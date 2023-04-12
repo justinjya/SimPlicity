@@ -2,9 +2,9 @@
 K3 | Kelompok 1
 
 ### Anggota Kelompok:
-Khairunnisa Hurun 'Iin 18221004
-Richard Haris 18221006
-Nurshafa Qanita 18221007
-Justin Yusuf Abidjoko 18221016
-Muhammad Mumtaz 18221029
-Eleanora Felicia 18221032
+18221004 Khairunnisa Hurun 'Iin  
+18221006 Richard Haris  
+18221007 Nurshafa Qanita  
+18221016 Justin Yusuf Abidjoko  
+18221029 Muhammad Mumtaz  
+18221032 Eleanora Felicia  
