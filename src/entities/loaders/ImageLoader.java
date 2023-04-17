@@ -9,19 +9,19 @@ import javax.imageio.ImageIO;
 import src.main.Consts;
 
 public class ImageLoader {
-    private static BufferedImage scaleImage(BufferedImage image, int x, int y) {
-        BufferedImage scaledImage = new BufferedImage(Consts.SCALED_TILE * x, Consts.SCALED_TILE * y, image.getType());
+    private static BufferedImage scaleImage(BufferedImage image, int width, int height) {
+        BufferedImage scaledImage = new BufferedImage(Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, image.getType());
         Graphics2D g = scaledImage.createGraphics();
-        g.drawImage(image, 0, 0, Consts.SCALED_TILE * x, Consts.SCALED_TILE * y, null);
+        g.drawImage(image, 0, 0, Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, null);
         g.dispose();
         return scaledImage;
     }
 
-    private static BufferedImage readImage(String folder, String fileName, int x, int y) {
+    private static BufferedImage readImage(String folder, String fileName, int width, int height) {
         BufferedImage image;
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
-            image = scaleImage(image, x, y);
+            image = scaleImage(image, width, height);
             return image;
         }
         catch (IOException e) {
