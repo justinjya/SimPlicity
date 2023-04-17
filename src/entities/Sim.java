@@ -2,15 +2,13 @@ package src.entities;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.awt.Color;
 
 import src.main.Consts;
 import src.main.KeyInput;
 import src.entities.handlers.*;
-import src.items.interactables.*;;
+import src.items.interactables.*;
+import src.entities.loaders.ImageLoader;
 
 public class Sim {
     // Atributes
@@ -21,10 +19,7 @@ public class Sim {
     private int money;
     private String status;
     private boolean isBusy;
-
-    // Image of the sim
-    private BufferedImage[] images = new BufferedImage[12];
-
+    
     // Positions and sizes inside the game window
     private int x;
     private int y;
@@ -35,6 +30,9 @@ public class Sim {
     private InteractionHandler interactionHandler;
     private CollisionHandler collisionHandler;
     private Interactables[] solidObjects;
+    
+    // Image of the sim
+    private BufferedImage[] images = new BufferedImage[12];
 
     public Sim(String name, int x, int y, Interactables[] solidObjects) {
         // Atributes
@@ -46,24 +44,6 @@ public class Sim {
         this.status = "Idle";
         this.isBusy = false;
 
-        // Load the image of the sim
-        try {
-            this.images[0] = ImageIO.read(new File("./src/assets/idle_down.png"));
-            this.images[1] = ImageIO.read(new File("./src/assets/idle_up.png"));
-            this.images[2] = ImageIO.read(new File("./src/assets/idle_left.png"));
-            this.images[3] = ImageIO.read(new File("./src/assets/idle_right.png"));
-            this.images[4] = ImageIO.read(new File("./src/assets/walk_down_1.png"));
-            this.images[5] = ImageIO.read(new File("./src/assets/walk_down_2.png"));
-            this.images[6] = ImageIO.read(new File("./src/assets/walk_up_1.png"));
-            this.images[7] = ImageIO.read(new File("./src/assets/walk_up_2.png"));
-            this.images[8] = ImageIO.read(new File("./src/assets/walk_left_1.png"));
-            this.images[9] = ImageIO.read(new File("./src/assets/walk_left_2.png"));
-            this.images[10] = ImageIO.read(new File("./src/assets/walk_right_1.png"));
-            this.images[11] = ImageIO.read(new File("./src/assets/walk_right_2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // Positions and sizes inside the game window
         this.x = x;
         this.y = y;
@@ -73,6 +53,9 @@ public class Sim {
         interactionHandler = new InteractionHandler(this, solidObjects);
         collisionHandler = new CollisionHandler(this, solidObjects);
         this.solidObjects = solidObjects;
+
+        // Load the image of the sim
+        images = ImageLoader.loadSim();
     }
 
     public String getName() {
@@ -120,20 +103,9 @@ public class Sim {
         if (this.health > 100) this.health = 100;
     }
 
-    // ONLY FOR DEBUGGING
-    public void decrementHealth() {
-        Thread thread = new Thread() {
-            public void run() {
-                try {
-                    setHealth(getHealth() - 1);
-                    Thread.sleep(1000);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
+    public void setHunger(int hunger) {
+        this.hunger = hunger;
+        if (this.hunger > 100) this.hunger = 100;
     }
 
     public void setMood(int mood) {
@@ -154,9 +126,11 @@ public class Sim {
     }
 
     public boolean isWalking() {
-        if (KeyInput.isKeyDown(KeyInput.KEY_A) || KeyInput.isKeyDown(KeyInput.KEY_D) || 
-            KeyInput.isKeyDown(KeyInput.KEY_W) || KeyInput.isKeyDown(KeyInput.KEY_S)) {
+        if (!isBusy) {
+            if (KeyInput.isKeyDown(KeyInput.KEY_A) || KeyInput.isKeyDown(KeyInput.KEY_D) || 
+                KeyInput.isKeyDown(KeyInput.KEY_W) || KeyInput.isKeyDown(KeyInput.KEY_S)) {
                 return true;
+            }
         }
         return false;
     }
@@ -164,13 +138,12 @@ public class Sim {
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = direction;
-        if (!isBusy) {
-            if (isWalking()) {
-                imageIndex += (int) ((direction + (System.currentTimeMillis() / 250) % 2) + 4);
-            }
-            if (images[imageIndex] != null) {
-                g.drawImage(images[imageIndex], x, y, width, height, null);
-            }
+        if (isWalking()) {
+            imageIndex += (int) ((direction + (System.currentTimeMillis() / 250) % 2) + 4);
+        }
+
+        if (!isBusy && images[imageIndex] != null) {
+            g.drawImage(images[imageIndex], x, y, null);
         }
 
         // ONLY FOR DEBUGGING
@@ -188,30 +161,28 @@ public class Sim {
         int newX = x;
         int newY = y;
 
-        if (!isBusy) {
-            if (isWalking()) {
-                if (KeyInput.isKeyDown(KeyInput.KEY_A)) {
-                    newX -= speed;
-                    direction = 2;
-                    interactionHandler.moveLeft(newX, newY);
-                }
-                if (KeyInput.isKeyDown(KeyInput.KEY_D)) {
-                    newX += speed;
-                    direction = 3;
-                    interactionHandler.moveRight(newX, newY);
-                }
-                if (KeyInput.isKeyDown(KeyInput.KEY_W)) {
-                    newY -= speed;
-                    direction = 1;
-                    interactionHandler.moveUp(newX, newY);
-                }
-                if (KeyInput.isKeyDown(KeyInput.KEY_S)) {
-                    newY += speed;
-                    direction = 0;
-                    interactionHandler.moveDown(newX, newY);
-                }
-                checkCollision(newX, newY);
+        if (isWalking()) {
+            if (KeyInput.isKeyDown(KeyInput.KEY_A)) {
+                newX -= speed;
+                direction = 2;
+                interactionHandler.moveLeft(newX, newY);
             }
+            if (KeyInput.isKeyDown(KeyInput.KEY_D)) {
+                newX += speed;
+                direction = 3;
+                interactionHandler.moveRight(newX, newY);
+            }
+            if (KeyInput.isKeyDown(KeyInput.KEY_W)) {
+                newY -= speed;
+                direction = 1;
+                interactionHandler.moveUp(newX, newY);
+            }
+            if (KeyInput.isKeyDown(KeyInput.KEY_S)) {
+                newY += speed;
+                direction = 0;
+                interactionHandler.moveDown(newX, newY);
+            }
+            checkCollision(newX, newY);
         }
 
         // Keybinds for the sim to interact with the game or window
@@ -242,5 +213,20 @@ public class Sim {
 
     public Interactables[] getSolidObjects() {
         return solidObjects;
+    }
+
+    private void decrementHealth() {
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    setHealth(getHealth() - 1);
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
 }

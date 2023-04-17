@@ -34,7 +34,7 @@ public abstract class Interactables implements Item {
         this.width = width;
         this.height = height;
         this.occupied = false;
-        this.color = new Color(0, 0, 0, 100);
+        this.color = new Color(0, 0, 0, 100); // this acts as the object shadow
         this.bounds = new Rectangle(x + 7, y + 7, width - 17, height - 17);
         this.time = time;
         // x, y, width, and height subtracted to accomodate for collision clipping
@@ -89,8 +89,7 @@ public abstract class Interactables implements Item {
     }
     
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
-        g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(),
-        interactables.getWidth(), interactables.getHeight(), null);
+        g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }
     
     // ONLY FOR DEBUGGING

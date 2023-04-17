@@ -1,13 +1,11 @@
 package src.items.interactables;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 import src.main.Consts;
 import src.main.GameTime;
 import src.entities.Sim;
+import src.entities.loaders.ImageLoader;
 
 public class Bed extends Interactables{
     // Types of beds
@@ -36,19 +34,14 @@ public class Bed extends Interactables{
     private int price;
 
     // Image of the beds
-    private BufferedImage[] images = new BufferedImage[2]; // Will increase if more bed images are available
+    private BufferedImage[] images = new BufferedImage[6]; // Will increase if more bed images are available
 
     public Bed(int x, int y, int imageIndex, GameTime time) {
         super(names[imageIndex], "Sleep", imageIndex, x, y, Consts.SCALED_TILE * width[imageIndex], Consts.SCALED_TILE * height[imageIndex], time);
         this.price = prices[imageIndex];
 
         // Load the image of the beds
-        try {
-            this.images[0] = ImageIO.read(new File("./src/assets/bed_idle.png"));
-            this.images[1] = ImageIO.read(new File("./src/assets/bed_occupied.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        images = ImageLoader.loadBeds();
     }
 
     public int getPrice() {
