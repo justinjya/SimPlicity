@@ -7,4 +7,4 @@ K3 | Kelompok 1
 18221007 Nurshafa Qanita  
 18221016 Justin Yusuf Abidjoko  
 18221029 Muhammad Mumtaz  
-18221032 Eleanora Felicia  
+18221032 Eleanora Felicia 
