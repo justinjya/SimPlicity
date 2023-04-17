@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.*;
+import src.entities.handlers.KeyHandler;
 import src.items.interactables.*;
 
 // x + 12 pas dikiri 6x6 grid
@@ -46,12 +47,12 @@ public class GamePanel extends JPanel implements Runnable {
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                KeyInput.keyPressed(e.getKeyCode());
+                KeyHandler.keyPressed(e.getKeyCode());
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                KeyInput.keyReleased(e.getKeyCode());
+                KeyHandler.keyReleased(e.getKeyCode());
             }
         };
         addKeyListener(keyAdapter);

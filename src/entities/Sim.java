@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.main.Consts;
-import src.main.KeyInput;
 import src.entities.handlers.*;
 import src.items.interactables.*;
 import src.entities.loaders.ImageLoader;
@@ -127,10 +126,20 @@ public class Sim {
 
     public boolean isWalking() {
         if (!isBusy) {
-            if (KeyInput.isKeyDown(KeyInput.KEY_A) || KeyInput.isKeyDown(KeyInput.KEY_D) || 
-                KeyInput.isKeyDown(KeyInput.KEY_W) || KeyInput.isKeyDown(KeyInput.KEY_S)) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_A) || KeyHandler.isKeyDown(KeyHandler.KEY_D) || 
+                KeyHandler.isKeyDown(KeyHandler.KEY_W) || KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean isMovingDiagonally() {
+        if ((KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_A)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_D)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_S) && KeyHandler.isKeyDown(KeyHandler.KEY_A)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_S) && KeyHandler.isKeyDown(KeyHandler.KEY_D))) {
+            return true;
         }
         return false;
     }
@@ -148,7 +157,7 @@ public class Sim {
 
         // ONLY FOR DEBUGGING
         // Draw the sim collision area as a red rectangle
-        // g.setColor(new Color(255, 0, 0, 128)); // Transparent yellow color
+        // g.setColor(new Color(255, 0, 0, 128)); // Transparent red color
         // g.fillRect(x, y, width - 8, height);
     
         // Draw interaction range as a yellow rectangle
@@ -160,33 +169,39 @@ public class Sim {
         // Update the sim position when walking
         int newX = x;
         int newY = y;
+        int initialSpeed = speed;
+
+        if (isMovingDiagonally()) {
+            speed *= 0.707;
+        }
 
         if (isWalking()) {
-            if (KeyInput.isKeyDown(KeyInput.KEY_A)) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
                 newX -= speed;
                 direction = 2;
                 interactionHandler.moveLeft(newX, newY);
             }
-            if (KeyInput.isKeyDown(KeyInput.KEY_D)) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
                 newX += speed;
                 direction = 3;
                 interactionHandler.moveRight(newX, newY);
             }
-            if (KeyInput.isKeyDown(KeyInput.KEY_W)) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
                 newY -= speed;
                 direction = 1;
                 interactionHandler.moveUp(newX, newY);
             }
-            if (KeyInput.isKeyDown(KeyInput.KEY_S)) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
                 newY += speed;
                 direction = 0;
                 interactionHandler.moveDown(newX, newY);
             }
             checkCollision(newX, newY);
         }
+        speed = initialSpeed;
 
         // Keybinds for the sim to interact with the game or window
-        if (KeyInput.isKeyPressed(KeyInput.KEY_F)) { // check if the F key has been pressed since the last update
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) { // check if the F key has been pressed since the last update
             System.out.println("press");
             interactionHandler.interact();
         }       

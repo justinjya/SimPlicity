@@ -1,6 +1,6 @@
-package src.main;
+package src.entities.handlers;
 
-public class KeyInput {
+public class KeyHandler {
     public static final int KEY_A = 65;
     public static final int KEY_W = 87;
     public static final int KEY_D = 68;
