@@ -113,4 +113,37 @@ public abstract class Entity {
             interactionHandler.interact();
         }
     }
+
+    // FOR ADDING OBJECTS
+    public void move(CollisionHandler collisionHandler) {
+        // Update the entity position when moving
+        int newX = x;
+        int newY = y;
+        double speed = this.speed * 12.8;
+        double initialSpeed = speed;
+        int delay = 100;
+ 
+        if (isMoving()) {
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
+                newX -= speed; // move left by one tile
+            }
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
+                newX += speed; // move right by one tile
+            }
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
+                newY -= speed; // move up by one tile
+            }
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
+                newY += speed; // move down by one tile
+            }
+            checkCollision(collisionHandler, newX, newY);
+
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        speed = initialSpeed;
+    }
 }
