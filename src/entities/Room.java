@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
+import src.main.GameTime;
 import src.items.interactables.*;
 import src.entities.handlers.*;
 
@@ -14,6 +15,12 @@ public class Room {
     // Atributes
     private String name;
     private ArrayList<Interactables> listOfObjects;
+    private GameTime time;
+    
+    // For adding objects
+    private boolean addingObject;
+    private Interactables unaddedObject;
+    private CollisionHandler collisionHandler;
 
     // Position inside the game window
     private int centerX = Consts.WIDTH / 2 - 3 * Consts.SCALED_TILE;
@@ -22,54 +29,59 @@ public class Room {
     // Image for the room background
     private BufferedImage image;
 
-    public Room(String name) {
+    public Room(String name, GameTime time) {
         this.name = name;
-        image = ImageLoader.loadRoom();
+        this.listOfObjects = new ArrayList<>(); 
+        this.time = time;
+        this.addingObject = false;
+        this.image = ImageLoader.loadRoom();
+        testRoom();
     }
 
     public String getName() {
         return name;
     }
 
-    public <T extends Interactables> void addInteractableObject(T newObject) {
-        boolean intersectsWithExistingObject;
-        boolean enterPressed = false;
-    
-        while (!enterPressed) {
-            // Update the object's position using wasd keys
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                newObject.setX(newObject.getX() - Consts.SCALED_TILE);
-            }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                newObject.setX(newObject.getX() + Consts.SCALED_TILE);
-            }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
-                newObject.setY(newObject.getY() - Consts.SCALED_TILE);
-            }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
-                newObject.setY(newObject.getY() + Consts.SCALED_TILE);
-            }
-    
-            // Check if the object intersects with an existing object
-            intersectsWithExistingObject = false;
-            for (Interactables existingObject : listOfObjects) {
-                if (newObject.getBounds().intersects(existingObject.getBounds())) {
-                    intersectsWithExistingObject = true;
-                    break;
-                }
-            }
-    
-            // Exit the loop if Enter key is pressed and the new object is not intersecting with any existing object
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && !intersectsWithExistingObject) {
-                enterPressed = true;
-            }
-        }
-    
-        // Add the new object to the room's list of objects
-        listOfObjects.add(newObject);
+    public ArrayList<Interactables> getListOfObjects() {
+        return listOfObjects;
     }
-    
+
+    public boolean isAddingObject() {
+        return addingObject;
+    }
+
+    public void changeAddingObjectState() {
+        this.addingObject = !this.addingObject;
+    }
+
+    public void addObject(Interactables newObject) {
+        if (!isAddingObject()) {
+            unaddedObject = newObject;
+            this.collisionHandler = new CollisionHandler(unaddedObject, this);
+            changeAddingObjectState();
+        }
+        else {
+            listOfObjects.add(unaddedObject);
+            changeAddingObjectState();
+            unaddedObject = null;
+        }
+        // ONLY FOR DEBUGGING
+        System.out.println("addObject");
+    }
+
+    public void update() {
+        if (unaddedObject == null) {
+            return;
+        }
+
+        if (isAddingObject()) {
+            unaddedObject.move(collisionHandler);
+            unaddedObject.updateBounds();
+        }
+    }
+
     public void draw(Graphics2D g) {
+        // Draw the room floor
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 6; x++) {
                 int tileX = centerX + x * Consts.SCALED_TILE;
@@ -77,6 +89,37 @@ public class Room {
                 g.drawImage(image, tileX, tileY, Consts.SCALED_TILE, Consts.SCALED_TILE, null);
             }
         }
+        
+        // Draw objects inside of the room
+        for (Interactables object : listOfObjects) {
+            if (object instanceof Placeholder) {
+                object.draw(g);
+            }
+            else {
+                object.draw(g, object);
+            }
+            // ONLY FOR DEBUGGING
+            // object.drawCollisionBox(g);
+        }
+
+        // Draw object being added
+        if (isAddingObject()) {
+            if (unaddedObject instanceof Placeholder) {
+                unaddedObject.draw(g);
+            }
+            else {
+                unaddedObject.draw(g, unaddedObject);
+            }
+        }
+    }
+    
+    // ONLY FOR DEBUGGING
+    public void testRoom() {
+        listOfObjects.add(new Bed((Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) - 38, 0, time));
+        listOfObjects.add(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26, 3, 3, Color.CYAN, time));
+        listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38, 2, 1, Color.ORANGE, time));
+        listOfObjects.add(new Placeholder("5", "6", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 282, 1, 1, Color.MAGENTA, time));
+        listOfObjects.add(new Placeholder("7", "8", 0, (Consts.CENTER_X / 2) + 332, (Consts.CENTER_Y / 2) + 154, 1, 1, Color.LIGHT_GRAY, time));
     }
 
     public void drawGrid(Graphics2D g) {

@@ -39,9 +39,18 @@ public class Bed extends Interactables{
     private BufferedImage[] images = new BufferedImage[6]; // Will increase if more bed images are available
 
     public Bed(int x, int y, int imageIndex, GameTime time) {
-        super(names[imageIndex], "Sleep", imageIndex, x, y,
-            Consts.SCALED_TILE * width[imageIndex], Consts.SCALED_TILE * height[imageIndex], time);
+        super(names[imageIndex], "Sleep", imageIndex, x, y, width[imageIndex], height[imageIndex], time);
         this.price = prices[imageIndex];
+        this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
+
+        // Load the image of the beds
+        images = ImageLoader.loadBeds();
+    }
+
+    // ONLY FOR DEBUGGING
+    public Bed(GameTime time) {
+        super(names[0], "Sleep", 0, Consts.CENTER_X + 8, Consts.CENTER_Y + 8, width[0], height[0], time);
+        this.price = prices[0];
         this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
@@ -60,14 +69,14 @@ public class Bed extends Interactables{
     @Override
     public void changeOccupied(Sim sim) {
         if (!isOccupied()) {
-            setOccupied(true);
+            changeOccupiedState();
             setImageIndex(getImageIndex() + 1);
-            sim.setBusy(true);
+            sim.changeBusyState();
         }
         else {
-            setOccupied(false);
+            changeOccupiedState();
             setImageIndex(getImageIndex() - 1);
-            sim.setBusy(false);
+            sim.changeBusyState();
         }
     }
 
