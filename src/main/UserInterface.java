@@ -11,6 +11,7 @@ import src.entities.Interactables;
 public class UserInterface {
     BufferedImage[] images;
     Sim sim;
+    Interactables object;
     GameTime time;
 
     public UserInterface(Sim sim, GameTime time) {
@@ -35,16 +36,14 @@ public class UserInterface {
         g.drawString("Mood: " + sim.getMood(), 5, 80);
         g.drawString("Money: " + sim.getMoney(), 5, 100);
         g.drawString("Status: " + sim.getStatus(), 5, 120);
-        g.drawString("InRange: " + sim.getInteractionHandler().isInRange(), 5, 590);
+        g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 5, 590);
         g.drawString("isWalking: " + sim.isMoving(), 5, 570);
 
-        if (sim.getInteractionHandler().isInRange()) {
-            Interactables object = sim.getInteractionHandler().getInteractableObject();
-            if (object != null) {
-                g.drawString("Press F to Interact with " + object.getName(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 80);
-                g.drawString("isOccupied: " + object.isOccupied(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 60);
-                g.drawString("imageIndex: " + object.getImageIndex(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 40);
-            }
+        if (sim.getInteractionHandler().isObjectInRange()) {
+            object = sim.getInteractionHandler().getInteractableObject();
+            g.drawString("Press F to Interact with " + object.getName(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 80);
+            g.drawString("isOccupied: " + object.isOccupied(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 60);
+            g.drawString("imageIndex: " + object.getImageIndex(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 40);
         }
 
         if (sim.isBusy()) {

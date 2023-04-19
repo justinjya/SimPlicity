@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.handlers.CollisionHandler;
+import src.entities.handlers.InteractionHandler;
 
 public class Sim extends Entity{
     // Atributes
@@ -15,14 +17,18 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private boolean isBusy;
-    private Interactables[] solidObjects;
+    private Room currentRoom;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
 
-    public Sim(String name, int x, int y, Interactables[] solidObjects) {
+    // Collisions and interactions
+    private CollisionHandler collisionHandler;
+    private InteractionHandler interactionHandler;
+
+    public Sim(String name, int x, int y, Room currentRoom) {
         // Atributes
-        super(x, y, 1, 1, solidObjects);
+        super(x, y, 1, 1);
         this.name = name;
         this.health = 80;
         this.hunger = 80;
@@ -30,9 +36,14 @@ public class Sim extends Entity{
         this.money = 100;
         this.status = "Idle";
         this.isBusy = false;
+        this.currentRoom = currentRoom;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
+
+        // Collisions and interactions
+        collisionHandler = new CollisionHandler(this, currentRoom);
+        interactionHandler = new InteractionHandler(this, currentRoom);
     }
 
     public String getName() {
@@ -86,14 +97,14 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
-    public void setBusy(boolean isBusy) {
-        this.isBusy = isBusy;
+    public void changeBusyState() {
+        this.isBusy = !this.isBusy;
     }
 
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
-        if (isMoving()) {
+        if (isMoving() && !currentRoom.isAddingObject() ) {
             imageIndex += (int) ((getDirection() + (System.currentTimeMillis() / 250) % 2) + 4);
         }
 
@@ -103,32 +114,22 @@ public class Sim extends Entity{
 
         // ONLY FOR DEBUGGING
         // Draw the sim collision area as a red rectangle
-        // g.setColor(new Color(255, 0, 0, 128)); // Transparent red color
-        // g.fillRect(x, y, width - 8, height);
+        // g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
+        // g.fillRect(getX() + 8, getY() + 15, getWidth() - 16, getHeight() - 16);
     
         // Draw interaction range as a yellow rectangle
         g.setColor(new Color(255, 255, 0, 128)); // Transparent yellow color
-        g.fillRect(getInteractionHandler().getX(), getInteractionHandler().getY(), getInteractionHandler().getWidth(), getInteractionHandler().getHeight());
+        g.fillRect(interactionHandler.getX(), interactionHandler.getY(), interactionHandler.getWidth(), interactionHandler.getHeight());
     }
 
     public void update() {
-        if (!isBusy) {
-            move();
+        if (!isBusy() && !currentRoom.isAddingObject()) {
+            move(collisionHandler, interactionHandler);
         }
     }
 
-    private void decrementHealth() {
-        Thread thread = new Thread() {
-            public void run() {
-                try {
-                    setHealth(getHealth() - 1);
-                    Thread.sleep(1000);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
+    // ONLY FOR DEBUGGING
+    public InteractionHandler getInteractionHandler() {
+        return interactionHandler;
     }
 }

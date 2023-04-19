@@ -1,25 +1,23 @@
 package src.entities.handlers;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
-import src.entities.Interactables;
-import src.entities.Entity;
-import src.entities.Sim;
+import src.entities.*;
 import src.items.interactables.*;
 
 public class InteractionHandler {
     private Entity entity;
     private Rectangle interactionRange;
-    private Interactables[] solidObjects;
+    private Room currentRoom;
     private int x;
     private int y;
     private int width;
     private int height;
-    private boolean inRange = false;
 
-    public InteractionHandler(Entity entity, Interactables[] solidObjects) {
+    public InteractionHandler(Entity entity, Room currentRoom) {
         this.entity = entity;
-        this.solidObjects = solidObjects;
+        this.currentRoom = currentRoom;
         this.x = entity.getX();
         this.y = entity.getY() + entity.getHeight();
         this.width = entity.getWidth();
@@ -27,7 +25,7 @@ public class InteractionHandler {
         interactionRange = new Rectangle(x, y, width, height);
     }
 
-    public Entity getentity() {
+    public Entity getEntity() {
         return entity;
     }
 
@@ -51,14 +49,6 @@ public class InteractionHandler {
         return height;
     }
 
-    public boolean isInRange() {
-        return inRange;
-    }
-
-    public void setInRange(boolean inRange) {
-        this.inRange = inRange;
-    }
-
     public void moveLeft(int newX, int newY) {
         x = newX - (entity.getWidth()) / 3;
         y = newY;
@@ -70,7 +60,7 @@ public class InteractionHandler {
     }
 
     public void moveRight(int newX, int newY) {
-        x = newX + (entity.getWidth() - 8); // The width is subtracted by 8 to accomodate for collision clipping
+        x = newX + entity.getWidth();
         y = newY;
         width = entity.getWidth() / 3;
         height = entity.getHeight();
@@ -100,36 +90,25 @@ public class InteractionHandler {
     }
 
     public boolean isObjectInRange() {
-        try {
-            if (solidObjects.length != 0) {
-                for (Interactables solidObject : solidObjects) {
-                    if (solidObject instanceof Interactables) {
-                        if (getInteractionRange().intersects(solidObject.getBounds())) {
-                            return true;
-                        }
-                    }
-                }
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
+
+        for (Interactables object : listOfObjects) {
+            if (getInteractionRange().intersects(object.getBounds())) {
+                return true;
             }
         }
-        catch (NullPointerException e) {}
-
         return false;
     }
 
     public Interactables getInteractableObject() {
         // To - do fix
-        // Placeholer placeholder = new Placeholder(getInteractableObjectName(), getInteractableObjectName(), x, x, y, width, height, null, null);
-        try {
-            if (solidObjects.length != 0) {
-                for (Interactables solidObject : solidObjects) {
-                    if (getInteractionRange().intersects(solidObject.getBounds())) {
-                        return solidObject;
-                    }
-                }
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
+        
+        for (Interactables object : listOfObjects) {
+            if (getInteractionRange().intersects(object.getBounds())) {
+                return object;
             }
         }
-        catch (NullPointerException e) {}
-        
         return null;
     }
 

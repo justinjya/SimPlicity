@@ -10,18 +10,12 @@ public abstract class Entity {
     private int height;
     private int speed = 5;
     private int direction; // 0 = down, 1 = up, 2 = left, 3 = right
-    private InteractionHandler interactionHandler;
-    private CollisionHandler collisionHandler;
-    private Interactables[] solidObjects;
 
-    public Entity(int x, int y, int width, int height, Interactables[] solidObjects) {
+    public Entity(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = Consts.SCALED_TILE * width;
         this.height = Consts.SCALED_TILE * height;
-        this.interactionHandler = new InteractionHandler(this, solidObjects);
-        this.collisionHandler = new CollisionHandler(this, solidObjects);
-        this.solidObjects = solidObjects;
     }
 
     public int getX() {
@@ -44,12 +38,12 @@ public abstract class Entity {
         return direction;
     }
 
-    public InteractionHandler getInteractionHandler() {
-        return interactionHandler;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public Interactables[] getSolidObjects() {
-        return solidObjects;
+    public void setY(int y) {
+        this.y = y;
     }
 
     public boolean isMoving() {
@@ -70,21 +64,15 @@ public abstract class Entity {
         return false;
     }
 
-    private void checkCollision(int newX, int newY) {
+    private void checkCollision(CollisionHandler collisionHandler, int newX, int newY) {
         if (!collisionHandler.isCollision(newX, newY)) {
             x = newX;
             y = newY;
-            interactionHandler.setInRange(interactionHandler.isObjectInRange());
-            // boolean currentlyInRange = interactionHandler.isInRange();
-
-            // ONLY FOR DEBUGGING
-            // if (interactionHandler.isInRange() && !currentlyInRange) {
-            //     decrementHealth();
-            // }
         }
     }
 
-    public void move() {
+    // FOR SIM
+    public void move(CollisionHandler collisionHandler, InteractionHandler interactionHandler) {
         // Update the entity position when moving
         int newX = x;
         int newY = y;
@@ -115,7 +103,7 @@ public abstract class Entity {
                 direction = 0;
                 interactionHandler.moveDown(newX, newY);
             }
-            checkCollision(newX, newY);
+            checkCollision(collisionHandler, newX, newY);
         }
         speed = initialSpeed;
 
@@ -123,6 +111,6 @@ public abstract class Entity {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) { // check if the F key has been pressed since the last update
             System.out.println("press");
             interactionHandler.interact();
-        }       
-    }    
+        }
+    }
 }

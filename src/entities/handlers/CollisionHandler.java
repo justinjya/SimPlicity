@@ -1,35 +1,36 @@
 package src.entities.handlers;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
-import src.entities.Interactables;
-import src.entities.Entity;
-import src.items.*;
+import src.entities.*;
 
 public class CollisionHandler {
     private Entity entity;
-    private Item[] solidObjects;
+    private Room currentRoom;
     
-    public CollisionHandler(Entity entity, Item[] solidObjects) {
+    public CollisionHandler(Entity entity, Room room) {
         this.entity = entity;
-        this.solidObjects = solidObjects;
+        this.currentRoom = room;
     }
     
     public boolean isCollision(int x, int y) {
-        Rectangle newEntity = new Rectangle(x, y, entity.getWidth() - 8, entity.getHeight()); // entity collision entity
-        // The width is subtracted by 8 to accomodate the clipping
-        
-        // Only checks for collision if the solid objects array is not empty
-        try {
-            if (solidObjects.length != 0) {
-                for (Item solidObject : solidObjects) {
-                    if (newEntity.intersects(((Interactables) solidObject).getBounds())) {
-                        return true;
-                    }
-                }
-            }
-        } catch (NullPointerException e) {}
+        Rectangle newEntity;
+        if (entity instanceof Sim) {
+            newEntity = new Rectangle(x + 8, y + 15, entity.getWidth() - 16, entity.getHeight() - 16); // Sim collision box  
+            // Values subtracted to adjust the Sim collision box according to the image  
+        }
+        else {
+            newEntity = new Rectangle(x, y, entity.getWidth(), entity.getHeight()); // Object collision box
+        }
 
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
+        
+        for (Interactables object : listOfObjects) {
+            if (newEntity.intersects(object.getBounds())) {
+                return true;
+            }
+        }
         return false;
     }
 }
