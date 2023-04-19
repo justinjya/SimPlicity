@@ -1,4 +1,4 @@
-package src.entities.loaders;
+package src.assets;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -52,5 +52,10 @@ public class ImageLoader {
         images[0] = readImage("beds", "bed_idle", 4, 1);
         images[1] = readImage("beds", "bed_occupied", 4, 1);
         return images;
+    }
+
+    public static BufferedImage loadRoom() {
+        BufferedImage image = readImage("tiles", "wood", 1, 1);
+        return image;
     }
 }

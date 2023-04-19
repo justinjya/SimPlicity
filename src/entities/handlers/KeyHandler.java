@@ -1,11 +1,15 @@
 package src.entities.handlers;
 
+import java.awt.event.KeyEvent;
+
 public class KeyHandler {
-    public static final int KEY_A = 65;
-    public static final int KEY_W = 87;
-    public static final int KEY_D = 68;
-    public static final int KEY_S = 83;
-    public static final int KEY_F = 70;
+    public static final int KEY_A = KeyEvent.VK_A;
+    public static final int KEY_W = KeyEvent.VK_W;
+    public static final int KEY_D = KeyEvent.VK_D;
+    public static final int KEY_S = KeyEvent.VK_S;
+    public static final int KEY_F = KeyEvent.VK_F;
+    public static final int KEY_SPACE = KeyEvent.VK_SPACE;
+    public static final int KEY_ENTER = KeyEvent.VK_ENTER;
     private static boolean[] keys = new boolean[256];
     private static boolean[] prevKeys = new boolean[256];
 

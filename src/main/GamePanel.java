@@ -5,8 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.*;
-import src.entities.handlers.KeyHandler;
 import src.items.interactables.*;
+import src.entities.handlers.KeyHandler;
 
 // x + 12 pas dikiri 6x6 grid
 // y - 38 pas diatas 6x6 grid
@@ -15,9 +15,8 @@ import src.items.interactables.*;
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
     private Sim sim;
-    private Background background;
+    private Room room;
     private UserInterface ui;
-    private Interactables[] solidObjects;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
@@ -26,20 +25,12 @@ public class GamePanel extends JPanel implements Runnable {
         // Create game time
         time = new GameTime(1, 720, 720);
 
-        // Create background
-        background = new Background();
-
-        // Create solid objects
-        solidObjects = new Interactables[5];
-        solidObjects[0] = new Bed((Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) - 38, 0, time);
-        solidObjects[1] = new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26, 3, 3, Color.CYAN, time);
-        solidObjects[2] = new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38, 2, 1, Color.ORANGE, time);
-        solidObjects[3] = new Placeholder("5", "6", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 282, 1, 1, Color.MAGENTA, time);
-        solidObjects[4] = new Placeholder("7", "8", 0, (Consts.CENTER_X / 2) + 332, (Consts.CENTER_Y / 2) + 154, 1, 1, Color.LIGHT_GRAY, time);
-
+        // Create room
+        room = new Room("Starter Room", time);
+        
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, solidObjects); // Scaled
-
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+        
         // Create user interface
         ui = new UserInterface(sim, time);
 
@@ -48,6 +39,11 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    // room.addObject(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26, 3, 3, Color.CYAN, time));
+                    room.addObject(new Bed(time));
+                    // room.addObject();
+                }
             }
 
             @Override
@@ -95,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         sim.update();
+
+        room.update();
     }
 
     public void paintComponent(Graphics g)
@@ -104,16 +102,8 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // background.drawGrid(g2);
 
-        // Draw background
-        background.draw(g2);
-
-        // Draw bed test
-        solidObjects[0].draw(g2, solidObjects[0]);
-
-        // Draw placeholder solid objects
-        for (int i = 1; i < 5; i++) {
-            solidObjects[i].draw(g2);
-        }
+        // Draw room
+        room.draw(g2);
 
         // Draw sim
         sim.draw(g2);
