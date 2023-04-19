@@ -15,7 +15,7 @@ import src.items.interactables.*;
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
     private Sim sim;
-    private Background background;
+    private Room background;
     private UserInterface ui;
     private Interactables[] solidObjects;
 
@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create background
-        background = new Background();
+        background = new Room("Starter Room");
 
         // Create solid objects
         solidObjects = new Interactables[5];

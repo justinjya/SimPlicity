@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.entities.Sim;
+import src.entities.Interactables;
 
 public class UserInterface {
     BufferedImage[] images;
@@ -26,7 +27,7 @@ public class UserInterface {
         g.drawString("Time Remaining: " + time.getTimeRemaining(), 605, 40);
         
         // ONLY FOR DEBUGGING
-        g.drawString("Decrements: " + time.getDecrements(), 605, 60);
+        // g.drawString("Duration: " + time.getDecrements(), 605, 60);
 
         g.drawString("Name: " + sim.getName(), 5, 20);
         g.drawString("Health: " + sim.getHealth(), 5, 40);
@@ -35,12 +36,19 @@ public class UserInterface {
         g.drawString("Money: " + sim.getMoney(), 5, 100);
         g.drawString("Status: " + sim.getStatus(), 5, 120);
         g.drawString("InRange: " + sim.getInteractionHandler().isInRange(), 5, 590);
-        g.drawString("isWalking: " + sim.isWalking(), 5, 570);
+        g.drawString("isWalking: " + sim.isMoving(), 5, 570);
 
         if (sim.getInteractionHandler().isInRange()) {
-            g.drawString("Press F to Interact with " + sim.getInteractionHandler().getInteractableObjectName(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 80);
-            g.drawString("isOccupied: " + sim.getInteractionHandler().getInteractableObject().isOccupied(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 60);
-            g.drawString("imageIndex: " + sim.getInteractionHandler().getInteractableObject().getImageIndex(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 40);
+            Interactables object = sim.getInteractionHandler().getInteractableObject();
+            if (object != null) {
+                g.drawString("Press F to Interact with " + object.getName(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 80);
+                g.drawString("isOccupied: " + object.isOccupied(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 60);
+                g.drawString("imageIndex: " + object.getImageIndex(), Consts.WIDTH / 2 - 100, Consts.HEIGHT - 40);
+            }
+        }
+
+        if (sim.isBusy()) {
+            sim.getInteractionHandler().getInteractableObject().drawTimer(g);
         }
     }
 }

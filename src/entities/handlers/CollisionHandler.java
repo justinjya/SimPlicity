@@ -2,28 +2,28 @@ package src.entities.handlers;
 
 import java.awt.Rectangle;
 
-import src.entities.Sim;
+import src.entities.Interactables;
+import src.entities.Entity;
 import src.items.*;
-import src.items.interactables.Interactables;
 
 public class CollisionHandler {
-    private Sim sim;
+    private Entity entity;
     private Item[] solidObjects;
     
-    public CollisionHandler(Sim sim, Item[] solidObjects) {
-        this.sim = sim;
+    public CollisionHandler(Entity entity, Item[] solidObjects) {
+        this.entity = entity;
         this.solidObjects = solidObjects;
     }
     
     public boolean isCollision(int x, int y) {
-        Rectangle newsim = new Rectangle(x, y, sim.getWidth() - 8, sim.getHeight()); // Sim collision sim
+        Rectangle newEntity = new Rectangle(x, y, entity.getWidth() - 8, entity.getHeight()); // entity collision entity
         // The width is subtracted by 8 to accomodate the clipping
         
         // Only checks for collision if the solid objects array is not empty
         try {
             if (solidObjects.length != 0) {
                 for (Item solidObject : solidObjects) {
-                    if (newsim.intersects(((Interactables) solidObject).getBounds())) {
+                    if (newEntity.intersects(((Interactables) solidObject).getBounds())) {
                         return true;
                     }
                 }

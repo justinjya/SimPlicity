@@ -4,8 +4,9 @@ import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GameTime;
+import src.assets.ImageLoader;
+import src.entities.Interactables;
 import src.entities.Sim;
-import src.entities.loaders.ImageLoader;
 
 public class Bed extends Interactables{
     // Types of beds
@@ -32,13 +33,16 @@ public class Bed extends Interactables{
 
     // Atributes
     private int price;
+    private int duration;
 
     // Image of the beds
     private BufferedImage[] images = new BufferedImage[6]; // Will increase if more bed images are available
 
     public Bed(int x, int y, int imageIndex, GameTime time) {
-        super(names[imageIndex], "Sleep", imageIndex, x, y, Consts.SCALED_TILE * width[imageIndex], Consts.SCALED_TILE * height[imageIndex], time);
+        super(names[imageIndex], "Sleep", imageIndex, x, y,
+            Consts.SCALED_TILE * width[imageIndex], Consts.SCALED_TILE * height[imageIndex], time);
         this.price = prices[imageIndex];
+        this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();
@@ -69,15 +73,15 @@ public class Bed extends Interactables{
 
     @Override
     public void interact(Sim sim) {
-        Thread thread = new Thread() {
+        Thread interacting = new Thread() {
             @Override
             public void run() {
                 try {
                     changeOccupied(sim);
-                    getTime().startDecrementTimeRemaining(Consts.ONE_MINUTE / 4);
+                    getTime().startDecrementTimeRemaining(duration);
                     sim.setStatus("Sleeping");
 
-                    Thread.sleep(Consts.ONE_MINUTE / 4);
+                    Thread.sleep(duration);
                     
                     changeOccupied(sim);
                     sim.resetStatus();
@@ -89,6 +93,6 @@ public class Bed extends Interactables{
                 }
             }
         };
-        thread.start();
+        interacting.start();
     }
 }

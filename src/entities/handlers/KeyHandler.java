@@ -6,6 +6,7 @@ public class KeyHandler {
     public static final int KEY_D = 68;
     public static final int KEY_S = 83;
     public static final int KEY_F = 70;
+    public static final int KEY_ENTER = 10;
     private static boolean[] keys = new boolean[256];
     private static boolean[] prevKeys = new boolean[256];
 

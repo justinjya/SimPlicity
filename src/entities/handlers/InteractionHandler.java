@@ -2,11 +2,13 @@ package src.entities.handlers;
 
 import java.awt.Rectangle;
 
+import src.entities.Interactables;
+import src.entities.Entity;
 import src.entities.Sim;
 import src.items.interactables.*;
 
 public class InteractionHandler {
-    private Sim sim;
+    private Entity entity;
     private Rectangle interactionRange;
     private Interactables[] solidObjects;
     private int x;
@@ -15,18 +17,18 @@ public class InteractionHandler {
     private int height;
     private boolean inRange = false;
 
-    public InteractionHandler(Sim sim, Interactables[] solidObjects) {
-        this.sim = sim;
+    public InteractionHandler(Entity entity, Interactables[] solidObjects) {
+        this.entity = entity;
         this.solidObjects = solidObjects;
-        this.x = sim.getX();
-        this.y = sim.getY() + sim.getHeight();
-        this.width = sim.getWidth();
-        this.height = sim.getHeight() / 3;
+        this.x = entity.getX();
+        this.y = entity.getY() + entity.getHeight();
+        this.width = entity.getWidth();
+        this.height = entity.getHeight() / 3;
         interactionRange = new Rectangle(x, y, width, height);
     }
 
-    public Sim getSim() {
-        return sim;
+    public Entity getentity() {
+        return entity;
     }
 
     public Rectangle getInteractionRange() {
@@ -58,20 +60,20 @@ public class InteractionHandler {
     }
 
     public void moveLeft(int newX, int newY) {
-        x = newX - (sim.getWidth()) / 3;
+        x = newX - (entity.getWidth()) / 3;
         y = newY;
-        width = sim.getWidth() / 3;
-        height = sim.getHeight();
+        width = entity.getWidth() / 3;
+        height = entity.getHeight();
 
         interactionRange.setSize(width, height);
         interactionRange.setLocation(x, y);
     }
 
     public void moveRight(int newX, int newY) {
-        x = newX + (sim.getWidth() - 8); // The width is subtracted by 8 to accomodate for collision clipping
+        x = newX + (entity.getWidth() - 8); // The width is subtracted by 8 to accomodate for collision clipping
         y = newY;
-        width = sim.getWidth() / 3;
-        height = sim.getHeight();
+        width = entity.getWidth() / 3;
+        height = entity.getHeight();
 
         interactionRange.setSize(width, height);
         interactionRange.setLocation(x, y);
@@ -79,9 +81,9 @@ public class InteractionHandler {
 
     public void moveUp(int newX, int newY) {
         x = newX;
-        y = newY - (sim.getHeight() / 3);
-        width = sim.getWidth();
-        height = sim.getHeight() / 3;
+        y = newY - (entity.getHeight() / 3);
+        width = entity.getWidth();
+        height = entity.getHeight() / 3;
 
         interactionRange.setSize(width, height);
         interactionRange.setLocation(x, y);
@@ -89,15 +91,15 @@ public class InteractionHandler {
 
     public void moveDown(int newX, int newY) {
         x = newX;
-        y = newY + sim.getHeight();
-        width = sim.getWidth();
-        height = sim.getHeight() / 3;
+        y = newY + entity.getHeight();
+        width = entity.getWidth();
+        height = entity.getHeight() / 3;
 
         interactionRange.setSize(width, height);
         interactionRange.setLocation(x, y);
     }
 
-    public boolean isObjectInInteractionRange() {
+    public boolean isObjectInRange() {
         try {
             if (solidObjects.length != 0) {
                 for (Interactables solidObject : solidObjects) {
@@ -115,6 +117,8 @@ public class InteractionHandler {
     }
 
     public Interactables getInteractableObject() {
+        // To - do fix
+        // Placeholer placeholder = new Placeholder(getInteractableObjectName(), getInteractableObjectName(), x, x, y, width, height, null, null);
         try {
             if (solidObjects.length != 0) {
                 for (Interactables solidObject : solidObjects) {
@@ -129,17 +133,18 @@ public class InteractionHandler {
         return null;
     }
 
-    public String getInteractableObjectName() {
-        String objectName = getInteractableObject().getName();
-        return objectName;
-    }
-
     public void interact() {
         Interactables object = getInteractableObject();
-        if (!object.isOccupied()) {
-            if (object instanceof Bed) {
-                object.interact(sim);
-            }
+        if (object == null) {
+            return;
+        }
+
+        if (object.isOccupied()) {
+            return;
+        }
+
+        if (object instanceof Bed) {
+            object.interact((Sim) entity);
         }
     }
 }
