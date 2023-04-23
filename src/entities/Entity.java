@@ -65,13 +65,21 @@ public abstract class Entity {
     }
 
     private void checkCollision(CollisionHandler collisionHandler, int newX, int newY) {
-        if (!collisionHandler.isCollision(newX, newY)) {
-            x = newX;
-            y = newY;
+        if (this instanceof Sim) {
+            if (!collisionHandler.isCollision(newX, newY) && !collisionHandler.isOutsidePlayArea(newX, newY)) {
+                x = newX;
+                y = newY;
+            }
+        }
+        else {
+            if (!collisionHandler.isOutsidePlayArea(newX, newY)) {
+                x = newX;
+                y = newY;
+            }
         }
     }
 
-    // FOR SIM
+    // FOR THE SIM
     public void move(CollisionHandler collisionHandler, InteractionHandler interactionHandler) {
         // Update the entity position when moving
         int newX = x;
@@ -121,28 +129,21 @@ public abstract class Entity {
         int newY = y;
         double speed = this.speed * 12.8;
         double initialSpeed = speed;
-        int delay = 100;
  
         if (isMoving()) {
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                newX -= speed; // move left by one tile
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+                newX -= speed; // Move left by one tile
             }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                newX += speed; // move right by one tile
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+                newX += speed; // Move right by one tile
             }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
-                newY -= speed; // move up by one tile
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
+                newY -= speed; // Move up by one tile
             }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
-                newY += speed; // move down by one tile
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
+                newY += speed; // Move down by one tile
             }
             checkCollision(collisionHandler, newX, newY);
-
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         speed = initialSpeed;
     }

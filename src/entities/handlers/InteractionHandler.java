@@ -101,7 +101,6 @@ public class InteractionHandler {
     }
 
     public Interactables getInteractableObject() {
-        // To - do fix
         ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
         
         for (Interactables object : listOfObjects) {

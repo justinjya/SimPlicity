@@ -17,7 +17,7 @@ public class ImageLoader {
         return scaledImage;
     }
 
-    private static BufferedImage readImage(String folder, String fileName, int width, int height) {
+    public static BufferedImage readImage(String folder, String fileName, int width, int height) {
         BufferedImage image;
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
@@ -57,5 +57,16 @@ public class ImageLoader {
     public static BufferedImage loadRoom() {
         BufferedImage image = readImage("tiles", "wood", 1, 1);
         return image;
+    }
+
+    public static BufferedImage loadMockup() {
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/gameLayoutMockup.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

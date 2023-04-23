@@ -16,7 +16,6 @@ public class Sim extends Entity{
     private int mood;
     private int money;
     private String status;
-    private boolean isBusy;
     private Room currentRoom;
     
     // Image of the sim
@@ -35,7 +34,6 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = false;
         this.currentRoom = currentRoom;
 
         // Load the image of the sim
@@ -70,8 +68,12 @@ public class Sim extends Entity{
         return status;
     }
 
-    public boolean isBusy() {
-        return isBusy;
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public boolean isStatusCurrently(String status) {
+        return this.status.equals(status);
     }
 
     public void setHealth(int health) {
@@ -97,18 +99,18 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
-    public void changeBusyState() {
-        this.isBusy = !this.isBusy;
+    public void interact() {
+        interactionHandler.interact();
     }
 
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
-        if (isMoving() && !currentRoom.isAddingObject() ) {
+        if (!isStatusCurrently("Tabbed") && isMoving() && !currentRoom.isEditingRoom()) {
             imageIndex += (int) ((getDirection() + (System.currentTimeMillis() / 250) % 2) + 4);
         }
 
-        if (!isBusy() && images[imageIndex] != null) {
+        if (isStatusCurrently("Idle") || isStatusCurrently("Tabbed")) {
             g.drawImage(images[imageIndex], getX(), getY(), null);
         }
 
@@ -117,13 +119,13 @@ public class Sim extends Entity{
         // g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
         // g.fillRect(getX() + 8, getY() + 15, getWidth() - 16, getHeight() - 16);
     
-        // Draw interaction range as a yellow rectangle
+        // Draw the interaction range as a yellow rectangle
         g.setColor(new Color(255, 255, 0, 128)); // Transparent yellow color
         g.fillRect(interactionHandler.getX(), interactionHandler.getY(), interactionHandler.getWidth(), interactionHandler.getHeight());
     }
 
     public void update() {
-        if (!isBusy() && !currentRoom.isAddingObject()) {
+        if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom()) {
             move(collisionHandler, interactionHandler);
         }
     }
