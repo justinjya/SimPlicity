@@ -18,6 +18,7 @@ public class Sim extends Entity{
     private String status;
     private boolean isBusy;
     private Room currentRoom;
+    Profession profession;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -37,6 +38,7 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.isBusy = false;
         this.currentRoom = currentRoom;
+        this.profession = new Profession(); 
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -68,6 +70,14 @@ public class Sim extends Entity{
 
     public String getStatus() {
         return status;
+    }
+    
+    public String getProfession() {
+        return profession.getName();
+    }
+
+    public int getSimSalary() {
+        return profession.getSalary();
     }
 
     public boolean isBusy() {
