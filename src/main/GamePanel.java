@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
         setBackground(new Color(44, 39, 35));
 
         // Create game time
-        time = new GameTime(1, 720);
+        time = new GameTime(1, 720, 720);
 
         // Create room
         room = new Room("Starter Room", time);
