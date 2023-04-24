@@ -68,7 +68,7 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage loadRoom() {
+    public static BufferedImage loadWood() {
         BufferedImage image = readImage("tiles", "wood", 1, 1);
         return image;
     }
