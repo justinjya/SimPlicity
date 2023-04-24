@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create room
-        room = new Room("Starter Room", time);
+        room = new Room("First Room", time);
         
         // Create sim
         sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
