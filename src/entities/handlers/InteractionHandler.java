@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
-import src.items.interactables.*;
 
 public class InteractionHandler {
     private Entity entity;
@@ -113,6 +112,7 @@ public class InteractionHandler {
 
     public void interact() {
         Interactables object = getInteractableObject();
+        Sim sim = (Sim) entity;
         if (object == null) {
             return;
         }
@@ -121,8 +121,6 @@ public class InteractionHandler {
             return;
         }
 
-        if (object instanceof Bed) {
-            object.interact((Sim) entity);
-        }
+        object.interact(sim);
     }
 }

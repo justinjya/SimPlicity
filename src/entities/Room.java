@@ -39,6 +39,18 @@ public class Room {
 
         // ONLY FOR DEBUGGING
         testRoom();
+
+        listOfObjects.add(new Door(0, new Room(this, time), time, false));
+    }
+
+    public Room(Room room, GameTime time) {
+        this.name = "Second Room";
+        this.listOfObjects = new ArrayList<>(); 
+        this.time = time;
+        this.editingRoom = false;
+        this.image = ImageLoader.loadRoom();
+
+        listOfObjects.add(new Door(0, room, time, true));
     }
 
     public String getName() {
@@ -217,7 +229,7 @@ public class Room {
     public void testRoom() {
         listOfObjects.add(new Bed((Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 0, time));
         listOfObjects.add(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26 - Consts.OFFSET_Y, 3, 3, Color.CYAN, time));
-        listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 2, 1, Color.ORANGE, time));
+        // listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 2, 1, Color.ORANGE, time));
         listOfObjects.add(new Placeholder("5", "6", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 282 - Consts.OFFSET_Y, 1, 1, Color.MAGENTA, time));
         listOfObjects.add(new Placeholder("7", "8", 0, (Consts.CENTER_X / 2) + 332, (Consts.CENTER_Y / 2) + 154 - Consts.OFFSET_Y, 1, 1, Color.LIGHT_GRAY, time));
     }

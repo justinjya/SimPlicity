@@ -99,6 +99,12 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
+    public void setCurrentRoom(Room room) {
+        this.currentRoom = room;
+        collisionHandler = new CollisionHandler(this, room);
+        interactionHandler = new InteractionHandler(this, room);
+    }
+
     public void interact() {
         interactionHandler.interact();
     }
@@ -125,6 +131,10 @@ public class Sim extends Entity{
     }
 
     public void update() {
+        if (!isStatusCurrently("Idle")) {
+            return;
+        }
+        
         if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom()) {
             move(collisionHandler, interactionHandler);
         }
