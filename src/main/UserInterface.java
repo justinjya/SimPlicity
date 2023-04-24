@@ -105,7 +105,7 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
-        g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
+        // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
         
         // Draw box for filling text
         g.setColor(Color.WHITE);
