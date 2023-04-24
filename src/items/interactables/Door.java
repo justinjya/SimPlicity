@@ -60,10 +60,7 @@ public class Door extends Interactables{
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changeOccupied'");
-    }
+    public void changeOccupied(Sim sim) {}
 
     @Override
     public void interact(Sim sim) {

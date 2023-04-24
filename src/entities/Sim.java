@@ -131,6 +131,10 @@ public class Sim extends Entity{
     }
 
     public void update() {
+        if (!isStatusCurrently("Idle")) {
+            return;
+        }
+        
         if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom()) {
             move(collisionHandler, interactionHandler);
         }

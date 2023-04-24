@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
-import src.items.interactables.*;
 
 public class InteractionHandler {
     private Entity entity;

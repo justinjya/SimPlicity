@@ -114,7 +114,7 @@ public class GamePanel extends JPanel implements Runnable {
         // ui.drawMockup(g2);
 
         // Draw room
-        room.draw(g2);
+        sim.getCurrentRoom().draw(g2);
 
         // Draw sim
         sim.draw(g2);
