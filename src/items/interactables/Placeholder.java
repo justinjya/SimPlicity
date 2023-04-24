@@ -15,7 +15,7 @@ public class Placeholder extends Interactables {
     public Placeholder(String name, String interaction, int imageIndex, int x, int y, int width, int height, Color color, GameTime time) {
         super(name, interaction, imageIndex, x, y, width, height, time);
         setColor(color);
-        image = ImageLoader.loadRoom();
+        image = ImageLoader.loadWood();
     }
 
     public BufferedImage getImage() {

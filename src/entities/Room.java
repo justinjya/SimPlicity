@@ -35,7 +35,7 @@ public class Room {
         this.listOfObjects = new ArrayList<>(); 
         this.time = time;
         this.editingRoom = false;
-        this.image = ImageLoader.loadRoom();
+        this.image = ImageLoader.loadWood();
 
         // ONLY FOR DEBUGGING
         testRoom();
@@ -48,7 +48,7 @@ public class Room {
         this.listOfObjects = new ArrayList<>(); 
         this.time = time;
         this.editingRoom = false;
-        this.image = ImageLoader.loadRoom();
+        this.image = ImageLoader.loadWood();
 
         listOfObjects.add(new Door(0, room, time, true));
     }
