@@ -14,6 +14,7 @@ import src.entities.handlers.KeyHandler;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
+    private World world;
     private Sim sim;
     private Room room;
     private UserInterface ui;
@@ -21,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
+        world = new World();
 
         // Create game time
         time = new GameTime(1, 720, 720);
@@ -114,13 +116,17 @@ public class GamePanel extends JPanel implements Runnable {
         // ui.drawMockup(g2);
 
         // Draw room
-        sim.getCurrentRoom().draw(g2);
+        // sim.getCurrentRoom().draw(g2);
 
         // Draw sim
-        sim.draw(g2);
+        // sim.draw(g2);
 
         // Draw UI
-        ui.draw(g2);
+        // ui.draw(g2);
+
+        // Test drawing the world
+        world.draw(g2);
+        world.drawHouse(g2, new House(200, 200));
 
         // To free resources
         g2.dispose();

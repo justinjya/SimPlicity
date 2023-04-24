@@ -12,8 +12,6 @@ public class World {
     // Image of world background
     private BufferedImage image;
 
-    
-
     // Constructor 
     public World() {
         listOfHouse = new ArrayList<>();

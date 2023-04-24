@@ -7,8 +7,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 
-
-
 public class House extends Entity {
 
     // Owner of house
