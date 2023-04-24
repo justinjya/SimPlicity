@@ -30,6 +30,20 @@ public class ImageLoader {
         return null;
     }
 
+    public static BufferedImage rotate90Clockwise(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage rotated = new BufferedImage(height, width, image.getType());
+    
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                rotated.setRGB(height - 1 - y, x, image.getRGB(x, y));
+            }
+        }
+        return rotated;
+    }
+    
+
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
         images[0] = readImage("sim", "idle_down", 1, 1);
@@ -68,5 +82,15 @@ public class ImageLoader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static BufferedImage[] loadDoor() {
+        BufferedImage[] images = new BufferedImage[4];
+        images[0] = readImage("tiles", "door", 1, 1);
+        images[1] = rotate90Clockwise(images[0]);
+        images[2] = rotate90Clockwise(images[2]);
+        images[3] = rotate90Clockwise(images[3]);
+
+        return images;
     }
 }

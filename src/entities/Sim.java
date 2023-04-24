@@ -99,6 +99,10 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
+    public void setCurrentRoom(Room room) {
+        this.currentRoom = room;
+    }
+
     public void interact() {
         interactionHandler.interact();
     }
