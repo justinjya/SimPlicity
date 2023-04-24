@@ -152,27 +152,30 @@ public class UserInterface {
 
         drawAttributes(g);
 
-        // ONLY FOR DEBUGGING
-        if (debug) {
-            g.drawString("x: " + sim.getX(), 33, 264);
-            g.drawString("y: " + sim.getY(), 33, 274);
-            g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 73, 264);
-            g.drawString("isWalking: " + sim.isMoving(), 73, 274);
-            
-            if (sim.getInteractionHandler().isObjectInRange()) {
-                    object = sim.getInteractionHandler().getInteractableObject();
-                    g.drawString("Press F to Interact with " + object.getName(), 33, 304);
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 314);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 324);
-                }
-                
-            // if (!sim.isIdle()) {
-            //     sim.getInteractionHandler().getInteractableObject().drawTimer(g);
-            // }
+        font = new Font("Arial", Font.PLAIN, 12);
+        g.setFont(font);
+
+        if (sim.getInteractionHandler().isObjectInRange()) {
+            object = sim.getInteractionHandler().getInteractableObject();
+            g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
         }
 
         // ONLY FOR DEBUGGING
-        // g.drawString("Duration: " + time.getDecrements(), 605, 60);
+        if (debug) {
+            font = new Font("Arial", Font.PLAIN, 10);
+            g.setFont(font);
+
+            g.drawString("x: " + sim.getX(), 33, 374);
+            g.drawString("y: " + sim.getY(), 33, 384);
+            g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 73, 374);
+            g.drawString("isWalking: " + sim.isMoving(), 73, 384);
+            
+            if (sim.getInteractionHandler().isObjectInRange()) {
+                    object = sim.getInteractionHandler().getInteractableObject();
+                    g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
+                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
+                }
+        }
     }
 
     private void drawAttributes(Graphics2D g) {
@@ -189,7 +192,7 @@ public class UserInterface {
         g.drawString("Health", 48, 159);
         g.drawString("Hunger", 48, 196);
         g.drawString("Mood", 48, 233);
-        g.drawString("$ " + sim.getMoney(), 87, 123);
+        g.drawString("$ " + sim.getMoney(), 87, 122);
         
         g.drawString("Time", 48, 320);
         
