@@ -49,7 +49,7 @@ public class Bed extends Interactables{
 
     // ONLY FOR DEBUGGING
     public Bed(GameTime time) {
-        super(names[0], "Sleep", 0, (Consts.CENTER_X / 2) + 76, Consts.CENTER_Y + 17, width[0], height[0], time);
+        super(names[0], "Sleep", 0, (Consts.CENTER_X / 2) + 76, Consts.CENTER_Y + 15, width[0], height[0], time);
         this.price = prices[0];
         this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
