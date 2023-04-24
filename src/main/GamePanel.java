@@ -20,10 +20,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
-        setBackground(new Color(30, 30, 30));
+        setBackground(new Color(44, 39, 35));
 
         // Create game time
-        time = new GameTime(1, 720, 720);
+        time = new GameTime(1, 720);
 
         // Create room
         room = new Room("Starter Room", time);
@@ -111,7 +111,6 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         // ONLY FOR DEBUGGING
-        // background.drawGrid(g2);
         // ui.drawMockup(g2);
 
         // Draw room
