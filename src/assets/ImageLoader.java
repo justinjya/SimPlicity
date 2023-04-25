@@ -119,4 +119,14 @@ public class ImageLoader {
 
         return images;
     }
+
+    public static BufferedImage[] loadArrows() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("tiles", "arrow", 1, 1);
+        images[1] = rotate90Clockwise(images[0]);
+        images[2] = rotate90Clockwise(images[1]);
+        images[3] = rotate90Clockwise(images[2]);
+        return images;
+    }
 }
