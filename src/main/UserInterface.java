@@ -17,6 +17,7 @@ public class UserInterface {
     private Sim sim;
     private Interactables object;
     private GameTime time;
+    private boolean isViewingWorld = false;
 
     //ONLY FOR DEBUGGING
     private boolean debug;
@@ -37,6 +38,14 @@ public class UserInterface {
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
+    }
+
+    public boolean isViewingWorld() {
+        return isViewingWorld;
+    }
+
+    public void changeIsViewingWorldState() {
+        this.isViewingWorld = !this.isViewingWorld;
     }
 
     public void debug() {
@@ -66,6 +75,9 @@ public class UserInterface {
     private void boxEntered() {
         sim.resetStatus();
         switch (selectedBox) {
+            case 0:
+                changeIsViewingWorldState();
+                break;
             case 1:
                 // This is just a test
                 sim.getCurrentRoom().addObject(new Bed(time));
@@ -89,6 +101,13 @@ public class UserInterface {
     }
 
     public void update() {
+        if (isViewingWorld) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                System.out.println("tes");
+                changeIsViewingWorldState();
+            }
+        }
+
         // If enter is pressed execute a function according to selected box position 
         if (sim.isStatusCurrently("Tabbed")) {
             // Change selected box based on key input
@@ -237,6 +256,9 @@ public class UserInterface {
 
         g.setFont(font);
         switch (selectedBox) {
+            case 0:
+                g.drawString("Show World", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                break;
             case 1:
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;

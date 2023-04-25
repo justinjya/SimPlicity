@@ -18,7 +18,7 @@ public class Room {
     private GameTime time;
     
     // For adding, editing, and removing objects
-    private boolean editingRoom;
+    private boolean editingRoom = false;
     private Interactables moveableObject = null;
     private Interactables selectedObject = null;
     private CollisionHandler collisionHandler;
@@ -34,7 +34,6 @@ public class Room {
         this.name = name;
         this.listOfObjects = new ArrayList<>(); 
         this.time = time;
-        this.editingRoom = false;
         this.image = ImageLoader.loadWood();
 
         // ONLY FOR DEBUGGING

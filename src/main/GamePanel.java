@@ -49,7 +49,9 @@ public class GamePanel extends JPanel implements Runnable {
                 // System.out.println(e.getKeyCode());
 
                 if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
-                    ui.tab();
+                    if (!ui.isViewingWorld()) {
+                        ui.tab();
+                    }
                 }
                 if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
                     ui.debug();
@@ -107,13 +109,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        world.update();
+        ui.update();
 
-        // sim.update();
-
-        // room.update();
-
-        // ui.update();
+        if (!ui.isViewingWorld()) {
+            sim.update();
+            
+            room.update();
+        }
+        else {
+            world.update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -123,18 +128,20 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // Draw room
-        // sim.getCurrentRoom().draw(g2);
+        if (!ui.isViewingWorld()) {
+            // Draw room
+            sim.getCurrentRoom().draw(g2);
 
-        // Draw sim
-        // sim.draw(g2);
+            // Draw sim
+            sim.draw(g2);
 
-        // Draw UI
-        // ui.draw(g2);
-
-        // Draw the world
-        world.draw(g2);
-
+            // Draw UI
+            ui.draw(g2);
+        }
+        else {
+            // Draw the world
+            world.draw(g2);
+        }
         // To free resources
         g2.dispose();
     }
