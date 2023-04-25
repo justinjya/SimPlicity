@@ -1,7 +1,5 @@
 package src.entities;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
-
 import src.entities.handlers.KeyHandler;
 
 public class Cursor {
