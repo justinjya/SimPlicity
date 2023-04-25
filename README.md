@@ -1,4 +1,4 @@
-## Cangelog
+## Changelog
 
 **23/04**
 - Add profession attribute to Sim
