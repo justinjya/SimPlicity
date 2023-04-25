@@ -61,8 +61,6 @@ public class GamePanel extends JPanel implements Runnable {
                     world.changeIsAddingState();
                 }
             }
-
-// world.getTime().decreaseTimeRemaining((int) Math.sqrt((sim.getX()-selectedHouse.getX())*(sim.getX()-selectedHouse.getX())+(sim.getY()-selectedHouse.getY())*(sim.getY()-selectedHouse.getY())));
             
             @Override
             public void keyReleased(KeyEvent e) {

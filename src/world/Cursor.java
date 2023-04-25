@@ -44,6 +44,7 @@ public class Cursor {
         else {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
                 if (world.isLocationOccupied()) {
+                    // ONLY FOR DEBUGGING
                     System.out.println("BERHASIL VISIT");
                 }
             }

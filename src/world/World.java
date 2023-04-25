@@ -2,11 +2,11 @@ package src.world;
 
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.awt.*;
+
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.GameTime;
-
-import java.awt.*;
 
 public class World {
     // Atributes
@@ -46,19 +46,20 @@ public class World {
         this.cursor = new Cursor(0, 0, this);
         this.time = gameTime;
         
+        // ONLY FOR DEBUGGING
         listOfHouse.add(new House(1, 1, this));
     }
 
     // Getter and setter
-    public int getMap(int x, int y){
+    public int getMap(int x, int y) {
         return map[y][x];
     }
 
-    public boolean isAdding(){
+    public boolean isAdding() {
         return isAdding;
     }
 
-    public void setMap(int x, int y, int value){
+    public void setMap(int x, int y, int value) {
         map[y][x] = value;
     }
 
@@ -66,14 +67,13 @@ public class World {
         this.isAdding = !this.isAdding;
     }
 
-    public ArrayList<House> getListOfHouse(){
+    public ArrayList<House> getListOfHouse() {
         return listOfHouse;
     }
 
     // Method to add house
     public void addHouse() {
         if (!isLocationOccupied()) {
-            System.out.println("addHouse");
             listOfHouse.add(new House(cursor.getX(), cursor.getY(), this));
         }
     }
