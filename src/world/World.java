@@ -78,7 +78,7 @@ public class World {
         }
     }
 
-    // // Method to check the whether the location of new house is being occupied
+    // Method to check the whether the location of new house is being occupied
     public boolean isLocationOccupied() {
         boolean isOccupied = false; // initialize the status of occupation in newHouse location
 
