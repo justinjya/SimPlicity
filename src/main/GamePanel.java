@@ -23,19 +23,15 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
-<<<<<<< Updated upstream
-        world = new World(time);
-=======
+        
+        // Create game time
+        time = new GameTime(1, 720, 720);
         
         // create a new house at position (100,100)
         house = new House(0, 0);
 
         // create a new world
-        world = new World();
->>>>>>> Stashed changes
-
-        // Create game time
-        time = new GameTime(1, 720, 720);
+        world = new World(time);
 
         // Create room
         room = new Room("First Room", time);
