@@ -1,6 +1,7 @@
 package src.entities;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -46,6 +47,7 @@ public class Main extends Canvas implements Runnable, KeyListener {
     public void start() {
         // set up the JFrame
         frame = new JFrame();
+        frame.setBackground(Color.GRAY);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
