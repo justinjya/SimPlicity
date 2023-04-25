@@ -14,23 +14,32 @@ public class Door extends Interactables {
 
     private BufferedImage[] images;
 
-    public Door(int imageIndex, GameTime time) {
-        super("Door", "Visit another room", imageIndex, Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4), Consts.PLAY_ARENA_Y_UP, 1, 1, time);
-
+    public Door(int imageIndex, Room room, GameTime time) {
+        super("Door", "Visit another room", imageIndex, 0, 0, 1, 1, time);
+        
+        this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
 
         // Update the bounds based on the image index
         switch (imageIndex) {
             case 0:
+                setX(Consts.PLAY_ARENA_X_LEFT);
+                setY(Consts.PLAY_ARENA_Y_UP);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 1:
+                setX(Consts.PLAY_ARENA_X_RIGHT);
+                setY(Consts.PLAY_ARENA_Y_UP);
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
+                setX(Consts.PLAY_ARENA_X_RIGHT);
+                setY(Consts.PLAY_ARENA_Y_UP);
                 getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 3:
+                setX(Consts.PLAY_ARENA_X_LEFT);
+                setY(Consts.PLAY_ARENA_Y_UP);
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             default:
@@ -38,15 +47,36 @@ public class Door extends Interactables {
         }
     }
 
-    public Door(int imageIndex, Room room, GameTime time, boolean flip) {
-        super("Door", "Visit another room", imageIndex, Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4), Consts.PLAY_ARENA_Y_UP, 1, 1, time);
-        getBounds().setSize(64, 24);
-
+    public Door(Door door, Room room, GameTime time) {
+        super("Door", "Visit another room", 0, 0, 0, 1, 1, time);
+        
         this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
 
-        if (flip) {
-            flip();
+        // Update the bounds based on the image index
+        switch (door.getImageIndex()) {
+            case 0:
+                setX(Consts.PLAY_ARENA_X_LEFT);
+                setY(Consts.PLAY_ARENA_Y_UP);
+                getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
+                break;
+            case 1:
+                setX(Consts.PLAY_ARENA_X_RIGHT);
+                setY(Consts.PLAY_ARENA_Y_UP);
+                getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
+                break;
+            case 2:
+                setX(Consts.PLAY_ARENA_X_RIGHT);
+                setY(Consts.PLAY_ARENA_Y_UP);
+                getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
+                break;
+            case 3:
+                setX(Consts.PLAY_ARENA_X_LEFT);
+                setY(Consts.PLAY_ARENA_Y_UP);
+                getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
+                break;
+            default:
+                break;
         }
     }
 
@@ -59,14 +89,17 @@ public class Door extends Interactables {
                 break;
             case 1:
                 setImageIndex(3);
+                setY(Consts.PLAY_ARENA_X_LEFT);
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
                 setImageIndex(0);
+                setY(Consts.PLAY_ARENA_Y_UP);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 3:
                 setImageIndex(1);
+                setY(Consts.PLAY_ARENA_X_RIGHT);
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
             default:

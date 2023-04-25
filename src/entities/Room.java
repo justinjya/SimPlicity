@@ -40,7 +40,9 @@ public class Room {
         // ONLY FOR DEBUGGING
         // testRoom();
 
-        listOfObjects.add(new Door(0, new Room(this, time), time, false));
+        Room secondRoom = new Room(this, time);
+        listOfObjects.add(new Door(3, secondRoom, time));
+        secondRoom.getListOfObjects().add(new Door((Door) listOfObjects.get(0), this, time));
     }
 
     public Room(Room room, GameTime time) {
@@ -50,7 +52,7 @@ public class Room {
         this.editingRoom = false;
         this.image = ImageLoader.loadWood();
 
-        listOfObjects.add(new Door(0, room, time, true));
+        // listOfObjects.add(new Door(0, room, time, true));
     }
 
     public String getName() {
