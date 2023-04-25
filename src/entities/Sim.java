@@ -7,6 +7,7 @@ import java.awt.Color;
 import src.assets.ImageLoader;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.world.Room;
 
 public class Sim extends Entity{
     // Atributes

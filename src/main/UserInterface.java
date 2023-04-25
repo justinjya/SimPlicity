@@ -73,6 +73,9 @@ public class UserInterface {
             case 2:
                 sim.getCurrentRoom().selectObject();
                 break;
+            case 3:
+                
+                break;
             default:
                 break;
         }
@@ -242,6 +245,9 @@ public class UserInterface {
                 break;
             case 2:
                 g.drawString("Edit Room", Consts.CENTER_X - 18, Consts.CENTER_Y + 172);
+                break;
+            case 3:
+                g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);

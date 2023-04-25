@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.world.Room;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid

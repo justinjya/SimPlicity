@@ -1,4 +1,4 @@
-package src.entities;
+package src.world;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -9,6 +9,7 @@ import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.GameTime;
 import src.items.interactables.*;
+import src.entities.Interactables;
 import src.entities.handlers.*;
 
 public class Room {

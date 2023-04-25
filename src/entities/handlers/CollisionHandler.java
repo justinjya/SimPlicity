@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import src.entities.*;
 import src.main.Consts;
+import src.world.Room;
 
 public class CollisionHandler {
     private Entity entity;
