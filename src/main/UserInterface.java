@@ -79,7 +79,6 @@ public class UserInterface {
     }
 
     public void tab() {
-        // TO - DO !!! : Fix being able to tab while doing an active action
         if (!sim.isStatusCurrently("Tabbed")) {
             sim.setStatus("Tabbed");
         }
@@ -106,22 +105,19 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
-        // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
+        g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
         
         // Draw box for filling text
         g.setColor(Color.WHITE);
         g.fillRect(11, 51, 182, 24); // Sim name
         g.fillRect(607, 51, 182, 24); // Day number
-
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(11, 81, 182, 16); // Sim status
         g.fillRect(11, 266, 182, 28); // Time remaining title
-        g.fillRect(607, 119, 182, 16); // Room name
-        
         g.setColor(Color.GRAY);
         g.fillRect(11, 103, 182, 30); // Sim money
         g.fillRect(11, 294, 182, 58); // Time remaining
-        g.fillRect(607, 88, 182, 31); // House name
+        // g.fillRect(607, 88, 182, 64); // House and Room name
 
         // Draw option boxes
         g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
@@ -153,14 +149,13 @@ public class UserInterface {
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
-        g.drawString("House name", 660, 108);
 
         drawAttributes(g);
 
         font = new Font("Arial", Font.PLAIN, 12);
         g.setFont(font);
 
-        if (sim.getInteractionHandler().isObjectInRange() && sim.isStatusCurrently("Idle")) {
+        if (sim.getInteractionHandler().isObjectInRange()) {
             object = sim.getInteractionHandler().getInteractableObject();
             g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
         }
@@ -189,7 +184,6 @@ public class UserInterface {
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.drawString("" + sim.getStatus(), 90, 93);
-        g.drawString("" + sim.getCurrentRoom().getName(), 670, 130);
 
         font = new Font("Arial", Font.PLAIN, 12);
         g.setFont(font);

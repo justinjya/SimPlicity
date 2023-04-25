@@ -84,6 +84,61 @@ public class ImageLoader {
         return null;
     }
 
+    public static BufferedImage loadMenuMockup(){
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/menu_display.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage loadStartButton(){
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/start_button.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage loadHelpButton(){
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/help_button.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage loadExitButton(){
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/exit_button.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage loadLoadButton(){
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/load_button.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static BufferedImage[] loadDoor() {
         BufferedImage[] images = new BufferedImage[4];
         images[0] = readImage("tiles", "door", 1, 1);
