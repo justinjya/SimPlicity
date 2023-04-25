@@ -30,6 +30,19 @@ public class ImageLoader {
         return null;
     }
 
+    public static BufferedImage readImage(String folder, String subfolder, String fileName, int width, int height) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new File("./src/assets/" + folder + "/" + subfolder + "/" + fileName + ".png"));
+            image = scaleImage(image, width, height);
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static BufferedImage rotate90Clockwise(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -98,32 +111,12 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[6];
 
         images[0] = readImage("tiles", "grass", 1, 1);
-        images[1] = readImage("tiles", "house", 1, 1);
+        images[1] = readImage("tiles", "house", "house", 1, 1);
         images[2] = readImage("tiles", "cursor", 1, 1);
-        images[3] = readImage("tiles", "unadded_house", 1, 1);
-        images[4] = readImage("tiles", "selected_house", 1, 1);
-        images[5] = readImage("tiles", "selected_house_occupied", 1, 1);
+        images[3] = readImage("tiles", "house", "unadded_house", 1, 1);
+        images[4] = readImage("tiles", "house", "selected_house", 1, 1);
+        images[5] = readImage("tiles", "house", "selected_house_occupied", 1, 1);
 
         return images;
-    }
-
-    public static BufferedImage loadGrass() {
-        BufferedImage image = readImage("tiles", "grass", 1, 1);
-        return image;
-    }
-
-    public static BufferedImage loadHouse() {
-        BufferedImage image = readImage("tiles", "house", 1, 1);
-        return image;
-    }
-
-    public static BufferedImage loadAddedHouse() {
-        BufferedImage image = readImage("tiles", "added_house", 1, 1);
-        return image;
-    }
-
-    public static BufferedImage loadCursor() {
-        BufferedImage image = readImage("tiles", "cursor", 1, 1);
-        return image;
     }
 }
