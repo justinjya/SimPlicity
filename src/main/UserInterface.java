@@ -88,6 +88,10 @@ public class UserInterface {
         }
     }
 
+    public void inventory() {
+        sim.getInventory().changeState();
+    }
+
     public void update() {
         // If enter is pressed execute a function according to selected box position 
         if (sim.isStatusCurrently("Tabbed")) {
@@ -102,12 +106,16 @@ public class UserInterface {
                 boxEntered();
             }
         }
+
+        if (sim.getInventory().isOpen()) {
+            // Change selected box based on key input
+        }
     }
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
         // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
-        
+
         // Draw box for filling text
         g.setColor(Color.WHITE);
         g.fillRect(11, 51, 182, 24); // Sim name
@@ -123,6 +131,8 @@ public class UserInterface {
         g.fillRect(11, 294, 182, 58); // Time remaining
         g.fillRect(607, 88, 182, 31); // House name
 
+        g.fillRect(607, 147, 182, 26); // Inventory
+
         // Draw option boxes
         g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
         g.fillRect(288, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
@@ -137,6 +147,10 @@ public class UserInterface {
             drawSelectedBoxText(g);
         }
 
+        if (sim.getInventory().isOpen()) {
+            sim.getInventory().draw(g);
+        }
+        
         drawText(g);
     }
 
@@ -144,7 +158,7 @@ public class UserInterface {
         Font font;
         g.setColor(Color.BLACK);
 
-        font = new Font("Arial", Font.BOLD, 13);
+        font = new Font("Inter", Font.BOLD, 13);
 
         g.setFont(font);
         g.drawString(sim.getName(), 83, 68);
@@ -155,9 +169,11 @@ public class UserInterface {
         g.setColor(Color.WHITE);
         g.drawString("House name", 660, 108);
 
+        g.drawString("Inventory", 668, 165);
+
         drawAttributes(g);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
 
         if (sim.getInteractionHandler().isObjectInRange() && sim.isStatusCurrently("Idle")) {
@@ -167,7 +183,7 @@ public class UserInterface {
 
         // ONLY FOR DEBUGGING
         if (debug) {
-            font = new Font("Arial", Font.PLAIN, 10);
+            font = new Font("Inter", Font.PLAIN, 10);
             g.setFont(font);
 
             g.drawString("x: " + sim.getX(), 33, 374);
@@ -184,14 +200,14 @@ public class UserInterface {
     }
 
     private void drawAttributes(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 10);
+        Font font = new Font("Inter", Font.PLAIN, 10);
 
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.drawString("" + sim.getStatus(), 90, 93);
         g.drawString("" + sim.getCurrentRoom().getName(), 670, 130);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
         g.setColor(Color.WHITE);
 
@@ -209,7 +225,7 @@ public class UserInterface {
     }
 
     private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {
@@ -221,7 +237,7 @@ public class UserInterface {
     }
 
     private void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {
@@ -233,7 +249,7 @@ public class UserInterface {
     }
 
     private void drawSelectedBoxText(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 12);
+        Font font = new Font("Inter", Font.PLAIN, 12);
 
         g.setFont(font);
         switch (selectedBox) {

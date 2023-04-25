@@ -17,7 +17,8 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private Room currentRoom;
-    Profession profession;
+    private Profession profession;
+    private Inventory inventory;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -37,6 +38,7 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.currentRoom = currentRoom;
         this.profession = new Profession(); 
+        this.inventory = new Inventory();
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -76,6 +78,10 @@ public class Sim extends Entity{
 
     public int getSimSalary() {
         return profession.getSalary();
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public Room getCurrentRoom() {

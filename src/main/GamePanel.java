@@ -52,6 +52,9 @@ public class GamePanel extends JPanel implements Runnable {
                 if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
                     sim.interact();
                 }
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+                    ui.inventory();
+                }
             }
 
             @Override
@@ -112,6 +115,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
+
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0,0,800,600);
 
         // Draw room
         sim.getCurrentRoom().draw(g2);
