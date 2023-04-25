@@ -105,7 +105,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage loadAddedHouse() {
-        BufferedImage image = readImage("tiles", "addedHouse", 1, 1);
+        BufferedImage image = readImage("tiles", "added_house", 1, 1);
         return image;
     }
 
