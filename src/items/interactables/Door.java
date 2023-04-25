@@ -9,16 +9,33 @@ import src.entities.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 
-public class Door extends Interactables{
+public class Door extends Interactables {
     private Room leadsIntoRoom;
 
     private BufferedImage[] images;
 
     public Door(int imageIndex, GameTime time) {
         super("Door", "Visit another room", imageIndex, Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4), Consts.PLAY_ARENA_Y_UP, 1, 1, time);
-        getBounds().setSize(64, 24);
 
         this.images = ImageLoader.loadDoor();
+
+        // Update the bounds based on the image index
+        switch (imageIndex) {
+            case 0:
+                getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
+                break;
+            case 1:
+                getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
+                break;
+            case 2:
+                getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
+                break;
+            case 3:
+                getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
+                break;
+            default:
+                break;
+        }
     }
 
     public Door(int imageIndex, Room room, GameTime time, boolean flip) {
@@ -38,16 +55,19 @@ public class Door extends Interactables{
             case 0:
                 setImageIndex(2);
                 setY(Consts.PLAY_ARENA_Y_DOWN);
-                getBounds().setLocation(getX(), getY() + (Consts.SCALED_TILE - 24));
+                getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 1:
                 setImageIndex(3);
+                getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
                 setImageIndex(0);
+                getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 3:
                 setImageIndex(1);
+                getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
             default:
                 break;

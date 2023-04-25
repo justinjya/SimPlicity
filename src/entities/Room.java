@@ -38,7 +38,7 @@ public class Room {
         this.image = ImageLoader.loadWood();
 
         // ONLY FOR DEBUGGING
-        testRoom();
+        // testRoom();
 
         listOfObjects.add(new Door(0, new Room(this, time), time, false));
     }
@@ -206,7 +206,7 @@ public class Room {
                 object.draw(g, object);
             }
             // ONLY FOR DEBUGGING
-            // object.drawCollisionBox(g);
+            object.drawCollisionBox(g);
         }
 
         if (isEditingRoom() && moveableObject == null) {
