@@ -94,6 +94,19 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadWorld() {
+        BufferedImage[] images = new BufferedImage[6];
+
+        images[0] = readImage("tiles", "grass", 1, 1);
+        images[1] = readImage("tiles", "house", 1, 1);
+        images[2] = readImage("tiles", "cursor", 1, 1);
+        images[3] = readImage("tiles", "unadded_house", 1, 1);
+        images[4] = readImage("tiles", "selected_house", 1, 1);
+        images[5] = readImage("tiles", "selected_house_occupied", 1, 1);
+
+        return images;
+    }
+
     public static BufferedImage loadGrass() {
         BufferedImage image = readImage("tiles", "grass", 1, 1);
         return image;

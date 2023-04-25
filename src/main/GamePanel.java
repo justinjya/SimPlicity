@@ -5,8 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.*;
-import src.entities.Cursor;
 import src.entities.handlers.KeyHandler;
+import src.world.World;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -16,8 +16,6 @@ import src.entities.handlers.KeyHandler;
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
     private World world;
-    private Cursor cursor;
-    private House house;
     private Sim sim;
     private Room room;
     private UserInterface ui;
@@ -28,15 +26,9 @@ public class GamePanel extends JPanel implements Runnable {
         
         // Create game time
         time = new GameTime(1, 720, 720);
-        
-        // create a new house at position (100,100)
-        house = new House(0, 0);
 
         // create a new world
         world = new World(time);
-
-        // create a new cursor
-        cursor = new Cursor(0,0);
 
         // Create room
         room = new Room("First Room", time);
@@ -65,23 +57,13 @@ public class GamePanel extends JPanel implements Runnable {
                 if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
                     sim.interact();
                 }
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) { 
-                    if(!world.getIsAdding()){
-                        if(world.isLocationOccupied(cursor.getX(), cursor.getY())){
-                            if(world.findHouse(cursor.getX(), cursor.getY()).getOwner().getCurrentHouse() == sim.getCurrentHouse()){
-                                System.out.println("BERHASIL VISIT");
-                                House selectedHouse = world.findHouse(cursor.getX(), cursor.getY());
-                                world.getTime().decreaseTimeRemaining((int) Math.sqrt((sim.getX()-selectedHouse.getX())*(sim.getX()-selectedHouse.getX())+(sim.getY()-selectedHouse.getY())*(sim.getY()-selectedHouse.getY())));
-                                System.out.println(world.getTime().getDay()+" "+world.getTime().getTimeRemaining());
-                            }
-                        }
-                    }
-                    else{
-                        world.addHouse(house);
-                    }
+                if (KeyHandler.isKeyPressed(KeyHandler.KEY_SPACE)) {
+                    world.changeIsAddingState();
                 }
             }
 
+// world.getTime().decreaseTimeRemaining((int) Math.sqrt((sim.getX()-selectedHouse.getX())*(sim.getX()-selectedHouse.getX())+(sim.getY()-selectedHouse.getY())*(sim.getY()-selectedHouse.getY())));
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e.getKeyCode());
@@ -127,18 +109,13 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        if(world.getIsAdding()){
-            house.move(world);
-        }
-        else{
-            cursor.move();
-        }
+        world.update();
 
-    //     sim.update();
+        // sim.update();
 
-    //     room.update();
+        // room.update();
 
-    //     ui.update();
+        // ui.update();
     }
 
     public void paintComponent(Graphics g)
@@ -157,14 +134,8 @@ public class GamePanel extends JPanel implements Runnable {
         // Draw UI
         // ui.draw(g2);
 
-        // Test drawing the world
-        world.draw(g2, cursor, house);
-        if(world.getIsAdding()){
-            world.drawHouse(g2, house);
-        }
-        else{
-            world.drawCursor(g2, cursor);
-        }
+        // Draw the world
+        world.draw(g2);
 
         // To free resources
         g2.dispose();
