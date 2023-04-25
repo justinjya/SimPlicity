@@ -17,7 +17,7 @@ public class ImageLoader {
         return scaledImage;
     }
 
-    private static BufferedImage readImage(String folder, String fileName, int width, int height) {
+    public static BufferedImage readImage(String folder, String fileName, int width, int height) {
         BufferedImage image;
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
@@ -29,6 +29,20 @@ public class ImageLoader {
         }
         return null;
     }
+
+    public static BufferedImage rotate90Clockwise(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage rotated = new BufferedImage(height, width, image.getType());
+    
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                rotated.setRGB(height - 1 - y, x, image.getRGB(x, y));
+            }
+        }
+        return rotated;
+    }
+    
 
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
@@ -54,8 +68,29 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage loadRoom() {
+    public static BufferedImage loadWood() {
         BufferedImage image = readImage("tiles", "wood", 1, 1);
         return image;
+    }
+
+    public static BufferedImage loadMockup() {
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/gameLayoutMockup.png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage[] loadDoor() {
+        BufferedImage[] images = new BufferedImage[4];
+        images[0] = readImage("tiles", "door", 1, 1);
+        images[1] = rotate90Clockwise(images[0]);
+        images[2] = rotate90Clockwise(images[1]);
+        images[3] = rotate90Clockwise(images[2]);
+
+        return images;
     }
 }

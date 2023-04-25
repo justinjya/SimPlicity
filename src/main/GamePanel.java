@@ -5,9 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.*;
-import src.items.interactables.*;
 import src.entities.handlers.KeyHandler;
 
+// ini notes aja
 // x + 12 pas dikiri 6x6 grid
 // y - 38 pas diatas 6x6 grid
 // y + 283 pas dibawah 6x6 grid
@@ -20,13 +20,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
-        setBackground(Color.WHITE);
+        setBackground(new Color(44, 39, 35));
 
         // Create game time
         time = new GameTime(1, 720, 720);
 
         // Create room
-        room = new Room("Starter Room", time);
+        room = new Room("First Room", time);
         
         // Create sim
         sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
@@ -39,10 +39,18 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    // room.addObject(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26, 3, 3, Color.CYAN, time));
-                    room.addObject(new Bed(time));
-                    // room.addObject();
+                
+                // ONLY FOR DEBUGGING
+                // System.out.println(e.getKeyCode());
+
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
+                    ui.tab();
+                }
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
+                    ui.debug();
+                }
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
+                    sim.interact();
                 }
             }
 
@@ -53,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
         };
         addKeyListener(keyAdapter);
         setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
         requestFocusInWindow();
     }
 
@@ -93,6 +102,8 @@ public class GamePanel extends JPanel implements Runnable {
         sim.update();
 
         room.update();
+
+        ui.update();
     }
 
     public void paintComponent(Graphics g)
@@ -100,10 +111,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         // ONLY FOR DEBUGGING
-        // background.drawGrid(g2);
+        // ui.drawMockup(g2);
 
         // Draw room
-        room.draw(g2);
+        sim.getCurrentRoom().draw(g2);
 
         // Draw sim
         sim.draw(g2);
@@ -111,6 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Draw UI
         ui.draw(g2);
 
+        // To free resources
         g2.dispose();
     }
 }
