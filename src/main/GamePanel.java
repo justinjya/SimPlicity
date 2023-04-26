@@ -20,6 +20,11 @@ public class GamePanel extends JPanel implements Runnable {
     private Room room;
     private UserInterface ui;
 
+    // testing sim color
+    private float hue = 0.0f;
+    private float sat = 1.0f;
+    private float bri = 0.92f;
+
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
@@ -41,7 +46,15 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(sim, ui);
+                // KeyHandler.keyBinds(sim, ui);
+
+                // testing sim color
+                if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
+                    hue += 1 / 180.0f;
+                }
+                if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
+                    hue -= 1 / 180.0f;
+                }
             }
 
             @Override
@@ -112,7 +125,18 @@ public class GamePanel extends JPanel implements Runnable {
         // // Draw UI
         // ui.draw(g2);
 
-        g2.drawImage(ImageLoader.testSimColor(), Consts.CENTER_X, Consts.CENTER_Y, Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
+        // testing sim color
+        Font font;
+        g2.setColor(Color.WHITE);
+
+        font = new Font("Arial", Font.PLAIN, 15);
+
+        g2.setFont(font);
+        g2.drawString("hue: " + hue, 10, 30);
+        g2.drawString("sat: " + sat, 10, 50);
+        g2.drawString("bri: " + bri, 10, 70);
+
+        g2.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
 
         // To free resources
         g2.dispose();

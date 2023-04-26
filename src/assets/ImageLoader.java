@@ -99,7 +99,7 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage testSimColor() {
+    public static BufferedImage testSimColor(float hue) {
         Color redColor = new Color(215, 0, 20); // red color
         Color greenColor = new Color(0, 254, 10); // green color
         Color newShirtColor = new Color(0, 255, 0); // purple color
@@ -133,6 +133,7 @@ public class ImageLoader {
 
                 if (hueDiff <= 0.1 || hueDiff >= 0.9) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
+                    newShirtHsb[0] = hue;
                     newShirtHsb[1] = pixelHsb[1]; // keep saturation value
                     newShirtHsb[2] = pixelHsb[2]; // keep brightness value
                     Color newPixelColor = new Color(Color.HSBtoRGB(newShirtHsb[0], newShirtHsb[1], newShirtHsb[2]));
