@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.world.Room;
 import src.world.World;
 
 // ini notes aja
@@ -44,24 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                
-                // ONLY FOR DEBUGGING
-                // System.out.println(e.getKeyCode());
-
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
-                    if (!ui.isViewingWorld()) {
-                        ui.tab();
-                    }
-                }
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
-                    ui.debug();
-                }
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-                    sim.interact();
-                }
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_SPACE)) {
-                    world.changeIsAddingState();
-                }
+                KeyHandler.keyBinds(sim, ui);
             }
             
             @Override
@@ -114,7 +99,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (!ui.isViewingWorld()) {
             sim.update();
             
-            room.update();
+            sim.getCurrentRoom().update();
         }
         else {
             world.update();
