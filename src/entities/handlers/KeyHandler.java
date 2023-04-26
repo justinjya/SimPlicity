@@ -2,6 +2,9 @@ package src.entities.handlers;
 
 import java.awt.event.KeyEvent;
 
+import src.entities.Sim;
+import src.main.UserInterface;
+
 public class KeyHandler {
     public static final int KEY_A = KeyEvent.VK_A;
     public static final int KEY_W = KeyEvent.VK_W;
@@ -34,5 +37,17 @@ public class KeyHandler {
         boolean pressed = keys[keyCode] && !prevKeys[keyCode];
         prevKeys[keyCode] = keys[keyCode];
         return pressed;
+    }
+
+    public static void keyBinds(Sim sim, UserInterface ui) {
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
+            ui.tab();
+        }
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
+            ui.debug();
+        }
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
+            sim.interact();
+        }
     }
 }

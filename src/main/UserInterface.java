@@ -68,6 +68,12 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
+        if (debug) {
+            sim.drawCollisionBox(g);
+            sim.drawInteractionRange(g);
+            sim.getCurrentRoom().drawCollisionBox(g);
+        }
+
         // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
         
         // Draw box for filling text

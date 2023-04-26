@@ -94,22 +94,21 @@ public abstract class Interactables extends Entity implements Item {
         g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
     
-    // ONLY FOR DEBUGGING
-    public void drawTimer(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        Font font = new Font("Arial", Font.BOLD, 16);
-        g.setFont(font);
-        
-        g.drawString("Duration: " + time.getDecrements(), 605, 60);
-    }
-    
     public abstract BufferedImage getImage();
     public abstract void changeOccupied(Sim sim);
     public abstract void interact(Sim sim);
 
     // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {
-        g.setColor(new Color(255, 0, 0, 128)); // Transparent yellow color
+        g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
         g.fillRect((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+    }
+
+    public void drawTimer(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        Font font = new Font("Arial", Font.BOLD, 16);
+        g.setFont(font);
+        
+        g.drawString("Duration: " + time.getDecrements(), 605, 60);
     }
 }

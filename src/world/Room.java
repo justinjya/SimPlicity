@@ -8,14 +8,16 @@ import java.util.ArrayList;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.GameTime;
-import src.items.interactables.*;
 import src.entities.Interactables;
+import src.entities.Sim;
+import src.items.interactables.*;
 import src.entities.handlers.*;
 
 public class Room {
     // Atributes
     private String name;
     private ArrayList<Interactables> listOfObjects;
+    private ArrayList<Sim> listOfSims;
     private GameTime time;
     
     // For adding, editing, and removing objects
@@ -33,11 +35,33 @@ public class Room {
 
     // CONSTRUCTOR
     public Room(String name, GameTime time) {
+        // Atributes
         this.name = name;
         this.listOfObjects = new ArrayList<>(); 
+        this.listOfSims = new ArrayList<>();
         this.time = time;
         this.isEditingRoom = false;
+
+        // Load the image of the room
         this.image = ImageLoader.loadWood();
+
+        // ONLY FOR DEBUGGING
+        // testRoom();
+    }
+
+    public Room(String name, Sim sim, GameTime time) {
+        // Atributes
+        this.name = name;
+        this.listOfObjects = new ArrayList<>(); 
+        this.listOfSims = new ArrayList<>();
+        this.time = time;
+        this.isEditingRoom = false;
+
+        // Load the image of the room
+        this.image = ImageLoader.loadWood();
+
+        // Add a sim into the room
+        this.listOfSims.add(sim);
 
         // ONLY FOR DEBUGGING
         // testRoom();
@@ -56,11 +80,23 @@ public class Room {
         return isEditingRoom;
     }
 
+    public ArrayList<Sim> getListOfSims() {
+        return listOfSims;
+    }
+    
+    // SETTERS
+    public void addSim(Sim sim) {
+        listOfSims.add(sim);
+    }
+
+    public void removeSim(Sim sim) {
+        listOfSims.remove(sim);
+    }
+
     public void changeisEditingRoomState() {
         this.isEditingRoom = !this.isEditingRoom;
     }
 
-    // SETTERS
     public void addObject(Interactables object) {
         changeisEditingRoomState();
         moveableObject = object;
@@ -213,10 +249,13 @@ public class Room {
     // TO - DO !!! : Integrate with inventory
     private void updateUnaddedObject() {
         if (isEditingRoom && moveableObject != null) {
-            boolean inCollision;
+            boolean inCollision = false;
+            boolean isCollidingWithSim = false;
             boolean isWallOccupied = false;
-            inCollision = collisionHandler.isCollision(moveableObject.getX(), moveableObject.getY());
 
+            inCollision = collisionHandler.isCollision(moveableObject.getX(), moveableObject.getY());
+            isCollidingWithSim = collisionHandler.isCollidingWithSim(moveableObject.getX(), moveableObject.getY(), listOfSims);
+            
             moveableObject.move(collisionHandler);
             moveableObject.updateBounds();
 
@@ -224,14 +263,14 @@ public class Room {
             if (moveableObject instanceof Door) {
                 Door door = (Door) moveableObject;
                 isWallOccupied = collisionHandler.isWallOccupied(door);
-                
+
                 if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
                     door.rotate(door.getX(), door.getY());
                 }
             }
 
             // Add the object if enter is pressed and object is not in collision with another object
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && (!inCollision && !isWallOccupied)) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && (!inCollision && !isWallOccupied && !isCollidingWithSim)) {
                 listOfObjects.add(moveableObject);
                 moveableObject = null;
                 changeisEditingRoomState();
@@ -264,8 +303,6 @@ public class Room {
             else {
                 object.draw(g, object);
             }
-            // ONLY FOR DEBUGGING
-            object.drawCollisionBox(g);
         }
     }
 
@@ -289,10 +326,16 @@ public class Room {
     }
 
     // ONLY FOR DEBUGGING
+    public void drawCollisionBox(Graphics2D g) {
+        for (Interactables object : listOfObjects) {
+            object.drawCollisionBox(g);
+        }
+    }
+
     public void testRoom() {
         listOfObjects.add(new Bed((Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 0, time));
         listOfObjects.add(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26 - Consts.OFFSET_Y, 3, 3, Color.CYAN, time));
-        // listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 2, 1, Color.ORANGE, time));
+        listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 2, 1, Color.ORANGE, time));
         listOfObjects.add(new Placeholder("5", "6", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 282 - Consts.OFFSET_Y, 1, 1, Color.MAGENTA, time));
         listOfObjects.add(new Placeholder("7", "8", 0, (Consts.CENTER_X / 2) + 332, (Consts.CENTER_Y / 2) + 154 - Consts.OFFSET_Y, 1, 1, Color.LIGHT_GRAY, time));
     }

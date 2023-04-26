@@ -17,8 +17,8 @@ public class Sim extends Entity{
     private int mood;
     private int money;
     private String status;
-    private Room currentRoom;
     private boolean isBusy;
+    private Room currentRoom;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -43,8 +43,11 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.currentRoom = currentRoom;
         this.isBusy = false;
+        this.currentRoom = currentRoom;
+
+        // Place the sim inside of the current room
+        currentRoom.addSim(this);
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -124,7 +127,9 @@ public class Sim extends Entity{
     }
 
     public void setCurrentRoom(Room room) {
+        this.currentRoom.removeSim(this);
         this.currentRoom = room;
+        this.currentRoom.addSim(this);
         collisionHandler = new CollisionHandler(this, room);
         interactionHandler = new InteractionHandler(this, room);
     }
@@ -148,15 +153,6 @@ public class Sim extends Entity{
         if (isStatusCurrently("Idle")) {
             g.drawImage(images[imageIndex], getX(), getY(), null);
         }
-
-        // ONLY FOR DEBUGGING
-        // Draw the sim collision area as a red rectangle
-        // g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
-        // g.fillRect(getX() + 8, getY() + 15, getWidth() - 16, getHeight() - 16);
-    
-        // Draw the interaction range as a yellow rectangle
-        g.setColor(new Color(255, 255, 0, 128)); // Transparent yellow color
-        g.fillRect(interactionHandler.getX(), interactionHandler.getY(), interactionHandler.getWidth(), interactionHandler.getHeight());
     }
 
     public void update() {
@@ -167,5 +163,18 @@ public class Sim extends Entity{
         if (isMoving() && !isBusy) {
             move(collisionHandler, interactionHandler);
         }
+    }
+
+    // ONLY FOR DEBUGGING
+    public void drawCollisionBox(Graphics2D g) {
+        // Draw the sim collision area as a red rectangle
+        g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
+        g.fillRect(getX() + 8, getY() + 15, getWidth() - 16, getHeight() - 16);
+    }
+
+    public void drawInteractionRange(Graphics2D g) {
+        // Draw the interaction range as a yellow rectangle
+        g.setColor(new Color(255, 255, 0, 128)); // Transparent yellow color
+        g.fillRect(interactionHandler.getX(), interactionHandler.getY(), interactionHandler.getWidth(), interactionHandler.getHeight());
     }
 }

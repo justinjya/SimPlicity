@@ -58,6 +58,20 @@ public class CollisionHandler {
         return false;
     }
 
+    public boolean isCollidingWithSim(int x, int y, ArrayList<Sim> listOfSims) {
+        Rectangle newEntity;
+        Rectangle Sim;
+
+        newEntity = new Rectangle(x, y, entity.getWidth(), entity.getHeight());
+        for (Sim sim : listOfSims) {
+            Sim = new Rectangle(sim.getX() + 8, sim.getY() + 15, sim.getWidth() - 16, sim.getHeight() - 16);  
+            if (newEntity.intersects(Sim)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isWallOccupied(Door door) {
         for (Interactables object : currentRoom.getListOfObjects()) {
             if (object instanceof Door) {

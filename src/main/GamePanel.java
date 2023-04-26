@@ -41,19 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                
-                // ONLY FOR DEBUGGING
-                // System.out.println(e.getKeyCode());
-
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
-                    ui.tab();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
-                    ui.debug();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
-                    sim.interact();
-                }
+                KeyHandler.keyBinds(sim, ui);
             }
 
             @Override
