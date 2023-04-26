@@ -126,19 +126,24 @@ public class GamePanel extends JPanel implements Runnable {
         // ui.draw(g2);
 
         // testing sim color
+        testingSimColor(g2);
+       
+        // To free resources
+        g2.dispose();
+    }
+
+    private void testingSimColor(Graphics2D g) {
         Font font;
-        g2.setColor(Color.WHITE);
+        g.setColor(Color.WHITE);
 
         font = new Font("Arial", Font.PLAIN, 15);
 
-        g2.setFont(font);
-        g2.drawString("hue: " + hue, 10, 30);
-        g2.drawString("sat: " + sat, 10, 50);
-        g2.drawString("bri: " + bri, 10, 70);
+        g.setFont(font);
+        g.drawString("hue: " + hue, 10, 30);
+        g.drawString("sat: " + sat, 10, 50);
+        g.drawString("bri: " + bri, 10, 70);
 
-        g2.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
+        g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
 
-        // To free resources
-        g2.dispose();
     }
 }
