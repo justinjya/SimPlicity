@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GamePanel;
+import src.assets.ImageLoader;
 
 public class MenuButton {
     private int xPos, yPos, rowIndex;
@@ -18,5 +19,11 @@ public class MenuButton {
         this.rowIndex = rowIndex;
         this.game = game;
         
+    }
+
+    public void loadImages(){
+        images = new BufferedImage[4];
+        BufferedImage temp = ImageLoader.loadMenuMockup();
+
     }
 }
