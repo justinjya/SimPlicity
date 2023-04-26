@@ -214,20 +214,24 @@ public class Room {
     private void updateUnaddedObject() {
         if (isEditingRoom && moveableObject != null) {
             boolean inCollision;
+            boolean isWallOccupied = false;
             inCollision = collisionHandler.isCollision(moveableObject.getX(), moveableObject.getY());
 
             moveableObject.move(collisionHandler);
             moveableObject.updateBounds();
 
+            // To rotate the door
             if (moveableObject instanceof Door) {
                 Door door = (Door) moveableObject;
+                isWallOccupied = collisionHandler.isWallOccupied(door);
+                
                 if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
                     door.rotate(door.getX(), door.getY());
                 }
             }
 
             // Add the object if enter is pressed and object is not in collision with another object
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && !inCollision) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && (!inCollision && !isWallOccupied)) {
                 listOfObjects.add(moveableObject);
                 moveableObject = null;
                 changeisEditingRoomState();

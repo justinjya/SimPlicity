@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
+import src.items.interactables.Door;
 import src.main.Consts;
 import src.world.Room;
 
@@ -52,6 +53,17 @@ public class CollisionHandler {
         for (Interactables object : listOfObjects) {
             if (newEntity.intersects(object.getBounds())) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isWallOccupied(Door door) {
+        for (Interactables object : currentRoom.getListOfObjects()) {
+            if (object instanceof Door) {
+                if (door.getImageIndex() == object.getImageIndex()) {
+                    return true;
+                }
             }
         }
         return false;
