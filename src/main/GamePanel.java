@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.world.Room;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -39,19 +41,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                
-                // ONLY FOR DEBUGGING
-                // System.out.println(e.getKeyCode());
-
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
-                    ui.tab();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
-                    ui.debug();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
-                    sim.interact();
-                }
+                KeyHandler.keyBinds(sim, ui);
             }
 
             @Override
@@ -101,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
     private void update() {
         sim.update();
 
-        room.update();
+        sim.getCurrentRoom().update();
 
         ui.update();
     }
@@ -113,14 +103,16 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // Draw room
+        // // Draw room
         sim.getCurrentRoom().draw(g2);
 
-        // Draw sim
+        // // Draw sim
         sim.draw(g2);
 
-        // Draw UI
+        // // Draw UI
         ui.draw(g2);
+
+        // g2.drawImage(ImageLoader.testSimColor(), Consts.CENTER_X, Consts.CENTER_Y, Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
 
         // To free resources
         g2.dispose();

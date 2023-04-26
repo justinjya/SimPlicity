@@ -1,6 +1,7 @@
 package src.entities;
 
 import src.entities.handlers.*;
+import src.items.interactables.Door;
 import src.main.Consts;
 
 public abstract class Entity {
@@ -9,8 +10,9 @@ public abstract class Entity {
     private int width;
     private int height;
     private int speed = 5;
-    private int direction; // 0 = down, 1 = up, 2 = left, 3 = right
+    private int direction = 2; // 0 = up, 1 = right, 2 = down, 3 = left
 
+    // CONSTRUCTOR
     public Entity(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
@@ -18,6 +20,7 @@ public abstract class Entity {
         this.height = Consts.SCALED_TILE * height;
     }
 
+    // GETTERS
     public int getX() {
         return x;
     }
@@ -38,6 +41,7 @@ public abstract class Entity {
         return direction;
     }
 
+    // SETTERS
     public void setX(int x) {
         this.x = x;
     }
@@ -46,6 +50,7 @@ public abstract class Entity {
         this.y = y;
     }
 
+    // OTHERS
     public boolean isMoving() {
         if (KeyHandler.isKeyDown(KeyHandler.KEY_A) || KeyHandler.isKeyDown(KeyHandler.KEY_D) || 
             KeyHandler.isKeyDown(KeyHandler.KEY_W) || KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
@@ -64,22 +69,33 @@ public abstract class Entity {
         return false;
     }
 
-    private void checkCollision(CollisionHandler collisionHandler, int newX, int newY) {
+    public void checkCollision(CollisionHandler collisionHandler, int newX, int newY) {
         if (this instanceof Sim) {
-            if (!collisionHandler.isCollision(newX, newY) && !collisionHandler.isOutsidePlayArea(newX, newY)) {
-                x = newX;
-                y = newY;
+            if (collisionHandler.isCollision(newX, newY) || collisionHandler.isOutsidePlayArea(newX, newY)) {
+                return;
+            }
+        }
+        else if (this instanceof Door) {
+            if (!collisionHandler.isAtAreaBorder(newX, newY)) {
+                return;
             }
         }
         else {
-            if (!collisionHandler.isOutsidePlayArea(newX, newY)) {
-                x = newX;
-                y = newY;
+            if (collisionHandler.isOutsidePlayArea(newX, newY)) {
+                return;
             }
+        }
+
+        x = newX;
+        y = newY;
+        
+        if (this instanceof Door) {
+            Door door = (Door) this;
+            door.changeDoorDirection(newX, newY);
         }
     }
 
-    // FOR THE SIM
+    // FOR MOVING THE SIM
     public void move(CollisionHandler collisionHandler, InteractionHandler interactionHandler) {
         // Update the entity position when moving
         int newX = x;
@@ -91,25 +107,25 @@ public abstract class Entity {
         }
 
         if (isMoving()) {
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                newX -= speed;
-                direction = 2;
-                interactionHandler.moveLeft(newX, newY);
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
+                newY -= speed;
+                direction = 0;
+                interactionHandler.moveUp(newX, newY);
             }
             if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
                 newX += speed;
-                direction = 3;
-                interactionHandler.moveRight(newX, newY);
-            }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_W)) {
-                newY -= speed;
                 direction = 1;
-                interactionHandler.moveUp(newX, newY);
+                interactionHandler.moveRight(newX, newY);
             }
             if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
                 newY += speed;
-                direction = 0;
+                direction = 2;
                 interactionHandler.moveDown(newX, newY);
+            }
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
+                newX -= speed;
+                direction = 3;
+                interactionHandler.moveLeft(newX, newY);
             }
             checkCollision(collisionHandler, newX, newY);
         }
