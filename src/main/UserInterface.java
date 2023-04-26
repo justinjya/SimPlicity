@@ -33,7 +33,7 @@ public class UserInterface {
     public UserInterface(Sim sim, GameTime time) {
         this.sim = sim;
         this.time = time;
-        this.debug = true;
+        this.debug = false;
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();

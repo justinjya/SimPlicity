@@ -23,7 +23,14 @@ public class MenuButton {
 
     public void loadImages(){
         images = new BufferedImage[4];
-        BufferedImage temp = ImageLoader.loadMenuMockup();
-
+        BufferedImage mockup = ImageLoader.loadMenuMockup();
+        BufferedImage load = ImageLoader.loadLoadButton();
+        BufferedImage start = ImageLoader.loadStartButton();
+        BufferedImage help = ImageLoader.loadHelpButton();
+        BufferedImage exit = ImageLoader.loadExitButton();
+        for(int i = 0; i < images.length; i++){
+            images[i] = mockup.getSubimage(i * Consts.WIDTH, rowIndex * Consts.HEIGHT, Consts.WIDTH, Consts.HEIGHT);
+        }
     }
+
 }
