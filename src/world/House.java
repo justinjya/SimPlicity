@@ -1,6 +1,5 @@
 package src.world;
 
-import src.entities.Room;
 import src.entities.Sim;
 
 public class House {

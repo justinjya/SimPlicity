@@ -74,7 +74,7 @@ public class UserInterface {
 
     // TO - DO !!! : Add the rest of the boxes features
     private void boxEntered() {
-        sim.resetStatus();
+        sim.changeIsBusyState();
         switch (selectedBox) {
             case 0:
                 changeIsViewingWorldState();
@@ -85,6 +85,9 @@ public class UserInterface {
                 break;
             case 2:
                 sim.getCurrentRoom().selectObject();
+                break;
+            case 3:
+                sim.getCurrentRoom().addRoom("Second Room");
                 break;
             default:
                 break;
