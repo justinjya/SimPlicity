@@ -105,20 +105,20 @@ public class World {
     }
 
     private int getCursorInQuarter() {
-        if ((cursor.getX() >= 0 && cursor.getX() <= 32) &&
-            (cursor.getY() >= 0 && cursor.getY() <= 32)) {
+        if ((cursor.getX() >= 0 && cursor.getX() < 32) &&
+            (cursor.getY() >= 0 && cursor.getY() < 32)) {
             return 1;
         }
-        if ((cursor.getX() >= 32 && cursor.getX() <= 64) &&
-            (cursor.getY() >= 0 && cursor.getY() <= 32)) {
+        if ((cursor.getX() >= 32 && cursor.getX() < 64) &&
+            (cursor.getY() >= 0 && cursor.getY() < 32)) {
             return 2;
         }
-        if ((cursor.getX() >= 32 && cursor.getX() <= 64) &&
-            (cursor.getY() >= 32 && cursor.getY() <= 64)) {
+        if ((cursor.getX() >= 32 && cursor.getX() < 64) &&
+            (cursor.getY() >= 32 && cursor.getY() < 64)) {
             return 3;
         }
-        if ((cursor.getX() >= 0 && cursor.getX() <= 32) &&
-            (cursor.getY() >= 32 && cursor.getY() <= 64)) {
+        if ((cursor.getX() >= 0 && cursor.getX() < 32) &&
+            (cursor.getY() >= 32 && cursor.getY() < 64)) {
             return 4;
         }
         return 0;
