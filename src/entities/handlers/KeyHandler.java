@@ -8,6 +8,7 @@ public class KeyHandler {
     public static final int KEY_D = KeyEvent.VK_D;
     public static final int KEY_S = KeyEvent.VK_S;
     public static final int KEY_F = KeyEvent.VK_F;
+    public static final int KEY_R = KeyEvent.VK_R;
     public static final int KEY_SPACE = KeyEvent.VK_SPACE;
     public static final int KEY_ENTER = KeyEvent.VK_ENTER;
     public static final int KEY_TAB = KeyEvent.VK_TAB;

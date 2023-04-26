@@ -18,6 +18,7 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private Room currentRoom;
+    private boolean isBusy;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -26,9 +27,16 @@ public class Sim extends Entity{
     private CollisionHandler collisionHandler;
     private InteractionHandler interactionHandler;
 
+    // CONSTRUCTOR
     public Sim(String name, int x, int y, Room currentRoom) {
         // Atributes
-        super(x, y, 1, 1);
+        super (
+            x,
+            y,
+            1,
+            1
+        );
+        
         this.name = name;
         this.health = 80;
         this.hunger = 80;
@@ -36,6 +44,7 @@ public class Sim extends Entity{
         this.money = 100;
         this.status = "Idle";
         this.currentRoom = currentRoom;
+        this.isBusy = false;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -45,6 +54,7 @@ public class Sim extends Entity{
         interactionHandler = new InteractionHandler(this, currentRoom);
     }
 
+    // GETTERS
     public String getName() {
         return name;
     }
@@ -73,10 +83,23 @@ public class Sim extends Entity{
         return currentRoom;
     }
 
+    public InteractionHandler getInteractionHandler() {
+        return interactionHandler;
+    }
+
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
+    }
+
     public boolean isStatusCurrently(String status) {
         return this.status.equals(status);
     }
 
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    // SETTERS
     public void setHealth(int health) {
         this.health = health;
         if (this.health > 100) this.health = 100;
@@ -106,18 +129,23 @@ public class Sim extends Entity{
         interactionHandler = new InteractionHandler(this, room);
     }
 
+    public void changeIsBusyState() {
+        this.isBusy = !this.isBusy;
+    }
+
     public void interact() {
         interactionHandler.interact();
     }
 
+    // OTHERS
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
-        if (!isStatusCurrently("Tabbed") && isMoving() && !currentRoom.isEditingRoom()) {
+        if (!isBusy && isMoving() && !currentRoom.isEditingRoom()) {
             imageIndex += (int) ((getDirection() + (System.currentTimeMillis() / 250) % 2) + 4);
         }
 
-        if (isStatusCurrently("Idle") || isStatusCurrently("Tabbed")) {
+        if (isStatusCurrently("Idle")) {
             g.drawImage(images[imageIndex], getX(), getY(), null);
         }
 
@@ -132,17 +160,12 @@ public class Sim extends Entity{
     }
 
     public void update() {
-        if (!isStatusCurrently("Idle")) {
+        if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
             return;
         }
         
-        if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom()) {
+        if (isMoving() && !isBusy) {
             move(collisionHandler, interactionHandler);
         }
-    }
-
-    // ONLY FOR DEBUGGING
-    public InteractionHandler getInteractionHandler() {
-        return interactionHandler;
     }
 }

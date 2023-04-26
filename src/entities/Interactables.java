@@ -19,8 +19,16 @@ public abstract class Interactables extends Entity implements Item {
     private Rectangle bounds;
     private GameTime time;
 
+
+    // CONSTRUCTOR
     public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height, GameTime time) {
-        super(x, y, width, height);
+        super (
+            x,
+            y,
+            width,
+            height
+        );
+        
         this.name = name;
         this.interaction = interaction;
         this.imageIndex = imageIndex;
@@ -30,6 +38,7 @@ public abstract class Interactables extends Entity implements Item {
         this.time = time;
     }
 
+    // GETTERS
     public String getName() {
         return name;
     }
@@ -58,6 +67,7 @@ public abstract class Interactables extends Entity implements Item {
         return imageIndex;
     }
     
+    // SETTERS
     public void changeOccupiedState() {
         this.occupied = !this.occupied;
     }
@@ -74,6 +84,7 @@ public abstract class Interactables extends Entity implements Item {
         this.bounds.setLocation(getX(), getY());
     }
 
+    // OTHERS
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }
@@ -83,6 +94,7 @@ public abstract class Interactables extends Entity implements Item {
         g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
     
+    // ONLY FOR DEBUGGING
     public void drawTimer(Graphics2D g) {
         g.setColor(Color.BLACK);
         Font font = new Font("Arial", Font.BOLD, 16);

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
 import src.world.Room;
@@ -102,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
     private void update() {
         sim.update();
 
-        room.update();
+        sim.getCurrentRoom().update();
 
         ui.update();
     }
@@ -114,14 +115,16 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // Draw room
+        // // Draw room
         sim.getCurrentRoom().draw(g2);
 
-        // Draw sim
+        // // Draw sim
         sim.draw(g2);
 
-        // Draw UI
+        // // Draw UI
         ui.draw(g2);
+
+        // g2.drawImage(ImageLoader.testSimColor(), Consts.CENTER_X, Consts.CENTER_Y, Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
 
         // To free resources
         g2.dispose();
