@@ -5,12 +5,15 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import src.assets.ImageLoader;
+import src.entities.Sim;
 import src.main.Consts;
 import src.main.GameTime;
+import src.main.UserInterface;
 
 public class World {
     // Atributes
     private int[][] map = new int[64][64];
+    private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
     private GameTime time;
     
@@ -21,19 +24,22 @@ public class World {
     private Cursor cursor;
     
     // State of the world (is adding house or selecting)
-    private boolean isAdding = false;
+    private boolean isAdding = true;
     
     // Viewable world inside of the window
     private int viewableGrid = Consts.TILE_SIZE * 32;
     private int centerX = (Consts.WIDTH / 2) - (viewableGrid / 2);
     private int centerY = (Consts.HEIGHT / 2) - (viewableGrid / 2);
+
+    // Bounds for each quarter
     private int lowerBoundsX;
     private int upperBoundsX;
     private int lowerBoundsY;
     private int upperBoundsY;
 
     // Constructor 
-    public World(GameTime gameTime) {
+    public World(Sim sim, GameTime time) {
+        listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
         this.images = ImageLoader.loadWorld();
 
@@ -44,10 +50,12 @@ public class World {
         }
 
         this.cursor = new Cursor(0, 0, this);
-        this.time = gameTime;
+        this.time = time;
+
+        listOfSim.add(sim);
         
         // ONLY FOR DEBUGGING
-        listOfHouse.add(new House(1, 1, this));
+        // listOfHouse.add(new House(1, 1, this));
     }
 
     // Getter and setter
@@ -59,8 +67,20 @@ public class World {
         return isAdding;
     }
 
+    public ArrayList<Sim> getListOfSim() {
+        return listOfSim;
+    }
+    
     public ArrayList<House> getListOfHouse() {
         return listOfHouse;
+    }
+
+    public Cursor getCursor() {
+        return cursor;
+    }
+
+    public Sim getSim(int index) {
+        return listOfSim.get(index);
     }
 
     public void setMap(int x, int y, int value) {
@@ -71,7 +91,7 @@ public class World {
         this.isAdding = !this.isAdding;
     }
 
-    // Method to check the whether the location of new house is being occupied
+    // Others
     public boolean isLocationOccupied() {
         boolean isOccupied = false; // initialize the status of occupation in newHouse location
 
@@ -90,17 +110,24 @@ public class World {
         return null;
     }
 
-    // Method to add house
+    public Room getHouseRoomWhenEntered(int x, int y) {
+        return findHouse(x, y).getRoomWhenEntered();
+    }
+
     public void addHouse() {
         if (!isLocationOccupied()) {
-            listOfHouse.add(new House(cursor.getGridX(), cursor.getGridY(), this));
+            Room newRoom = new Room("First Room", time);
+            House newHouse = new House(cursor.getGridX(), cursor.getGridY(), this, getSim(0), newRoom);
+
+            listOfHouse.add(newHouse);
             setMap(cursor.getGridX(), cursor.getGridY(), 1);
         }
     }
 
-    public void update() {
-        System.out.println("cursorX: " + cursor.getX() + " cursorY: " + cursor.getY());
-        cursor.move();
+    public void update(UserInterface ui) {
+        if (ui.isViewingWorld()) {
+            cursor.move();
+        }
     }
 
     public void draw(Graphics2D g) {

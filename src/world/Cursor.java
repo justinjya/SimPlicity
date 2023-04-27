@@ -2,8 +2,10 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
+import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
 import src.main.Consts;
+import src.main.UserInterface;
 
 public class Cursor {
     // Location inside of the world
@@ -12,12 +14,31 @@ public class Cursor {
     private World world;
     private boolean gridMovement = false;
 
+    // Constructor
     public Cursor(int x, int y, World world){
         this.x = x;
         this.y = y;
         this.world = world;
     }
 
+    // Getter and setter
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+    public int getGridX() {
+        return x / Consts.TILE_SIZE;
+    }
+
+    public int getGridY() {
+        return y / Consts.TILE_SIZE;
+    }
+
+    // Others
     public void move(){
         if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
             gridMovement = !gridMovement;
@@ -69,36 +90,44 @@ public class Cursor {
             x = newX;
             y = newY;
         }
+    }
 
+    public void updateUI(UserInterface ui) {
         if (world.isAdding()) {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
                 world.addHouse();
+                world.changeIsAddingState();
+
+                // ONLY FOR DEBUGGING
+                System.out.println("added house");
             }
         }
+        
         else {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                if (world.isLocationOccupied()) {
-                    // ONLY FOR DEBUGGING
-                    System.out.println("BERHASIL VISIT");
-                    System.out.println("house.getX(): " + world.findHouse(x / Consts.TILE_SIZE, y / Consts.TILE_SIZE).getX());
-                }
+                enterHouse(ui);
             }
         }
     }
 
-    public int getX(){
-        return x;
-    }
+    private void enterHouse(UserInterface ui) {
+        if (world.isLocationOccupied()) {
+            ui.changeIsViewingWorldState();
 
-    public int getY(){
-        return y;
-    }
+            // ONLY FOR DEBUGGING
+            Sim currentSim = ui.getCurrentSim();
+            House currentHouse = world.findHouse(getGridX(), getGridY());
+            Room currentRoom = world.getHouseRoomWhenEntered(getGridX(), getGridY());
 
-    public int getGridX() {
-        return x / Consts.TILE_SIZE;
-    }
+            System.out.println("BERHASIL VISIT");
+            System.out.println("house.getX(): " + currentHouse.getX());
+            System.out.println(currentRoom.getName());
 
-    public int getGridY() {
-        return y / Consts.TILE_SIZE;
+            ui.setCurrentSim(world.getSim(0));
+            ui.getCurrentSim().setCurrentRoom(currentRoom);
+
+            System.out.println(currentSim.getName());
+            System.out.println(currentSim.getCurrentRoom().getName());
+        }
     }
 }

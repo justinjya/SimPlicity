@@ -12,11 +12,11 @@ public class House {
     private int y;
     private World world;
 
-    public House(int x, int y, World world, Sim owner) {
+    public House(int x, int y, World world, Sim sim) {
         this.x = x;
         this.y = y;
         this.world = world;
-        this.owner = owner;
+        this.owner = sim;
         world.setMap(x, y, 1);
     }
     
@@ -27,6 +27,16 @@ public class House {
         world.setMap(x, y, 1);
     }
 
+    public House(int x, int y, World world, Sim sim, Room room) {
+        this.x = x;
+        this.y = y;
+        this.world = world;
+        world.setMap(x, y, 1);
+
+        this.owner = sim;
+        this.roomWhenEntered = room;
+    }
+
     public int getX() {
         return x;
     }
@@ -35,7 +45,11 @@ public class House {
         return y;
     }
 
-    public Sim getOwner(){
+    public Sim getOwner() {
         return owner;
+    }
+
+    public Room getRoomWhenEntered() {
+        return roomWhenEntered;
     }
 }
