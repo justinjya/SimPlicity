@@ -80,6 +80,7 @@ public class Cursor {
                 if (world.isLocationOccupied()) {
                     // ONLY FOR DEBUGGING
                     System.out.println("BERHASIL VISIT");
+                    System.out.println("house.getX(): " + world.findHouse(x / Consts.TILE_SIZE, y / Consts.TILE_SIZE).getX());
                 }
             }
         }
@@ -91,5 +92,13 @@ public class Cursor {
 
     public int getY(){
         return y;
+    }
+
+    public int getGridX() {
+        return x / Consts.TILE_SIZE;
+    }
+
+    public int getGridY() {
+        return y / Consts.TILE_SIZE;
     }
 }
