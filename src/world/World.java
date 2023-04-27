@@ -82,11 +82,8 @@ public class World {
     public boolean isLocationOccupied() {
         boolean isOccupied = false; // initialize the status of occupation in newHouse location
 
-        for (House house : listOfHouse) {
-            if (house.getX() == cursor.getX() / Consts.TILE_SIZE && house.getY() == cursor.getY() / Consts.TILE_SIZE) {
-                isOccupied = true;
-                break;
-            }
+        if (getMap(cursor.getX() / Consts.TILE_SIZE, cursor.getY() / Consts.TILE_SIZE) == 1) {
+            isOccupied = true;
         }
         return isOccupied;
     }
@@ -109,9 +106,11 @@ public class World {
         // Draw the world in quarters with the size of each quarter of 32 x 32
         drawWorld(g);
 
-        drawHouses(g);
+        // drawHouses(g);
         
         drawCursor(g);
+
+        drawArrows(g);
     }
 
     private int getCursorInQuarter() {
@@ -162,35 +161,35 @@ public class World {
     }
 
     private void drawCursor(Graphics2D g) {
+        if (isLocationOccupied()) {
+            return;
+        }
+
         int tileX = centerX + (cursor.getX() % viewableGrid);
         int tileY = centerY + (cursor.getY() % viewableGrid);
 
-        if (isLocationOccupied()) {
-            if (isAdding) {
-                g.drawImage(images[5], tileX, tileY, null);
-            }
-            else {
-                g.drawImage(images[4], tileX, tileY, null);
-            }
+        if (isAdding) {
+            g.drawImage(images[3], tileX, tileY, null);
         }
         else {
-            if (isAdding) {
-                g.drawImage(images[3], tileX, tileY, null);
-            }
-            else {
-                g.drawImage(images[2], tileX, tileY, null);
-            }
+            g.drawImage(images[2], tileX, tileY, null);
         }
     }
 
-    private void drawHouses(Graphics2D g) {
-        for (int y = lowerBoundsY; y < upperBoundsY; y++) {
-            for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
-
-                if (getMap(x, y) == 1) {
-                    g.drawImage(images[1], tileX, tileY, null);    
+    private void drawHouses(Graphics2D g, int x, int y, int tileX, int tileY) {
+        if (getMap(x, y) == 1) {
+            g.drawImage(images[1], tileX, tileY, null); 
+            if (isAdding) {
+                if (isLocationOccupied()) {
+                    g.drawImage(images[5], tileX, tileY, null);
+                }
+                else {
+                    g.drawImage(images[3], tileX, tileY, null);    
+                }
+            }
+            else {
+                if (isLocationOccupied()) {
+                    g.drawImage(images[4], tileX, tileY, null);
                 }
             }
         }
@@ -204,9 +203,13 @@ public class World {
                 int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
                 int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
                 g.drawImage(images[0], tileX, tileY, null);
+
+                drawHouses(g, x, y, tileX, tileY);
             }
         }
+    }
 
+    private void drawArrows(Graphics2D g) {
         // Arrows
         if (getCursorInQuarter() == 1){
             g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
