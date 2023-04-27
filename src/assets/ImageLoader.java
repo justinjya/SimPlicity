@@ -33,6 +33,19 @@ public class ImageLoader {
         return null;
     }
 
+    public static BufferedImage readImage(String folder, String subfolder, String fileName, int width, int height) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new File("./src/assets/" + folder + "/" + subfolder + "/" + fileName + ".png"));
+            image = scaleImage(image, width, height);
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static BufferedImage rotate90Clockwise(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -96,6 +109,33 @@ public class ImageLoader {
         images[2] = rotate90Clockwise(images[1]);
         images[3] = rotate90Clockwise(images[2]);
 
+        return images;
+    }
+
+    public static BufferedImage[] loadWorld() {
+        BufferedImage[] images = new BufferedImage[10];
+
+        images[0] = readImage("tiles", "grass", 1, 1);
+        images[1] = readImage("tiles", "house", "house", 1, 1);
+        images[2] = readImage("tiles", "cursor", 1, 1);
+        images[3] = readImage("tiles", "house", "unadded_house", 1, 1);
+        images[4] = readImage("tiles", "house", "selected_house", 1, 1);
+        images[5] = readImage("tiles", "house", "selected_house_occupied", 1, 1);
+        images[6] = readImage("tiles", "quarter_arrow", "up", 1, 1);
+        images[7] = readImage("tiles", "quarter_arrow", "left", 1, 1);
+        images[8] = readImage("tiles", "quarter_arrow", "down", 1, 1);
+        images[9] = readImage("tiles", "quarter_arrow", "right", 1, 1);
+        
+        return images;
+    }
+
+    public static BufferedImage[] loadArrows() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("tiles", "arrow", 1, 1);
+        images[1] = rotate90Clockwise(images[0]);
+        images[2] = rotate90Clockwise(images[1]);
+        images[3] = rotate90Clockwise(images[2]);
         return images;
     }
 

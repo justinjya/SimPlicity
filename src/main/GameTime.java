@@ -72,4 +72,13 @@ public class GameTime implements Runnable {
         thread = new Thread(this);
         thread.start();
     }
+
+    public void decreaseTimeRemaining(int time) {
+        timeRemaining -= time;
+        if(timeRemaining <= 0){
+            int timeLeft = 0-timeRemaining;
+            timeRemaining = initialTimeRemaining - timeLeft;
+            incrementDay();
+        }
+    }
 }

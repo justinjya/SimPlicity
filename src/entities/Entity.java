@@ -145,10 +145,15 @@ public abstract class Entity {
         int newY = y;
         double speed = this.speed * 12.8;
         double initialSpeed = speed;
+
+        if(isMovingDiagonally()){
+            speed *= 0.707;
+        }
  
         if (isMoving()) {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 newX -= speed; // Move left by one tile
+
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
                 newX += speed; // Move right by one tile
@@ -163,4 +168,6 @@ public abstract class Entity {
         }
         speed = initialSpeed;
     }
+
+    
 }

@@ -40,7 +40,7 @@ public class KeyHandler {
     }
 
     public static void keyBinds(Sim sim, UserInterface ui) {
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
+        if (!ui.isViewingWorld() && KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {

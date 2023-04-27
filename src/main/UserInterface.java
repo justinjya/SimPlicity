@@ -18,6 +18,7 @@ public class UserInterface {
     private Interactables object;
     private boolean tabbed = false;
     private GameTime time;
+    private boolean isViewingWorld = false;
 
     // Selection Box Attributes
     private int selectedBox = 0; // Boxes starting from 0 to 4
@@ -44,6 +45,14 @@ public class UserInterface {
     // SETTERS
     public void setCurrentSim(Sim sim) {
         this.sim = sim;
+    }
+
+    public boolean isViewingWorld() {
+        return isViewingWorld;
+    }
+
+    public void changeIsViewingWorldState() {
+        this.isViewingWorld = !this.isViewingWorld;
     }
 
     public void debug() {
@@ -89,14 +98,20 @@ public class UserInterface {
             case 2:
                 sim.getCurrentRoom().addObject(new Bed(time));
                 break;
-            case 3:
-                break;
             default:
                 break;
         }
     }
 
+    // OTHERS
     public void update() {
+        if (isViewingWorld) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                System.out.println("tes");
+                changeIsViewingWorldState();
+            }
+        }
+
         // If enter is pressed execute a function according to selected box position 
         if (tabbed) {
             // Change selected box based on key input
@@ -114,6 +129,12 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
+        if (debug) {
+            sim.drawCollisionBox(g);
+            sim.drawInteractionRange(g);
+            sim.getCurrentRoom().drawCollisionBox(g);
+        }
+
         if (debug) {
             sim.drawCollisionBox(g);
             sim.drawInteractionRange(g);
@@ -190,7 +211,14 @@ public class UserInterface {
             g.drawString("isWalking: " + sim.isMoving(), 73, 384);
             g.drawString("isEditingRoom: " + sim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + sim.isBusy(), 33, 408);
+            g.drawString("isEditingRoom: " + sim.getCurrentRoom().isEditingRoom(), 33, 398);
+            g.drawString("isBusy: " + sim.isBusy(), 33, 408);
             
+            // if (sim.getInteractionHandler().isObjectInRange()) {
+            //     object = sim.getInteractionHandler().getInteractableObject();
+            //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
+            //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
+            // }
             // if (sim.getInteractionHandler().isObjectInRange()) {
             //     object = sim.getInteractionHandler().getInteractableObject();
             //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);

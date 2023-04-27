@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
 import src.world.Room;
+import src.world.World;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -16,6 +17,7 @@ import src.world.Room;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
+    private World world;
     private Sim currentSim;
     private Sim sim, sim2;
     private Room room;
@@ -29,17 +31,20 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
-
+        
         // Create game time
         time = new GameTime(1, 720, 720);
+
+        // create a new world
+        world = new World(time);
 
         // Create room
         room = new Room("First Room", time);
         
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null);
 
-        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room);
+        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room, null);
         sim2.changeIsBusyState();
 
         currentSim = sim;
@@ -75,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
                     ui.setCurrentSim(currentSim);
                 }
             }
-
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e.getKeyCode());
@@ -126,6 +131,15 @@ public class GamePanel extends JPanel implements Runnable {
         currentSim.getCurrentRoom().update();
 
         ui.update();
+
+        if (!ui.isViewingWorld()) {
+            sim.update();
+            
+            sim.getCurrentRoom().update();
+        }
+        else {
+            world.update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -135,20 +149,25 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // Draw room
-        currentSim.getCurrentRoom().draw(g2);
-        for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
-            // if (s == currentSim) continue;
-            // s.drawSimStanding(g2);
-            s.draw(g2);
+        if (!ui.isViewingWorld()) {
+            // Draw room
+            currentSim.getCurrentRoom().draw(g2);
+            for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
+                // if (s == currentSim) continue;
+                // s.drawSimStanding(g2);
+                s.draw(g2);
         }
 
-        // Draw sim
-        currentSim.draw(g2);
+            // Draw sim
+            currentSim.draw(g2);
         
-        // Draw UI
-        ui.draw(g2);
-
+            // Draw UI
+            ui.draw(g2);
+        }
+        else {
+            // Draw the world
+            world.draw(g2);
+        }
         // testing sim color
         // testingSimColor(g2);
        
