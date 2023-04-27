@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
 import src.world.Room;
+import src.Menu.MenuButton;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -19,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Sim sim;
     private Room room;
     private UserInterface ui;
+    private MenuButton menu;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
@@ -116,5 +118,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         // To free resources
         g2.dispose();
+
+        // Draw Menu
+        //menu.loadImages();
     }
 }
