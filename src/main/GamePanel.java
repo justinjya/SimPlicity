@@ -7,6 +7,7 @@ import javax.swing.*;
 import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.gamestates.Gamestate;
 import src.world.Room;
 import src.Menu.MenuButton;
 import src.world.World;
@@ -128,6 +129,27 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
+        /* 
+        switch (Gamestate.state) {
+            case MENU:
+                
+                break;
+            
+            case PLAYING:
+                if (!ui.isViewingWorld()) {
+                    currentSim.update();
+        
+                    currentSim.getCurrentRoom().update();
+                }
+                else {
+                    world.update();
+                }
+                
+                ui.update();
+
+            default:
+                break;
+        } */
         if (!ui.isViewingWorld()) {
             currentSim.update();
 
