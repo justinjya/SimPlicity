@@ -1,4 +1,4 @@
-package src.actions;
+package src.entities;
 
 public interface activeactions {
     void work();
