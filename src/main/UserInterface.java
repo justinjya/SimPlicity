@@ -16,6 +16,8 @@ public class UserInterface {
     // Atributes to show
     private BufferedImage[] images;
 
+    private GamePanel gp;
+
     private World world;
     private Sim currentSim;
 
@@ -38,29 +40,10 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(Sim sim, GameTime time) {
-        this.currentSim = sim;
-        this.time = time;
-        this.debug = false;
-
-        // ONLY FOR DEBUGGING
-        this.mockup = ImageLoader.loadMockup();
-    }
-
-    public UserInterface(World world, GameTime time) {
-        this.world = world;
-        this.time = time;
-        this.viewingWorld = true;
-        this.tabbed = false;
-        this.debug = false;
-
-        // ONLY FOR DEBUGGING
-        this.mockup = ImageLoader.loadMockup();
-    }
-
-    public UserInterface(Sim sim, World world, GameTime time) {
+    public UserInterface(Sim sim, World world, GamePanel gamePanel, GameTime time) {
         this.currentSim = sim;
         this.world = world;
+        this.gp = gamePanel;
         this.time = time;
         this.viewingWorld = true;
         this.tabbed = false;
@@ -71,29 +54,33 @@ public class UserInterface {
     }
 
     // GETTERS
-    public boolean isTabbed() {
-        return tabbed;
+    public Sim getCurrentSim() {
+        return currentSim;
     }
 
     public boolean isViewingWorld() {
         return viewingWorld;
     }
 
-    public Sim getCurrentSim() {
-        return currentSim;
+    public boolean isTabbed() {
+        return tabbed;
     }
 
     // SETTERS
-    public void setCurrentSim(Sim currentSim) {
-        this.currentSim = currentSim;
+    public void setCurrentSim(Sim sim) {
+        currentSim = sim;
+
+        if (currentSim.isBusy() && currentSim.isStatusCurrently("Idle")) currentSim.changeIsBusyState();
+
+        for (Sim s : world.getListOfSim()) {
+            if (s == currentSim) continue;
+
+            if (!s.isBusy()) s.changeIsBusyState();
+        }
     }
 
     public void changeIsViewingWorldState() {
         this.viewingWorld = !this.viewingWorld;
-    }
-
-    public void debug() {
-        this.debug = !this.debug;
     }
 
     public void tab() {
@@ -101,33 +88,11 @@ public class UserInterface {
         currentSim.changeIsBusyState();
     }
 
-    // OTHERS
-    public void update() {
-        if (viewingWorld) {
-            world.getCursor().updateUI(this);
-
-            if (!world.isAdding()) {
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                    changeIsViewingWorldState();
-                }
-            }
-        }
-
-        // If enter is pressed execute a function according to selected box position 
-        if (tabbed) {
-            // Change selected box based on key input
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                moveSelectedBox("left");
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                moveSelectedBox("right");
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                boxEntered();
-            }
-        }
+    public void debug() {
+        this.debug = !this.debug;
     }
 
+    // OTHERS
     private void moveSelectedBox(String direction) {
         switch (direction)  {
             case "left":
@@ -155,25 +120,61 @@ public class UserInterface {
         }
     }
 
-    // TO - DO !!! : Add the rest of the boxes features
+    // TO - DO !!! : Integrate with its own text box
+    private void addSim() {
+        changeIsViewingWorldState();
+        
+        Sim newSim = new Sim("nitsuJ", Consts.CENTER_X, Consts.CENTER_Y);
+        
+        world.addSim(newSim);
+        world.changeIsAddingState();
+    }
+
+    // TO - DO !!! : Integrate with Store
     private void boxEntered() {
         tab();
+
+        if (currentSim.isBusy()) return;
+
         switch (selectedBox) {
             case 0:
-                // This is just a test
                 currentSim.getCurrentRoom().selectObject();
                 break;
             case 1:
                 currentSim.getCurrentRoom().addRoom("Second Room");
                 break;
             case 2:
+                // This is just a test
                 currentSim.getCurrentRoom().addObject(new Bed(time));
+                break;
+            case 3:
+                addSim();
                 break;
             case 4:
                 changeIsViewingWorldState();
                 break;
             default:
                 break;
+        }
+    }
+    
+    public void update() {
+        if (viewingWorld) {
+            world.getCursor().update(gp, this);
+        }
+
+        // If enter is pressed execute a function according to selected box position 
+        if (tabbed) {
+            // Change selected box based on key input
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+                moveSelectedBox("left");
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+                moveSelectedBox("right");
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                boxEntered();
+            }
         }
     }
 
@@ -188,51 +189,51 @@ public class UserInterface {
             g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
         }
         else {
-            // ONLY FOR DEBUGGING
-            if (debug) {
-                currentSim.drawCollisionBox(g);
-                currentSim.drawInteractionRange(g);
-                currentSim.getCurrentRoom().drawCollisionBox(g);
-            }
-
             drawUI(g);
         }
     }
 
     private void drawUI(Graphics2D g) {
         // ONLY FOR DEBUGGING
-            // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
-            
-            // Draw main ui boxes
-            g.setColor(Color.WHITE);
-            g.fillRect(11, 51, 182, 24); // currentSim name
-            g.fillRect(607, 51, 182, 24); // Day number
+        if (debug) {
+            currentSim.drawCollisionBox(g);
+            currentSim.drawInteractionRange(g);
+            currentSim.getCurrentRoom().drawCollisionBox(g);
+        }
 
+        // ONLY FOR DEBUGGING
+        // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
+            
+        // Draw main ui boxes
+        g.setColor(Color.WHITE);
+        g.fillRect(11, 51, 182, 24); // currentSim name
+        g.fillRect(607, 51, 182, 24); // Day number
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(11, 81, 182, 16); // currentSim status
+        g.fillRect(11, 266, 182, 28); // Time remaining title
+        g.fillRect(607, 119, 182, 16); // Room name
+        
+        g.setColor(Color.GRAY);
+        g.fillRect(11, 103, 182, 30); // currentSim money
+        g.fillRect(11, 294, 182, 58); // Time remaining
+        g.fillRect(607, 88, 182, 31); // House name
+
+        // Draw tab boxes
+        g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
+        g.fillRect(288, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
+        g.fillRect(369, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
+        g.fillRect(450, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
+        g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
+
+        // Draw selected box
+        if (tabbed) {
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(11, 81, 182, 16); // currentSim status
-            g.fillRect(11, 266, 182, 28); // Time remaining title
-            g.fillRect(607, 119, 182, 16); // Room name
-            
-            g.setColor(Color.GRAY);
-            g.fillRect(11, 103, 182, 30); // currentSim money
-            g.fillRect(11, 294, 182, 58); // Time remaining
-            g.fillRect(607, 88, 182, 31); // House name
+            g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
+            drawSelectedBoxText(g);
+        }
 
-            // Draw tab boxes
-            g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-            g.fillRect(288, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-            g.fillRect(369, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-            g.fillRect(450, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-            g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-
-            // Draw selected box
-            if (tabbed) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
-                drawSelectedBoxText(g);
-            }
-
-            drawText(g);
+        drawText(g);
     }
 
     private void drawText(Graphics2D g) {
@@ -248,17 +249,20 @@ public class UserInterface {
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
-        g.drawString("House name", 660, 108);
+        g.drawString(currentSim.getCurrentHouse().getName(), 650, 108);
 
         drawAttributes(g);
 
         font = new Font("Arial", Font.PLAIN, 12);
         g.setFont(font);
 
-        if (currentSim.getInteractionHandler().isObjectInRange() && currentSim.isStatusCurrently("Idle")) {
-            object = currentSim.getInteractionHandler().getInteractableObject();
-            g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
+        try {
+            if (!tabbed && currentSim.getInteractionHandler().isObjectInRange() && currentSim.isStatusCurrently("Idle")) {
+                object = currentSim.getInteractionHandler().getInteractableObject();
+                g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
+            }
         }
+        catch (NullPointerException e) {}
 
         // ONLY FOR DEBUGGING
         if (debug) {
@@ -346,10 +350,10 @@ public class UserInterface {
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
             case 3:
-                g.drawString("View currentSims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
+                g.drawString("Add Sims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
                 break;
             case 4:
-                g.drawString("Visit Another currentSim", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
+                g.drawString("Visit Another Sim", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);

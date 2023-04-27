@@ -19,6 +19,7 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private boolean isBusy;
+
     private Room currentRoom;
     private House currentHouse;
     
@@ -45,12 +46,7 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = false;
-
-        // Place the sim inside of the current room
-        // this.currentRoom = currentRoom;
-        // currentRoom.addSim(this);
-        // this.currentHouse = currentHouse;
+        this.isBusy = true;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -131,6 +127,10 @@ public class Sim extends Entity{
 
     public void resetStatus() {
         setStatus("Idle");
+    }
+
+    public void setCurrentHouse(House house) {
+        this.currentHouse = house;
     }
 
     public void setCurrentRoom(Room room) {

@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
 import src.main.Consts;
+import src.main.GamePanel;
 import src.main.UserInterface;
 
 public class Cursor {
@@ -38,40 +39,54 @@ public class Cursor {
         return y / Consts.TILE_SIZE;
     }
 
+    private boolean isMovingDiagonally() {
+        if ((KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_A)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_D)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_S) && KeyHandler.isKeyDown(KeyHandler.KEY_A)) ||
+            (KeyHandler.isKeyDown(KeyHandler.KEY_S) && KeyHandler.isKeyDown(KeyHandler.KEY_D))) {
+            return true;
+        }
+        return false;
+    }
+
     // Others
     public void move(){
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
-            gridMovement = !gridMovement;
-        }
-        
         int upperX = (Consts.TILE_SIZE * 64) - 14;
         int upperY = (Consts.TILE_SIZE * 64) - 14;
         int newX = x;
         int newY = y;
         int speed = 5;
+        int initialSpeed = speed;
+
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
+            gridMovement = !gridMovement;
+        }
 
         if (gridMovement) {
             upperX = (Consts.TILE_SIZE * 64);
             upperY = (Consts.TILE_SIZE * 64);
+            // Move the cursor to the nearest grid
             newX -= (newX % Consts.TILE_SIZE);
             newY -= (newY % Consts.TILE_SIZE);
 
-            // keyPressed
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                    newX -= Consts.TILE_SIZE;
-                }
+                newX -= Consts.TILE_SIZE;
+            }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                    newX += Consts.TILE_SIZE;
-                }
+                newX += Consts.TILE_SIZE;
+            }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
-                    newY -= Consts.TILE_SIZE;
-                }
+                newY -= Consts.TILE_SIZE;
+            }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
-                    newY += Consts.TILE_SIZE;  
-                }
+                newY += Consts.TILE_SIZE;  
+            }
         }
         else {
-            // keyDown
+            if (isMovingDiagonally()) {
+                speed *= 0.707;
+            }
+            
             if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
                 newX -= speed;
             }
@@ -84,6 +99,7 @@ public class Cursor {
             if (KeyHandler.isKeyDown(KeyHandler.KEY_S)) {
                 newY += speed;  
             }
+            speed = initialSpeed;
         }
 
         if ((newX >= 0 && newX < upperX) && (newY >= 0 && newY < upperY)) {
@@ -92,42 +108,63 @@ public class Cursor {
         }
     }
 
-    public void updateUI(UserInterface ui) {
-        if (world.isAdding()) {
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                world.addHouse();
-                world.changeIsAddingState();
+    public void update(GamePanel gp, UserInterface ui) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE) && !gp.isCurrentState("Starting a new game")) {
+            if (world.isAdding()) world.changeIsAddingState();
+            ui.changeIsViewingWorldState();
+        }
 
-                // ONLY FOR DEBUGGING
-                System.out.println("added house");
-            }
-        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            if (world.isAdding() && !world.isLocationOccupied()) {
+                world.addHouse();
+                enterHouse(gp, ui);
         
-        else {
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                enterHouse(ui);
+                if (gp.isCurrentState("Starting a new game")) {
+                    gp.setState("Playing");
+                }
+            }
+            else if (!world.isAdding() && world.isLocationOccupied()) {
+                enterHouse(gp, ui);
             }
         }
+
     }
 
-    private void enterHouse(UserInterface ui) {
-        if (world.isLocationOccupied()) {
-            ui.changeIsViewingWorldState();
+    private void enterHouse(GamePanel gp, UserInterface ui) {
+        Sim currentSim;
+        House currentHouse;
+        Room currentRoom;
 
-            // ONLY FOR DEBUGGING
-            Sim currentSim = ui.getCurrentSim();
-            House currentHouse = world.findHouse(getGridX(), getGridY());
-            Room currentRoom = world.getHouseRoomWhenEntered(getGridX(), getGridY());
+        try {
+            currentSim = ui.getCurrentSim();
+            currentHouse = world.getHouse(getGridX(), getGridY());
+            currentRoom = currentHouse.getRoomWhenEntered();
 
-            System.out.println("BERHASIL VISIT");
-            System.out.println("house.getX(): " + currentHouse.getX());
-            System.out.println(currentRoom.getName());
-
-            ui.setCurrentSim(world.getSim(0));
-            ui.getCurrentSim().setCurrentRoom(currentRoom);
-
-            System.out.println(currentSim.getName());
-            System.out.println(currentSim.getCurrentRoom().getName());
+            if (gp.isCurrentState("Starting a new game")) {
+                currentSim = world.getSim(0);
+            }
+    
+            if (world.isAdding()) {
+                int latestSim = world.getListOfSim().size() - 1;
+    
+                currentSim = world.getSim(latestSim);
+                currentSim.changeIsBusyState();
+                world.changeIsAddingState();
+            }
+            
+            if (world.isLocationOccupied()) {
+                currentSim.setCurrentHouse(currentHouse);
+                currentSim.setCurrentRoom(currentRoom);
+                ui.setCurrentSim(currentSim);
+                
+                // ONLY FOR DEBUGGING
+                System.out.println(currentSim.getName());
+                System.out.println(currentSim.getCurrentRoom().getName());
+                System.out.println(currentSim.getCurrentHouse().getName());
+            }
         }
+        catch (NullPointerException e) {}
+
+        ui.changeIsViewingWorldState();
     }
 }
