@@ -41,12 +41,19 @@ public class GamePanel extends JPanel implements Runnable {
         // Create user interface
         ui = new UserInterface(sim, time);
 
+        Activeaction a = new Activeaction();
+
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
                 KeyHandler.keyBinds(sim, ui);
+
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_M)) {
+                    System.out.println("m");
+                    a.work(sim, time);
+                }
             }
             
             @Override
