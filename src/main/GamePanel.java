@@ -16,7 +16,8 @@ import src.world.Room;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
-    private Sim sim;
+    private Sim currentSim;
+    private Sim sim, sim2;
     private Room room;
     private UserInterface ui;
 
@@ -37,23 +38,41 @@ public class GamePanel extends JPanel implements Runnable {
         
         // Create sim
         sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+
+        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room);
+        sim2.changeIsBusyState();
+
+        currentSim = sim;
         
         // Create user interface
-        ui = new UserInterface(sim, time);
+        ui = new UserInterface(currentSim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                // KeyHandler.keyBinds(sim, ui);
+                KeyHandler.keyBinds(currentSim, ui);
 
                 // testing sim color
-                if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                    hue += 1 / 180.0f;
-                }
-                if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                    hue -= 1 / 180.0f;
+                // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
+                //     hue += 1 / 180.0f;
+                // }
+                // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
+                //     hue -= 1 / 180.0f;
+                // }
+
+                // testing adding sand switching sim
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
+                    currentSim.changeIsBusyState();
+                    if (currentSim == sim) {
+                        currentSim = sim2;
+                    }
+                    else {
+                        currentSim = sim;
+                    }
+                    currentSim.changeIsBusyState();
+                    ui.setCurrentSim(currentSim);
                 }
             }
 
@@ -102,9 +121,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        sim.update();
+        currentSim.update();
 
-        sim.getCurrentRoom().update();
+        currentSim.getCurrentRoom().update();
 
         ui.update();
     }
@@ -116,17 +135,22 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // // Draw room
-        // sim.getCurrentRoom().draw(g2);
+        // Draw room
+        currentSim.getCurrentRoom().draw(g2);
+        for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
+            // if (s == currentSim) continue;
+            // s.drawSimStanding(g2);
+            s.draw(g2);
+        }
 
-        // // Draw sim
-        // sim.draw(g2);
-
-        // // Draw UI
-        // ui.draw(g2);
+        // Draw sim
+        currentSim.draw(g2);
+        
+        // Draw UI
+        ui.draw(g2);
 
         // testing sim color
-        testingSimColor(g2);
+        // testingSimColor(g2);
        
         // To free resources
         g2.dispose();

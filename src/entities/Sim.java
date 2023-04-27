@@ -166,6 +166,10 @@ public class Sim extends Entity{
     }
 
     // ONLY FOR DEBUGGING
+    public void drawSimStanding(Graphics2D g) {
+        g.drawImage(images[2], getX(), getY(), null);
+    }
+
     public void drawCollisionBox(Graphics2D g) {
         // Draw the sim collision area as a red rectangle
         g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
