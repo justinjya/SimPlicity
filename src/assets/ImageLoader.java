@@ -1,5 +1,6 @@
 package src.assets;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,6 +13,7 @@ public class ImageLoader {
     private static BufferedImage scaleImage(BufferedImage image, int width, int height) {
         BufferedImage scaledImage = new BufferedImage(Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, image.getType());
         Graphics2D g = scaledImage.createGraphics();
+
         g.drawImage(image, 0, 0, Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, null);
         g.dispose();
         return scaledImage;
@@ -19,6 +21,7 @@ public class ImageLoader {
 
     public static BufferedImage readImage(String folder, String fileName, int width, int height) {
         BufferedImage image;
+
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
             image = scaleImage(image, width, height);
@@ -43,26 +46,27 @@ public class ImageLoader {
         return rotated;
     }
     
-
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
-        images[0] = readImage("sim", "idle_down", 1, 1);
-        images[1] = readImage("sim", "idle_up", 1, 1);
-        images[2] = readImage("sim", "idle_left", 1, 1);
-        images[3] = readImage("sim", "idle_right", 1, 1);
-        images[4] = readImage("sim", "walk_down_1", 1, 1);
-        images[5] = readImage("sim", "walk_down_2", 1, 1);
-        images[6] = readImage("sim", "walk_up_1", 1, 1);
-        images[7] = readImage("sim", "walk_up_2", 1, 1);
-        images[8] = readImage("sim", "walk_left_1", 1, 1);
-        images[9] = readImage("sim", "walk_left_2", 1, 1);
-        images[10] = readImage("sim", "walk_right_1", 1, 1);
-        images[11] = readImage("sim", "walk_right_2", 1, 1);
+
+        images[0] = readImage("sim", "idle_up", 1, 1);
+        images[1] = readImage("sim", "idle_right", 1, 1);
+        images[2] = readImage("sim", "idle_down", 1, 1);
+        images[3] = readImage("sim", "idle_left", 1, 1);
+        images[4] = readImage("sim", "walk_up_1", 1, 1);
+        images[5] = readImage("sim", "walk_up_2", 1, 1);
+        images[6] = readImage("sim", "walk_right_1", 1, 1);
+        images[7] = readImage("sim", "walk_right_2", 1, 1);
+        images[8] = readImage("sim", "walk_down_1", 1, 1);
+        images[9] = readImage("sim", "walk_down_2", 1, 1);
+        images[10] = readImage("sim", "walk_left_1", 1, 1);
+        images[11] = readImage("sim", "walk_left_2", 1, 1);
         return images;
     }
 
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
+
         images[0] = readImage("beds", "bed_idle", 4, 1);
         images[1] = readImage("beds", "bed_occupied", 4, 1);
         return images;
@@ -141,6 +145,7 @@ public class ImageLoader {
 
     public static BufferedImage[] loadDoor() {
         BufferedImage[] images = new BufferedImage[4];
+        
         images[0] = readImage("tiles", "door", 1, 1);
         images[1] = rotate90Clockwise(images[0]);
         images[2] = rotate90Clockwise(images[1]);
@@ -148,4 +153,35 @@ public class ImageLoader {
 
         return images;
     }
+
+    public static BufferedImage testSimColor() {
+        BufferedImage image;
+        Color shirtColor = new Color(215, 0, 20); // red color
+        Color newShirtColor = new Color(108, 50, 215); // purple color
+    
+        float[] hsv = new float[3];
+        float[] newHsv = new float[3];
+        float hueDelta = 0.0f; // adjust as needed
+        float saturationDelta = 0.0f; // adjust as needed
+        float brightnessDelta = 0.0f; // adjust as needed
+    
+        image = readImage("sim", "SIM_DOWN", 1, 1);
+    
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                int rgb = image.getRGB(x, y);
+                Color pixelColor = new Color(rgb);
+                if (pixelColor.equals(shirtColor)) {
+                    Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), hsv);
+                    newHsv[0] = (hsv[0] + hueDelta) % 1.0f;
+                    newHsv[1] = Math.max(0.0f, Math.min(1.0f, hsv[1] + saturationDelta));
+                    newHsv[2] = Math.max(0.0f, Math.min(1.0f, hsv[2] + brightnessDelta));
+                    int newRgb = Color.HSBtoRGB(newHsv[0], newHsv[1], newHsv[2]);
+                    image.setRGB(x, y, newRgb);
+                }
+            }
+        }
+    
+        return image;
+    }    
 }
