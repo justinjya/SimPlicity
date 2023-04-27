@@ -98,6 +98,9 @@ public class UserInterface {
             case 2:
                 sim.getCurrentRoom().addObject(new Bed(time));
                 break;
+            case 4:
+                changeIsViewingWorldState();
+                break;
             default:
                 break;
         }
@@ -107,7 +110,6 @@ public class UserInterface {
     public void update() {
         if (isViewingWorld) {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                System.out.println("tes");
                 changeIsViewingWorldState();
             }
         }
@@ -291,7 +293,10 @@ public class UserInterface {
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
             case 3:
-                g.drawString("Add sim", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
+                g.drawString("View sims", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
+                break;
+            case 4:
+                g.drawString("Visit another sim", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);

@@ -126,20 +126,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        currentSim.update();
-
-        currentSim.getCurrentRoom().update();
-
-        ui.update();
-
         if (!ui.isViewingWorld()) {
-            sim.update();
-            
-            sim.getCurrentRoom().update();
+            currentSim.update();
+
+            currentSim.getCurrentRoom().update();
         }
         else {
             world.update();
         }
+        
+        ui.update();
     }
 
     public void paintComponent(Graphics g)
@@ -156,7 +152,7 @@ public class GamePanel extends JPanel implements Runnable {
                 // if (s == currentSim) continue;
                 // s.drawSimStanding(g2);
                 s.draw(g2);
-        }
+            }
 
             // Draw sim
             currentSim.draw(g2);
@@ -168,6 +164,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Draw the world
             world.draw(g2);
         }
+
         // testing sim color
         // testingSimColor(g2);
        
