@@ -68,16 +68,24 @@ public class GamePanel extends JPanel implements Runnable {
                 // }
 
                 // testing adding sand switching sim
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
-                    currentSim.changeIsBusyState();
-                    if (currentSim == sim) {
-                        currentSim = sim2;
+                if (!ui.isViewingWorld()) {
+                    if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
+                        currentSim.changeIsBusyState();
+                        if (currentSim == sim) {
+                            currentSim = sim2;
+                        }
+                        else {
+                            currentSim = sim;
+                        }
+                        currentSim.changeIsBusyState();
+                        ui.setCurrentSim(currentSim);
                     }
-                    else {
-                        currentSim = sim;
+                }
+
+                if (ui.isViewingWorld()) {
+                    if (KeyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
+                        world.changeIsAddingState();
                     }
-                    currentSim.changeIsBusyState();
-                    ui.setCurrentSim(currentSim);
                 }
             }
             

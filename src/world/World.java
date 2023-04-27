@@ -10,8 +10,8 @@ import src.main.GameTime;
 
 public class World {
     // Atributes
-    private ArrayList<House> listOfHouse;
     private int[][] map = new int[64][64];
+    private ArrayList<House> listOfHouse;
     private GameTime time;
     
     // Images of the world
@@ -74,7 +74,7 @@ public class World {
     // Method to add house
     public void addHouse() {
         if (!isLocationOccupied()) {
-            listOfHouse.add(new House(cursor.getX(), cursor.getY(), this));
+            listOfHouse.add(new House(cursor.getX() / Consts.TILE_SIZE, cursor.getY() / Consts.TILE_SIZE, this));
         }
     }
 
@@ -83,7 +83,7 @@ public class World {
         boolean isOccupied = false; // initialize the status of occupation in newHouse location
 
         for (House house : listOfHouse) {
-            if (house.getX() == cursor.getX() && house.getY() == cursor.getY()) {
+            if (house.getX() == cursor.getX() / Consts.TILE_SIZE && house.getY() == cursor.getY() / Consts.TILE_SIZE) {
                 isOccupied = true;
                 break;
             }
@@ -101,24 +101,34 @@ public class World {
     }
 
     public void update() {
+        System.out.println("cursorX: " + cursor.getX() + " cursorY: " + cursor.getY());
         cursor.move();
     }
 
+    public void draw(Graphics2D g) {
+        // Draw the world in quarters with the size of each quarter of 32 x 32
+        drawWorld(g);
+
+        drawHouses(g);
+        
+        drawCursor(g);
+    }
+
     private int getCursorInQuarter() {
-        if ((cursor.getX() >= 0 && cursor.getX() < 32) &&
-            (cursor.getY() >= 0 && cursor.getY() < 32)) {
+        if ((cursor.getX() >= 0 * Consts.TILE_SIZE && cursor.getX() < 32 * Consts.TILE_SIZE) &&
+            (cursor.getY() >= 0 * Consts.TILE_SIZE && cursor.getY() < 32 * Consts.TILE_SIZE)) {
             return 1;
         }
-        if ((cursor.getX() >= 32 && cursor.getX() < 64) &&
-            (cursor.getY() >= 0 && cursor.getY() < 32)) {
+        if ((cursor.getX() >= 32 * Consts.TILE_SIZE && cursor.getX() < 64 * Consts.TILE_SIZE) &&
+            (cursor.getY() >= 0 * Consts.TILE_SIZE && cursor.getY() < 32 * Consts.TILE_SIZE)) {
             return 2;
         }
-        if ((cursor.getX() >= 32 && cursor.getX() < 64) &&
-            (cursor.getY() >= 32 && cursor.getY() < 64)) {
+        if ((cursor.getX() >= 32 * Consts.TILE_SIZE && cursor.getX() < 64 * Consts.TILE_SIZE) &&
+            (cursor.getY() >= 32 * Consts.TILE_SIZE && cursor.getY() < 64 * Consts.TILE_SIZE)) {
             return 3;
         }
-        if ((cursor.getX() >= 0 && cursor.getX() < 32) &&
-            (cursor.getY() >= 32 && cursor.getY() < 64)) {
+        if ((cursor.getX() >= 0 * Consts.TILE_SIZE && cursor.getX() < 32 * Consts.TILE_SIZE) &&
+            (cursor.getY() >= 32 * Consts.TILE_SIZE && cursor.getY() < 64 * Consts.TILE_SIZE)) {
             return 4;
         }
         return 0;
@@ -152,23 +162,23 @@ public class World {
     }
 
     private void drawCursor(Graphics2D g) {
-        int tileX = centerX + (cursor.getX() * Consts.TILE_SIZE) % viewableGrid;
-        int tileY = centerY + (cursor.getY() * Consts.TILE_SIZE) % viewableGrid;
+        int tileX = centerX + (cursor.getX() % viewableGrid);
+        int tileY = centerY + (cursor.getY() % viewableGrid);
 
         if (isLocationOccupied()) {
             if (isAdding) {
-                g.drawImage(images[5], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                g.drawImage(images[5], tileX, tileY, null);
             }
             else {
-                g.drawImage(images[4], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                g.drawImage(images[4], tileX, tileY, null);
             }
         }
         else {
             if (isAdding) {
-                g.drawImage(images[3], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                g.drawImage(images[3], tileX, tileY, null);
             }
             else {
-                g.drawImage(images[2], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                g.drawImage(images[2], tileX, tileY, null);
             }
         }
     }
@@ -180,7 +190,7 @@ public class World {
                 int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
 
                 if (getMap(x, y) == 1) {
-                    g.drawImage(images[1], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                    g.drawImage(images[1], tileX, tileY, null);    
                 }
             }
         }
@@ -193,33 +203,26 @@ public class World {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
                 int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
                 int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
-                g.drawImage(images[0], tileX, tileY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+                g.drawImage(images[0], tileX, tileY, null);
             }
         }
+
+        // Arrows
         if (getCursorInQuarter() == 1){
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (31 * Consts.TILE_SIZE), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
-            g.drawImage(images[9], centerX + (31 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
+            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
         }
-        else if (getCursorInQuarter() == 2){
-            g.drawImage(images[7], centerX, centerY + (15 * Consts.TILE_SIZE + 8), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (31 * Consts.TILE_SIZE), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+        if (getCursorInQuarter() == 2){
+            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
         }
-        else if (getCursorInQuarter() == 3){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
-            g.drawImage(images[7], centerX, centerY + (15 * Consts.TILE_SIZE + 8), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+        if (getCursorInQuarter() == 3){
+            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
+            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
         }
-        else if (getCursorInQuarter() == 4){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY, Consts.TILE_SIZE, Consts.TILE_SIZE, null);
-            g.drawImage(images[9], centerX + (31 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), Consts.TILE_SIZE, Consts.TILE_SIZE, null);
+        if (getCursorInQuarter() == 4){
+            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
+            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
         }
-    }
-
-    public void draw(Graphics2D g) {
-        // Draw the world in quarters with the size of each quarter of 32 x 32
-        drawWorld(g);
-
-        drawHouses(g);
-        
-        drawCursor(g);
     }
 }

@@ -68,14 +68,22 @@ public class UserInterface {
     private void moveSelectedBox(String direction) {
         switch (direction)  {
             case "left":
-                if (selectedBox > 0) {
-                    selectedBox--;
+                selectedBox--;
+                if (selectedBox < 0) {
+                    selectedBox = 4;
+                    selectedBoxX += boxStep * 4;
+                }
+                else {
                     selectedBoxX -= boxStep;
                 }
                 break;
             case "right":
-                if (selectedBox < 4) {
-                    selectedBox++;
+                selectedBox++;
+                if (selectedBox > 4) {
+                    selectedBox = 0;
+                    selectedBoxX -= boxStep * 4;
+                }
+                else {
                     selectedBoxX += boxStep;
                 }
                 break;
@@ -131,12 +139,6 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
-        if (debug) {
-            sim.drawCollisionBox(g);
-            sim.drawInteractionRange(g);
-            sim.getCurrentRoom().drawCollisionBox(g);
-        }
-
         if (debug) {
             sim.drawCollisionBox(g);
             sim.drawInteractionRange(g);
@@ -221,11 +223,6 @@ public class UserInterface {
             //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
             //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
             // }
-            // if (sim.getInteractionHandler().isObjectInRange()) {
-            //     object = sim.getInteractionHandler().getInteractableObject();
-            //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
-            //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
-            // }
         }
     }
 
@@ -293,10 +290,10 @@ public class UserInterface {
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
             case 3:
-                g.drawString("View sims", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
+                g.drawString("View Sims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
                 break;
             case 4:
-                g.drawString("Visit another sim", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
+                g.drawString("Visit Another Sim", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);
