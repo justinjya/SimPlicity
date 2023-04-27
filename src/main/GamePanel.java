@@ -129,6 +129,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
+        ui.update();
+
         if (!ui.isViewingWorld()) {
             ui.getCurrentSim().update();
 
@@ -136,11 +138,9 @@ public class GamePanel extends JPanel implements Runnable {
         }
         else {
             world.update(ui);
-
-            ui.update();
         }
     }
-
+    
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
