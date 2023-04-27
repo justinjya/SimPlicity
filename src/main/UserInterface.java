@@ -16,7 +16,9 @@ public class UserInterface {
     private BufferedImage[] images;
     private Sim sim;
     private Interactables object;
+    private boolean tabbed = false;
     private GameTime time;
+    private boolean isViewingWorld = false;
 
     // Selection Box Attributes
     private int selectedBox = 0; // Boxes starting from 0 to 4
@@ -41,18 +43,79 @@ public class UserInterface {
     }
 
     // SETTERS
+    public void setCurrentSim(Sim sim) {
+        this.sim = sim;
+    }
+
+    public boolean isViewingWorld() {
+        return isViewingWorld;
+    }
+
+    public void changeIsViewingWorldState() {
+        this.isViewingWorld = !this.isViewingWorld;
+    }
+
     public void debug() {
         this.debug = !this.debug;
     }
 
     public void tab() {
+        this.tabbed = !this.tabbed;
         sim.changeIsBusyState();
     }
 
     // OTHERS
+    private void moveSelectedBox(String direction) {
+        switch (direction)  {
+            case "left":
+                if (selectedBox > 0) {
+                    selectedBox--;
+                    selectedBoxX -= boxStep;
+                }
+                break;
+            case "right":
+                if (selectedBox < 4) {
+                    selectedBox++;
+                    selectedBoxX += boxStep;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    // TO - DO !!! : Add the rest of the boxes features
+    private void boxEntered() {
+        tab();
+        switch (selectedBox) {
+            case 0:
+                // This is just a test
+                sim.getCurrentRoom().selectObject();
+                break;
+            case 1:
+                sim.getCurrentRoom().addRoom("Second Room");
+                break;
+            case 2:
+                sim.getCurrentRoom().addObject(new Bed(time));
+                break;
+            case 4:
+                changeIsViewingWorldState();
+                break;
+            default:
+                break;
+        }
+    }
+
+    // OTHERS
     public void update() {
+        if (isViewingWorld) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                changeIsViewingWorldState();
+            }
+        }
+
         // If enter is pressed execute a function according to selected box position 
-        if (sim.isBusy()) {
+        if (tabbed) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 moveSelectedBox("left");
@@ -68,6 +131,12 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
+        if (debug) {
+            sim.drawCollisionBox(g);
+            sim.drawInteractionRange(g);
+            sim.getCurrentRoom().drawCollisionBox(g);
+        }
+
         if (debug) {
             sim.drawCollisionBox(g);
             sim.drawInteractionRange(g);
@@ -99,51 +168,13 @@ public class UserInterface {
         g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
 
         // Draw selected box
-        if (sim.isBusy()) {
+        if (tabbed) {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
             drawSelectedBoxText(g);
         }
 
         drawText(g);
-    }
-
-    private void moveSelectedBox(String direction) {
-        switch (direction)  {
-            case "left":
-                if (selectedBox > 0) {
-                    selectedBox--;
-                    selectedBoxX -= boxStep;
-                }
-                break;
-            case "right":
-                if (selectedBox < 4) {
-                    selectedBox++;
-                    selectedBoxX += boxStep;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    // TO - DO !!! : Add the rest of the boxes features
-    private void boxEntered() {
-        sim.changeIsBusyState();
-        switch (selectedBox) {
-            case 1:
-                // This is just a test
-                sim.getCurrentRoom().addObject(new Bed(time));
-                break;
-            case 2:
-                sim.getCurrentRoom().selectObject();
-                break;
-            case 3:
-                sim.getCurrentRoom().addRoom("Second Room");
-                break;
-            default:
-                break;
-        }
     }
 
     private void drawText(Graphics2D g) {
@@ -182,7 +213,14 @@ public class UserInterface {
             g.drawString("isWalking: " + sim.isMoving(), 73, 384);
             g.drawString("isEditingRoom: " + sim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + sim.isBusy(), 33, 408);
+            g.drawString("isEditingRoom: " + sim.getCurrentRoom().isEditingRoom(), 33, 398);
+            g.drawString("isBusy: " + sim.isBusy(), 33, 408);
             
+            // if (sim.getInteractionHandler().isObjectInRange()) {
+            //     object = sim.getInteractionHandler().getInteractableObject();
+            //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
+            //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
+            // }
             // if (sim.getInteractionHandler().isObjectInRange()) {
             //     object = sim.getInteractionHandler().getInteractableObject();
             //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
@@ -245,14 +283,20 @@ public class UserInterface {
 
         g.setFont(font);
         switch (selectedBox) {
-            case 1:
-                g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
-                break;
-            case 2:
+            case 0:
                 g.drawString("Edit Room", Consts.CENTER_X - 18, Consts.CENTER_Y + 172);
                 break;
-            case 3:
+            case 1:
                 g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
+                break;
+            case 2:
+                g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                break;
+            case 3:
+                g.drawString("View sims", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
+                break;
+            case 4:
+                g.drawString("Visit another sim", Consts.CENTER_X - 22, Consts.CENTER_Y + 1772);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);

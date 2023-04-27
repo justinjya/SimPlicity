@@ -9,6 +9,7 @@ import src.entities.*;
 import src.entities.handlers.KeyHandler;
 import src.world.Room;
 import src.Menu.MenuButton;
+import src.world.World;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -17,35 +18,71 @@ import src.Menu.MenuButton;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
-    private Sim sim;
+    private World world;
+    private Sim currentSim;
+    private Sim sim, sim2;
     private Room room;
     private UserInterface ui;
+
+    // testing sim color
+    private float hue = 0.0f;
+    private float sat = 1.0f;
+    private float bri = 0.92f;
     private MenuButton menu;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
-
+        
         // Create game time
         time = new GameTime(1, 720, 720);
+
+        // create a new world
+        world = new World(time);
 
         // Create room
         room = new Room("First Room", time);
         
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null);
+
+        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room, null);
+        sim2.changeIsBusyState();
+
+        currentSim = sim;
         
         // Create user interface
-        ui = new UserInterface(sim, time);
+        ui = new UserInterface(currentSim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(sim, ui);
-            }
+                KeyHandler.keyBinds(currentSim, ui);
 
+                // testing sim color
+                // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
+                //     hue += 1 / 180.0f;
+                // }
+                // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
+                //     hue -= 1 / 180.0f;
+                // }
+
+                // testing adding sand switching sim
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
+                    currentSim.changeIsBusyState();
+                    if (currentSim == sim) {
+                        currentSim = sim2;
+                    }
+                    else {
+                        currentSim = sim;
+                    }
+                    currentSim.changeIsBusyState();
+                    ui.setCurrentSim(currentSim);
+                }
+            }
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e.getKeyCode());
@@ -91,10 +128,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        sim.update();
+        if (!ui.isViewingWorld()) {
+            currentSim.update();
 
-        sim.getCurrentRoom().update();
-
+            currentSim.getCurrentRoom().update();
+        }
+        else {
+            world.update();
+        }
+        
         ui.update();
     }
 
@@ -105,21 +147,45 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // // Draw room
-        sim.getCurrentRoom().draw(g2);
+        if (!ui.isViewingWorld()) {
+            // Draw room
+            currentSim.getCurrentRoom().draw(g2);
+            for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
+                // if (s == currentSim) continue;
+                // s.drawSimStanding(g2);
+                s.draw(g2);
+            }
 
-        // // Draw sim
-        sim.draw(g2);
+            // Draw sim
+            currentSim.draw(g2);
+        
+            // Draw UI
+            ui.draw(g2);
+        }
+        else {
+            // Draw the world
+            world.draw(g2);
+        }
 
-        // // Draw UI
-        ui.draw(g2);
-
-        // g2.drawImage(ImageLoader.testSimColor(), Consts.CENTER_X, Consts.CENTER_Y, Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
-
+        // testing sim color
+        // testingSimColor(g2);
+       
         // To free resources
         g2.dispose();
+    }
 
-        // Draw Menu
-        //menu.loadImages();
+    private void testingSimColor(Graphics2D g) {
+        Font font;
+        g.setColor(Color.WHITE);
+
+        font = new Font("Arial", Font.PLAIN, 15);
+
+        g.setFont(font);
+        g.drawString("hue: " + hue, 10, 30);
+        g.drawString("sat: " + sat, 10, 50);
+        g.drawString("bri: " + bri, 10, 70);
+
+        g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
+
     }
 }
