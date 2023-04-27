@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
 import src.world.Room;
+import src.world.World;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -16,6 +17,7 @@ import src.world.Room;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
+    private World world;
     private Sim sim;
     private Room room;
     private UserInterface ui;
@@ -23,15 +25,18 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
-
+        
         // Create game time
         time = new GameTime(1, 720, 720);
+
+        // create a new world
+        world = new World(time);
 
         // Create room
         room = new Room("First Room", time);
         
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null);
         
         // Create user interface
         ui = new UserInterface(sim, time);
@@ -43,7 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
                 KeyHandler.keyPressed(e.getKeyCode());
                 KeyHandler.keyBinds(sim, ui);
             }
-
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e.getKeyCode());
@@ -89,11 +94,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        sim.update();
-
-        sim.getCurrentRoom().update();
-
         ui.update();
+
+        if (!ui.isViewingWorld()) {
+            sim.update();
+            
+            sim.getCurrentRoom().update();
+        }
+        else {
+            world.update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -103,17 +113,20 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // // Draw room
-        sim.getCurrentRoom().draw(g2);
+        if (!ui.isViewingWorld()) {
+            // Draw room
+            sim.getCurrentRoom().draw(g2);
 
-        // // Draw sim
-        sim.draw(g2);
+            // Draw sim
+            sim.draw(g2);
 
-        // // Draw UI
-        ui.draw(g2);
-
-        // g2.drawImage(ImageLoader.testSimColor(), Consts.CENTER_X, Consts.CENTER_Y, Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
-
+            // Draw UI
+            ui.draw(g2);
+        }
+        else {
+            // Draw the world
+            world.draw(g2);
+        }
         // To free resources
         g2.dispose();
     }

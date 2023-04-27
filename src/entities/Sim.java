@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
 import src.world.Room;
+import src.world.House;
 
 public class Sim extends Entity{
     // Atributes
@@ -19,6 +20,7 @@ public class Sim extends Entity{
     private String status;
     private boolean isBusy;
     private Room currentRoom;
+    private House currentHouse;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -28,7 +30,7 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y, Room currentRoom) {
+    public Sim(String name, int x, int y, Room currentRoom, House currentHouse) {
         // Atributes
         super (
             x,
@@ -48,6 +50,7 @@ public class Sim extends Entity{
 
         // Place the sim inside of the current room
         currentRoom.addSim(this);
+        this.currentHouse = currentHouse;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -84,6 +87,10 @@ public class Sim extends Entity{
 
     public Room getCurrentRoom() {
         return currentRoom;
+    }
+
+    public House getCurrentHouse() {
+        return currentHouse;
     }
 
     public InteractionHandler getInteractionHandler() {

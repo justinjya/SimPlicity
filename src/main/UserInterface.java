@@ -17,6 +17,7 @@ public class UserInterface {
     private Sim sim;
     private Interactables object;
     private GameTime time;
+    private boolean isViewingWorld = false;
 
     // Selection Box Attributes
     private int selectedBox = 0; // Boxes starting from 0 to 4
@@ -40,9 +41,57 @@ public class UserInterface {
         this.mockup = ImageLoader.loadMockup();
     }
 
-    // SETTERS
+    public boolean isViewingWorld() {
+        return isViewingWorld;
+    }
+
+    public void changeIsViewingWorldState() {
+        this.isViewingWorld = !this.isViewingWorld;
+    }
+
     public void debug() {
         this.debug = !this.debug;
+    }
+
+    private void moveSelectedBox(String direction) {
+        switch (direction)  {
+            case "left":
+                if (selectedBox > 0) {
+                    selectedBox--;
+                    selectedBoxX -= boxStep;
+                }
+                break;
+            case "right":
+                if (selectedBox < 4) {
+                    selectedBox++;
+                    selectedBoxX += boxStep;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    // TO - DO !!! : Add the rest of the boxes features
+    private void boxEntered() {
+        sim.changeIsBusyState();
+        switch (selectedBox) {
+            case 0:
+                changeIsViewingWorldState();
+                break;
+            case 1:
+                // This is just a test
+                sim.getCurrentRoom().addObject(new Bed(time));
+                break;
+            case 2:
+                sim.getCurrentRoom().selectObject();
+                break;
+            case 3:
+                sim.getCurrentRoom().addRoom("Second Room");
+                break;
+            default:
+                break;
+        }
     }
 
     public void tab() {
@@ -51,6 +100,13 @@ public class UserInterface {
 
     // OTHERS
     public void update() {
+        if (isViewingWorld) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                System.out.println("tes");
+                changeIsViewingWorldState();
+            }
+        }
+
         // If enter is pressed execute a function according to selected box position 
         if (sim.isBusy()) {
             // Change selected box based on key input
@@ -106,44 +162,6 @@ public class UserInterface {
         }
 
         drawText(g);
-    }
-
-    private void moveSelectedBox(String direction) {
-        switch (direction)  {
-            case "left":
-                if (selectedBox > 0) {
-                    selectedBox--;
-                    selectedBoxX -= boxStep;
-                }
-                break;
-            case "right":
-                if (selectedBox < 4) {
-                    selectedBox++;
-                    selectedBoxX += boxStep;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    // TO - DO !!! : Add the rest of the boxes features
-    private void boxEntered() {
-        sim.changeIsBusyState();
-        switch (selectedBox) {
-            case 1:
-                // This is just a test
-                sim.getCurrentRoom().addObject(new Bed(time));
-                break;
-            case 2:
-                sim.getCurrentRoom().selectObject();
-                break;
-            case 3:
-                sim.getCurrentRoom().addRoom("Second Room");
-                break;
-            default:
-                break;
-        }
     }
 
     private void drawText(Graphics2D g) {
@@ -245,6 +263,9 @@ public class UserInterface {
 
         g.setFont(font);
         switch (selectedBox) {
+            case 0:
+                g.drawString("Show World", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                break;
             case 1:
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
