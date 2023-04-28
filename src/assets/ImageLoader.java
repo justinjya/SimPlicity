@@ -30,6 +30,19 @@ public class ImageLoader {
         return null;
     }
 
+    // read image with no scaling
+    public static BufferedImage readImage(String folder, String fileName) {
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
+            return image;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static BufferedImage rotate90Clockwise(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -72,6 +85,37 @@ public class ImageLoader {
         BufferedImage image = readImage("tiles", "wood", 1, 1);
         return image;
     }
+
+    public static BufferedImage[] loadItemsIcon() {
+        BufferedImage[] images = new BufferedImage[12];
+        images[0] = readImage("inventory", "bed_single");
+        images[1] = readImage("inventory", "bed_queen");
+        images[2] = readImage("inventory", "bed_king");
+        images[3] = readImage("inventory", "trash_bin");
+        images[4] = readImage("inventory", "gas_stove");
+        // images[5] = readImage("inventory", "electric_stove");
+        // images[6] = readImage("inventory", "table_and_chair");
+        // images[7] = readImage("inventory", "clock");
+        // images[8] = readImage("inventory", "television");
+        // images[9] = readImage("inventory", "shover");
+        // images[10] = readImage("inventory", "aquarium");
+        // images[11] = readImage("inventory", "trash_bin");
+        // images[12] = readImage("inventory", "rice");
+        // images[13] = readImage("inventory", "potato");
+        // images[14] = readImage("inventory", "chicken");
+        // images[15] = readImage("inventory", "meat");
+        // images[16] = readImage("inventory", "carrot");
+        // images[17] = readImage("inventory", "spinach");
+        // images[18] = readImage("inventory", "peanuts");
+        // images[19] = readImage("inventory", "milk");
+        // images[20] = readImage("inventory", "chicken_and_rice");
+        // images[21] = readImage("inventory", "curry_and_rice");
+        // images[22] = readImage("inventory", "peanut_and_milk");
+        // images[23] = readImage("inventory", "cut_vegetables");
+        // images[24] = readImage("inventory", "steak");
+        return images;
+    }
+
 
     public static BufferedImage loadMockup() {
         try {

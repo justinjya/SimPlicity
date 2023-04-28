@@ -80,16 +80,25 @@ public class UserInterface {
 
     public void tab() {
         // TO - DO !!! : Fix being able to tab while doing an active action
-        if (!sim.isStatusCurrently("Tabbed")) {
+        if (!sim.isStatusCurrently("Tabbed") && !sim.isBusy()) {
             sim.setStatus("Tabbed");
+            sim.changeState();
         }
         else {
             sim.resetStatus();
+            sim.resetState();
         }
     }
 
     public void inventory() {
-        sim.getInventory().changeState();
+        if (!sim.getInventory().isOpen() && !sim.isBusy()) {
+            sim.getInventory().changeState();
+            sim.changeState();
+        }
+        else {
+            sim.resetState();
+            sim.getInventory().resetState();
+        }
     }
 
     public void update() {
@@ -108,7 +117,30 @@ public class UserInterface {
         }
 
         if (sim.getInventory().isOpen()) {
-            // Change selected box based on key input
+            // Change selected box
+            // int max = sim.getInventory().itemOwned();
+            
+
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+                if (sim.getInventory().slotCol > 0) {
+                    sim.getInventory().slotCol--;
+                }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
+                if (sim.getInventory().slotRow < 3) {
+                    sim.getInventory().slotRow++;
+                } 
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+                if (sim.getInventory().slotCol < 2) {
+                    sim.getInventory().slotCol++;
+                }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
+                if (sim.getInventory().slotRow > 0) {
+                    sim.getInventory().slotRow--;
+                }
+            }
         }
     }
 
@@ -149,7 +181,8 @@ public class UserInterface {
 
         if (sim.getInventory().isOpen()) {
             sim.getInventory().draw(g);
-        }
+            drawInventory(g);
+        }        
         
         drawText(g);
     }
@@ -190,11 +223,12 @@ public class UserInterface {
             g.drawString("y: " + sim.getY(), 33, 384);
             g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 73, 374);
             g.drawString("isWalking: " + sim.isMoving(), 73, 384);
+            g.drawString("isBusy: " + sim.isBusy(), 73, 394);
             
             if (sim.getInteractionHandler().isObjectInRange()) {
                     object = sim.getInteractionHandler().getInteractableObject();
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
+                    g.drawString("isOccupied: " + object.isOccupied(), 33, 404);
+                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 414);
                 }
         }
     }
@@ -263,6 +297,18 @@ public class UserInterface {
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);
                 break;
         }
+    }
+
+    private void drawInventory(Graphics2D g) {
+
+        // cursor
+        int cursorX = sim.getInventory().slotXstart + (sim.getInventory().slotSize * sim.getInventory().slotCol);
+        int cursorY = sim.getInventory().slotYstart + (sim.getInventory().slotSize * sim.getInventory().slotRow);
+        int cursorWidth = sim.getInventory().slotSize;
+        int cursorHeight = sim.getInventory().slotSize;
+        g.setColor(Color.WHITE);
+        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
     }
 
     // ONLY FOR DEBUGGING

@@ -19,6 +19,7 @@ public class Sim extends Entity{
     private Room currentRoom;
     private Profession profession;
     private Inventory inventory;
+    private boolean state;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -38,6 +39,7 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.currentRoom = currentRoom;
         this.profession = new Profession(); 
+        this.state = false;
         this.inventory = new Inventory();
 
         // Load the image of the sim
@@ -84,6 +86,18 @@ public class Sim extends Entity{
         return inventory;
     }
 
+    public boolean isBusy() {
+        return state;
+    }
+
+    public void changeState() {
+        state = !state;
+    }
+
+    public void resetState() {
+        state = false;
+    }
+
     public Room getCurrentRoom() {
         return currentRoom;
     }
@@ -128,7 +142,7 @@ public class Sim extends Entity{
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
-        if (!isStatusCurrently("Tabbed") && isMoving() && !currentRoom.isEditingRoom()) {
+        if (!isStatusCurrently("Tabbed") && isMoving() && !currentRoom.isEditingRoom() && !isBusy()) {
             imageIndex += (int) ((getDirection() + (System.currentTimeMillis() / 250) % 2) + 4);
         }
 
@@ -151,7 +165,7 @@ public class Sim extends Entity{
             return;
         }
         
-        if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom()) {
+        if (isMoving() && !isStatusCurrently("Tabbed") && !currentRoom.isEditingRoom() && !isBusy()) {
             move(collisionHandler, interactionHandler);
         }
     }

@@ -116,6 +116,7 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
+        // klo gaada ini di gua ga keliatan gatau knp
         g2.setColor(Color.BLACK);
         g2.fillRect(0,0,800,600);
 

@@ -1,12 +1,25 @@
 package src.entities;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import src.assets.ImageLoader;
+
 import java.awt.Color;
+import java.awt.Font;
 
 public class Inventory {
-    private boolean state = false;
-    // true if the inventory is open, false if closed
-
-    private static String[] objects =
+    public int slotSize = 45;
+    public int slotRow = 0;
+    public int slotCol = 0;
+    private boolean state = false; // true if the inventory is open, false if closed
+    private boolean isObject = true;
+    public ArrayList<Integer> ownedObjectsIndex = new ArrayList<Integer>();
+    public ArrayList<Integer> ownedFoodsIndex = new ArrayList<Integer>();
+    
+    // objects = 0-11
+    // foods = 12-24
+    public static String[] items =
     {
         "Single Bed",
         "Queen Size Bed",
@@ -19,43 +32,7 @@ public class Inventory {
         "Television",
         "Shower",
         "Aquarium",
-        "Trash Bin"
-    };
-
-    private int[] quantityObjects =
-    {
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    };
-
-    private static int[] priceObjects =
-    {
-        50,
-        100,
-        150,
-        50,
-        100,
-        200,
-        50,
-        10,
-        200,
-        100,
-        20,
-        10
-    };
-
-    private static String[] foods =
-    {
+        "Trash Bin",
         "Rice",
         "Potato",
         "Chicken",
@@ -71,8 +48,20 @@ public class Inventory {
         "Steak"
     };
 
-    private int[] quantityFoods =
+    private int[] quantity =
     {
+        1,
+        2,
+        3,
+        1,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
         0,
         0,
         0,
@@ -88,8 +77,20 @@ public class Inventory {
         0
     };
 
-    private static int[] priceFoods =
+    private static int[] price =
     {
+        50,
+        100,
+        150,
+        50,
+        100,
+        200,
+        50,
+        10,
+        200,
+        100,
+        20,
+        10,
         5,
         3,
         10,
@@ -103,9 +104,8 @@ public class Inventory {
         0,
         0,
         0
-    };
+    };    
 
-    // create inventory
     public Inventory() {
 
     }
@@ -118,18 +118,19 @@ public class Inventory {
         state = !state;
     }
 
-    public String[] getObjects() {
-        return objects;
+    public void resetState() {
+        state = false;
     }
 
-    public String[] getFoods() {
-        return foods;
+    public String[] getItemList() {
+        return items;
     }
 
     // return item index on list
-    public int itemIndex(String[] category, String object) {
-        for (int i = 0; i < category.length; i++) {
-            if (category[i].equals(object)) {
+    public int itemIndex(String item)
+    {
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].equals(item)) {
                 return i;
             }
         }
@@ -138,84 +139,158 @@ public class Inventory {
     }
 
     // return item price
-    // TO-DO : handle not for sale items (price = 0)
-    public int getItemPrice(String[] category, String item) {
-        if (category.equals(objects)){
-            return priceObjects[itemIndex(category, item)];
-        } else {
-            return priceFoods[itemIndex(category, item)];
-        }
+    public int getItemPrice(String item)
+    {
+        return price[itemIndex(item)];
     }
     
     // increase item's quantity by 1
-    public void addItem(String[] category, String item) {
-        if (category.equals(objects)){
-            quantityObjects[itemIndex(category, item)] += 1;
-        } else {
-            quantityFoods[itemIndex(category, item)] += 1;
-        }
+    public void addItem(String item)
+     {
+        quantity[itemIndex(item)] += 1;
     } 
     
     // increase item's quantity with spesific quantity
-    public void addItem(String[] category, String item, int quantity) {
-        if (category.equals(objects)){
-            quantityObjects[itemIndex(category, item)] += quantity;
-        } else {
-            quantityFoods[itemIndex(category, item)] += quantity;
-        }
+    public void addItem(String item, int quantity)
+    {
+        this.quantity[itemIndex(item)] += quantity;
     }    
 
     // reduce item's quantity by 1
-    public void reduceItem(String[] category, String item) {
-        if (category.equals(objects)){
-            quantityObjects[itemIndex(category, item)] += 1;
-        } else {
-            quantityFoods[itemIndex(category, item)] += 1;
-        }
+    public void reduceItem(String item)
+    {
+        this.quantity[itemIndex(item)] += 1;
     } 
     
     // reduce item's quantity with spesific quantity
-    public void reduceItem(String[] category, String item, int quantity) {
-        if (category.equals(objects)){
-            quantityObjects[itemIndex(category, item)] += quantity;
-        } else {
-            quantityFoods[itemIndex(category, item)] += quantity;
-        }
+    public void reduceItem(String item, int quantity)
+    {
+        this.quantity[itemIndex(item)] += quantity;
     } 
 
     // check if the sim owns spesific item
-    public boolean isItemOwned(String[] category, String item) {
-        if (category.equals(objects)){
-            return quantityObjects[itemIndex(category, item)] > 0;
-        } else {
-            return quantityObjects[itemIndex(category, item)] > 0;
+    public boolean isItemOwned(String item)
+    {
+        return quantity[itemIndex(item)] > 0;
+    }
+
+    public void addOwnedObjects() {
+        for (int i = 0; i < 11; i++) {
+            if (isItemOwned(items[i])) {
+                ownedObjectsIndex.add(i);
+            }
         }
     }
 
+    public void addOwnedFoods() {
+        for (int i = 12; i < 24; i++) {
+            if (isItemOwned(items[i])) {
+                ownedFoodsIndex.add(i);
+            }
+        }
+    }
+
+    public int frameX = 607;
+    public int frameY = 173;
+    public int frameWidth = 182;
+    public int frameHeight = 262;
+
+    public int boxWidth = (slotSize*3) + 20;
+    public int boxHeight = (slotSize*4) + 20;
+    public int boxX = frameX+((frameWidth-boxWidth)/2);
+    public int boxY = frameY+((frameHeight-boxHeight)/2);
+
+    public int categoryWidth = boxWidth/2;
+    public int categoryHeight = 20;
+    public int categoryX = boxX;
+    public int categoryY = boxHeight + boxY;
+
+    
+    public int slotXstart = boxX + ((boxWidth-(slotSize*3))/2);
+    public int slotYstart = boxY + ((boxHeight-(slotSize*4))/2);
+    public int slotX = slotXstart;
+    public int slotY = slotYstart;
+    public final int slotXnext = slotXstart;
+    public final int slotYnext = slotYstart;
+    
+    public void drawItem(Graphics2D g) {
+        int nextSlotX = slotX;
+        int nextSlotY = slotY;
+        int next, end;
+
+        if (isObject) {
+            next = 0; end = 11;
+        }
+
+        else {
+            next = 12; end = 24;
+        }
+
+        BufferedImage[] images = ImageLoader.loadItemsIcon();
+        for(int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                    if (next < end) {
+                        if (isItemOwned(items[next])) {
+                            g.drawImage(images[next], nextSlotX, nextSlotY, images[next].getWidth(), images[next].getHeight(), null);
+                            if(quantity[next] > 1) {
+                                g.setColor(Color.WHITE);
+                                g.fillRect(nextSlotX+31, nextSlotY+31, 14, 14);
+
+                                g.setColor(Color.BLACK);
+                                Font font = new Font("Inter", Font.BOLD, 10);
+                                g.setFont(font);
+                                g.drawString(Integer.toString(quantity[next]), nextSlotX+35, nextSlotY+41);
+                            }
+                            
+                            if (nextSlotX == slotX+(2*slotSize)) {
+                                nextSlotX = slotX;
+                                nextSlotY += slotSize;
+                            }
+
+                            else { 
+                                nextSlotX += slotSize;
+                            } 
+                    }
+                    next++;
+                }
+            }
+        } 
+    }
+
     public void draw(Graphics2D g){
-        
+
         // Frame
         g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(607, 173, 182, 262);
+        g.fillRect(frameX, frameY, frameWidth, frameHeight);
 
         // Box
         g.setColor(Color.GRAY);
-        g.fillRect(607+11, 173+54-26, 160, 189);
+        g.fillRect(boxX, boxY, boxWidth, boxHeight);
 
-        // Slot
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(607+11+10, 173+54-26+10, 32, 32);
+        if (isObject) {
+            // Selected category = object
+            g.fillRect(categoryX, categoryY, categoryWidth, categoryHeight);
+            g.setColor(Color.WHITE);
+            Font font = new Font("Inter", Font.BOLD, 10);
+            g.setFont(font);
+            g.drawString("Objects", categoryX+(categoryWidth/4), categoryY+(categoryHeight/2));
+        }
+
+        else {
+            // Selected category = foods
+            int categoryWidth = boxWidth/2;
+            int categoryHeight = 20;
+            int categoryX = boxX;
+            int categoryY = boxHeight + boxY + categoryWidth;
+            g.fillRect(categoryX, categoryY, categoryWidth, categoryHeight);
+            g.setColor(Color.WHITE);
+            Font font = new Font("Inter", Font.BOLD, 10);
+            g.setFont(font);
+            g.drawString("Foods", categoryX+categoryWidth, categoryY+(categoryHeight/2));
+        }
+        
+        drawItem(g);
 
     }
-
-    // public void 
-
-    // public void showOwnedItems() {
-    //     for (int i = 0; i < objects.length; i++) {
-    //         if (quantityObjects[i] > 0) {
-    //             System.out.print(objects[i] + ": ");
-    //             System.out.println(quantityObjects);
-    //         }
-    //     }
-    // }
 }
+
