@@ -88,7 +88,7 @@ public class Activeaction {
 
             // Mengatur waktu makan
             try {
-                Thread.sleep(Consts.ONE_SECOND); // Simulasi waktu makan selama 3 detik
+                Thread.sleep(Consts.ONE_SECOND);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
