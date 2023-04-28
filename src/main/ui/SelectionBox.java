@@ -11,6 +11,7 @@ import src.entities.actions.NonActiveActions;
 import src.entities.actions.UpgradeActions;
 import src.entities.handlers.KeyHandler;
 import src.items.interactables.Bed;
+import src.items.interactables.Shower;
 import src.main.Consts;
 import src.main.GameTime;
 import src.world.World;
@@ -69,7 +70,7 @@ public class SelectionBox {
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(time));
+                currentSim.getCurrentRoom().addObject(new Shower(time));
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);
