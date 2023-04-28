@@ -1,12 +1,14 @@
 package src.main;
 
 public class GameTime implements Runnable {    
+    // Atributes
     private int day;
     private int initialTimeRemaining;
     private int timeRemaining;
     private int decrements;
     private Thread thread;
     
+    // CONSTRUCTOR
     public GameTime(int day, int initialTimeRemaining, int timeRemaining) {
         this.day = day;
         this.initialTimeRemaining = initialTimeRemaining;
@@ -14,11 +16,12 @@ public class GameTime implements Runnable {
         this.decrements = 0;
     }
 
+    // IMPLEMENTATION OF INTERFACE
     @Override
     public void run() {
         while (decrements > 0) {
             try {
-                Thread.sleep(Consts.ONE_SECOND);
+                Thread.sleep(Consts.THREAD_ONE_SECOND);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -27,6 +30,7 @@ public class GameTime implements Runnable {
         }
     }
 
+    // GETTERS
     public int getDay() {
         return day;
     }
@@ -43,10 +47,7 @@ public class GameTime implements Runnable {
         return thread;
     }
 
-    public void setDecrements(int decrements) {
-        this.decrements = decrements / Consts.ONE_SECOND;
-    }
-    
+    // SETTERS
     private void decrementTimeRemaining(int initialTimeRemaining) {
         timeRemaining--;
         decrements--;
@@ -61,9 +62,23 @@ public class GameTime implements Runnable {
         day++;
     }
 
+    public void setDecrements(int decrements) {
+        this.decrements = decrements / Consts.THREAD_ONE_SECOND;
+    }
+    
+    // OTHERS
     public void startDecrementTimeRemaining(int decrements) {
         setDecrements(decrements);
         thread = new Thread(this);
         thread.start();
+    }
+
+    public void decreaseTimeRemaining(int time) {
+        timeRemaining -= time;
+        if(timeRemaining <= 0){
+            int timeLeft = 0-timeRemaining;
+            timeRemaining = initialTimeRemaining - timeLeft;
+            incrementDay();
+        }
     }
 }

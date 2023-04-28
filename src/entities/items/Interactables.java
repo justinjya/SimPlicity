@@ -1,4 +1,4 @@
-package src.entities;
+package src.entities.items;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.main.GameTime;
+import src.entities.Entity;
+import src.entities.sim.Sim;
 import src.items.Item;
 
 public abstract class Interactables extends Entity implements Item {
@@ -19,8 +21,16 @@ public abstract class Interactables extends Entity implements Item {
     private Rectangle bounds;
     private GameTime time;
 
+
+    // CONSTRUCTOR
     public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height, GameTime time) {
-        super(x, y, width, height);
+        super (
+            x,
+            y,
+            width,
+            height
+        );
+        
         this.name = name;
         this.interaction = interaction;
         this.imageIndex = imageIndex;
@@ -30,6 +40,7 @@ public abstract class Interactables extends Entity implements Item {
         this.time = time;
     }
 
+    // GETTERS
     public String getName() {
         return name;
     }
@@ -58,6 +69,7 @@ public abstract class Interactables extends Entity implements Item {
         return imageIndex;
     }
     
+    // SETTERS
     public void changeOccupiedState() {
         this.occupied = !this.occupied;
     }
@@ -74,6 +86,7 @@ public abstract class Interactables extends Entity implements Item {
         this.bounds.setLocation(getX(), getY());
     }
 
+    // OTHERS
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }
@@ -83,21 +96,21 @@ public abstract class Interactables extends Entity implements Item {
         g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
     
-    public void drawTimer(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        Font font = new Font("Arial", Font.BOLD, 16);
-        g.setFont(font);
-        
-        g.drawString("Duration: " + time.getDecrements(), 605, 60);
-    }
-    
     public abstract BufferedImage getImage();
     public abstract void changeOccupied(Sim sim);
     public abstract void interact(Sim sim);
 
     // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {
-        g.setColor(new Color(255, 0, 0, 128)); // Transparent yellow color
+        g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
         g.fillRect((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+    }
+
+    public void drawTimer(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        Font font = new Font("Arial", Font.BOLD, 16);
+        g.setFont(font);
+        
+        g.drawString("Duration: " + time.getDecrements(), 605, 60);
     }
 }

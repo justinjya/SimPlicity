@@ -1,5 +1,6 @@
 package src.assets;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,16 +13,20 @@ public class ImageLoader {
     private static BufferedImage scaleImage(BufferedImage image, int width, int height) {
         BufferedImage scaledImage = new BufferedImage(Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, image.getType());
         Graphics2D g = scaledImage.createGraphics();
+
         g.drawImage(image, 0, 0, Consts.SCALED_TILE * width, Consts.SCALED_TILE * height, null);
         g.dispose();
         return scaledImage;
     }
 
-    public static BufferedImage readImage(String folder, String fileName, int width, int height) {
+    public static BufferedImage readImage(String folder, String fileName, int width, int height, boolean scaled) {
         BufferedImage image;
+
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
-            image = scaleImage(image, width, height);
+            if (scaled) {
+                image = scaleImage(image, width, height);
+            }
             return image;
         }
         catch (IOException e) {
@@ -30,11 +35,13 @@ public class ImageLoader {
         return null;
     }
 
-    // read image with no scaling
-    public static BufferedImage readImage(String folder, String fileName) {
+    public static BufferedImage readImage(String folder, String subfolder, String fileName, int width, int height, boolean scaled) {
         BufferedImage image;
         try {
-            image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
+            image = ImageIO.read(new File("./src/assets/" + folder + "/" + subfolder + "/" + fileName + ".png"));
+            if (scaled) {
+                image = scaleImage(image, width, height);
+            }
             return image;
         }
         catch (IOException e) {
@@ -56,63 +63,68 @@ public class ImageLoader {
         return rotated;
     }
     
-
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
-        images[0] = readImage("sim", "idle_down", 1, 1);
-        images[1] = readImage("sim", "idle_up", 1, 1);
-        images[2] = readImage("sim", "idle_left", 1, 1);
-        images[3] = readImage("sim", "idle_right", 1, 1);
-        images[4] = readImage("sim", "walk_down_1", 1, 1);
-        images[5] = readImage("sim", "walk_down_2", 1, 1);
-        images[6] = readImage("sim", "walk_up_1", 1, 1);
-        images[7] = readImage("sim", "walk_up_2", 1, 1);
-        images[8] = readImage("sim", "walk_left_1", 1, 1);
-        images[9] = readImage("sim", "walk_left_2", 1, 1);
-        images[10] = readImage("sim", "walk_right_1", 1, 1);
-        images[11] = readImage("sim", "walk_right_2", 1, 1);
+
+        images[0] = readImage("sim", "idle_up", 1, 1, true);
+        images[1] = readImage("sim", "idle_right", 1, 1, true);
+        images[2] = readImage("sim", "idle_down", 1, 1, true);
+        images[3] = readImage("sim", "idle_left", 1, 1, true);
+        images[4] = readImage("sim", "walk_up_1", 1, 1, true);
+        images[5] = readImage("sim", "walk_up_2", 1, 1, true);
+        images[6] = readImage("sim", "walk_right_1", 1, 1, true);
+        images[7] = readImage("sim", "walk_right_2", 1, 1, true);
+        images[8] = readImage("sim", "walk_down_1", 1, 1, true);
+        images[9] = readImage("sim", "walk_down_2", 1, 1, true);
+        images[10] = readImage("sim", "walk_left_1", 1, 1, true);
+        images[11] = readImage("sim", "walk_left_2", 1, 1, true);
         return images;
     }
 
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
-        images[0] = readImage("beds", "bed_idle", 4, 1);
-        images[1] = readImage("beds", "bed_occupied", 4, 1);
+
+        images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("beds", "bed_king_idle", 5, 2, true);
+        images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
+        images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
+        images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
         return images;
     }
 
     public static BufferedImage loadWood() {
-        BufferedImage image = readImage("tiles", "wood", 1, 1);
+        BufferedImage image = readImage("tiles", "wood", 1, 1, true);
         return image;
     }
 
     public static BufferedImage[] loadItemsIcon() {
         BufferedImage[] images = new BufferedImage[12];
-        images[0] = readImage("inventory", "bed_single");
-        images[1] = readImage("inventory", "bed_queen");
-        images[2] = readImage("inventory", "bed_king");
-        images[3] = readImage("inventory", "trash_bin");
-        images[4] = readImage("inventory", "gas_stove");
-        // images[5] = readImage("inventory", "electric_stove");
-        // images[6] = readImage("inventory", "table_and_chair");
-        // images[7] = readImage("inventory", "clock");
-        // images[8] = readImage("inventory", "television");
-        // images[9] = readImage("inventory", "shover");
-        // images[10] = readImage("inventory", "aquarium");
-        // images[11] = readImage("inventory", "trash_bin");
-        // images[12] = readImage("inventory", "rice");
-        // images[13] = readImage("inventory", "potato");
-        // images[14] = readImage("inventory", "chicken");
-        // images[15] = readImage("inventory", "meat");
-        // images[16] = readImage("inventory", "carrot");
-        // images[17] = readImage("inventory", "spinach");
-        // images[18] = readImage("inventory", "peanuts");
-        // images[19] = readImage("inventory", "milk");
-        // images[20] = readImage("inventory", "chicken_and_rice");
-        // images[21] = readImage("inventory", "curry_and_rice");
-        // images[22] = readImage("inventory", "peanut_and_milk");
-        // images[23] = readImage("inventory", "cut_vegetables");
-        // images[24] = readImage("inventory", "steak");
+        images[0] = readImage("inventory", "bed_single",1,1,false);
+        images[1] = readImage("inventory", "bed_queen",1,1,false);
+        images[2] = readImage("inventory", "bed_king",1,1,false);
+        images[3] = readImage("inventory", "trash_bin",1,1,false);
+        images[4] = readImage("inventory", "gas_stove",1,1,false);
+        // images[5] = readImage("inventory", "electric_stove",1,1,false);
+        // images[6] = readImage("inventory", "table_and_chair",1,1,false);
+        // images[7] = readImage("inventory", "clock",1,1,false);
+        // images[8] = readImage("inventory", "television",1,1,false);
+        // images[9] = readImage("inventory", "shover",1,1,false);
+        // images[10] = readImage("inventory", "aquarium",1,1,false);
+        // images[11] = readImage("inventory", "trash_bin",1,1,false);
+        // images[12] = readImage("inventory", "rice",1,1,false);
+        // images[13] = readImage("inventory", "potato",1,1,false);
+        // images[14] = readImage("inventory", "chicken",1,1,false);
+        // images[15] = readImage("inventory", "meat",1,1,false);
+        // images[16] = readImage("inventory", "carrot",1,1,false);
+        // images[17] = readImage("inventory", "spinach",1,1,false);
+        // images[18] = readImage("inventory", "peanuts",1,1,false);
+        // images[19] = readImage("inventory", "milk",1,1,false);
+        // images[20] = readImage("inventory", "chicken_and_rice",1,1,false);
+        // images[21] = readImage("inventory", "curry_and_rice",1,1,false);
+        // images[22] = readImage("inventory", "peanut_and_milk",1,1,false);
+        // images[23] = readImage("inventory", "cut_vegetables",1,1,false);
+        // images[24] = readImage("inventory", "steak",1,1,false);
         return images;
     }
 
@@ -130,11 +142,85 @@ public class ImageLoader {
 
     public static BufferedImage[] loadDoor() {
         BufferedImage[] images = new BufferedImage[4];
-        images[0] = readImage("tiles", "door", 1, 1);
+        
+        images[0] = readImage("tiles", "door", 1, 1, true);
         images[1] = rotate90Clockwise(images[0]);
         images[2] = rotate90Clockwise(images[1]);
         images[3] = rotate90Clockwise(images[2]);
 
         return images;
+    }
+
+    public static BufferedImage[] loadWorld() {
+        BufferedImage[] images = new BufferedImage[10];
+
+        images[0] = readImage("tiles", "grass", 1, 1, false);
+        images[1] = readImage("tiles", "house", "house", 1, 1, false);
+        images[2] = readImage("tiles", "cursor", 1, 1, false);
+        images[3] = readImage("tiles", "house", "unadded_house", 1, 1, false);
+        images[4] = readImage("tiles", "house", "selected_house", 1, 1, false);
+        images[5] = readImage("tiles", "house", "selected_house_occupied", 1, 1, false);
+        images[6] = readImage("tiles", "quarter_arrow", "up", 1, 1, false);
+        images[7] = readImage("tiles", "quarter_arrow", "left", 1, 1, false);
+        images[8] = readImage("tiles", "quarter_arrow", "down", 1, 1, false);
+        images[9] = readImage("tiles", "quarter_arrow", "right", 1, 1, false);
+        
+        return images;
+    }
+
+    public static BufferedImage testSimColor(float hue) {
+        Color redColor = new Color(215, 0, 20); // red color
+        Color greenColor = new Color(0, 254, 10); // green color
+        Color newShirtColor = new Color(0, 255, 0); // purple color
+        Color newHairColor = new Color(87, 52, 37); // brown color
+        
+        BufferedImage image;
+        float[] redHsb = new float[3];
+        float[] greenHsb = new float[3];
+        float[] newShirtHsb = new float[3];
+        float[] newHairHsb = new float[3];
+        float hueDiff;
+
+        Color.RGBtoHSB(redColor.getRed(), redColor.getGreen(), redColor.getBlue(), redHsb);
+        Color.RGBtoHSB(greenColor.getRed(), greenColor.getGreen(), greenColor.getBlue(), greenHsb);
+        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtHsb);
+        Color.RGBtoHSB(newHairColor.getRed(), newHairColor.getGreen(), newHairColor.getBlue(), newHairHsb);
+    
+        image = readImage("sim", "sim_down", 1, 1, true);
+    
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                int rgb = image.getRGB(x, y);
+                if ((rgb >> 24) == 0x00) continue; // if pixel is transparent, skip color transformation
+
+                Color pixelColor = new Color(rgb);
+    
+                // Check if the pixel color is within the range of red hues
+                float[] pixelHsb = new float[3];
+                Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
+                hueDiff = Math.abs(pixelHsb[0] - redHsb[0]);
+
+                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
+                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
+                    newShirtHsb[0] = hue;
+                    newShirtHsb[1] = pixelHsb[1]; // keep saturation value
+                    newShirtHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtHsb[0], newShirtHsb[1], newShirtHsb[2]));
+    
+                    image.setRGB(x, y, newPixelColor.getRGB());
+                }
+
+                hueDiff = Math.abs(pixelHsb[0] - greenHsb[0]);
+                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
+                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
+                    newHairHsb[1] = pixelHsb[1]; // keep saturation value
+                    newHairHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newHairHsb[0], newHairHsb[1], newHairHsb[2]));
+    
+                    image.setRGB(x, y, newPixelColor.getRGB());
+                }
+            }
+        }
+        return image;
     }
 }
