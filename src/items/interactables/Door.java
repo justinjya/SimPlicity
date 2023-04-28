@@ -5,34 +5,56 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.Interactables;
 import src.entities.Sim;
+import src.main.GamePanel;
 import src.main.Consts;
 import src.main.GameTime;
+import src.main.ui.ActiveActionsUserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {
     // Atributes
     private Room leadsIntoRoom;
+    private GamePanel gp;
 
     // Images of the door
     private BufferedImage[] images;
 
     // CONSTRUCTOR
-    public Door(Room room, GameTime time) {
+    public Door(Room room, GamePanel gp, GameTime time) {
         super (
             "Door",
             "visit another room",
-            0,
-            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 2),
-            Consts.PLAY_ARENA_Y_UP,
+            2,
+            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
+            Consts.PLAY_ARENA_Y_DOWN,
             1,
             1,
             time
         );
 
+        this.gp = gp;
         this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
 
-        getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
+        updateBounds();
+    }
+
+    public Door(Room room, GameTime time) {
+        super (
+            "Door",
+            "visit another room",
+            2,
+            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
+            Consts.PLAY_ARENA_Y_DOWN,
+            1,
+            1,
+            time
+        );
+        
+        this.leadsIntoRoom = room;
+        this.images = ImageLoader.loadDoor();
+
+        updateBounds();
     }
 
     public Door(Door door, Room room, GameTime time) {
@@ -117,6 +139,11 @@ public class Door extends Interactables {
 
     @Override
     public void interact(Sim sim) {
+        if (leadsIntoRoom == null) {
+            ActiveActionsUserInterface.showActiveActions(gp);
+            return;
+        }
+
         sim.setCurrentRoom(leadsIntoRoom);
         switch (getImageIndex()) {
             case 0:

@@ -4,12 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.entities.handlers.KeyHandler;
+import src.main.ui.ActiveActionsUserInterface;
+import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
 import src.entities.*;
-import src.entities.handlers.KeyHandler;
-import src.gamestates.Gamestate;
-import src.world.Room;
-import src.Menu.MenuButton;
 import src.world.World;
 
 // ini notes aja
@@ -18,70 +17,51 @@ import src.world.World;
 // y + 283 pas dibawah 6x6 grid
 
 public class GamePanel extends JPanel implements Runnable {
+    private String gameState;
     private GameTime time;
+
     private World world;
-    private Sim currentSim;
-    private Sim sim, sim2;
-    private Room room;
+    private Sim sim;
     private UserInterface ui;
 
     // testing sim color
     private float hue = 0.0f;
     private float sat = 1.0f;
     private float bri = 0.92f;
-    private MenuButton menu;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
+
+        gameState = "Starting a new game";
         
         // Create game time
         time = new GameTime(1, 720, 720);
 
-        // create a new world
-        world = new World(time);
-
-        // Create room
-        room = new Room("First Room", time);
-        
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
 
-        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room, null);
-        sim2.changeIsBusyState();
-
-        currentSim = sim;
+        // create a new world
+        world = new World(sim, this, time);
         
-        // Create user interface
-        ui = new UserInterface(currentSim, time);
+        // // Create user interface
+        ui = new UserInterface(world, sim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(currentSim, ui);
+                
+                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
 
-                // testing sim color
+                 // testing sim color
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
                 //     hue += 1 / 180.0f;
                 // }
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
                 //     hue -= 1 / 180.0f;
                 // }
-
-                // testing adding sand switching sim
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
-                    currentSim.changeIsBusyState();
-                    if (currentSim == sim) {
-                        currentSim = sim2;
-                    }
-                    else {
-                        currentSim = sim;
-                    }
-                    currentSim.changeIsBusyState();
-                    ui.setCurrentSim(currentSim);
-                }
             }
             
             @Override
@@ -128,6 +108,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public boolean isCurrentState(String state) {
+        return gameState.equals(state); 
+    }
+
+    public void setState(String state) {
+        gameState = state;
+    }
+
     private void update() {
         /* 
         switch (Gamestate.state) {
@@ -145,48 +133,48 @@ public class GamePanel extends JPanel implements Runnable {
                     world.update();
                 }
                 
-                ui.update();
+                if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            ui.update();
 
-            default:
-                break;
-        } */
-        if (!ui.isViewingWorld()) {
-            currentSim.update();
+            if (!ui.isViewingWorld()) {
+                ui.getCurrentSim().update();
 
-            currentSim.getCurrentRoom().update();
+                ui.getCurrentSim().getCurrentRoom().update();
+            }
+            else {
+                world.update(this, ui);
+            }
         }
-        else {
-            world.update();
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.update(sim, ui, this);
         }
         
         ui.update();
     }
-
-    public void paintComponent(Graphics g)
-    {
+    
+    public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        if (!ui.isViewingWorld()) {
-            // Draw room
-            currentSim.getCurrentRoom().draw(g2);
-            for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
-                // if (s == currentSim) continue;
-                // s.drawSimStanding(g2);
-                s.draw(g2);
+        if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            if (!ui.isViewingWorld()) {
+                // Draw room and sim
+                try {
+                    ui.getCurrentSim().getCurrentRoom().draw(g2);
+                }
+                catch (NullPointerException e) { }
             }
-
-            // Draw sim
-            currentSim.draw(g2);
-        
-            // Draw UI
+            else {
+                // Draw the world
+                world.draw(g2);
+            }
+    
             ui.draw(g2);
         }
-        else {
-            // Draw the world
-            world.draw(g2);
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.draw(g2);
         }
 
         // testing sim color
@@ -194,6 +182,21 @@ public class GamePanel extends JPanel implements Runnable {
        
         // To free resources
         g2.dispose();
+    }
+
+    private void testingSimColor(Graphics2D g) {
+        Font font;
+        g.setColor(Color.WHITE);
+
+        font = new Font("Arial", Font.PLAIN, 15);
+
+        g.setFont(font);
+        g.drawString("hue: " + hue, 10, 30);
+        g.drawString("sat: " + sat, 10, 50);
+        g.drawString("bri: " + bri, 10, 70);
+
+        g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
+
     }
 
     private void testingSimColor(Graphics2D g) {

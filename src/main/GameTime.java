@@ -21,7 +21,7 @@ public class GameTime implements Runnable {
     public void run() {
         while (decrements > 0) {
             try {
-                Thread.sleep(Consts.ONE_SECOND);
+                Thread.sleep(Consts.THREAD_ONE_SECOND);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
@@ -63,7 +63,7 @@ public class GameTime implements Runnable {
     }
 
     public void setDecrements(int decrements) {
-        this.decrements = decrements / Consts.ONE_SECOND;
+        this.decrements = decrements / Consts.THREAD_ONE_SECOND;
     }
     
     // OTHERS
