@@ -8,9 +8,44 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Aquarium extends Interactables {
+    private int duration = Consts.THREAD_ONE_SECOND * 5;
+
+    // Images of the aquarium
+    private BufferedImage image;
+
+    // CONSTRUCTOR
+    public Aquarium (int x, int y, GameTime time) {
+        super (
+            "Aquarium",
+            0,
+            x,
+            y,
+            2,
+            1,
+            time
+        );
+
+        // Load the image of the shower
+        image = ImageLoader.readImage("tiles", "grass", 2, 1);
+    }
 
     @Override
-    public void feedingfish (Sim sim, GameTime time){
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public void changeOccupied(Sim sim) {
+        if (!isOccupied()) {
+            changeOccupiedState();
+        }
+        else {
+            changeOccupiedState();
+        }
+    }
+
+    @Override
+    public void interact (Sim sim){
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
@@ -19,6 +54,7 @@ public class Aquarium extends Interactables {
                     // count the time
                     time.startDecrementTimeRemaining(5000);
                     Thread.sleep(5000);
+                    sim.resetStatus();
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
                 } catch (InterruptedException e) {
                     e.printStackTrace();
