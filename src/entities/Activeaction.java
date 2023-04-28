@@ -42,7 +42,6 @@ public class Activeaction {
         }
     }
 
-    
 
     public void exercise (Sim sim, GameTime time){
         sim.setStatus("Exercising");
@@ -60,4 +59,33 @@ public class Activeaction {
         sim.setMood(sim.getMood() + 10); // increase sim's mood
 
     }
+
+    public void eat(Sim sim) {
+        // Makan berarti Sim mengambil makanan yang ada di Inventory untuk kemudian dikonsumsi
+        // Konsumsi makanan akan mengurangi jumlah makanan terkait pada inventory sejumlah 1 buah
+        // dan meningkatkan tingkat kekenyangan Sim sejumlah satuan kekenyangan makanan terkait
+        if (!sim.isBusy() && !currentRoom.isAddingObject()) {
+            sim.setStatus("Eating");
+            sim.changeIsBusyState();
+
+            // Mengkonsumsi makanan yang ada di inventory
+            Inventory inventory = currentRoom.getInventory();
+            Food food = inventory.takeFood(); // Mengambil makanan dari inventory
+            if (food != null) {
+                int hungerIncrease = food.getSaturation(); // Mendapatkan jumlah kekenyangan dari makanan yang dikonsumsi
+                sim.setHunger(sim.getHunger() + hungerIncrease); // Menambahkan kekenyangan Sim dengan jumlah kekenyangan makanan yang dikonsumsi
+            }
+
+            // Mengatur waktu makan
+            try {
+                Thread.sleep(Consts.ONE_SECOND); // Simulasi waktu makan selama 3 detik
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            sim.setStatus("Idle");
+            sim.changeIsBusyState();
+        }
+    }
+
 }
