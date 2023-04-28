@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
         world = new World(sim, this, time);
         
         // // Create user interface
-        ui = new UserInterface(world, sim, time);
+        // ui = new UserInterface(world, sim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
                 
-                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
+                // KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
 
                  // testing sim color
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
@@ -116,9 +116,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = state;
     }
 
-    private void update() {
-        MainMenu.update();
-        
+    private void update() {   
         // if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
         //     ui.update();
 
@@ -185,4 +183,5 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
 
     }
+
 }
