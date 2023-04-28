@@ -5,7 +5,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.Consts;
 
-public class Activeaction {
+public class ActiveAction {
     public void work (Sim sim, GameTime time){
         Thread working = new Thread() {
             @Override
