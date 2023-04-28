@@ -17,19 +17,21 @@ public class UserInterface {
     private Sim sim;
     private Interactables object;
     private GameTime time;
+    private boolean isViewingWorld = false;
+
+    // Selection Box Attributes
+    private int selectedBox = 0; // Boxes starting from 0 to 4
+    private int selectedBoxX = 203;
+    private int selectedBoxY = 479;
+    private int selectedBoxWidth = Consts.SCALED_TILE + 8;
+    private int selectedBoxHeight = Consts.SCALED_TILE + 8;
+    private int boxStep = 81;
 
     //ONLY FOR DEBUGGING
     private boolean debug;
     private BufferedImage mockup;
 
-    // Selection Box Attributes
-    private int selectedBoxX = 207 - 4;  // Initial x position of selected box
-    private int selectedBoxY = 483 - 4;  // Initial y position of selected box
-    private int selectedBoxWidth = Consts.SCALED_TILE + 8;  // Width of selected box
-    private int selectedBoxHeight = Consts.SCALED_TILE + 8;  // Height of selected box
-    private int boxStep = 81;  // Amount to change box position with each key press
-    private int selectedBox = 0; // Boxes starting from 0 to 4
-
+    // CONSTRUCTOR
     public UserInterface(Sim sim, GameTime time) {
         this.sim = sim;
         this.time = time;
@@ -37,6 +39,14 @@ public class UserInterface {
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
+    }
+
+    public boolean isViewingWorld() {
+        return isViewingWorld;
+    }
+
+    public void changeIsViewingWorldState() {
+        this.isViewingWorld = !this.isViewingWorld;
     }
 
     public void debug() {
@@ -64,8 +74,11 @@ public class UserInterface {
 
     // TO - DO !!! : Add the rest of the boxes features
     private void boxEntered() {
-        sim.resetStatus();
+        sim.changeIsBusyState();
         switch (selectedBox) {
+            case 0:
+                changeIsViewingWorldState();
+                break;
             case 1:
                 // This is just a test
                 sim.getCurrentRoom().addObject(new Bed(time));
@@ -73,24 +86,29 @@ public class UserInterface {
             case 2:
                 sim.getCurrentRoom().selectObject();
                 break;
+            case 3:
+                sim.getCurrentRoom().addRoom("Second Room");
+                break;
             default:
                 break;
         }
     }
 
     public void tab() {
-        // TO - DO !!! : Fix being able to tab while doing an active action
-        if (!sim.isStatusCurrently("Tabbed")) {
-            sim.setStatus("Tabbed");
-        }
-        else {
-            sim.resetStatus();
-        }
+        sim.changeIsBusyState();
     }
 
+    // OTHERS
     public void update() {
+        if (isViewingWorld) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                System.out.println("tes");
+                changeIsViewingWorldState();
+            }
+        }
+
         // If enter is pressed execute a function according to selected box position 
-        if (sim.isStatusCurrently("Tabbed")) {
+        if (sim.isBusy()) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 moveSelectedBox("left");
@@ -106,6 +124,12 @@ public class UserInterface {
 
     public void draw(Graphics2D g) {
         // ONLY FOR DEBUGGING
+        if (debug) {
+            sim.drawCollisionBox(g);
+            sim.drawInteractionRange(g);
+            sim.getCurrentRoom().drawCollisionBox(g);
+        }
+
         // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
         
         // Draw box for filling text
@@ -131,7 +155,7 @@ public class UserInterface {
         g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
 
         // Draw selected box
-        if (sim.isStatusCurrently("Tabbed")) {
+        if (sim.isBusy()) {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
             drawSelectedBoxText(g);
@@ -174,12 +198,14 @@ public class UserInterface {
             g.drawString("y: " + sim.getY(), 33, 384);
             g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 73, 374);
             g.drawString("isWalking: " + sim.isMoving(), 73, 384);
+            g.drawString("isEditingRoom: " + sim.getCurrentRoom().isEditingRoom(), 33, 398);
+            g.drawString("isBusy: " + sim.isBusy(), 33, 408);
             
-            if (sim.getInteractionHandler().isObjectInRange()) {
-                    object = sim.getInteractionHandler().getInteractableObject();
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
-                }
+            // if (sim.getInteractionHandler().isObjectInRange()) {
+            //     object = sim.getInteractionHandler().getInteractableObject();
+            //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
+            //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
+            // }
         }
     }
 
@@ -237,11 +263,17 @@ public class UserInterface {
 
         g.setFont(font);
         switch (selectedBox) {
+            case 0:
+                g.drawString("Show World", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                break;
             case 1:
                 g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
             case 2:
                 g.drawString("Edit Room", Consts.CENTER_X - 18, Consts.CENTER_Y + 172);
+                break;
+            case 3:
+                g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
                 break;
             default:
                 g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);

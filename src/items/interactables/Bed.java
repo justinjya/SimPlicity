@@ -38,8 +38,19 @@ public class Bed extends Interactables{
     // Image of the beds
     private BufferedImage[] images = new BufferedImage[6]; // Will increase if more bed images are available
 
+    // CONSTRUCTOR
     public Bed(int x, int y, int imageIndex, GameTime time) {
-        super(names[imageIndex], "Sleep", imageIndex, x, y, width[imageIndex], height[imageIndex], time);
+        super (
+            names[imageIndex],
+            "sleep",
+            imageIndex,
+            x,
+            y,
+            width[imageIndex],
+            height[imageIndex],
+            time
+        );
+
         this.price = prices[imageIndex];
         this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
@@ -49,7 +60,17 @@ public class Bed extends Interactables{
 
     // ONLY FOR DEBUGGING
     public Bed(GameTime time) {
-        super(names[0], "Sleep", 0, (Consts.CENTER_X / 2) + 76, Consts.CENTER_Y + 15, width[0], height[0], time);
+        super (
+            names[0],
+            "sleep",
+            0,
+            (Consts.CENTER_X / 2) + 76,
+            Consts.CENTER_Y + 15,
+            width[0],
+            height[0],
+            time
+        );
+        
         this.price = prices[0];
         this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
@@ -57,10 +78,12 @@ public class Bed extends Interactables{
         images = ImageLoader.loadBeds();
     }
 
+    // GETTERS
     public int getPrice() {
         return price;
     }
 
+    // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];

@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.world.Room;
+import src.world.World;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -14,6 +17,7 @@ import src.entities.handlers.KeyHandler;
 
 public class GamePanel extends JPanel implements Runnable {
     private GameTime time;
+    private World world;
     private Sim sim;
     private Room room;
     private UserInterface ui;
@@ -21,39 +25,37 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
-
+        
         // Create game time
         time = new GameTime(1, 720, 720);
+
+        // create a new world
+        world = new World(time);
 
         // Create room
         room = new Room("First Room", time);
         
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null, 1);
         
         // Create user interface
         ui = new UserInterface(sim, time);
+
+        Activeaction a = new Activeaction();
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                
-                // ONLY FOR DEBUGGING
-                // System.out.println(e.getKeyCode());
+                KeyHandler.keyBinds(sim, ui);
 
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
-                    ui.tab();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
-                    ui.debug();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
-                    sim.interact();
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_M)) {
+                    System.out.println("m");
+                    a.work(sim, time);
                 }
             }
-
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e.getKeyCode());
@@ -99,11 +101,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        sim.update();
-
-        room.update();
-
         ui.update();
+
+        if (!ui.isViewingWorld()) {
+            sim.update();
+            
+            sim.getCurrentRoom().update();
+        }
+        else {
+            world.update();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -113,15 +120,20 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        // Draw room
-        sim.getCurrentRoom().draw(g2);
+        if (!ui.isViewingWorld()) {
+            // Draw room
+            sim.getCurrentRoom().draw(g2);
 
-        // Draw sim
-        sim.draw(g2);
+            // Draw sim
+            sim.draw(g2);
 
-        // Draw UI
-        ui.draw(g2);
-
+            // Draw UI
+            ui.draw(g2);
+        }
+        else {
+            // Draw the world
+            world.draw(g2);
+        }
         // To free resources
         g2.dispose();
     }

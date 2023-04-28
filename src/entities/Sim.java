@@ -7,6 +7,7 @@ import java.awt.Color;
 import src.assets.ImageLoader;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.main.GameTime;
 import src.world.Room;
 import src.world.House;
 
@@ -21,6 +22,10 @@ public class Sim extends Entity{
     private boolean isBusy;
     private Room currentRoom;
     private House currentHouse;
+    private int professionId;
+    private int durationOfWork;
+    private boolean hasChangedProfession;
+    private GameTime changeProfessionTime;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -30,7 +35,7 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y, Room currentRoom, House currentHouse) {
+    public Sim(String name, int x, int y, Room currentRoom, House currentHouse, int professionId) {
         // Atributes
         super (
             x,
@@ -47,6 +52,10 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.isBusy = false;
         this.currentRoom = currentRoom;
+        this.professionId = professionId;
+        this.durationOfWork = 0;
+        this.hasChangedProfession = false;
+        this.changeProfessionTime = new GameTime(1, 720, 720);
 
         // Place the sim inside of the current room
         currentRoom.addSim(this);
@@ -109,6 +118,22 @@ public class Sim extends Entity{
         return isBusy;
     }
 
+    public int getProfessionId() {
+        return professionId;
+    }
+
+    public int getDurationOfWork() {
+        return durationOfWork;
+    }
+
+    public boolean getHasChangedProfession() {
+        return hasChangedProfession;
+    }
+
+    public GameTime getChangeProfessionTime() {
+        return changeProfessionTime;
+    }
+
     // SETTERS
     public void setHealth(int health) {
         this.health = health;
@@ -149,7 +174,54 @@ public class Sim extends Entity{
         interactionHandler.interact();
     }
 
+    public void setMoney (int money) {
+        this.money = money;
+    }
+
+    public void setDurationOfWork(int duration) {
+        durationOfWork = duration;
+    }
+
+    public void setChangeProfessionTime(GameTime time) {
+        changeProfessionTime = time;
+    }
+
     // OTHERS
+    public void changeProfessionId(int professionId, GameTime time) {
+        if (durationOfWork >= 720) {
+            if (professionId == 1) {
+                if(getMoney() >= 1/2 * 15) {
+                    this.professionId = professionId;
+                }
+            }
+            else if (professionId == 2) {
+                if(getMoney() >= 1/2 * 30) {
+                    this.professionId = professionId;
+                }
+            }
+            else if (professionId == 3) {
+                if(getMoney() >= 1/2 * 35) {
+                    this.professionId = professionId;
+                }
+            }
+            else if (professionId == 4) {
+                if(getMoney() >= 1/2 * 45) {
+                    this.professionId = professionId;
+                }
+            }
+            else if (professionId == 5) {
+                if(getMoney() >= 1/2 * 50) {
+                    this.professionId = professionId;
+                }
+            }
+        }
+        hasChangedProfession = true;
+        setChangeProfessionTime(time);
+    }
+
+    
+
+    
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
@@ -170,69 +242,6 @@ public class Sim extends Entity{
         if (isMoving() && !isBusy) {
             move(collisionHandler, interactionHandler);
         }
-    }
-
-    @Override
-    public void work() {
-        // Sim harus bekerja
-        // Selama bekerja, sim kekenyangan dan mood Sim akan berkurang
-        // Kerja juga akan menghasilkan uang dengan jumlah yang bergantung pada pekerjaan dari Sim
-        if (!isBusy() && !currentRoom.isAddingObject()) {
-            setStatus("Working");
-            setBusy(true);
-            setHunger(getHunger() - 5); // Mengurangi kekenyangan Sim sebanyak 5 satuan
-            setMood(getMood() - 5); // Mengurangi mood Sim sebanyak 5 satuan
-
-            // Mendapatkan uang berdasarkan pekerjaan Sim
-            int salary = calculateSalary(); // Menghitung gaji berdasarkan pekerjaan
-            setMoney(getMoney() + salary); // Menambahkan uang Sim dengan gaji yang didapatkan
-
-            // Mengatur waktu kerja
-            try {
-                Thread.sleep(5000); // Simulasi waktu kerja selama 5 detik
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            setStatus("Idle");
-            setBusy(false);
-        }
-    }
-
-    @Override
-    public void eat() {
-        // Makan berarti Sim mengambil makanan yang ada di Inventory untuk kemudian dikonsumsi
-        // Konsumsi makanan akan mengurangi jumlah makanan terkait pada inventory sejumlah 1 buah
-        // dan meningkatkan tingkat kekenyangan Sim sejumlah satuan kekenyangan makanan terkait
-        if (!isBusy() && !currentRoom.isAddingObject()) {
-            setStatus("Eating");
-            setBusy(true);
-
-            // Mengkonsumsi makanan yang ada di inventory
-            Inventory inventory = currentRoom.getInventory();
-            Food food = inventory.takeFood(); // Mengambil makanan dari inventory
-            if (food != null) {
-                int hungerIncrease = food.getSaturation(); // Mendapatkan jumlah kekenyangan dari makanan yang dikonsumsi
-                setHunger(getHunger() + hungerIncrease); // Menambahkan kekenyangan Sim dengan jumlah kekenyangan makanan yang dikonsumsi
-            }
-
-            // Mengatur waktu makan
-            try {
-                Thread.sleep(3000); // Simulasi waktu makan selama 3 detik
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            setStatus("Idle");
-            setBusy(false);
-        }
-    }
-
-    // Helper method untuk menghitung gaji Sim berdasarkan pekerjaan
-    private int calculateSalary() {
-        // Implementasi logika untuk menghitung gaji berdasarkan pekerjaan Sim
-        // Contoh implementasi sederhana yang menghasilkan gaji acak antara 10-20
-        return (int) (Math.random() * 11) + 10;
     }
 
     // ONLY FOR DEBUGGING

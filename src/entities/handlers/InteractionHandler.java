@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
+import src.world.Room;
 
 public class InteractionHandler {
     private Entity entity;
@@ -88,6 +89,25 @@ public class InteractionHandler {
         interactionRange.setLocation(x, y);
     }
 
+    public void update() {
+        switch (entity.getDirection()) {
+            case 0:
+                moveUp(entity.getX(), entity.getY());
+                break;
+            case 1:
+                moveRight(entity.getX(), entity.getY());
+                break;
+            case 2:
+                moveDown(entity.getX(), entity.getY());
+                break;
+            case 3:
+                moveLeft(entity.getX(), entity.getY());
+                break;
+            default:
+                break;
+        }
+    }
+
     public boolean isObjectInRange() {
         ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
 
@@ -112,15 +132,16 @@ public class InteractionHandler {
 
     public void interact() {
         Interactables object = getInteractableObject();
-        Sim sim = (Sim) entity;
+        
         if (object == null) {
             return;
         }
-
+        
         if (object.isOccupied()) {
             return;
         }
-
+        
+        Sim sim = (Sim) entity;
         object.interact(sim);
     }
 }
