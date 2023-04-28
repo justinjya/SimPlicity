@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.entities.handlers.*;
-import src.entities.items.interactables.*;
+import src.entities.interactables.Door;
+import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 
 public class Room {

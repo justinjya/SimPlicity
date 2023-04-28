@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.entities.handlers.KeyHandler;
-import src.entities.items.interactables.Bed;
+import src.entities.interactables.Bed;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.*;
 import src.main.Consts;

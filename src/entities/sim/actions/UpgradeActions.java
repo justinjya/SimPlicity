@@ -1,6 +1,6 @@
 package src.entities.sim.actions;
 
-import src.entities.items.interactables.Door;
+import src.entities.interactables.Door;
 import src.world.Room;
 
 public class UpgradeActions {

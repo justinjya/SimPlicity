@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
+import src.entities.sim.actions.NonActiveActions;
 import src.main.ui.UserInterface;
 import src.world.World;
 
@@ -44,7 +45,7 @@ public class KeyHandler {
 
     // public static void keyBinds(Sim sim, UserInterface ui) {
     public static void keyBinds(Sim sim, World world, UserInterface ui) {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB) && !ui.isViewingWorld() && !sim.getInventory().isOpen()) {
+        if (!ui.isViewingWorld() && !sim.getInventory().isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
@@ -54,7 +55,7 @@ public class KeyHandler {
             ActiveActions.interact(ui);
         }
         if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
-            ui.inventory();
+            NonActiveActions.showInventory(ui);
         }
 
         // testing adding and switching sim

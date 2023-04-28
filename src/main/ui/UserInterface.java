@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import src.main.Consts;
 import src.world.World;
 import src.assets.ImageLoader;
-import src.entities.items.interactables.Interactables;
+import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 

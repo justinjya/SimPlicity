@@ -1,4 +1,4 @@
-package src.entities.items.interactables;
+package src.entities.interactables;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;

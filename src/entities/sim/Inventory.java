@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.interactables.Interactables;
 import src.items.Item;
 
 public class Inventory {
@@ -44,31 +45,38 @@ public class Inventory {
     public Inventory() {}
 
     // getter
-    public HashMap<Item, Integer> getMapOfItems() {
+    public HashMap<Item, Integer> getMapOfItems()
+    {
         return mapOfItems;
     }
 
-    public boolean isOpen() {
+    public boolean isOpen()
+    {
         return isOpen;
     }
 
     // setter
-    public void changeIsOpen() {
+    public void changeIsOpen()
+    {
         isOpen = !isOpen;
     }
 
-    public void resetIsOpen() {
+    public void resetIsOpen()
+    {
         isOpen = false;
     }
 
-    public void switchCategory() {
+    public void switchCategory()
+    {
         isObject = !isObject;
     }
 
-    // NEW 
-    public void addItem(Item item) {
-        for (Item i : mapOfItems.keySet()) {
-            if (i.getName().equals(item.getName())) {
+    public void addItem(Item item)
+    {
+        for (Item i : mapOfItems.keySet())
+        {
+            if (i.getName().equals(item.getName()))
+            {
                 int count = mapOfItems.get(item);
                 mapOfItems.put(item, count + 1);
                 return;
@@ -78,9 +86,12 @@ public class Inventory {
         mapOfItems.put(item, 1);
     }
 
-    public void removeItem(Item item) {
-        for (Item i : mapOfItems.keySet()) {
-            if (i.getName().equals(item.getName())) {
+    public void removeItem(Item item)
+    {
+        for (Item i : mapOfItems.keySet())
+        {
+            if (i.getName().equals(item.getName()))
+            {
                 int count = mapOfItems.get(i);
                 mapOfItems.put(i, count - 1);
                 return;
@@ -90,11 +101,12 @@ public class Inventory {
         mapOfItems.remove(item);
     }
 
-    public HashMap<Item, Integer> getmapOfItems() {
-        return mapOfItems;
-    }
+    public void update()
+    {
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
+            switchCategory();
+        }
 
-    public void update() {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             if (slotCol > 0) {
                 slotCol--;
@@ -115,65 +127,15 @@ public class Inventory {
                 slotRow--;
             }
         }
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_N)) {
-            switchCategory();
-        }
     }
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g)
+    {
         drawFrame(g);
 
         drawCursor(g);
         
         drawItems(g);
-    }
-
-    private void drawItems(Graphics2D g)
-    {
-        int x = slotX, y = slotY; // Starting coordinates
-        int cols = 3, rows = 4; // Number of columns and rows
-        int i = 0;
-
-        for (Item item : mapOfItems.keySet()) {
-            //only for debugging
-            System.out.println(item.getName() + ": " + mapOfItems.get(item));
-
-            BufferedImage itemIcon = item.getIcon(); // Get the item image
-
-            g.drawImage(itemIcon, x, y, null); // Draw the image
-
-            if (mapOfItems.get(item) > 1) {
-                g.setColor(Color.WHITE);
-                g.fillRect(x + 31, y + 31, 14, 14);
-
-                g.setColor(Color.BLACK);
-                Font font = new Font("Inter", Font.BOLD, 10);
-                g.setFont(font);
-                g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
-            }
-            
-            x += slotSize; // Move to the next column
-            if (i % cols == cols - 1) { // If we've filled up a row
-                x = slotX; // Reset to the first column
-                y += slotSize; // Move to the next row
-            }
-            i++;
-        }
-    }
-
-    private void drawCursor(Graphics2D g)
-    {
-        // Cursor
-        int cursorX = slotXstart + (slotSize * slotCol);
-        int cursorY = slotYstart + (slotSize * slotRow);
-        int cursorWidth = slotSize;
-        int cursorHeight = slotSize;
-
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
-        g.setColor(Color.WHITE);
-        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
     }
 
     private void drawFrame(Graphics2D g)
@@ -202,5 +164,68 @@ public class Inventory {
             g.setFont(font);
             g.drawString("Foods", categoryX + (categoryWidth + 23), categoryY + (categoryHeight / 2));
         }
+    }
+
+    private void drawItems(Graphics2D g)
+    {
+        int x = slotX, y = slotY; // Starting coordinates
+        int cols = 3, rows = 4; // Number of columns and rows
+        int i = 0;
+
+        for (Item item : mapOfItems.keySet()) {
+            if (isObject && (item instanceof Interactables)){
+                BufferedImage itemIcon = item.getIcon(); // Get the item image
+
+                g.drawImage(itemIcon, x, y, null); // Draw the image
+
+                if (mapOfItems.get(item) > 1) {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(x + 31, y + 31, 14, 14);
+
+                    g.setColor(Color.BLACK);
+                    Font font = new Font("Inter", Font.BOLD, 10);
+                    g.setFont(font);
+                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+                }
+            }
+
+            if (!isObject && !(item instanceof Interactables)){
+                BufferedImage itemIcon = item.getIcon(); // Get the item image
+
+                g.drawImage(itemIcon, x, y, null); // Draw the image
+
+                if (mapOfItems.get(item) > 1) {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(x + 31, y + 31, 14, 14);
+
+                    g.setColor(Color.BLACK);
+                    Font font = new Font("Inter", Font.BOLD, 10);
+                    g.setFont(font);
+                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+                }
+            }
+            
+            x += slotSize; // Move to the next column
+            if (i % cols == cols - 1) { // If we've filled up a row
+                x = slotX; // Reset to the first column
+                y += slotSize; // Move to the next row
+            }
+            i++;
+        }
+    }
+
+    private void drawCursor(Graphics2D g)
+    {
+        // Cursor
+        int cursorX = slotXstart + (slotSize * slotCol);
+        int cursorY = slotYstart + (slotSize * slotRow);
+        int cursorWidth = slotSize;
+        int cursorHeight = slotSize;
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        g.setColor(Color.WHITE);
+        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
     }
 }
