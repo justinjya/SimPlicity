@@ -134,10 +134,6 @@ public class Door extends Interactables {
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-    }
-
-    @Override
     public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
             ActiveActionsUserInterface.showActiveActions(gp);

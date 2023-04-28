@@ -84,6 +84,15 @@ public abstract class Interactables extends Entity implements Item {
         this.bounds.setLocation(getX(), getY());
     }
 
+    public void changeOccupied() {
+        if (!isOccupied()) {
+            changeOccupiedState();
+        }
+        else {
+            changeOccupiedState();
+        }
+    }
+
     // OTHERS
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
@@ -95,7 +104,6 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     public abstract BufferedImage getImage();
-    public abstract void changeOccupied(Sim sim);
     public abstract void interact(Sim sim);
 
     // ONLY FOR DEBUGGING

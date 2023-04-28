@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
+        sim = new Sim("Justin", 4, 4);
 
         // create a new world
         world = new World(sim, this, time);
@@ -52,16 +52,12 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                
-                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
+                KeyHandler.keyBinds(sim, world, ui);
 
-                 // testing sim color
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                //     hue += 1 / 180.0f;
-                // }
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                //     hue -= 1 / 180.0f;
-                // }
+                if (KeyHandler.isKeyPressed(KeyEvent.VK_M)) {
+                    System.out.println("m");
+                    // a.work(sim, time);
+                }
             }
             
             @Override
@@ -130,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update(sim, ui, this);
+            ActiveActionsUserInterface.update(sim, ui, this, time);
         }
     }
     
