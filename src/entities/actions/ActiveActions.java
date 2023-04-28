@@ -39,6 +39,23 @@ public class ActiveActions {
         workingThread.start();
     }
 
+    public static void watchTV(Sim sim){
+        // CODE HERE
+        Thread workingThread = new Thread() {
+            @Override
+            public void run() {
+                sim.setStatus("Watch TV");
+                try {
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
+                }
+                catch (InterruptedException e) {}
+                sim.resetStatus();
+            }
+        };
+        
+        workingThread.start();
+    }
+
     public static void interact(Sim sim) {
         sim.getInteractionHandler().interact();
     }
