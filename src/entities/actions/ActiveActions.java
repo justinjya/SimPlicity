@@ -41,6 +41,7 @@ public class ActiveActions {
 
     public static void watchTV(Sim sim){
         // CODE HERE
+        Television TV = Sim.
         Thread workingThread = new Thread() {
             @Override
             public void run() {
@@ -49,6 +50,7 @@ public class ActiveActions {
                     Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
                 }
                 catch (InterruptedException e) {}
+
                 sim.resetStatus();
             }
         };
