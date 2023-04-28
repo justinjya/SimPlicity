@@ -97,7 +97,7 @@ public abstract class Entity {
 
     // FOR MOVING THE SIM
     public void move(CollisionHandler collisionHandler, InteractionHandler interactionHandler) {
-        // Update the entity position when moving
+        // Update the sim position when moving
         int newX = x;
         int newY = y;
         int initialSpeed = speed;
@@ -130,16 +130,11 @@ public abstract class Entity {
             checkCollision(collisionHandler, newX, newY);
         }
         speed = initialSpeed;
-
-        // Keybinds for the entity to interact with the game or window
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            interactionHandler.interact();
-        }
     }
 
-    // FOR ADDING OBJECTS
+    // FOR MOVING OBJECTS
     public void move(CollisionHandler collisionHandler) {
-        // Update the entity position when moving
+        // Update the object position when moving
         int newX = x;
         int newY = y;
         speed = Consts.SCALED_TILE; // Move object by one tile

@@ -3,7 +3,9 @@ package src.entities.handlers;
 import java.awt.event.KeyEvent;
 
 import src.entities.Sim;
+import src.entities.actions.ActiveActions;
 import src.main.UserInterface;
+import src.world.World;
 
 public class KeyHandler {
     public static final int KEY_A = KeyEvent.VK_A;
@@ -39,15 +41,32 @@ public class KeyHandler {
         return pressed;
     }
 
-    public static void keyBinds(Sim sim, UserInterface ui) {
-        if (!ui.isViewingWorld() && KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
+    // public static void keyBinds(Sim sim, UserInterface ui) {
+    public static void keyBinds(Sim sim, World world, UserInterface ui) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB) && !ui.isViewingWorld()) {
             ui.tab();
         }
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
             ui.debug();
         }
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
-            sim.interact();
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
+            ActiveActions.interact(sim);
+        }
+
+        // testing adding and switching sim
+        try {
+            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !ui.getCurrentSim().getCurrentRoom().isEditingRoom();
+            if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
+                if (ui.getCurrentSim() == world.getSim(1)) {
+                    ui.setCurrentSim(world.getSim(0));
+                }
+                else {
+                    ui.setCurrentSim(world.getSim(1));
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("No sim found!");
         }
     }
 }

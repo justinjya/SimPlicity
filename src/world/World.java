@@ -6,7 +6,9 @@ import java.awt.*;
 
 import src.assets.ImageLoader;
 import src.entities.Sim;
+import src.entities.handlers.KeyHandler;
 import src.main.Consts;
+import src.main.GamePanel;
 import src.main.GameTime;
 import src.main.UserInterface;
 
@@ -44,6 +46,7 @@ public class World {
         // Load the images of the world
         this.images = ImageLoader.loadWorld();
 
+        // Load the initial state of the map
         for (int y = 0 ; y < 64 ; y++) {
             for (int x = 0 ; x < 64 ; x++) {
                 map[y][x] = 0;
@@ -101,17 +104,17 @@ public class World {
 
     public void addSim(Sim sim) {
         listOfSim.add(sim);
-        addHouse();
     }
 
     public void addHouse() {
-        if (!isLocationOccupied()) {
-            Room newRoom = new Room("First Room", time);
-            House newHouse = new House(cursor.getGridX(), cursor.getGridY(), this, getSim(listOfSim.size() - 1), newRoom);
+        int x = cursor.getGridX();
+        int y = cursor.getGridY();
+        Sim newSim = getSim(listOfSim.size() - 1);
+        Room newRoom = new Room("First Room", time);
+        House newHouse = new House(x, y, this, newSim, newRoom);
 
-            listOfHouse.add(newHouse);
-            setMap(cursor.getGridX(), cursor.getGridY(), 1);
-        }
+        listOfHouse.add(newHouse);
+        setMap(cursor.getGridX(), cursor.getGridY(), 1);
     }
 
     public void changeIsAddingState() {
@@ -119,18 +122,15 @@ public class World {
     }
 
     // Others
-    public boolean isLocationOccupied() {
-        boolean isOccupied = false; // initialize the status of occupation in newHouse location
-
-        if (getMap(cursor.getGridX(), cursor.getGridY()) == 1) {
-            isOccupied = true;
-        }
-        return isOccupied;
-    }
-
-    public void update(UserInterface ui) {
+    public void update(GamePanel gp, UserInterface ui) {
         if (ui.isViewingWorld()) {
             cursor.move();
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            cursor.enterPressed(gp, ui);
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            ui.changeIsViewingWorldState();
         }
     }
 
@@ -146,7 +146,6 @@ public class World {
     }
 
     private int getCursorInQuarter() {
-        // First Quarter
         int lowerCoords = 0 * Consts.TILE_SIZE;
         int middleCoords = 32 * Consts.TILE_SIZE;
         int upperCoords = 64 * Consts.TILE_SIZE;
@@ -189,24 +188,15 @@ public class World {
         }
     }
 
-    private void drawCursor(Graphics2D g) {
-        if (isLocationOccupied()) {
-            return;
-        }
+    private void drawWorld(Graphics2D g) {
+        setUpperAndLowerBounds();
 
-        int tileX = centerX + (cursor.getX() % viewableGrid);
-        int tileY = centerY + (cursor.getY() % viewableGrid);
-
-        if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
-            tileX = centerX + (cursor.getX() % (viewableGrid - 14));
-            tileY = centerY + (cursor.getY() % (viewableGrid - 14));
-        }
-
-        if (isAdding) {
-            g.drawImage(images[3], tileX, tileY, null);
-        }
-        else {
-            g.drawImage(images[2], tileX, tileY, null);
+        for (int y = lowerBoundsY; y < upperBoundsY; y++) {
+            for (int x = lowerBoundsX; x < upperBoundsX; x++) {
+                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
+                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
+                g.drawImage(images[0], tileX, tileY, null);
+            }
         }
     }
 
@@ -227,13 +217,11 @@ public class World {
                     g.drawImage(images[1], tileX, tileY, null);
                 }
                 
-                if (isAdding) {
-                    if (isLocationOccupied() && x == cursor.getX() / Consts.TILE_SIZE && y == cursor.getY() / Consts.TILE_SIZE) {
+                if (cursor.isAboveHouse() && x == cursor.getGridX() && y == cursor.getGridY()) {
+                    if (isAdding) {
                         g.drawImage(images[5], tileX, tileY, null);
                     }
-                }
-                else {
-                    if (isLocationOccupied() && x == cursor.getX() / Consts.TILE_SIZE && y == cursor.getY() / Consts.TILE_SIZE) {
+                    else {        
                         g.drawImage(images[4], tileX, tileY, null);
                         g.drawString(getHouse(x, y).getName(), tileX - 5, tileY + 26);
                     }
@@ -242,15 +230,24 @@ public class World {
         }
     }
 
-    private void drawWorld(Graphics2D g) {
-        setUpperAndLowerBounds();
+    private void drawCursor(Graphics2D g) {
+        if (cursor.isAboveHouse()) {
+            return;
+        }
 
-        for (int y = lowerBoundsY; y < upperBoundsY; y++) {
-            for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
-                g.drawImage(images[0], tileX, tileY, null);
-            }
+        int tileX = centerX + (cursor.getX() % viewableGrid);
+        int tileY = centerY + (cursor.getY() % viewableGrid);
+
+        if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
+            tileX = centerX + (cursor.getX() % (viewableGrid - 14));
+            tileY = centerY + (cursor.getY() % (viewableGrid - 14));
+        }
+
+        if (isAdding) {
+            g.drawImage(images[3], tileX, tileY, null);
+        }
+        else {
+            g.drawImage(images[2], tileX, tileY, null);
         }
     }
 

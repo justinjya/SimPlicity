@@ -105,30 +105,6 @@ public class Room {
         }
     }
 
-    public void addRoom(String name) {
-        Room thisRoom = this;
-        
-        Thread addNewRoomThread = new Thread() {
-            @Override
-            public void run() {
-                Room newRoom = new Room(name, time);
-                Door newDoor = new Door(newRoom, time);
-                
-                addObject(newDoor);
-                while (true) {
-                    synchronized (thisRoom) {
-                        if (!thisRoom.isEditingRoom()) {
-                            break;
-                        }
-                    }
-                }
-                newRoom.getListOfObjects().add(new Door(newDoor, thisRoom, time));
-            }
-        };
-
-        addNewRoomThread.start();
-    }
-
     // OTHERS
     public void update() {
         // Editing an existing object

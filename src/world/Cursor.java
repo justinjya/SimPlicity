@@ -39,6 +39,18 @@ public class Cursor {
         return y / Consts.TILE_SIZE;
     }
 
+    // Others
+    public boolean isAboveHouse() {
+        int x = getGridX();
+        int y = getGridY();
+        boolean isOccupied = false; // Initialize the status of occupation in newHouse location
+
+        if (world.getMap(x, y) == 1) {
+            isOccupied = true;
+        }
+        return isOccupied;
+    }
+
     private boolean isMovingDiagonally() {
         if ((KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_A)) ||
             (KeyHandler.isKeyDown(KeyHandler.KEY_W) && KeyHandler.isKeyDown(KeyHandler.KEY_D)) ||
@@ -49,7 +61,6 @@ public class Cursor {
         return false;
     }
 
-    // Others
     public void move(){
         int upperX = (Consts.TILE_SIZE * 64) - 14;
         int upperY = (Consts.TILE_SIZE * 64) - 14;
@@ -108,63 +119,58 @@ public class Cursor {
         }
     }
 
-    public void update(GamePanel gp, UserInterface ui) {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE) && !gp.isCurrentState("Starting a new game")) {
-            if (world.isAdding()) world.changeIsAddingState();
-            ui.changeIsViewingWorldState();
-        }
+    public void enterPressed(GamePanel gp, UserInterface ui) {
+        if (world.isAdding()) {
+            if (gp.isCurrentState("Starting a new game")) {
+                gp.setState("Playing");
+            }
 
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            if (world.isAdding() && !world.isLocationOccupied()) {
+            if (isAboveHouse()) return;
+            
+            if (!isAboveHouse()) {
                 world.addHouse();
-                enterHouse(gp, ui);
-        
-                if (gp.isCurrentState("Starting a new game")) {
-                    gp.setState("Playing");
-                }
-            }
-            else if (!world.isAdding() && world.isLocationOccupied()) {
-                enterHouse(gp, ui);
             }
         }
-
+        enterHouse(gp, ui);
     }
 
     private void enterHouse(GamePanel gp, UserInterface ui) {
+        int x = getGridX();
+        int y = getGridY();
         Sim currentSim;
         House currentHouse;
         Room currentRoom;
 
         try {
             currentSim = ui.getCurrentSim();
-            currentHouse = world.getHouse(getGridX(), getGridY());
+            currentHouse = world.getHouse(x, y);
             currentRoom = currentHouse.getRoomWhenEntered();
 
             if (gp.isCurrentState("Starting a new game")) {
                 currentSim = world.getSim(0);
             }
+
+            if (currentSim.getCurrentHouse() == currentHouse) {
+                ui.changeIsViewingWorldState();
+                System.out.println("You cannot enter a house you're already in!");
+                return;
+            }
     
             if (world.isAdding()) {
-                int latestSim = world.getListOfSim().size() - 1;
+                int newSim = world.getListOfSim().size() - 1;
     
-                currentSim = world.getSim(latestSim);
+                currentSim = world.getSim(newSim);
                 currentSim.changeIsBusyState();
+                ui.setCurrentSim(currentSim);
                 world.changeIsAddingState();
             }
             
-            if (world.isLocationOccupied()) {
+            if (isAboveHouse()) {
                 currentSim.setCurrentHouse(currentHouse);
                 currentSim.setCurrentRoom(currentRoom);
-                ui.setCurrentSim(currentSim);
-                
-                // ONLY FOR DEBUGGING
-                System.out.println(currentSim.getName());
-                System.out.println(currentSim.getCurrentRoom().getName());
-                System.out.println(currentSim.getCurrentHouse().getName());
+                ui.changeIsViewingWorldState();
             }
         }
-        catch (NullPointerException e) {}
-
-        ui.changeIsViewingWorldState();
+        catch (Exception e) {System.out.println("Unexpected Error!");}
     }
 }

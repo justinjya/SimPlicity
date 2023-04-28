@@ -4,10 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import src.entities.handlers.KeyHandler;
 import src.assets.ImageLoader;
 import src.entities.*;
-import src.entities.handlers.KeyHandler;
-import src.world.Room;
 import src.world.World;
 
 // ini notes aja
@@ -16,12 +15,11 @@ import src.world.World;
 // y + 283 pas dibawah 6x6 grid
 
 public class GamePanel extends JPanel implements Runnable {
-    private GameTime time;
     private String gameState;
+    private GameTime time;
 
     private World world;
-    private Sim sim, sim2;
-    private Room room;
+    private Sim sim;
     private UserInterface ui;
 
     // testing sim color
@@ -32,10 +30,11 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
+
+        gameState = "Starting a new game";
         
         // Create game time
         time = new GameTime(1, 720, 720);
-        gameState = "Starting a new game";
 
         // Create sim
         sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
@@ -43,42 +42,16 @@ public class GamePanel extends JPanel implements Runnable {
         // create a new world
         world = new World(sim, time);
         
-        // sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room, null);
-        // sim2.changeIsBusyState();
-        
         // // Create user interface
-        // ui = new UserInterface(currentSim, time);
-        ui = new UserInterface(sim, world, this, time);
+        ui = new UserInterface(sim, world, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(ui.getCurrentSim(), ui);
-
-                // testing adding sand switching sim
-                if (!ui.isViewingWorld() && !ui.isTabbed() && !ui.getCurrentSim().getCurrentRoom().isEditingRoom()) {
-                    if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
-                        try {
-                            if (ui.getCurrentSim() == world.getSim(1)) {
-                                ui.setCurrentSim(world.getSim(0));
-                            }
-                            else {
-                                ui.setCurrentSim(world.getSim(1));
-                            }
-                        }
-                        catch (NullPointerException npe) {
-                            npe.printStackTrace();
-                        }
-                    }
-                }
-
-                // if (ui.isViewingWorld()) {
-                //     if (KeyHandler.isKeyPressed(KeyEvent.VK_SPACE)) {
-                //         world.changeIsAddingState();
-                //     }
-                // }
+                
+                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
 
                  // testing sim color
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
@@ -133,6 +106,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public boolean isCurrentState(String state) {
+        return gameState.equals(state); 
+    }
+
+    public void setState(String state) {
+        gameState = state;
+    }
+
     private void update() {
         ui.update();
 
@@ -142,7 +123,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.getCurrentSim().getCurrentRoom().update();
         }
         else {
-            world.update(ui);
+            world.update(this, ui);
         }
     }
     
@@ -171,14 +152,6 @@ public class GamePanel extends JPanel implements Runnable {
        
         // To free resources
         g2.dispose();
-    }
-
-    public boolean isCurrentState(String state) {
-        return gameState.equals(state); 
-    }
-
-    public void setState(String state) {
-        gameState = state;
     }
 
     private void testingSimColor(Graphics2D g) {

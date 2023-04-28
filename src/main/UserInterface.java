@@ -9,23 +9,24 @@ import src.entities.handlers.KeyHandler;
 import src.items.interactables.*;
 import src.world.World;
 import src.entities.Sim;
+import src.entities.actions.*;
 import src.assets.ImageLoader;
+
+// will delete later?
 import src.entities.Interactables;
 
 public class UserInterface {
-    // Atributes to show
-    private BufferedImage[] images;
-
-    private GamePanel gp;
-
+    // Atributes
     private World world;
     private Sim currentSim;
 
-    private Interactables object;
-
+    private GameTime time;
+    
     private boolean viewingWorld;
     private boolean tabbed;
-    private GameTime time;
+
+    // User Interface Images
+    private BufferedImage[] images;
 
     // Selection Box Attributes
     private int selectedBox = 0; // Boxes starting from 0 to 4
@@ -40,11 +41,11 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(Sim sim, World world, GamePanel gamePanel, GameTime time) {
+    public UserInterface(Sim sim, World world, GameTime time) {
         this.currentSim = sim;
         this.world = world;
-        this.gp = gamePanel;
         this.time = time;
+        // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
         this.debug = false;
@@ -120,16 +121,6 @@ public class UserInterface {
         }
     }
 
-    // TO - DO !!! : Integrate with its own text box
-    private void addSim() {
-        changeIsViewingWorldState();
-        
-        Sim newSim = new Sim("nitsuJ", Consts.CENTER_X, Consts.CENTER_Y);
-        
-        world.addSim(newSim);
-        world.changeIsAddingState();
-    }
-
     // TO - DO !!! : Integrate with Store
     private void boxEntered() {
         tab();
@@ -138,20 +129,20 @@ public class UserInterface {
 
         switch (selectedBox) {
             case 0:
-                currentSim.getCurrentRoom().selectObject();
+                NonActiveActions.editRoom(currentSim.getCurrentRoom());
                 break;
             case 1:
-                currentSim.getCurrentRoom().addRoom("Second Room");
+                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room", time);
                 break;
             case 2:
                 // This is just a test
                 currentSim.getCurrentRoom().addObject(new Bed(time));
                 break;
             case 3:
-                addSim();
+                AddSimAction.addSim(this, world);
                 break;
             case 4:
-                changeIsViewingWorldState();
+                ActiveActions.visitAnotherSim(this);
                 break;
             default:
                 break;
@@ -159,11 +150,6 @@ public class UserInterface {
     }
     
     public void update() {
-        if (viewingWorld) {
-            world.getCursor().update(gp, this);
-        }
-
-        // If enter is pressed execute a function according to selected box position 
         if (tabbed) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
@@ -258,8 +244,10 @@ public class UserInterface {
 
         try {
             if (!tabbed && currentSim.getInteractionHandler().isObjectInRange() && currentSim.isStatusCurrently("Idle")) {
-                object = currentSim.getInteractionHandler().getInteractableObject();
-                g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
+                Interactables object = currentSim.getInteractionHandler().getInteractableObject();
+                if (object != null) {
+                    g.drawString("Press F to Interact with " + object.getName(), Consts.CENTER_X - 72, Consts.CENTER_Y + 172);
+                }
             }
         }
         catch (NullPointerException e) {}
@@ -278,11 +266,13 @@ public class UserInterface {
             g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             
-            // if (currentSim.getInteractionHandler().isObjectInRange()) {
-            //     object = currentSim.getInteractionHandler().getInteractableObject();
-            //     g.drawString("isOccupied: " + object.isOccupied(), 33, 394);
-            //     g.drawString("imageIndex: " + object.getImageIndex(), 33, 404);
-            // }
+            if (currentSim.getInteractionHandler().isObjectInRange()) {
+                Interactables object = currentSim.getInteractionHandler().getInteractableObject();
+                if (object != null) {
+                    g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
+                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
+                }
+            }
         }
     }
 
