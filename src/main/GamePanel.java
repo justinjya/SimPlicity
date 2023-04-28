@@ -125,6 +125,7 @@ public class GamePanel extends JPanel implements Runnable {
         else if (isCurrentState("Viewing active actions")) {
             ActiveActionsUserInterface.update(sim, ui, this);
         }
+        
     }
     
     public void paintComponent(Graphics g) {

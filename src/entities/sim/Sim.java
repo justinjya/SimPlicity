@@ -1,10 +1,11 @@
-package src.entities;
+package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
 import src.world.Room;
@@ -22,6 +23,8 @@ public class Sim extends Entity{
 
     private Room currentRoom;
     private House currentHouse;
+    private Profession profession;
+    private Inventory inventory;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -47,6 +50,8 @@ public class Sim extends Entity{
         this.money = 100;
         this.status = "Idle";
         this.isBusy = true;
+        this.profession = new Profession(); 
+        this.inventory = new Inventory();
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -79,6 +84,18 @@ public class Sim extends Entity{
 
     public String getStatus() {
         return status;
+    }
+    
+    public String getProfession() {
+        return profession.getName();
+    }
+
+    public int getSimSalary() {
+        return profession.getSalary();
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     public Room getCurrentRoom() {

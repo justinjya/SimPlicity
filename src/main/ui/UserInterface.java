@@ -9,6 +9,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.world.World;
 import src.assets.ImageLoader;
+import src.entities.handlers.KeyHandler;
 import src.entities.items.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
@@ -107,6 +108,32 @@ public class UserInterface {
         if (tabbed) {
             SelectionBox.update(this, time);
         }
+        if (currentSim.getInventory().isOpen()) {
+
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+                if (currentSim.getInventory().slotCol > 0) {
+                    currentSim.getInventory().slotCol--;
+                }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
+                if (currentSim.getInventory().slotRow < 3) {
+                    currentSim.getInventory().slotRow++;
+                } 
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+                if (currentSim.getInventory().slotCol < 2) {
+                    currentSim.getInventory().slotCol++;
+                }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
+                if (currentSim.getInventory().slotRow > 0) {
+                    currentSim.getInventory().slotRow--;
+                }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+                currentSim.getInventory().switchCategory();
+            }
+        }
     }
     
     public void draw(Graphics2D g) {
@@ -156,6 +183,11 @@ public class UserInterface {
 
         drawText(g);
         drawAttributes(g);
+
+        if (currentSim.getInventory().isOpen()) {
+            currentSim.getInventory().draw(g);
+            drawInventory(g);
+        }  
 
         // Draw tab boxes
        SelectionBox.draw(g, this);
@@ -262,6 +294,25 @@ public class UserInterface {
         else {
             g.drawString("" + value, offsetX - 5, 340 + (37 * offsetY));
         }
+    }
+
+    private void drawInventory(Graphics2D g) {
+        currentSim.getInventory().draw(g);
+
+        // cursor
+        int cursorX = currentSim.getInventory().slotXstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotCol);
+        int cursorY = currentSim.getInventory().slotYstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotRow);
+        int cursorWidth = currentSim.getInventory().slotSize;
+        int cursorHeight = currentSim.getInventory().slotSize;
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        currentSim.getInventory().drawItem(g);
+
+        g.setColor(Color.WHITE);
+        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
     }
 
     // ONLY FOR DEBUGGING

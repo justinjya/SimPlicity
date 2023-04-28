@@ -1,4 +1,4 @@
-package src.entities;
+package src.entities.sim;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
