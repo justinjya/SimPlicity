@@ -132,8 +132,11 @@ public class GamePanel extends JPanel implements Runnable {
                 else {
                     world.update();
                 }
+            default:
+                break;
+        } */
                 
-                if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+        if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             ui.update();
 
             if (!ui.isViewingWorld()) {
@@ -170,6 +173,7 @@ public class GamePanel extends JPanel implements Runnable {
                 // Draw the world
                 world.draw(g2);
             }
+            
     
             ui.draw(g2);
         }
@@ -199,18 +203,4 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    private void testingSimColor(Graphics2D g) {
-        Font font;
-        g.setColor(Color.WHITE);
-
-        font = new Font("Arial", Font.PLAIN, 15);
-
-        g.setFont(font);
-        g.drawString("hue: " + hue, 10, 30);
-        g.drawString("sat: " + sat, 10, 50);
-        g.drawString("bri: " + bri, 10, 70);
-
-        g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
-
-    }
 }
