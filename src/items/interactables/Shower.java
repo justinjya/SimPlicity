@@ -9,10 +9,27 @@ import src.main.GameTime;
 
 public class Shower extends Interactables {
 
-    public Shower (GameTime time)
+    // Images of the shower
+    private BufferedImage image;
+
+    // CONSTRUCTOR
+    public Shower(int x, int y, GameTime time) {
+        super (
+            "Shower",
+            0,
+            x,
+            y,
+            1,
+            1,
+            time
+        );
+
+        // Load the image of the shower
+        image = ImageLoader.readImage("tiles", "grass", 1, 1);
+    }
 
     @Override
-    public void shower (Sim sim, GameTime time){
+    public void interact (Sim sim, GameTime time){
         Thread showering = new Thread() {
             @Override
             public void run() {
