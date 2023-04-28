@@ -1,8 +1,10 @@
 package src.entities.sim.actions;
 
+import src.entities.items.interactables.Interactables;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.ui.UserInterface;
+import src.world.World;
 
 public class ActiveActions {
     public static void work(Sim sim) {
@@ -39,8 +41,20 @@ public class ActiveActions {
         workingThread.start();
     }
 
-    public static void interact(Sim sim) {
-        sim.getInteractionHandler().interact();
+    public static void interact(UserInterface ui) {
+        Sim sim = ui.getCurrentSim();
+        World world = ui.getWorld();
+        Interactables object = sim.getInteractionHandler().getInteractableObject();
+        
+        if (object == null) {
+            return;
+        }
+        
+        if (object.isOccupied()) {
+            return;
+        }
+
+        object.interact(sim, world.getTime());
     }
 
     public static void visitAnotherSim(UserInterface ui) {

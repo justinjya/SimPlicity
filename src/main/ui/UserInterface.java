@@ -3,14 +3,14 @@ package src.main.ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
-import src.main.GameTime;
 import src.world.World;
 import src.assets.ImageLoader;
 import src.entities.handlers.KeyHandler;
-import src.entities.items.Interactables;
+import src.entities.items.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 
@@ -18,8 +18,6 @@ public class UserInterface {
     // Atributes
     private World world;
     private Sim currentSim;
-
-    private GameTime time;
     
     private boolean viewingWorld;
     private boolean tabbed;
@@ -32,10 +30,9 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world, Sim sim, GameTime time) {
+    public UserInterface(World world, Sim sim) {
         this.world = world;
         this.currentSim = sim;
-        this.time = time;
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
@@ -105,11 +102,11 @@ public class UserInterface {
 
     // OTHERS
     public void update() {
-        if (tabbed) {
-            SelectionBox.update(this, time);
+        if (tabbed && !currentSim.getInventory().isOpen()) {
+            SelectionBox.update(this);
         }
-        if (currentSim.getInventory().isOpen()) {
 
+        if (currentSim.getInventory().isOpen()) {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 if (currentSim.getInventory().slotCol > 0) {
                     currentSim.getInventory().slotCol--;
@@ -130,7 +127,7 @@ public class UserInterface {
                     currentSim.getInventory().slotRow--;
                 }
             }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+            if (KeyHandler.isKeyPressed(KeyEvent.VK_N)) {
                 currentSim.getInventory().switchCategory();
             }
         }
@@ -147,10 +144,6 @@ public class UserInterface {
             g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
         }
         else {
-            Inventory inventory = currentSim.getInventory();
-            if (inventory.isOpen()) {
-                inventory.draw(g);
-            }
             drawUI(g);
         }
     }
@@ -183,10 +176,10 @@ public class UserInterface {
 
         drawText(g);
         drawAttributes(g);
-
+        
         if (currentSim.getInventory().isOpen()) {
             currentSim.getInventory().draw(g);
-            drawInventory(g);
+            // drawInventory(g);
         }  
 
         // Draw tab boxes
@@ -202,7 +195,7 @@ public class UserInterface {
         g.setFont(font);
         g.drawString(currentSim.getName(), 83, 68);
         
-        g.drawString("Day " + time.getDay(), 675, 68);
+        g.drawString("Day " + world.getTime().getDay(), 675, 68);
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
@@ -269,7 +262,7 @@ public class UserInterface {
         drawValue(g, currentSim.getHealth(), 174, 0);
         drawValue(g, currentSim.getHunger(), 174, 1);
         drawValue(g, currentSim.getMood(), 174, 2);
-        drawTime(g, time.getTimeRemaining(), 174, 0);
+        drawTime(g, world.getTime().getTimeRemaining(), 174, 0);
     }
 
     private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
@@ -297,22 +290,21 @@ public class UserInterface {
     }
 
     private void drawInventory(Graphics2D g) {
-        currentSim.getInventory().draw(g);
+        // currentSim.getInventory().draw(g);
 
         // cursor
-        int cursorX = currentSim.getInventory().slotXstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotCol);
-        int cursorY = currentSim.getInventory().slotYstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotRow);
-        int cursorWidth = currentSim.getInventory().slotSize;
-        int cursorHeight = currentSim.getInventory().slotSize;
+        // int cursorX = currentSim.getInventory().slotXstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotCol);
+        // int cursorY = currentSim.getInventory().slotYstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotRow);
+        // int cursorWidth = currentSim.getInventory().slotSize;
+        // int cursorHeight = currentSim.getInventory().slotSize;
 
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
+        // g.setColor(Color.LIGHT_GRAY);
+        // g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
 
-        currentSim.getInventory().drawItem(g);
+        // currentSim.getInventory().drawItem(g);
 
-        g.setColor(Color.WHITE);
-        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
+        // g.setColor(Color.WHITE);
+        // g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
     }
 
     // ONLY FOR DEBUGGING

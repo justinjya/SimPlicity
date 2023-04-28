@@ -1,4 +1,4 @@
-package src.entities.items;
+package src.entities.items.interactables;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -6,10 +6,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.main.GameTime;
 import src.entities.Entity;
 import src.entities.sim.Sim;
 import src.items.Item;
+import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {
     // Atributes
@@ -17,13 +17,11 @@ public abstract class Interactables extends Entity implements Item {
     private String interaction;
     private int imageIndex;
     private boolean occupied;
-    private Color color;
     private Rectangle bounds;
-    private GameTime time;
 
 
     // CONSTRUCTOR
-    public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height, GameTime time) {
+    public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height) {
         super (
             x,
             y,
@@ -35,9 +33,7 @@ public abstract class Interactables extends Entity implements Item {
         this.interaction = interaction;
         this.imageIndex = imageIndex;
         this.occupied = false;
-        this.color = new Color(0, 0, 0, 100); // This acts as the object shadow
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        this.time = time;
     }
 
     // GETTERS
@@ -53,16 +49,8 @@ public abstract class Interactables extends Entity implements Item {
         return occupied;
     }
     
-    public Color getColor() {
-        return color;
-    }
-    
     public Rectangle getBounds() {
         return bounds;
-    }
-    
-    public GameTime getTime() {
-        return time;
     }
     
     public int getImageIndex() {
@@ -77,10 +65,6 @@ public abstract class Interactables extends Entity implements Item {
     public void setImageIndex(int imageIndex) {
         this.imageIndex = imageIndex;
     }
-    
-    public void setColor(Color color) {
-        this.color = color;
-    }
 
     public void updateBounds() {
         this.bounds.setLocation(getX(), getY());
@@ -90,15 +74,11 @@ public abstract class Interactables extends Entity implements Item {
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }
-   
-    public void draw(Graphics2D g) {
-        g.setColor(color);
-        g.fillRect(getX(), getY(), getWidth(), getHeight());
-    }
     
+    public abstract BufferedImage getIcon();
     public abstract BufferedImage getImage();
     public abstract void changeOccupied(Sim sim);
-    public abstract void interact(Sim sim);
+    public abstract void interact(Sim sim, GameTime time);
 
     // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {
@@ -106,11 +86,11 @@ public abstract class Interactables extends Entity implements Item {
         g.fillRect((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
     }
 
-    public void drawTimer(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        Font font = new Font("Arial", Font.BOLD, 16);
-        g.setFont(font);
+    // public void drawTimer(Graphics2D g) {
+    //     g.setColor(Color.BLACK);
+    //     Font font = new Font("Arial", Font.BOLD, 16);
+    //     g.setFont(font);
         
-        g.drawString("Duration: " + time.getDecrements(), 605, 60);
-    }
+    //     g.drawString("Duration: " + time.getDecrements(), 605, 60);
+    // }
 }

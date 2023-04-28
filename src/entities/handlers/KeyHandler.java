@@ -44,14 +44,14 @@ public class KeyHandler {
 
     // public static void keyBinds(Sim sim, UserInterface ui) {
     public static void keyBinds(Sim sim, World world, UserInterface ui) {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB) && !ui.isViewingWorld()) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB) && !ui.isViewingWorld() && !sim.getInventory().isOpen()) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
             ui.debug();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            ActiveActions.interact(sim);
+            ActiveActions.interact(ui);
         }
         if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
             ui.inventory();

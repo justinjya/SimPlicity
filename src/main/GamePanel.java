@@ -9,7 +9,6 @@ import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
-import src.entities.*;
 import src.world.World;
 
 // ini notes aja
@@ -46,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
         world = new World(sim, this, time);
         
         // // Create user interface
-        ui = new UserInterface(world, sim, time);
+        ui = new UserInterface(world, sim);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {

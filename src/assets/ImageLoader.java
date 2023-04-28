@@ -82,7 +82,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadBeds() {
-        BufferedImage[] images = new BufferedImage[6];
+        BufferedImage[] images = new BufferedImage[9];
 
         images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
         images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
@@ -90,6 +90,9 @@ public class ImageLoader {
         images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
         images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
         images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
+        images[6] = readImage("inventory", "bed_single", 1, 1, false);
+        images[7] = readImage("inventory", "bed_queen", 1, 1, false);
+        images[8] = readImage("inventory", "bed_king", 1, 1, false);
         return images;
     }
 

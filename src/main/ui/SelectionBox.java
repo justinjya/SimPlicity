@@ -7,12 +7,8 @@ import java.awt.Graphics2D;
 import src.entities.handlers.KeyHandler;
 import src.entities.items.interactables.Bed;
 import src.entities.sim.Sim;
-import src.entities.sim.actions.ActiveActions;
-import src.entities.sim.actions.AddSimAction;
-import src.entities.sim.actions.NonActiveActions;
-import src.entities.sim.actions.UpgradeActions;
+import src.entities.sim.actions.*;
 import src.main.Consts;
-import src.main.GameTime;
 import src.world.World;
 
 public class SelectionBox {
@@ -52,7 +48,7 @@ public class SelectionBox {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(UserInterface ui, GameTime time) {
+    private static void boxEntered(UserInterface ui) {
         ui.tab();
 
         Sim currentSim = ui.getCurrentSim();
@@ -65,11 +61,11 @@ public class SelectionBox {
                 NonActiveActions.editRoom(currentSim.getCurrentRoom());
                 break;
             case 1:
-                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room", time);
+                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room");
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(time));
+                currentSim.getCurrentRoom().addObject(new Bed());
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);
@@ -82,7 +78,7 @@ public class SelectionBox {
         }
     }
     
-    public static void update(UserInterface ui, GameTime time) {
+    public static void update(UserInterface ui) {
         if (ui.isTabbed()) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
@@ -92,7 +88,7 @@ public class SelectionBox {
                 moveSelectedBox("right");
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                boxEntered(ui, time);
+                boxEntered(ui);
             }
         }
     }

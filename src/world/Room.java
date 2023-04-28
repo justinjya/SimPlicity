@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
-import src.main.GameTime;
 import src.entities.handlers.*;
-import src.entities.items.Interactables;
 import src.entities.items.interactables.*;
 import src.entities.sim.Sim;
 
@@ -18,7 +16,6 @@ public class Room {
     private String name;
     private ArrayList<Interactables> listOfObjects;
     private ArrayList<Sim> listOfSims;
-    private GameTime time;
     
     // For adding, editing, and removing objects
     private boolean isEditingRoom;
@@ -34,12 +31,11 @@ public class Room {
     private BufferedImage image;
 
     // CONSTRUCTOR
-    public Room(String name, GameTime time) {
+    public Room(String name) {
         // Atributes
         this.name = name;
         this.listOfObjects = new ArrayList<>(); 
         this.listOfSims = new ArrayList<>();
-        this.time = time;
         this.isEditingRoom = false;
 
         // Load the image of the room
@@ -257,13 +253,7 @@ public class Room {
 
     private void drawObjects(Graphics2D g) {
         for (Interactables object : listOfObjects) {
-            // ONLY FOR DEBUNGGING
-            if (object instanceof Placeholder) {
-                object.draw(g);
-            }
-            else {
-                object.draw(g, object);
-            }
+            object.draw(g, object);
         }
     }
 
@@ -283,12 +273,7 @@ public class Room {
 
     private void drawSelectedObject(Graphics2D g) {
         if (isEditingRoom && moveableObject != null) {
-            if (moveableObject instanceof Placeholder) {
-                moveableObject.draw(g);
-            }
-            else {
-                moveableObject.draw(g, moveableObject);
-            }
+            moveableObject.draw(g, moveableObject);
         }
     }
 
@@ -297,13 +282,5 @@ public class Room {
         for (Interactables object : listOfObjects) {
             object.drawCollisionBox(g);
         }
-    }
-
-    public void testRoom() {
-        listOfObjects.add(new Bed((Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 0, time));
-        listOfObjects.add(new Placeholder("1", "2", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 26 - Consts.OFFSET_Y, 3, 3, Color.CYAN, time));
-        listOfObjects.add(new Placeholder("3", "4", 0, (Consts.CENTER_X / 2) + 268, (Consts.CENTER_Y / 2) - 38 - Consts.OFFSET_Y, 2, 1, Color.ORANGE, time));
-        listOfObjects.add(new Placeholder("5", "6", 0, (Consts.CENTER_X / 2) + 12, (Consts.CENTER_Y / 2) + 282 - Consts.OFFSET_Y, 1, 1, Color.MAGENTA, time));
-        listOfObjects.add(new Placeholder("7", "8", 0, (Consts.CENTER_X / 2) + 332, (Consts.CENTER_Y / 2) + 154 - Consts.OFFSET_Y, 1, 1, Color.LIGHT_GRAY, time));
     }
 }

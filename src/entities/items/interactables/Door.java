@@ -3,7 +3,6 @@ package src.entities.items.interactables;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
-import src.entities.items.Interactables;
 import src.entities.sim.Sim;
 import src.main.GamePanel;
 import src.main.Consts;
@@ -20,7 +19,7 @@ public class Door extends Interactables {
     private BufferedImage[] images;
 
     // CONSTRUCTOR
-    public Door(Room room, GamePanel gp, GameTime time) {
+    public Door(Room room, GamePanel gp) {
         super (
             "Door",
             "visit another room",
@@ -28,8 +27,7 @@ public class Door extends Interactables {
             Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
             Consts.PLAY_ARENA_Y_DOWN,
             1,
-            1,
-            time
+            1
         );
 
         this.gp = gp;
@@ -39,7 +37,7 @@ public class Door extends Interactables {
         updateBounds();
     }
 
-    public Door(Room room, GameTime time) {
+    public Door(Room room) {
         super (
             "Door",
             "visit another room",
@@ -47,8 +45,7 @@ public class Door extends Interactables {
             Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
             Consts.PLAY_ARENA_Y_DOWN,
             1,
-            1,
-            time
+            1
         );
         
         this.leadsIntoRoom = room;
@@ -57,7 +54,7 @@ public class Door extends Interactables {
         updateBounds();
     }
 
-    public Door(Door door, Room room, GameTime time) {
+    public Door(Door door, Room room) {
         super (
             "Door",
             "visit another room",
@@ -65,8 +62,7 @@ public class Door extends Interactables {
             0,
             0,
             1,
-            1,
-            time
+            1
         );
 
         this.leadsIntoRoom = room;
@@ -129,6 +125,12 @@ public class Door extends Interactables {
     }
 
     @Override
+    public BufferedImage getIcon() {
+        return images[getImageIndex()];
+    }
+
+
+    @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
@@ -138,7 +140,7 @@ public class Door extends Interactables {
     }
 
     @Override
-    public void interact(Sim sim) {
+    public void interact(Sim sim, GameTime time) {
         if (leadsIntoRoom == null) {
             ActiveActionsUserInterface.showActiveActions(gp);
             return;

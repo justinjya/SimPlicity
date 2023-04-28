@@ -93,6 +93,10 @@ public class World {
         return null;
     }
 
+    public GameTime getTime() {
+        return time;
+    }
+
     public boolean isAdding() {
         return isAdding;
     }
@@ -114,8 +118,8 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        Room newRoom = new Room("First Room", time);
-        newRoom.getListOfObjects().add(new Door(null, gp, time));
+        Room newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null, gp));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);

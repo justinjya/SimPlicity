@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import src.main.Consts;
 import src.main.GameTime;
 import src.assets.ImageLoader;
-import src.entities.items.Interactables;
 import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
@@ -36,10 +35,10 @@ public class Bed extends Interactables{
     private int duration;
 
     // Image of the beds
-    private BufferedImage[] images = new BufferedImage[6]; // Will increase if more bed images are available
+    private BufferedImage[] images = new BufferedImage[9];
 
     // CONSTRUCTOR
-    public Bed(int x, int y, int imageIndex, GameTime time) {
+    public Bed(int x, int y, int imageIndex) {
         super (
             names[imageIndex],
             "sleep",
@@ -47,8 +46,7 @@ public class Bed extends Interactables{
             x,
             y,
             width[imageIndex],
-            height[imageIndex],
-            time
+            height[imageIndex]
         );
 
         this.price = prices[imageIndex];
@@ -58,8 +56,23 @@ public class Bed extends Interactables{
         images = ImageLoader.loadBeds();
     }
 
+    public Bed(int imageIndex) {
+        super (
+            names[imageIndex],
+            "sleep",
+            imageIndex,
+            Consts.PLAY_ARENA_X_LEFT+ (Consts.SCALED_TILE * 3),
+            Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * 3),
+            width[imageIndex],
+            height[imageIndex]
+        );
+
+        // Load the image of the beds
+        images = ImageLoader.loadBeds();
+    }
+
     // ONLY FOR DEBUGGING
-    public Bed(GameTime time) {
+    public Bed() {
         super (
             names[1],
             "sleep",
@@ -67,11 +80,10 @@ public class Bed extends Interactables{
             (Consts.CENTER_X / 2) + 76,
             Consts.CENTER_Y + 15,
             width[1],
-            height[1],
-            time
+            height[1]
         );
         
-        this.price = prices[0];
+        this.price = prices[1];
         this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
@@ -84,6 +96,11 @@ public class Bed extends Interactables{
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS
+    @Override
+    public BufferedImage getIcon() {
+        return images[getImageIndex() + 6];
+    }
+
     @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
@@ -102,13 +119,13 @@ public class Bed extends Interactables{
     }
 
     @Override
-    public void interact(Sim sim) {
+    public void interact(Sim sim, GameTime time) {
         Thread interacting = new Thread() {
             @Override
             public void run() {
                 try {
                     changeOccupied(sim);
-                    getTime().startDecrementTimeRemaining(duration);
+                    time.startDecrementTimeRemaining(duration);
                     sim.setStatus("Sleeping");
 
                     Thread.sleep(duration);
