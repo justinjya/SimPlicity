@@ -16,7 +16,7 @@ public class TrashBin extends Interactables {
     // CONSTRUCTOR
     public TrashBin(int x, int y, GameTime time) {
         super (
-            "TrashBin",
+            "Trash Bin",
             0,
             x,
             y,

@@ -52,8 +52,8 @@ public class Aquarium extends Interactables {
                 try {
                     sim.setStatus("Feeding Fish");
                     // count the time
-                    time.startDecrementTimeRemaining(5000);
-                    Thread.sleep(5000);
+                    time.startDecrementTimeRemaining(duration);
+                    Thread.sleep(duration);
                     sim.resetStatus();
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
                 } catch (InterruptedException e) {
