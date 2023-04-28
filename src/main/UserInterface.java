@@ -117,9 +117,6 @@ public class UserInterface {
         }
 
         if (sim.getInventory().isOpen()) {
-            // Change selected box
-            // int max = sim.getInventory().itemOwned();
-            
 
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 if (sim.getInventory().slotCol > 0) {
@@ -140,6 +137,9 @@ public class UserInterface {
                 if (sim.getInventory().slotRow > 0) {
                     sim.getInventory().slotRow--;
                 }
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+                sim.getInventory().switchCategory();
             }
         }
     }
@@ -223,7 +223,7 @@ public class UserInterface {
             g.drawString("y: " + sim.getY(), 33, 384);
             g.drawString("InRange: " + sim.getInteractionHandler().isObjectInRange(), 73, 374);
             g.drawString("isWalking: " + sim.isMoving(), 73, 384);
-            g.drawString("isBusy: " + sim.isBusy(), 73, 394);
+            g.drawString("Category: " + sim.getInventory().isObject, 73, 394);
             
             if (sim.getInteractionHandler().isObjectInRange()) {
                     object = sim.getInteractionHandler().getInteractableObject();
@@ -306,6 +306,12 @@ public class UserInterface {
         int cursorY = sim.getInventory().slotYstart + (sim.getInventory().slotSize * sim.getInventory().slotRow);
         int cursorWidth = sim.getInventory().slotSize;
         int cursorHeight = sim.getInventory().slotSize;
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        sim.getInventory().drawItem(g);
+
         g.setColor(Color.WHITE);
         g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
 

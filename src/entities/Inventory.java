@@ -13,7 +13,7 @@ public class Inventory {
     public int slotRow = 0;
     public int slotCol = 0;
     private boolean state = false; // true if the inventory is open, false if closed
-    private boolean isObject = true;
+    public boolean isObject = true;
     public ArrayList<Integer> ownedObjectsIndex = new ArrayList<Integer>();
     public ArrayList<Integer> ownedFoodsIndex = new ArrayList<Integer>();
     
@@ -120,6 +120,10 @@ public class Inventory {
 
     public void resetState() {
         state = false;
+    }
+
+    public void switchCategory() {
+        isObject = !isObject;
     }
 
     public String[] getItemList() {
@@ -288,8 +292,6 @@ public class Inventory {
             g.setFont(font);
             g.drawString("Foods", categoryX+categoryWidth, categoryY+(categoryHeight/2));
         }
-        
-        drawItem(g);
 
     }
 }
