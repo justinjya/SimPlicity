@@ -119,7 +119,6 @@ public class World {
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);
-        setMap(cursor.getGridX(), cursor.getGridY(), 1);
     }
 
     public void changeIsAddingState() {

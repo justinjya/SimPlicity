@@ -11,7 +11,6 @@ public class House {
     // Location inside of the world
     private int x;
     private int y;
-    private World world;
 
     public House(int x, int y, World world, Sim sim, Room room) {
         // Atributes
@@ -22,9 +21,7 @@ public class House {
         // Locatoin inside of the world
         this.x = x;
         this.y = y;
-        this.world = world;
         world.setMap(x, y, 1);
-
     }
 
     public String getName() {
