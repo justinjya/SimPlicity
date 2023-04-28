@@ -62,6 +62,20 @@ public class ImageLoader {
         }
         return rotated;
     }
+
+    public static BufferedImage[] loadMainMenu() {
+        BufferedImage[] images = new BufferedImage[7];
+
+        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false);
+        images[1] = ImageLoader.readImage("mockup", "main menu", "title", 0, 0, false);
+        images[2] = ImageLoader.readImage("mockup", "main menu", "menu_button_bg", 0, 0, false);
+        images[3] = ImageLoader.readImage("mockup", "main menu", "start_button", 0, 0, false);
+        images[4] = ImageLoader.readImage("mockup", "main menu", "load_button", 0, 0, false);
+        images[5] = ImageLoader.readImage("mockup", "main menu", "help_button", 0, 0, false);
+        images[6] = ImageLoader.readImage("mockup", "main menu", "exit_button", 0, 0, false);
+
+        return images;
+    }
     
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
@@ -185,6 +199,16 @@ public class ImageLoader {
         images[8] = readImage("tiles", "quarter_arrow", "down", 1, 1, false);
         images[9] = readImage("tiles", "quarter_arrow", "right", 1, 1, false);
         
+        return images;
+    }
+
+    public static BufferedImage[] loadArrows() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("tiles", "arrow", 1, 1, false);
+        images[1] = rotate90Clockwise(images[0]);
+        images[2] = rotate90Clockwise(images[1]);
+        images[3] = rotate90Clockwise(images[2]);
         return images;
     }
 
