@@ -1,5 +1,8 @@
 package src.Menu;
 
+import java.awt.*;
+import javax.swing.*;
+
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 
@@ -23,6 +26,7 @@ public class MenuButton {
         this.yPos = yPos;
         this.rowIndex = rowIndex;
         this.game = game;
+        loadImages();
         initBounds();
     }
 
@@ -46,17 +50,20 @@ public class MenuButton {
         g.drawImage(images[index], xPos - xOffsetCenter, yPos, WIDTH, HEIGHT, null);
     }
 
-    public void update(){
-        index = 0;
-        if(mouseOver){
-            index = 1;
-        }
-        if(mousePressed){
-            index = 2;
-        }
-    }
-
+    
+    
+    
+    /* Reference
     public boolean isMouseOver(){
+        public void update(){
+            index = 0;
+            if(mouseOver){
+                index = 1;
+            }
+            if(mousePressed){
+                index = 2;
+            }
+        }
         return mouseOver;
     }
 
@@ -75,4 +82,6 @@ public class MenuButton {
     public Rectangle getBounds(){
         return bounds;
     }
+ */
+
 }
