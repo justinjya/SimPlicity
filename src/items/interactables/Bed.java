@@ -90,7 +90,7 @@ public class Bed extends Interactables{
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
+    public void changeOccupied() {
         if (!isOccupied()) {
             changeOccupiedState();
             setImageIndex(getImageIndex() + 1);
@@ -107,13 +107,13 @@ public class Bed extends Interactables{
             @Override
             public void run() {
                 try {
-                    changeOccupied(sim);
+                    changeOccupied();
                     getTime().startDecrementTimeRemaining(duration);
                     sim.setStatus("Sleeping");
 
                     Thread.sleep(duration);
                     
-                    changeOccupied(sim);
+                    changeOccupied();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() + 30);
                     sim.setMood(sim.getMood() + 20);
