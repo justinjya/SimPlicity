@@ -1,18 +1,13 @@
-package src.items;
-
-import javax.imageio.ImageTypeSpecifier;
-
-import src.items.Item;
-import src.main.GameTime;
+package src.items.foods;
 
 import java.awt.image.BufferedImage;
 
-import java.lang.Math;
+import src.main.GameTime;
+import src.items.Item;
+import src.entities.sim.Sim;
+import src.entities.sim.actions.UpgradeActions;
 
-import src.actions.UpgradeActions;
-import src.entities.Sim;
-
-public class Rawfood implements Item{
+public class RawFood implements Item{
     // Types of raw food
     private static String[] names = {
         "Nasi",
@@ -56,7 +51,7 @@ public class Rawfood implements Item{
     private BufferedImage[] images = new BufferedImage[8];
 
     // Constructor
-    public Rawfood (int imageIndex) {
+    public RawFood (int imageIndex) {
         this.name = names[imageIndex];
         this.hungerPoint = hungerPoints[imageIndex];
         this.price = prices[imageIndex];

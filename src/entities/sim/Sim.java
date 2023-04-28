@@ -1,10 +1,11 @@
-package src.entities;
+package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
 import src.main.GameTime;

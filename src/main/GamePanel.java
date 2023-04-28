@@ -7,6 +7,7 @@ import javax.swing.*;
 import src.assets.ImageLoader;
 import src.entities.*;
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.world.Room;
 import src.world.World;
 

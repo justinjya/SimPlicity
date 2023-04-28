@@ -1,12 +1,10 @@
-package src.items.interactables;
+package src.entities.interactables;
 
 import java.io.BufferedInputStream;
 import java.awt.image.BufferedImage;
 
-import src.entities.Interactables;
-
+import src.entities.sim.Sim;
 import src.main.GameTime;
-import src.entities.Sim;
 
 public class Stove extends Interactables{
     // Types of stove

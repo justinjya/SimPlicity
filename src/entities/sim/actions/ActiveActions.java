@@ -1,10 +1,10 @@
-package src.actions;
+package src.entities.sim.actions;
 
 import src.main.Consts;
 import src.main.GameTime;
-import src.entities.Sim;
-import src.items.interactables.Stove;
-import src.items.Bakedfood;
+import src.entities.interactables.Stove;
+import src.entities.sim.Sim;
+import src.items.foods.BakedFood;
 
 public class ActiveActions {
     public void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
@@ -92,7 +92,7 @@ public class ActiveActions {
         exercising.start();
     }
 
-    public void cook (Bakedfood bakedfood, Stove stove, Sim sim, GameTime time){
+    public void cook (BakedFood bakedfood, Stove stove, Sim sim, GameTime time){
         Thread cooking = new Thread() {
             @Override
             public void run() {
@@ -134,19 +134,19 @@ public class ActiveActions {
         cooking.start();
     }
 
-    public void takeALeak(Toilet toilet, Sim sim, GameTime time) {
-        try {
-            toilet.changeOccupied(sim);
-            time.startDecrementTimeRemaining(10*1000);
-            sim.setStatus("TakingALeak");
-            Thread.sleep(10*1000);
-            toilet.changeOccupied(sim);
-            sim.setHunger(sim.getHunger() - 20);
-            sim.setMood(sim.getMood() + 10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    // public void takeALeak(Toilet toilet, Sim sim, GameTime time) {
+    //     try {
+    //         toilet.changeOccupied(sim);
+    //         time.startDecrementTimeRemaining(10*1000);
+    //         sim.setStatus("TakingALeak");
+    //         Thread.sleep(10*1000);
+    //         toilet.changeOccupied(sim);
+    //         sim.setHunger(sim.getHunger() - 20);
+    //         sim.setMood(sim.getMood() + 10);
+    //     } catch (InterruptedException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public void readABook(Sim sim, GameTime time) {
         try {

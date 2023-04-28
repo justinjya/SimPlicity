@@ -1,10 +1,10 @@
-package src.actions;
-import src.items.Rawfood;
-import src.entities.Sim;
+package src.entities.sim.actions;
+import src.entities.sim.Sim;
+import src.items.foods.RawFood;
 import src.main.GameTime;
 
 public class UpgradeActions {
-    public static void buyRawFood(Rawfood rawfood, Sim sim, GameTime time) {
+    public static void buyRawFood(RawFood rawfood, Sim sim, GameTime time) {
         Thread buying = new Thread(){
             @Override
             public void run() {

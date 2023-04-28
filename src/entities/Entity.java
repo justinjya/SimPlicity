@@ -1,7 +1,8 @@
 package src.entities;
 
 import src.entities.handlers.*;
-import src.items.interactables.Door;
+import src.entities.interactables.Door;
+import src.entities.sim.Sim;
 import src.main.Consts;
 
 public abstract class Entity {

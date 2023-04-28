@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
+import src.entities.interactables.Interactables;
+import src.entities.sim.Sim;
 import src.world.Room;
 
 public class InteractionHandler {

@@ -1,6 +1,6 @@
 package src.world;
 
-import src.entities.Sim;
+import src.entities.sim.Sim;
 
 public class House {
     // Atributes

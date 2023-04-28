@@ -6,10 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.entities.handlers.KeyHandler;
-import src.items.interactables.*;
-import src.entities.Sim;
+import src.entities.interactables.*;
+import src.entities.sim.Sim;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
 
 public class UserInterface {
     // Atributes to show

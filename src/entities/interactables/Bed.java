@@ -1,12 +1,11 @@
-package src.items.interactables;
+package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GameTime;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
     // Types of beds

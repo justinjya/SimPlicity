@@ -1,4 +1,4 @@
-package src.actions;
+package src.entities.sim.actions;
 
 
 

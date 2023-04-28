@@ -1,11 +1,10 @@
-package src.items;
-
-import src.items.Item;
+package src.items.foods;
 
 import java.awt.image.BufferedImage;
 
+import src.items.Item;
 
-public class Bakedfood implements Item{
+public class BakedFood implements Item{
     // Types of baked food
     private static String[] names = {
         "Nasi Ayam",
@@ -39,7 +38,7 @@ public class Bakedfood implements Item{
     private BufferedImage[] images = new BufferedImage[5];
 
     // Constructor
-    public Bakedfood (int imageIndex) {
+    public BakedFood (int imageIndex) {
         this.name = names[imageIndex];
         this.hungerPoint = hungerPoints[imageIndex];
         this.ingredient = ingredients[imageIndex];
@@ -56,7 +55,7 @@ public class Bakedfood implements Item{
         return hungerPoint;
     }
 
-    public String[] getPrice() {
+    public String[] getIngredients() {
         return ingredient;
     }
 

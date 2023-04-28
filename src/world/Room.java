@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.GameTime;
-import src.entities.Interactables;
-import src.entities.Sim;
-import src.items.interactables.*;
 import src.entities.handlers.*;
+import src.entities.interactables.*;
+import src.entities.sim.Sim;
 
 public class Room {
     // Atributes

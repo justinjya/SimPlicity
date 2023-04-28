@@ -2,7 +2,7 @@ package src.entities.handlers;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.Sim;
+import src.entities.sim.Sim;
 import src.main.UserInterface;
 
 public class KeyHandler {
