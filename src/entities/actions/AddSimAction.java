@@ -2,7 +2,7 @@ package src.entities.actions;
 
 import src.entities.Sim;
 import src.main.Consts;
-import src.main.UserInterface;
+import src.main.ui.UserInterface;
 import src.world.World;
 
 public class AddSimAction {

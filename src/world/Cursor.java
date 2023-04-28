@@ -6,7 +6,7 @@ import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
 import src.main.Consts;
 import src.main.GamePanel;
-import src.main.UserInterface;
+import src.main.ui.UserInterface;
 
 public class Cursor {
     // Location inside of the world

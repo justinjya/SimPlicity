@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 
 import src.entities.Sim;
 import src.entities.actions.ActiveActions;
-import src.main.UserInterface;
+import src.main.ui.UserInterface;
 import src.world.World;
 
 public class KeyHandler {

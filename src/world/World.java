@@ -7,16 +7,18 @@ import java.awt.*;
 import src.assets.ImageLoader;
 import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
+import src.items.interactables.Door;
 import src.main.Consts;
 import src.main.GamePanel;
 import src.main.GameTime;
-import src.main.UserInterface;
+import src.main.ui.UserInterface;
 
 public class World {
     // Atributes
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
+    private GamePanel gp;
     private GameTime time;
     
     // State of the world (is adding a house or selecting a house to visit)
@@ -38,7 +40,7 @@ public class World {
     private int lowerBoundsY, upperBoundsY;
 
     // Constructor 
-    public World(Sim sim, GameTime time) {
+    public World(Sim sim, GamePanel gp, GameTime time) {
         // Atributes
         listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
@@ -57,6 +59,7 @@ public class World {
         this.cursor = new Cursor(Consts.TILE_SIZE * 16, Consts.TILE_SIZE * 16, this);
 
         // For the start of the game
+        this.gp = gp;
         this.time = time;
         listOfSim.add(sim);
         
@@ -109,8 +112,10 @@ public class World {
     public void addHouse() {
         int x = cursor.getGridX();
         int y = cursor.getGridY();
+
         Sim newSim = getSim(listOfSim.size() - 1);
         Room newRoom = new Room("First Room", time);
+        newRoom.getListOfObjects().add(new Door(null, gp, time));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);

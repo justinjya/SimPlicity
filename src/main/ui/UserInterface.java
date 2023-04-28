@@ -1,15 +1,14 @@
-package src.main;
+package src.main.ui;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import src.entities.handlers.KeyHandler;
-import src.items.interactables.*;
+import src.main.Consts;
+import src.main.GameTime;
 import src.world.World;
 import src.entities.Sim;
-import src.entities.actions.*;
 import src.assets.ImageLoader;
 
 // will delete later?
@@ -28,22 +27,14 @@ public class UserInterface {
     // User Interface Images
     private BufferedImage[] images;
 
-    // Selection Box Attributes
-    private int selectedBox = 0; // Boxes starting from 0 to 4
-    private int selectedBoxX = 203;
-    private int selectedBoxY = 479;
-    private int selectedBoxWidth = Consts.SCALED_TILE + 8;
-    private int selectedBoxHeight = Consts.SCALED_TILE + 8;
-    private int boxStep = 81;
-
     //ONLY FOR DEBUGGING
     private boolean debug;
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(Sim sim, World world, GameTime time) {
-        this.currentSim = sim;
+    public UserInterface(World world, Sim sim, GameTime time) {
         this.world = world;
+        this.currentSim = sim;
         this.time = time;
         // For the start of the game
         this.viewingWorld = true;
@@ -55,6 +46,10 @@ public class UserInterface {
     }
 
     // GETTERS
+    public World getWorld() {
+        return world;
+    }
+
     public Sim getCurrentSim() {
         return currentSim;
     }
@@ -71,7 +66,7 @@ public class UserInterface {
     public void setCurrentSim(Sim sim) {
         currentSim = sim;
 
-        if (currentSim.isBusy() && currentSim.isStatusCurrently("Idle")) currentSim.changeIsBusyState();
+        if (currentSim.isBusy()) currentSim.changeIsBusyState();
 
         for (Sim s : world.getListOfSim()) {
             if (s == currentSim) continue;
@@ -94,73 +89,9 @@ public class UserInterface {
     }
 
     // OTHERS
-    private void moveSelectedBox(String direction) {
-        switch (direction)  {
-            case "left":
-                selectedBox--;
-                if (selectedBox < 0) {
-                    selectedBox = 4;
-                    selectedBoxX += boxStep * 4;
-                }
-                else {
-                    selectedBoxX -= boxStep;
-                }
-                break;
-            case "right":
-                selectedBox++;
-                if (selectedBox > 4) {
-                    selectedBox = 0;
-                    selectedBoxX -= boxStep * 4;
-                }
-                else {
-                    selectedBoxX += boxStep;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    // TO - DO !!! : Integrate with Store
-    private void boxEntered() {
-        tab();
-
-        if (currentSim.isBusy()) return;
-
-        switch (selectedBox) {
-            case 0:
-                NonActiveActions.editRoom(currentSim.getCurrentRoom());
-                break;
-            case 1:
-                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room", time);
-                break;
-            case 2:
-                // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(time));
-                break;
-            case 3:
-                AddSimAction.addSim(this, world);
-                break;
-            case 4:
-                ActiveActions.visitAnotherSim(this);
-                break;
-            default:
-                break;
-        }
-    }
-    
     public void update() {
         if (tabbed) {
-            // Change selected box based on key input
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                moveSelectedBox("left");
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                moveSelectedBox("right");
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                boxEntered();
-            }
+            SelectionBox.update(this, time);
         }
     }
 
@@ -205,21 +136,11 @@ public class UserInterface {
         g.fillRect(11, 294, 182, 58); // Time remaining
         g.fillRect(607, 88, 182, 31); // House name
 
-        // Draw tab boxes
-        g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(288, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(369, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(450, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-
-        // Draw selected box
-        if (tabbed) {
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
-            drawSelectedBoxText(g);
-        }
-
         drawText(g);
+        drawAttributes(g);
+
+        // Draw tab boxes
+       SelectionBox.draw(g, this);
     }
 
     private void drawText(Graphics2D g) {
@@ -322,32 +243,6 @@ public class UserInterface {
         }
         else {
             g.drawString("" + value, offsetX - 5, 340 + (37 * offsetY));
-        }
-    }
-
-    private void drawSelectedBoxText(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 12);
-
-        g.setFont(font);
-        switch (selectedBox) {
-            case 0:
-                g.drawString("Edit Room", Consts.CENTER_X - 18, Consts.CENTER_Y + 172);
-                break;
-            case 1:
-                g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
-                break;
-            case 2:
-                g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
-                break;
-            case 3:
-                g.drawString("Add Sims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
-                break;
-            case 4:
-                g.drawString("Visit Another Sim", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
-                break;
-            default:
-                g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);
-                break;
         }
     }
 

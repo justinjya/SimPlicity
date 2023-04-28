@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.handlers.KeyHandler;
+import src.main.ui.ActiveActionsUserInterface;
+import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
 import src.entities.*;
 import src.world.World;
@@ -40,10 +42,10 @@ public class GamePanel extends JPanel implements Runnable {
         sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
 
         // create a new world
-        world = new World(sim, time);
+        world = new World(sim, this, time);
         
         // // Create user interface
-        ui = new UserInterface(sim, world, time);
+        ui = new UserInterface(world, sim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -115,15 +117,20 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        ui.update();
+        if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            ui.update();
 
-        if (!ui.isViewingWorld()) {
-            ui.getCurrentSim().update();
+            if (!ui.isViewingWorld()) {
+                ui.getCurrentSim().update();
 
-            ui.getCurrentSim().getCurrentRoom().update();
+                ui.getCurrentSim().getCurrentRoom().update();
+            }
+            else {
+                world.update(this, ui);
+            }
         }
-        else {
-            world.update(this, ui);
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.update(sim, ui, this);
         }
     }
     
@@ -133,19 +140,24 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        if (!ui.isViewingWorld()) {
-            // Draw room and sim
-            try {
-                ui.getCurrentSim().getCurrentRoom().draw(g2);
+        if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            if (!ui.isViewingWorld()) {
+                // Draw room and sim
+                try {
+                    ui.getCurrentSim().getCurrentRoom().draw(g2);
+                }
+                catch (NullPointerException e) { }
             }
-            catch (NullPointerException e) { }
+            else {
+                // Draw the world
+                world.draw(g2);
+            }
+    
+            ui.draw(g2);
         }
-        else {
-            // Draw the world
-            world.draw(g2);
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.draw(g2);
         }
-
-        ui.draw(g2);
 
         // testing sim color
         // testingSimColor(g2);
