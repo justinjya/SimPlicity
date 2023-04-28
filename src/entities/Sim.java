@@ -52,7 +52,7 @@ public class Sim extends Entity{
         this.money = 100;
         this.status = "Idle";
         this.isBusy = false;
-        this.currentRoom = currentRoom;
+        
         this.professionId = 0;
         this.durationOfWork = 0;
         this.hasChangedProfession = false;

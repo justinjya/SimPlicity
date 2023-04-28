@@ -17,6 +17,7 @@ public class Aquarium extends Interactables {
     public Aquarium (int x, int y, GameTime time) {
         super (
             "Aquarium",
+            "feed the fish",
             0,
             x,
             y,
@@ -26,7 +27,7 @@ public class Aquarium extends Interactables {
         );
 
         // Load the image of the shower
-        image = ImageLoader.readImage("tiles", "grass", 2, 1);
+        image = ImageLoader.readImage("tiles", "grass", 2, 1, true);
     }
 
     @Override
@@ -35,25 +36,17 @@ public class Aquarium extends Interactables {
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-        if (!isOccupied()) {
-            changeOccupiedState();
-        }
-        else {
-            changeOccupiedState();
-        }
-    }
-
-    @Override
     public void interact (Sim sim){
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
                 try {
-                    sim.setStatus("Feeding Fish");
+                    changeOccupied();
+                    sim.setStatus("Feeding the fish");
                     // count the time
-                    time.startDecrementTimeRemaining(duration);
+                    getTime().startDecrementTimeRemaining(duration);
                     Thread.sleep(duration);
+                    changeOccupied();
                     sim.resetStatus();
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
                 } catch (InterruptedException e) {

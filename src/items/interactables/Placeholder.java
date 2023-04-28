@@ -33,8 +33,5 @@ public class Placeholder extends Interactables {
     }
 
     @Override
-    public void changeOccupied(Sim sim) {}
-    
-    @Override
     public void interact(Sim sim) {}
 }

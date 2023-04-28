@@ -17,6 +17,7 @@ public class TrashBin extends Interactables {
     public TrashBin(int x, int y, GameTime time) {
         super (
             "Trash Bin",
+            "kick the trash bin",
             0,
             x,
             y,
@@ -26,7 +27,7 @@ public class TrashBin extends Interactables {
         );
 
         // Load the image of the shower
-        image = ImageLoader.readImage("tiles", "grass", 1, 1);
+        image = ImageLoader.readImage("tiles", "grass", 1, 1, true);
     }
 
     @Override
@@ -35,25 +36,17 @@ public class TrashBin extends Interactables {
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-        if (!isOccupied()) {
-            changeOccupiedState();
-        }
-        else {
-          changeOccupiedState();
-        }
-    }
-
-    @Override
-    public void interact (Sim sim, GameTime time){
+    public void interact (Sim sim){
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
                 try {
-                    sim.setStatus("Kicking The Bin");
+                    changeOccupied();
+                    sim.setStatus("Kicking the Bin");
                     // count the time
-                    time.startDecrementTimeRemaining(duration);
+                    getTime().startDecrementTimeRemaining(duration);
                     Thread.sleep(duration);
+                    changeOccupied();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() - 2); // decrease sim's health
                     sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger

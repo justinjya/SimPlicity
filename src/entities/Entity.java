@@ -14,8 +14,8 @@ public abstract class Entity {
 
     // CONSTRUCTOR
     public Entity(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x);
+        this.y = Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * y);
         this.width = Consts.SCALED_TILE * width;
         this.height = Consts.SCALED_TILE * height;
     }
