@@ -7,6 +7,7 @@ import src.entities.*;
 import src.world.Room;
 
 public class InteractionHandler {
+    // Atributes
     private Entity entity;
     private Rectangle interactionRange;
     private Room currentRoom;
@@ -15,6 +16,7 @@ public class InteractionHandler {
     private int width;
     private int height;
 
+    // CONSTRUCTOR
     public InteractionHandler(Entity entity, Room currentRoom) {
         this.entity = entity;
         this.currentRoom = currentRoom;
@@ -25,6 +27,7 @@ public class InteractionHandler {
         interactionRange = new Rectangle(x, y, width, height);
     }
 
+    // GETTER
     public Entity getEntity() {
         return entity;
     }
@@ -47,6 +50,65 @@ public class InteractionHandler {
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean isObjectInRange() {
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
+
+        for (Interactables object : listOfObjects) {
+            if (getInteractionRange().intersects(object.getBounds())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public Interactables getInteractableObject() {
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
+        
+        for (Interactables object : listOfObjects) {
+            if (getInteractionRange().intersects(object.getBounds())) {
+                return object;
+            }
+        }
+        return null;
+    }
+    
+    // OTHERS
+    public void interact() {
+        if (!(entity instanceof Sim)) return;
+
+        Interactables object = getInteractableObject();
+        
+        if (object == null) {
+            return;
+        }
+        
+        if (object.isOccupied()) {
+            return;
+        }
+        
+        Sim sim = (Sim) entity;
+        object.interact(sim);
+    }
+
+    public void update() {
+        switch (entity.getDirection()) {
+            case 0:
+                moveUp(entity.getX(), entity.getY());
+                break;
+            case 1:
+                moveRight(entity.getX(), entity.getY());
+                break;
+            case 2:
+                moveDown(entity.getX(), entity.getY());
+                break;
+            case 3:
+                moveLeft(entity.getX(), entity.getY());
+                break;
+            default:
+                break;
+        }
     }
 
     public void moveLeft(int newX, int newY) {
@@ -87,61 +149,5 @@ public class InteractionHandler {
 
         interactionRange.setSize(width, height);
         interactionRange.setLocation(x, y);
-    }
-
-    public void update() {
-        switch (entity.getDirection()) {
-            case 0:
-                moveUp(entity.getX(), entity.getY());
-                break;
-            case 1:
-                moveRight(entity.getX(), entity.getY());
-                break;
-            case 2:
-                moveDown(entity.getX(), entity.getY());
-                break;
-            case 3:
-                moveLeft(entity.getX(), entity.getY());
-                break;
-            default:
-                break;
-        }
-    }
-
-    public boolean isObjectInRange() {
-        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
-
-        for (Interactables object : listOfObjects) {
-            if (getInteractionRange().intersects(object.getBounds())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Interactables getInteractableObject() {
-        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects(); 
-        
-        for (Interactables object : listOfObjects) {
-            if (getInteractionRange().intersects(object.getBounds())) {
-                return object;
-            }
-        }
-        return null;
-    }
-
-    public void interact() {
-        Interactables object = getInteractableObject();
-        
-        if (object == null) {
-            return;
-        }
-        
-        if (object.isOccupied()) {
-            return;
-        }
-        
-        Sim sim = (Sim) entity;
-        object.interact(sim);
     }
 }

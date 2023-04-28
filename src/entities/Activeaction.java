@@ -49,7 +49,6 @@ public class Activeaction {
         working.start();
     }
 
-
     public void exercise (Sim sim, GameTime time){
         Thread exercising = new Thread() {
             @Override

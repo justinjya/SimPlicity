@@ -52,7 +52,7 @@ public class Bed extends Interactables{
         );
 
         this.price = prices[imageIndex];
-        this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
+        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();
@@ -72,7 +72,7 @@ public class Bed extends Interactables{
         );
         
         this.price = prices[0];
-        this.duration = Consts.ONE_MINUTE / 4; // Change this to * 4 once the project is done
+        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();

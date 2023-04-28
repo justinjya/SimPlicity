@@ -22,9 +22,9 @@ public class Room {
     
     // For adding, editing, and removing objects
     private boolean isEditingRoom;
+    private CollisionHandler collisionHandler;
     private Interactables moveableObject = null;
     private Interactables selectedObject = null;
-    private CollisionHandler collisionHandler;
 
     // Position inside the game window
     private int centerX = Consts.WIDTH / 2 - 3 * Consts.SCALED_TILE;
@@ -44,24 +44,6 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
-
-        // ONLY FOR DEBUGGING
-        // testRoom();
-    }
-
-    public Room(String name, Sim sim, GameTime time) {
-        // Atributes
-        this.name = name;
-        this.listOfObjects = new ArrayList<>(); 
-        this.listOfSims = new ArrayList<>();
-        this.time = time;
-        this.isEditingRoom = false;
-
-        // Load the image of the room
-        this.image = ImageLoader.loadWood();
-
-        // Add a sim into the room
-        this.listOfSims.add(sim);
 
         // ONLY FOR DEBUGGING
         // testRoom();
@@ -123,30 +105,6 @@ public class Room {
         }
     }
 
-    public void addRoom(String name) {
-        Room thisRoom = this;
-        
-        Thread addNewRoomThread = new Thread() {
-            @Override
-            public void run() {
-                Room newRoom = new Room(name, time);
-                Door newDoor = new Door(newRoom, time);
-                
-                addObject(newDoor);
-                while (true) {
-                    synchronized (thisRoom) {
-                        if (!thisRoom.isEditingRoom()) {
-                            break;
-                        }
-                    }
-                }
-                newRoom.getListOfObjects().add(new Door(newDoor, thisRoom, time));
-            }
-        };
-
-        addNewRoomThread.start();
-    }
-
     // OTHERS
     public void update() {
         // Editing an existing object
@@ -162,6 +120,9 @@ public class Room {
         
         // Draw objects inside of the room
         drawObjects(g);
+
+        // Draw sims inside of the room
+        drawSims(g);
 
         // Draw the selector for an object
         drawObjectSelector(g);
@@ -303,6 +264,12 @@ public class Room {
             else {
                 object.draw(g, object);
             }
+        }
+    }
+
+    private void drawSims(Graphics2D g) {
+        for (Sim sim: listOfSims) {
+            sim.draw(g);
         }
     }
 

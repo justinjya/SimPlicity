@@ -20,6 +20,7 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private boolean isBusy;
+
     private Room currentRoom;
     private House currentHouse;
     private int professionId;
@@ -35,7 +36,7 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y, Room currentRoom, House currentHouse, int professionId) {
+    public Sim(String name, int x, int y) {
         // Atributes
         super (
             x,
@@ -52,14 +53,10 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.isBusy = false;
         this.currentRoom = currentRoom;
-        this.professionId = professionId;
+        this.professionId = 0;
         this.durationOfWork = 0;
         this.hasChangedProfession = false;
         this.changeProfessionTime = new GameTime(1, 720, 720);
-
-        // Place the sim inside of the current room
-        currentRoom.addSim(this);
-        this.currentHouse = currentHouse;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -158,8 +155,15 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
+    public void setCurrentHouse(House house) {
+        this.currentHouse = house;
+    }
+
     public void setCurrentRoom(Room room) {
-        this.currentRoom.removeSim(this);
+        if (currentRoom != null) {
+            this.currentRoom.removeSim(this);
+        }
+        
         this.currentRoom = room;
         this.currentRoom.addSim(this);
         collisionHandler = new CollisionHandler(this, room);
@@ -187,6 +191,16 @@ public class Sim extends Entity{
     }
 
     // OTHERS
+    public void update() {
+        if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
+            return;
+        }
+        
+        if (isMoving() && !isBusy) {
+            move(collisionHandler, interactionHandler);
+        }
+    }
+
     public void changeProfessionId(int professionId, GameTime time) {
         if (durationOfWork >= 720) {
             if (professionId == 1) {
@@ -218,9 +232,6 @@ public class Sim extends Entity{
         hasChangedProfession = true;
         setChangeProfessionTime(time);
     }
-
-    
-
     
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
@@ -234,17 +245,11 @@ public class Sim extends Entity{
         }
     }
 
-    public void update() {
-        if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
-            return;
-        }
-        
-        if (isMoving() && !isBusy) {
-            move(collisionHandler, interactionHandler);
-        }
+    // ONLY FOR DEBUGGING
+    public void drawSimStanding(Graphics2D g) {
+        g.drawImage(images[2], getX(), getY(), null);
     }
 
-    // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {
         // Draw the sim collision area as a red rectangle
         g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
