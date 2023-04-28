@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
@@ -54,19 +55,6 @@ public class GamePanel extends JPanel implements Runnable {
                 KeyHandler.keyPressed(e.getKeyCode());
                 
                 KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
-
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
-                    ui.tab();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_EQUALS)) {
-                    ui.debug();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_F)) {
-                    sim.interact();
-                }
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
-                    ui.inventory();
-                }
             }
             
             @Override

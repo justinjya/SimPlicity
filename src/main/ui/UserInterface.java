@@ -8,11 +8,10 @@ import java.awt.image.BufferedImage;
 import src.main.Consts;
 import src.main.GameTime;
 import src.world.World;
-import src.entities.Sim;
 import src.assets.ImageLoader;
-
-// will delete later?
-import src.entities.Interactables;
+import src.entities.items.Interactables;
+import src.entities.sim.Inventory;
+import src.entities.sim.Sim;
 
 public class UserInterface {
     // Atributes
@@ -80,12 +79,27 @@ public class UserInterface {
     }
 
     public void tab() {
-        this.tabbed = !this.tabbed;
-        currentSim.changeIsBusyState();
+        Inventory inventory = currentSim.getInventory();
+
+        if (!inventory.isOpen()) {
+            this.tabbed = !this.tabbed;
+            currentSim.changeIsBusyState();
+        }
     }
 
     public void debug() {
         this.debug = !this.debug;
+    }
+
+    public void inventory() {
+        Inventory inventory = currentSim.getInventory();
+
+        if (tabbed) {
+            tab();
+        }
+
+        inventory.changeState();
+        currentSim.changeIsBusyState();
     }
 
     // OTHERS
@@ -94,11 +108,7 @@ public class UserInterface {
             SelectionBox.update(this, time);
         }
     }
-
-    public void inventory() {
-        currentSim.getInventory().changeState();
-    }
-
+    
     public void draw(Graphics2D g) {
         if (viewingWorld) {
             Font font;
@@ -110,6 +120,10 @@ public class UserInterface {
             g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
         }
         else {
+            Inventory inventory = currentSim.getInventory();
+            if (inventory.isOpen()) {
+                inventory.draw(g);
+            }
             drawUI(g);
         }
     }

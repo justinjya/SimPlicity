@@ -2,8 +2,8 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GamePanel;
 import src.main.ui.UserInterface;

@@ -1,12 +1,12 @@
-package src.items.interactables;
+package src.entities.items.interactables;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import src.main.GameTime;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.items.Interactables;
+import src.entities.sim.Sim;
 
 public class Placeholder extends Interactables {
     // Placeholder Image

@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.Sim;
-import src.entities.actions.ActiveActions;
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
+import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
 import src.main.GamePanel;
 

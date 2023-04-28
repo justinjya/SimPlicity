@@ -1,10 +1,10 @@
-package src.items.interactables;
+package src.entities.items.interactables;
 
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.items.Interactables;
+import src.entities.sim.Sim;
 import src.main.GamePanel;
 import src.main.Consts;
 import src.main.GameTime;

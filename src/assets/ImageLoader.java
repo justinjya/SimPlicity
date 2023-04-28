@@ -84,8 +84,12 @@ public class ImageLoader {
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
 
-        images[0] = readImage("beds", "bed_idle", 4, 1, true);
-        images[1] = readImage("beds", "bed_occupied", 4, 1, true);
+        images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("beds", "bed_king_idle", 5, 2, true);
+        images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
+        images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
+        images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
         return images;
     }
 

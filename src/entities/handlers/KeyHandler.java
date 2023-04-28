@@ -2,8 +2,8 @@ package src.entities.handlers;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.Sim;
-import src.entities.actions.ActiveActions;
+import src.entities.sim.Sim;
+import src.entities.sim.actions.ActiveActions;
 import src.main.ui.UserInterface;
 import src.world.World;
 
@@ -52,6 +52,9 @@ public class KeyHandler {
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
             ActiveActions.interact(sim);
+        }
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+            ui.inventory();
         }
 
         // testing adding and switching sim

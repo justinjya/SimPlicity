@@ -1,4 +1,4 @@
-package src.entities;
+package src.entities.items;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.main.GameTime;
+import src.entities.Entity;
+import src.entities.sim.Sim;
 import src.items.Item;
 
 public abstract class Interactables extends Entity implements Item {

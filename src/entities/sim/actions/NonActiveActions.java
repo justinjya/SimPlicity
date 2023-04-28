@@ -1,4 +1,4 @@
-package src.entities.actions;
+package src.entities.sim.actions;
 
 import src.world.Room;
 

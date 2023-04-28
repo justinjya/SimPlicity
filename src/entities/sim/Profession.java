@@ -1,4 +1,4 @@
-package src.entities;
+package src.entities.sim;
 
 public class Profession 
 {

@@ -1,6 +1,6 @@
-package src.entities.actions;
+package src.entities.sim.actions;
 
-import src.items.interactables.Door;
+import src.entities.items.interactables.Door;
 import src.main.GameTime;
 import src.world.Room;
 

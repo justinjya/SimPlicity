@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import src.assets.ImageLoader;
-import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
-import src.items.interactables.Door;
+import src.entities.items.interactables.Door;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GamePanel;
 import src.main.GameTime;

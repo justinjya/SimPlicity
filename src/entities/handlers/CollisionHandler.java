@@ -4,7 +4,9 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
-import src.items.interactables.Door;
+import src.entities.items.Interactables;
+import src.entities.items.interactables.Door;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.world.Room;
 

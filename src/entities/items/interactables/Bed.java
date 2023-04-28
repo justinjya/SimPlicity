@@ -1,12 +1,12 @@
-package src.items.interactables;
+package src.entities.items.interactables;
 
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GameTime;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.items.Interactables;
+import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
     // Types of beds
@@ -61,13 +61,13 @@ public class Bed extends Interactables{
     // ONLY FOR DEBUGGING
     public Bed(GameTime time) {
         super (
-            names[0],
+            names[1],
             "sleep",
-            0,
+            1,
             (Consts.CENTER_X / 2) + 76,
             Consts.CENTER_Y + 15,
-            width[0],
-            height[0],
+            width[1],
+            height[1],
             time
         );
         
@@ -93,11 +93,11 @@ public class Bed extends Interactables{
     public void changeOccupied(Sim sim) {
         if (!isOccupied()) {
             changeOccupiedState();
-            setImageIndex(getImageIndex() + 1);
+            setImageIndex(getImageIndex() + 3);
         }
         else {
             changeOccupiedState();
-            setImageIndex(getImageIndex() - 1);
+            setImageIndex(getImageIndex() - 3);
         }
     }
 

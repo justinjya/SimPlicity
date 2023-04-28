@@ -1,4 +1,4 @@
-package src.entities;
+package src.entities.sim;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
@@ -207,8 +207,6 @@ public class Inventory {
         g.fillRect(607+11+10, 173+54-26+10, 32, 32);
 
     }
-
-    // public void 
 
     // public void showOwnedItems() {
     //     for (int i = 0; i < objects.length; i++) {
