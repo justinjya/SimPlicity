@@ -1,268 +1,183 @@
 package src.entities.sim;
+
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import src.assets.ImageLoader;
-
 import java.awt.Color;
 import java.awt.Font;
 
+import src.entities.handlers.KeyHandler;
+import src.items.Item;
+
 public class Inventory {
-    public int slotSize = 45;
-    public int slotRow = 0;
-    public int slotCol = 0;
-    private boolean state = false; // true if the inventory is open, false if closed
-    public boolean isObject = true;
-    public ArrayList<Integer> ownedObjectsIndex = new ArrayList<Integer>();
-    public ArrayList<Integer> ownedFoodsIndex = new ArrayList<Integer>();
+    private HashMap<Item, Integer> mapOfItems = new HashMap<>();
+    private boolean isOpen = false; // true if the inventory is open, false if closed
+    private boolean isObject = true;
     
-    // objects = 0-11
-    // foods = 12-24
-    public static String[] items =
-    {
-        "Single Bed",
-        "Queen Size Bed",
-        "King Size Bed",
-        "Toilet",
-        "Gas Stove",
-        "Electric Stove",
-        "Table and Chair",
-        "Clock",
-        "Television",
-        "Shower",
-        "Aquarium",
-        "Trash Bin",
-        "Rice",
-        "Potato",
-        "Chicken",
-        "Meat",
-        "Carrot",
-        "Spinach",
-        "Peanuts",
-        "Milk",
-        "Chicken and Rice",
-        "Curry and Rice",
-        "Peanut and Milk",
-        "Cut Vegetables",
-        "Steak"
-    };
+    // interface dimensions
+    private int slotSize = 45;
+    private int slotRow = 0;
+    private int slotCol = 0;
 
-    private int[] quantity =
-    {
-        1,
-        2,
-        3,
-        1,
-        4,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    };
+    private int frameX = 607;
+    private int frameY = 173;
+    private int frameWidth = 182;
+    private int frameHeight = 262;
 
-    private static int[] price =
-    {
-        50,
-        100,
-        150,
-        50,
-        100,
-        200,
-        50,
-        10,
-        200,
-        100,
-        20,
-        10,
-        5,
-        3,
-        10,
-        12,
-        3,
-        3,
-        2,
-        2,
-        0,
-        0,
-        0,
-        0,
-        0
-    };    
+    private int boxWidth = (slotSize * 3) + 20;
+    private int boxHeight = (slotSize * 4) + 20;
+    private int boxX = frameX + ((frameWidth - boxWidth) / 2);
+    private int boxY = frameY + ((frameHeight - boxHeight) / 2);
 
-    public Inventory() {
+    private int categoryWidth = boxWidth / 2;
+    private int categoryHeight = 20;
+    private int categoryX = boxX;
+    private int categoryY = boxHeight + boxY;
+    
+    private int slotXstart = boxX + ((boxWidth - (slotSize * 3)) / 2);
+    private int slotYstart = boxY + ((boxHeight - (slotSize * 4)) / 2);
+    private int slotX = slotXstart;
+    private int slotY = slotYstart;
 
+    // constructor
+    public Inventory() {}
+
+    // getter
+    public HashMap<Item, Integer> getMapOfItems() {
+        return mapOfItems;
     }
 
     public boolean isOpen() {
-        return state;
+        return isOpen;
     }
 
-    public void changeState() {
-        state = !state;
+    // setter
+    public void changeIsOpen() {
+        isOpen = !isOpen;
     }
 
-    public void resetState() {
-        state = false;
+    public void resetIsOpen() {
+        isOpen = false;
     }
 
     public void switchCategory() {
         isObject = !isObject;
     }
 
-    public String[] getItemList() {
-        return items;
-    }
-
-    // return item index on list
-    public int itemIndex(String item)
-    {
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].equals(item)) {
-                return i;
+    // NEW 
+    public void addItem(Item item) {
+        for (Item i : mapOfItems.keySet()) {
+            if (i.getName().equals(item.getName())) {
+                int count = mapOfItems.get(item);
+                mapOfItems.put(item, count + 1);
+                return;
             }
         }
-        // if item not found in list, return -1 to indicate failure
-        return -1;
+
+        mapOfItems.put(item, 1);
     }
 
-    // return item price
-    public int getItemPrice(String item)
-    {
-        return price[itemIndex(item)];
-    }
-    
-    // increase item's quantity by 1
-    public void addItem(String item)
-     {
-        quantity[itemIndex(item)] += 1;
-    } 
-    
-    // increase item's quantity with spesific quantity
-    public void addItem(String item, int quantity)
-    {
-        this.quantity[itemIndex(item)] += quantity;
-    }    
-
-    // reduce item's quantity by 1
-    public void reduceItem(String item)
-    {
-        this.quantity[itemIndex(item)] += 1;
-    } 
-    
-    // reduce item's quantity with spesific quantity
-    public void reduceItem(String item, int quantity)
-    {
-        this.quantity[itemIndex(item)] += quantity;
-    } 
-
-    // check if the sim owns spesific item
-    public boolean isItemOwned(String item)
-    {
-        return quantity[itemIndex(item)] > 0;
-    }
-
-    public void addOwnedObjects() {
-        for (int i = 0; i < 11; i++) {
-            if (isItemOwned(items[i])) {
-                ownedObjectsIndex.add(i);
+    public void removeItem(Item item) {
+        for (Item i : mapOfItems.keySet()) {
+            if (i.getName().equals(item.getName())) {
+                int count = mapOfItems.get(i);
+                mapOfItems.put(i, count - 1);
+                return;
             }
         }
+
+        mapOfItems.remove(item);
     }
 
-    public void addOwnedFoods() {
-        for (int i = 12; i < 24; i++) {
-            if (isItemOwned(items[i])) {
-                ownedFoodsIndex.add(i);
-            }
-        }
+    public HashMap<Item, Integer> getmapOfItems() {
+        return mapOfItems;
     }
 
-    public int frameX = 607;
-    public int frameY = 173;
-    public int frameWidth = 182;
-    public int frameHeight = 262;
-
-    public int boxWidth = (slotSize*3) + 20;
-    public int boxHeight = (slotSize*4) + 20;
-    public int boxX = frameX+((frameWidth-boxWidth)/2);
-    public int boxY = frameY+((frameHeight-boxHeight)/2);
-
-    public int categoryWidth = boxWidth/2;
-    public int categoryHeight = 20;
-    public int categoryX = boxX;
-    public int categoryY = boxHeight + boxY;
-
-    
-    public int slotXstart = boxX + ((boxWidth-(slotSize*3))/2);
-    public int slotYstart = boxY + ((boxHeight-(slotSize*4))/2);
-    public int slotX = slotXstart;
-    public int slotY = slotYstart;
-    public final int slotXnext = slotXstart;
-    public final int slotYnext = slotYstart;
-    
-    public void drawItem(Graphics2D g) {
-        int nextSlotX = slotX;
-        int nextSlotY = slotY;
-        int next, end;
-
-        if (isObject) {
-            next = 0; end = 11;
-        }
-
-        else {
-            next = 12; end = 24;
-        }
-
-        BufferedImage[] images = ImageLoader.loadItemsIcon();
-        for(int i = 0; i < 2; i++) {
-            for (int j = 0; j < 3; j++) {
-                    if (next < end) {
-                        if (isItemOwned(items[next])) {
-                            g.drawImage(images[next], nextSlotX, nextSlotY, images[next].getWidth(), images[next].getHeight(), null);
-                            if(quantity[next] > 1) {
-                                g.setColor(Color.WHITE);
-                                g.fillRect(nextSlotX+31, nextSlotY+31, 14, 14);
-
-                                g.setColor(Color.BLACK);
-                                Font font = new Font("Inter", Font.BOLD, 10);
-                                g.setFont(font);
-                                g.drawString(Integer.toString(quantity[next]), nextSlotX+35, nextSlotY+41);
-                            }
-                            
-                            if (nextSlotX == slotX+(2*slotSize)) {
-                                nextSlotX = slotX;
-                                nextSlotY += slotSize;
-                            }
-
-                            else { 
-                                nextSlotX += slotSize;
-                            } 
-                    }
-                    next++;
-                }
+    public void update() {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+            if (slotCol > 0) {
+                slotCol--;
             }
-        } 
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
+            if (slotRow < 3) {
+                slotRow++;
+            } 
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+            if (slotCol < 2) {
+                slotCol++;
+            }
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
+            if (slotRow > 0) {
+                slotRow--;
+            }
+        }
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_N)) {
+            switchCategory();
+        }
     }
 
     public void draw(Graphics2D g){
+        drawFrame(g);
 
+        drawCursor(g);
+        
+        drawItems(g);
+    }
+
+    private void drawItems(Graphics2D g)
+    {
+        int x = slotX, y = slotY; // Starting coordinates
+        int cols = 3, rows = 4; // Number of columns and rows
+        int i = 0;
+
+        for (Item item : mapOfItems.keySet()) {
+            //only for debugging
+            System.out.println(item.getName() + ": " + mapOfItems.get(item));
+
+            BufferedImage itemIcon = item.getIcon(); // Get the item image
+
+            g.drawImage(itemIcon, x, y, null); // Draw the image
+
+            if (mapOfItems.get(item) > 1) {
+                g.setColor(Color.WHITE);
+                g.fillRect(x + 31, y + 31, 14, 14);
+
+                g.setColor(Color.BLACK);
+                Font font = new Font("Inter", Font.BOLD, 10);
+                g.setFont(font);
+                g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+            }
+            
+            x += slotSize; // Move to the next column
+            if (i % cols == cols - 1) { // If we've filled up a row
+                x = slotX; // Reset to the first column
+                y += slotSize; // Move to the next row
+            }
+            i++;
+        }
+    }
+
+    private void drawCursor(Graphics2D g)
+    {
+        // Cursor
+        int cursorX = slotXstart + (slotSize * slotCol);
+        int cursorY = slotYstart + (slotSize * slotRow);
+        int cursorWidth = slotSize;
+        int cursorHeight = slotSize;
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        g.setColor(Color.WHITE);
+        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+    }
+
+    private void drawFrame(Graphics2D g)
+    {
         // Frame
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(frameX, frameY, frameWidth, frameHeight);
@@ -277,22 +192,15 @@ public class Inventory {
             g.setColor(Color.WHITE);
             Font font = new Font("Inter", Font.BOLD, 10);
             g.setFont(font);
-            g.drawString("Objects", categoryX+(categoryWidth/4), categoryY+(categoryHeight/2));
+            g.drawString("Objects", categoryX + (categoryWidth / 4), categoryY + (categoryHeight / 2));
         }
-
         else {
             // Selected category = foods
-            int categoryWidth = boxWidth/2;
-            int categoryHeight = 20;
-            int categoryX = boxX;
-            int categoryY = boxHeight + boxY + categoryWidth;
-            g.fillRect(categoryX, categoryY, categoryWidth, categoryHeight);
+            g.fillRect(categoryX + (categoryWidth + 1), categoryY, categoryWidth, categoryHeight);
             g.setColor(Color.WHITE);
             Font font = new Font("Inter", Font.BOLD, 10);
             g.setFont(font);
-            g.drawString("Foods", categoryX+categoryWidth, categoryY+(categoryHeight/2));
+            g.drawString("Foods", categoryX + (categoryWidth + 23), categoryY + (categoryHeight / 2));
         }
-
     }
 }
-

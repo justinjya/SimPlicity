@@ -3,13 +3,11 @@ package src.main.ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.world.World;
 import src.assets.ImageLoader;
-import src.entities.handlers.KeyHandler;
 import src.entities.items.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
@@ -18,6 +16,7 @@ public class UserInterface {
     // Atributes
     private World world;
     private Sim currentSim;
+    private Inventory inventory;
     
     private boolean viewingWorld;
     private boolean tabbed;
@@ -33,6 +32,7 @@ public class UserInterface {
     public UserInterface(World world, Sim sim) {
         this.world = world;
         this.currentSim = sim;
+        this.inventory = sim.getInventory();
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
@@ -77,8 +77,6 @@ public class UserInterface {
     }
 
     public void tab() {
-        Inventory inventory = currentSim.getInventory();
-
         if (!inventory.isOpen()) {
             this.tabbed = !this.tabbed;
             currentSim.changeIsBusyState();
@@ -96,7 +94,7 @@ public class UserInterface {
             tab();
         }
 
-        inventory.changeState();
+        inventory.changeIsOpen();
         currentSim.changeIsBusyState();
     }
 
@@ -106,30 +104,8 @@ public class UserInterface {
             SelectionBox.update(this);
         }
 
-        if (currentSim.getInventory().isOpen()) {
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                if (currentSim.getInventory().slotCol > 0) {
-                    currentSim.getInventory().slotCol--;
-                }
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
-                if (currentSim.getInventory().slotRow < 3) {
-                    currentSim.getInventory().slotRow++;
-                } 
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                if (currentSim.getInventory().slotCol < 2) {
-                    currentSim.getInventory().slotCol++;
-                }
-            }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
-                if (currentSim.getInventory().slotRow > 0) {
-                    currentSim.getInventory().slotRow--;
-                }
-            }
-            if (KeyHandler.isKeyPressed(KeyEvent.VK_N)) {
-                currentSim.getInventory().switchCategory();
-            }
+        if (inventory.isOpen()) {
+            inventory.update();
         }
     }
     
@@ -174,12 +150,14 @@ public class UserInterface {
         g.fillRect(11, 294, 182, 58); // Time remaining
         g.fillRect(607, 88, 182, 31); // House name
 
+        g.fillRect(607, 147, 182, 26); // Inventory
+
         drawText(g);
         drawAttributes(g);
         
-        if (currentSim.getInventory().isOpen()) {
-            currentSim.getInventory().draw(g);
-            // drawInventory(g);
+        // Draw currentSim's inventory
+        if (inventory.isOpen()) {
+            inventory.draw(g);
         }  
 
         // Draw tab boxes
@@ -200,6 +178,7 @@ public class UserInterface {
 
         g.setColor(Color.WHITE);
         g.drawString(currentSim.getCurrentHouse().getName(), 650, 108);
+        g.drawString("Inventory", 668, 165);
 
         drawAttributes(g);
 
@@ -287,24 +266,6 @@ public class UserInterface {
         else {
             g.drawString("" + value, offsetX - 5, 340 + (37 * offsetY));
         }
-    }
-
-    private void drawInventory(Graphics2D g) {
-        // currentSim.getInventory().draw(g);
-
-        // cursor
-        // int cursorX = currentSim.getInventory().slotXstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotCol);
-        // int cursorY = currentSim.getInventory().slotYstart + (currentSim.getInventory().slotSize * currentSim.getInventory().slotRow);
-        // int cursorWidth = currentSim.getInventory().slotSize;
-        // int cursorHeight = currentSim.getInventory().slotSize;
-
-        // g.setColor(Color.LIGHT_GRAY);
-        // g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
-        // currentSim.getInventory().drawItem(g);
-
-        // g.setColor(Color.WHITE);
-        // g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
     }
 
     // ONLY FOR DEBUGGING
