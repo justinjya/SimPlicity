@@ -19,12 +19,14 @@ public class ImageLoader {
         return scaledImage;
     }
 
-    public static BufferedImage readImage(String folder, String fileName, int width, int height) {
+    public static BufferedImage readImage(String folder, String fileName, int width, int height, boolean scaled) {
         BufferedImage image;
 
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + fileName + ".png"));
-            image = scaleImage(image, width, height);
+            if (scaled) {
+                image = scaleImage(image, width, height);
+            }
             return image;
         }
         catch (IOException e) {
@@ -33,11 +35,13 @@ public class ImageLoader {
         return null;
     }
 
-    public static BufferedImage readImage(String folder, String subfolder, String fileName, int width, int height) {
+    public static BufferedImage readImage(String folder, String subfolder, String fileName, int width, int height, boolean scaled) {
         BufferedImage image;
         try {
             image = ImageIO.read(new File("./src/assets/" + folder + "/" + subfolder + "/" + fileName + ".png"));
-            image = scaleImage(image, width, height);
+            if (scaled) {
+                image = scaleImage(image, width, height);
+            }
             return image;
         }
         catch (IOException e) {
@@ -58,35 +62,49 @@ public class ImageLoader {
         }
         return rotated;
     }
+
+    public static BufferedImage[] loadMainMenu() {
+        BufferedImage[] images = new BufferedImage[7];
+
+        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false);
+        images[1] = ImageLoader.readImage("mockup", "main menu", "title", 0, 0, false);
+        images[2] = ImageLoader.readImage("mockup", "main menu", "menu_button_bg", 0, 0, false);
+        images[3] = ImageLoader.readImage("mockup", "main menu", "start_button", 0, 0, false);
+        images[4] = ImageLoader.readImage("mockup", "main menu", "load_button", 0, 0, false);
+        images[5] = ImageLoader.readImage("mockup", "main menu", "help_button", 0, 0, false);
+        images[6] = ImageLoader.readImage("mockup", "main menu", "exit_button", 0, 0, false);
+
+        return images;
+    }
     
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
 
-        images[0] = readImage("sim", "idle_up", 1, 1);
-        images[1] = readImage("sim", "idle_right", 1, 1);
-        images[2] = readImage("sim", "idle_down", 1, 1);
-        images[3] = readImage("sim", "idle_left", 1, 1);
-        images[4] = readImage("sim", "walk_up_1", 1, 1);
-        images[5] = readImage("sim", "walk_up_2", 1, 1);
-        images[6] = readImage("sim", "walk_right_1", 1, 1);
-        images[7] = readImage("sim", "walk_right_2", 1, 1);
-        images[8] = readImage("sim", "walk_down_1", 1, 1);
-        images[9] = readImage("sim", "walk_down_2", 1, 1);
-        images[10] = readImage("sim", "walk_left_1", 1, 1);
-        images[11] = readImage("sim", "walk_left_2", 1, 1);
+        images[0] = readImage("sim", "idle_up", 1, 1, true);
+        images[1] = readImage("sim", "idle_right", 1, 1, true);
+        images[2] = readImage("sim", "idle_down", 1, 1, true);
+        images[3] = readImage("sim", "idle_left", 1, 1, true);
+        images[4] = readImage("sim", "walk_up_1", 1, 1, true);
+        images[5] = readImage("sim", "walk_up_2", 1, 1, true);
+        images[6] = readImage("sim", "walk_right_1", 1, 1, true);
+        images[7] = readImage("sim", "walk_right_2", 1, 1, true);
+        images[8] = readImage("sim", "walk_down_1", 1, 1, true);
+        images[9] = readImage("sim", "walk_down_2", 1, 1, true);
+        images[10] = readImage("sim", "walk_left_1", 1, 1, true);
+        images[11] = readImage("sim", "walk_left_2", 1, 1, true);
         return images;
     }
 
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
 
-        images[0] = readImage("beds", "bed_idle", 4, 1);
-        images[1] = readImage("beds", "bed_occupied", 4, 1);
+        images[0] = readImage("beds", "bed_idle", 4, 1, true);
+        images[1] = readImage("beds", "bed_occupied", 4, 1, true);
         return images;
     }
 
     public static BufferedImage loadWood() {
-        BufferedImage image = readImage("tiles", "wood", 1, 1);
+        BufferedImage image = readImage("tiles", "wood", 1, 1, true);
         return image;
     }
 
@@ -159,7 +177,7 @@ public class ImageLoader {
     public static BufferedImage[] loadDoor() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("tiles", "door", 1, 1);
+        images[0] = readImage("tiles", "door", 1, 1, true);
         images[1] = rotate90Clockwise(images[0]);
         images[2] = rotate90Clockwise(images[1]);
         images[3] = rotate90Clockwise(images[2]);
@@ -170,16 +188,16 @@ public class ImageLoader {
     public static BufferedImage[] loadWorld() {
         BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = readImage("tiles", "grass", 1, 1);
-        images[1] = readImage("tiles", "house", "house", 1, 1);
-        images[2] = readImage("tiles", "cursor", 1, 1);
-        images[3] = readImage("tiles", "house", "unadded_house", 1, 1);
-        images[4] = readImage("tiles", "house", "selected_house", 1, 1);
-        images[5] = readImage("tiles", "house", "selected_house_occupied", 1, 1);
-        images[6] = readImage("tiles", "quarter_arrow", "up", 1, 1);
-        images[7] = readImage("tiles", "quarter_arrow", "left", 1, 1);
-        images[8] = readImage("tiles", "quarter_arrow", "down", 1, 1);
-        images[9] = readImage("tiles", "quarter_arrow", "right", 1, 1);
+        images[0] = readImage("tiles", "grass", 1, 1, false);
+        images[1] = readImage("tiles", "house", "house", 1, 1, false);
+        images[2] = readImage("tiles", "cursor", 1, 1, false);
+        images[3] = readImage("tiles", "house", "unadded_house", 1, 1, false);
+        images[4] = readImage("tiles", "house", "selected_house", 1, 1, false);
+        images[5] = readImage("tiles", "house", "selected_house_occupied", 1, 1, false);
+        images[6] = readImage("tiles", "quarter_arrow", "up", 1, 1, false);
+        images[7] = readImage("tiles", "quarter_arrow", "left", 1, 1, false);
+        images[8] = readImage("tiles", "quarter_arrow", "down", 1, 1, false);
+        images[9] = readImage("tiles", "quarter_arrow", "right", 1, 1, false);
         
         return images;
     }
@@ -187,7 +205,7 @@ public class ImageLoader {
     public static BufferedImage[] loadArrows() {
         BufferedImage[] images = new BufferedImage[4];
 
-        images[0] = readImage("tiles", "arrow", 1, 1);
+        images[0] = readImage("tiles", "arrow", 1, 1, false);
         images[1] = rotate90Clockwise(images[0]);
         images[2] = rotate90Clockwise(images[1]);
         images[3] = rotate90Clockwise(images[2]);
@@ -212,7 +230,7 @@ public class ImageLoader {
         Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtHsb);
         Color.RGBtoHSB(newHairColor.getRed(), newHairColor.getGreen(), newHairColor.getBlue(), newHairHsb);
     
-        image = readImage("sim", "sim_down", 1, 1);
+        image = readImage("sim", "sim_down", 1, 1, true);
     
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {

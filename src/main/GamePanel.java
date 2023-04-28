@@ -4,12 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import src.assets.ImageLoader;
-import src.entities.*;
 import src.entities.handlers.KeyHandler;
-import src.gamestates.Gamestate;
-import src.world.Room;
-import src.Menu.MenuButton;
+import src.main.ui.ActiveActionsUserInterface;
+import src.assets.ImageLoader;
+import src.main.ui.*;
+import src.entities.*;
 import src.world.World;
 
 // ini notes aja
@@ -18,70 +17,51 @@ import src.world.World;
 // y + 283 pas dibawah 6x6 grid
 
 public class GamePanel extends JPanel implements Runnable {
+    private String gameState;
     private GameTime time;
+
     private World world;
-    private Sim currentSim;
-    private Sim sim, sim2;
-    private Room room;
+    private Sim sim;
     private UserInterface ui;
 
     // testing sim color
     private float hue = 0.0f;
     private float sat = 1.0f;
     private float bri = 0.92f;
-    private MenuButton menu;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
+
+        gameState = "Starting a new game";
         
         // Create game time
         time = new GameTime(1, 720, 720);
 
-        // create a new world
-        world = new World(time);
-
-        // Create room
-        room = new Room("First Room", time);
-        
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y, room, null);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
 
-        sim2 = new Sim("Nitsuj", Consts.CENTER_X, Consts.CENTER_Y, room, null);
-        sim2.changeIsBusyState();
-
-        currentSim = sim;
+        // create a new world
+        world = new World(sim, this, time);
         
-        // Create user interface
-        ui = new UserInterface(currentSim, time);
+        // // Create user interface
+        ui = new UserInterface(world, sim, time);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(currentSim, ui);
+                
+                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
 
-                // testing sim color
+                 // testing sim color
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
                 //     hue += 1 / 180.0f;
                 // }
                 // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
                 //     hue -= 1 / 180.0f;
                 // }
-
-                // testing adding sand switching sim
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
-                    currentSim.changeIsBusyState();
-                    if (currentSim == sim) {
-                        currentSim = sim2;
-                    }
-                    else {
-                        currentSim = sim;
-                    }
-                    currentSim.changeIsBusyState();
-                    ui.setCurrentSim(currentSim);
-                }
             }
             
             @Override
@@ -128,66 +108,61 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    private void update() {
-        /* 
-        switch (Gamestate.state) {
-            case MENU:
-                
-                break;
-            
-            case PLAYING:
-                if (!ui.isViewingWorld()) {
-                    currentSim.update();
-        
-                    currentSim.getCurrentRoom().update();
-                }
-                else {
-                    world.update();
-                }
-                
-                ui.update();
-
-            default:
-                break;
-        } */
-        if (!ui.isViewingWorld()) {
-            currentSim.update();
-
-            currentSim.getCurrentRoom().update();
-        }
-        else {
-            world.update();
-        }
-        
-        ui.update();
+    public boolean isCurrentState(String state) {
+        return gameState.equals(state); 
     }
 
-    public void paintComponent(Graphics g)
-    {
+    public void setState(String state) {
+        gameState = state;
+    }
+
+    private void update() {
+        MainMenu.update();
+        
+        // if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+        //     ui.update();
+
+        //     if (!ui.isViewingWorld()) {
+        //         ui.getCurrentSim().update();
+
+        //         ui.getCurrentSim().getCurrentRoom().update();
+        //     }
+        //     else {
+        //         world.update(this, ui);
+        //     }
+        // }
+        // else if (isCurrentState("Viewing active actions")) {
+        //     ActiveActionsUserInterface.update(sim, ui, this);
+        // }
+        
+        // ui.update();
+    }
+    
+    public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
+        MainMenu.draw(g2);
 
-        if (!ui.isViewingWorld()) {
-            // Draw room
-            currentSim.getCurrentRoom().draw(g2);
-            for (Sim s : currentSim.getCurrentRoom().getListOfSims()) {
-                // if (s == currentSim) continue;
-                // s.drawSimStanding(g2);
-                s.draw(g2);
-            }
-
-            // Draw sim
-            currentSim.draw(g2);
-        
-            // Draw UI
-            ui.draw(g2);
-        }
-        else {
-            // Draw the world
-            world.draw(g2);
-        }
+        // if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+        //     if (!ui.isViewingWorld()) {
+        //         // Draw room and sim
+        //         try {
+        //             ui.getCurrentSim().getCurrentRoom().draw(g2);
+        //         }
+        //         catch (NullPointerException e) { }
+        //     }
+        //     else {
+        //         // Draw the world
+        //         world.draw(g2);
+        //     }
+    
+        //     ui.draw(g2);
+        // }
+        // else if (isCurrentState("Viewing active actions")) {
+        //     ActiveActionsUserInterface.draw(g2);
+        // }
 
         // testing sim color
         // testingSimColor(g2);
