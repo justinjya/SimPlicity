@@ -63,7 +63,7 @@ public class GameTime implements Runnable {
     }
 
     public void setDecrements(int decrements) {
-        this.decrements = decrements / Consts.ONE_SECOND;
+        this.decrements = decrements / Consts.THREAD_ONE_SECOND;
     }
     
     // OTHERS

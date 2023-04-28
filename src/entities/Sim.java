@@ -19,6 +19,7 @@ public class Sim extends Entity{
     private int money;
     private String status;
     private boolean isBusy;
+
     private Room currentRoom;
     private House currentHouse;
     
@@ -30,7 +31,7 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y, Room currentRoom, House currentHouse) {
+    public Sim(String name, int x, int y) {
         // Atributes
         super (
             x,
@@ -45,12 +46,7 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = false;
-        this.currentRoom = currentRoom;
-
-        // Place the sim inside of the current room
-        currentRoom.addSim(this);
-        this.currentHouse = currentHouse;
+        this.isBusy = true;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -133,8 +129,15 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
+    public void setCurrentHouse(House house) {
+        this.currentHouse = house;
+    }
+
     public void setCurrentRoom(Room room) {
-        this.currentRoom.removeSim(this);
+        if (currentRoom != null) {
+            this.currentRoom.removeSim(this);
+        }
+        
         this.currentRoom = room;
         this.currentRoom.addSim(this);
         collisionHandler = new CollisionHandler(this, room);
@@ -150,6 +153,16 @@ public class Sim extends Entity{
     }
 
     // OTHERS
+    public void update() {
+        if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
+            return;
+        }
+        
+        if (isMoving() && !isBusy) {
+            move(collisionHandler, interactionHandler);
+        }
+    }
+
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();
@@ -162,17 +175,11 @@ public class Sim extends Entity{
         }
     }
 
-    public void update() {
-        if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
-            return;
-        }
-        
-        if (isMoving() && !isBusy) {
-            move(collisionHandler, interactionHandler);
-        }
+    // ONLY FOR DEBUGGING
+    public void drawSimStanding(Graphics2D g) {
+        g.drawImage(images[2], getX(), getY(), null);
     }
 
-    // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {
         // Draw the sim collision area as a red rectangle
         g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
