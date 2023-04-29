@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.main.GameTime;
 import src.world.Room;
 import src.world.House;
 
@@ -49,7 +50,7 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = true;
+        this.isBusy = false;
         this.profession = new Profession(); 
         this.inventory = new Inventory();
 
@@ -179,7 +180,7 @@ public class Sim extends Entity{
             move(collisionHandler, interactionHandler);
         }
     }
-
+    
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();

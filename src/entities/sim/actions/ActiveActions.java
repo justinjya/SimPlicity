@@ -12,7 +12,7 @@ import src.entities.sim.Inventory;
 import src.items.Item;
 
 public class ActiveActions {
-    public void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
+    public static void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
         // Thread working = new Thread() {
         //     @Override
         //     public void run() {
@@ -85,9 +85,7 @@ public class ActiveActions {
         // working.start();
     }
 
-    
-
-    public void exercise (Sim sim, GameTime time, int duration){
+    public static void exercise (Sim sim, GameTime time, int duration){
         Thread exercising = new Thread() {
             @Override
             public void run() {
@@ -202,9 +200,9 @@ public class ActiveActions {
                     Thread.sleep(10*1000);
                     sim.setMood(sim.getMood() + 10);
                     sim.setHunger(sim.getHunger() - 10);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                catch (InterruptedException e) {}
+                sim.resetStatus();
             }
         };
         karaoke.start();
@@ -248,5 +246,62 @@ public class ActiveActions {
 
     public static void visitAnotherSim(UserInterface ui) {
         ui.changeIsViewingWorldState();
+    }
+
+    public void shower (Sim sim, GameTime time){
+        Thread showering = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("Showering");
+                    // count the time
+                    time.startDecrementTimeRemaining(10000);
+                    Thread.sleep(10000);
+                    sim.setHealth(sim.getHealth() + 10); // increase sim's health
+                    sim.setMood(sim.getMood() + 15); // increase sim's mood
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        showering.start();
+    }
+
+    public void feedingfish (Sim sim, GameTime time){
+        Thread feedingfish = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("Feeding Fish");
+                    // count the time
+                    time.startDecrementTimeRemaining(5000);
+                    Thread.sleep(5000);
+                    sim.setMood(sim.getMood() + 5); // increase sim's mood
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        feedingfish.start();
+    }
+
+    public void kickTheBin (Sim sim, GameTime time){
+        Thread kickthebin = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("Kicking The Bin");
+                    // count the time
+                    time.startDecrementTimeRemaining(2000);
+                    Thread.sleep(2000);
+                    sim.setHealth(sim.getHealth() - 2); // decrease sim's health
+                    sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
+                    sim.setMood(sim.getMood() + 5); // increase sim's mood
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        kickthebin.start();
     }
 }

@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
+        sim = new Sim("Justin", 3, 3);
 
         // create a new world
         world = new World(sim, this, time);
@@ -122,7 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update(sim, ui, this);
+            ActiveActionsUserInterface.update(sim, ui, this, time);
         }
         
     }
@@ -136,14 +136,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
-                // Draw room and sim
                 try {
                     ui.getCurrentSim().getCurrentRoom().draw(g2);
                 }
                 catch (NullPointerException e) { }
             }
             else {
-                // Draw the world
                 world.draw(g2);
             }
     

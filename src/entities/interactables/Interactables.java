@@ -70,7 +70,7 @@ public abstract class Interactables extends Entity implements Item {
         this.bounds.setLocation(getX(), getY());
     }
 
-    // OTHERS
+    // OTHER
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }

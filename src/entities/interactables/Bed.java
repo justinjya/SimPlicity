@@ -61,8 +61,8 @@ public class Bed extends Interactables{
             names[imageIndex],
             "sleep",
             imageIndex,
-            Consts.PLAY_ARENA_X_LEFT+ (Consts.SCALED_TILE * 3),
-            Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * 3),
+            0,
+            3,
             width[imageIndex],
             height[imageIndex]
         );
@@ -77,8 +77,8 @@ public class Bed extends Interactables{
             names[1],
             "sleep",
             1,
-            (Consts.CENTER_X / 2) + 76,
-            Consts.CENTER_Y + 15,
+            0,
+            3,
             width[1],
             height[1]
         );
@@ -95,6 +95,16 @@ public class Bed extends Interactables{
         return price;
     }
 
+    @Override
+    public void changeOccupiedState() {
+        if (!isOccupied()) {
+            setImageIndex(getImageIndex() + 3);
+        }
+        else {
+            setImageIndex(getImageIndex() - 3);
+        }
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
@@ -104,18 +114,6 @@ public class Bed extends Interactables{
     @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
-    }
-
-    @Override
-    public void changeOccupiedState() {
-        if (!isOccupied()) {
-            changeOccupiedState();
-            setImageIndex(getImageIndex() + 3);
-        }
-        else {
-            changeOccupiedState();
-            setImageIndex(getImageIndex() - 3);
-        }
     }
 
     @Override
