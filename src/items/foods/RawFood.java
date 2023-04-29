@@ -6,6 +6,7 @@ import src.main.GameTime;
 import src.items.Item;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.UpgradeActions;
+import src.entities.sim.Inventory;;
 
 public class RawFood implements Item{
     // Types of raw food
@@ -76,7 +77,7 @@ public class RawFood implements Item{
         return images[imageIndex];
     }
 
-    public void buy(Sim sim, GameTime time) {
-        UpgradeActions.buyRawFood(this, sim, time);
+    public void buy(RawFood rawfood, Inventory inventory, Sim sim, GameTime time) { // ini ntar di implementasinya rawfood diisi this (refer to the currrent rawfood itself)
+        UpgradeActions.buyRawFood(inventory, rawfood, sim, time);
     }
 }

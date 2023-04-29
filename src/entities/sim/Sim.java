@@ -23,7 +23,7 @@ public class Sim extends Entity{
     private boolean isBusy;
     private Room currentRoom;
     private House currentHouse;
-    private int professionId;
+    private Profession profession;
     private int durationOfWork;
     private int durationofWork1;
     private boolean hasChangedProfession;
@@ -39,7 +39,7 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y, Room currentRoom, House currentHouse, int professionId) {
+    public Sim(String name, int x, int y, Room currentRoom, House currentHouse) {
         // Atributes
         super (
             x,
@@ -56,7 +56,7 @@ public class Sim extends Entity{
         this.status = "Idle";
         this.isBusy = false;
         this.currentRoom = currentRoom;
-        this.professionId = professionId;
+        this.profession = new Profession();
         this.durationOfWork = 0;
         this.durationofWork1 = 0;
         this.hasChangedProfession = false;
@@ -124,8 +124,8 @@ public class Sim extends Entity{
         return isBusy;
     }
 
-    public int getProfessionId() {
-        return professionId;
+    public Profession getProfession() {
+        return profession;
     }
 
     public int getDurationOfWork() {
@@ -200,6 +200,10 @@ public class Sim extends Entity{
         durationofWork1 = duration;
     }
 
+    public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
+
     public void setChangeProfessionTime(GameTime time) {
         changeProfessionTime = time;
     }
@@ -209,36 +213,85 @@ public class Sim extends Entity{
     }
 
     // OTHERS
-    public void changeProfessionId(int professionId, GameTime time) {
+    public void changeProfession(Profession profession, GameTime time) {
         if (durationOfWork >= 720) {
-            if (professionId == 1) {
-                if(getMoney() >= 1/2 * 15) {
-                    this.professionId = professionId;
+            if (profession.getName().equals("Clown")) {
+                int changeProfessionCharge = 1/2 * 15;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
                 }
             }
-            else if (professionId == 2) {
-                if(getMoney() >= 1/2 * 30) {
-                    this.professionId = professionId;
+            else if (profession.getName().equals("Chef")) {
+                int changeProfessionCharge = 1/2 * 30;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
                 }
             }
-            else if (professionId == 3) {
-                if(getMoney() >= 1/2 * 35) {
-                    this.professionId = professionId;
+            else if (profession.getName().equals("Police")) {
+                int changeProfessionCharge = 1/2 * 35;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
                 }
             }
-            else if (professionId == 4) {
-                if(getMoney() >= 1/2 * 45) {
-                    this.professionId = professionId;
+            else if (profession.getName().equals("Programmer")) {
+                int changeProfessionCharge = 1/2 * 45;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
                 }
             }
-            else if (professionId == 5) {
-                if(getMoney() >= 1/2 * 50) {
-                    this.professionId = professionId;
+            else if (profession.getName().equals("Doctor")) {
+                int changeProfessionCharge = 1/2 * 50;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
                 }
             }
+            else if (profession.getName().equals("Barista")) {
+                int changeProfessionCharge = 1/2 * 20;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
+                }
+            }
+            else if (profession.getName().equals("Model")) {
+                int changeProfessionCharge = 1/2 * 45;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
+                }
+            }
+            else if (profession.getName().equals("Dentist")) {
+                int changeProfessionCharge = 1/2 * 40;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
+                }
+            }
+            else if (profession.getName().equals("Security")) {
+                int changeProfessionCharge = 1/2 * 15;
+                if(getMoney() >= changeProfessionCharge) {
+                    this.profession = profession;
+                    setMoney(getMoney() - changeProfessionCharge);
+
+                }
+            }
+            setProfession(profession);
+            hasChangedProfession = true;
+            setChangeProfessionTime(time);
         }
-        hasChangedProfession = true;
-        setChangeProfessionTime(time);
+        
     }
 
     
