@@ -55,10 +55,10 @@ public class Inventory {
         addItem(new Bed(0));
         addItem(new Bed(1));
         addItem(new Bed(2));
-        addItem(new RawFood(0));
-        addItem(new RawFood(2));
+        // addItem(new RawFood(0));
+        // addItem(new RawFood(2));
         addItem(new Bed(2));
-        addItem(new RawFood(0));
+        // addItem(new RawFood(0));
     }
 
     // getter
