@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
 
@@ -42,7 +43,13 @@ public class Inventory {
     private int slotY = slotYstart;
 
     // constructor
-    public Inventory() {}
+    public Inventory() {
+        // ONLY FOR DEBUGGING
+        addItem(new Bed(0));
+        addItem(new Bed(1));
+        addItem(new Bed(2));
+        addItem(new Bed(0));
+    }
 
     // getter
     public HashMap<Item, Integer> getMapOfItems()
@@ -77,8 +84,8 @@ public class Inventory {
         {
             if (i.getName().equals(item.getName()))
             {
-                int count = mapOfItems.get(item);
-                mapOfItems.put(item, count + 1);
+                int count = mapOfItems.get(i);
+                mapOfItems.put(i, count + 1);
                 return;
             }
         }
