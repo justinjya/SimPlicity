@@ -11,7 +11,7 @@ import src.main.ui.ActiveActionsUserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {
-    // Atributes
+    // Attributes
     private Room leadsIntoRoom;
 
     // Images of the door
@@ -115,6 +115,7 @@ public class Door extends Interactables {
         return images[getImageIndex()];
     }
     
+    // TO - DO !!! : Figure out working and exercise
     @Override
     public void interact(Sim sim, GameTime time) {
         if (leadsIntoRoom == null) {

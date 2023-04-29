@@ -3,7 +3,7 @@ package src.world;
 import src.entities.sim.Sim;
 
 public class House {
-    // Atributes
+    // Attributes
     private String name;
     private Sim owner;
     private Room roomWhenEntered;
@@ -13,7 +13,7 @@ public class House {
     private int y;
 
     public House(int x, int y, World world, Sim sim, Room room) {
-        // Atributes
+        // Attributes
         this.name = sim.getName() + "'s House";
         this.owner = sim;
         this.roomWhenEntered = room;

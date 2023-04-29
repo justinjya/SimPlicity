@@ -14,7 +14,7 @@ import src.main.GameTime;
 import src.main.ui.UserInterface;
 
 public class World {
-    // Atributes
+    // Attributes
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
@@ -41,7 +41,7 @@ public class World {
 
     // Constructor 
     public World(Sim sim, GamePanel gp, GameTime time) {
-        // Atributes
+        // Attributes
         listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
 
@@ -212,7 +212,7 @@ public class World {
         Font font;
         g.setColor(Color.WHITE);
 
-        font = new Font("Arial", Font.PLAIN, 9);
+        font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
 

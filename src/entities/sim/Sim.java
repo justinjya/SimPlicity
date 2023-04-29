@@ -8,26 +8,26 @@ import src.assets.ImageLoader;
 import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
-import src.main.GameTime;
 import src.world.Room;
 import src.world.House;
 
 public class Sim extends Entity{
-    // Atributes
+    // Attributes
     private String name;
     private int health;
     private int hunger;
     private int mood;
     private int money;
-    private String status;
-    private boolean isBusy;
-
-    private Room currentRoom;
-    private House currentHouse;
     private Profession profession;
     private Inventory inventory;
-    
+
+    // Supporting Attributes
+    private Room currentRoom;
+    private House currentHouse;
+    private String status;
+    private boolean isBusy;
     private int durationWorked;
+    
 
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -38,7 +38,7 @@ public class Sim extends Entity{
 
     // CONSTRUCTOR
     public Sim(String name, int x, int y) {
-        // Atributes
+        // Attributes
         super (
             x,
             y,

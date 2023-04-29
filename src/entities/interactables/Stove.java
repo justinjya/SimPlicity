@@ -29,6 +29,7 @@ public class Stove extends Interactables{
         100,
         200
     };
+    
     // Images of stove
     BufferedImage[] images = new BufferedImage[4]; // buat kompor gas dan listrik (pas idle sama occupied)
 

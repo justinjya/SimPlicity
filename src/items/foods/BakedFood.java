@@ -29,7 +29,7 @@ public class BakedFood extends Food implements Item{
         {"Kentang", "Sapi"}
     };
 
-    // Atributes
+    // Attributes
     private String[] ingredient;
     private int imageIndex;
 

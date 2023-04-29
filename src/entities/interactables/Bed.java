@@ -30,7 +30,7 @@ public class Bed extends Interactables{
         150
     };
 
-    // Atributes
+    // Attributes
     private int price;
     private int duration = Consts.ONE_SECOND * 10; // Change this to * 4 once the project is done
 

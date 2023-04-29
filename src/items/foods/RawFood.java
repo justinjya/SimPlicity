@@ -38,7 +38,7 @@ public class RawFood extends Food implements Item{
         1
     };
 
-    // Atributes
+    // Attributes
     private int price;
     private int imageIndex;
 

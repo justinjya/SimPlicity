@@ -12,7 +12,6 @@ public class Shower extends Interactables {
     // Images of the shower
     private BufferedImage image;
 
-
     // CONSTRUCTOR
     public Shower(int x, int y) {
         super (

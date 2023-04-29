@@ -12,7 +12,7 @@ import src.entities.sim.Sim;
 import src.entities.interactables.*;
 
 public class Room {
-    // Atributes
+    // Attributes
     private String name;
     private ArrayList<Interactables> listOfObjects;
     private ArrayList<Sim> listOfSims;
@@ -32,7 +32,7 @@ public class Room {
 
     // CONSTRUCTOR
     public Room(String name) {
-        // Atributes
+        // Attributes
         this.name = name;
         this.listOfObjects = new ArrayList<>(); 
         this.listOfSims = new ArrayList<>();

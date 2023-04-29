@@ -16,9 +16,11 @@ import src.items.foods.Food;
 import src.items.foods.RawFood;
 import src.main.GameTime;
 import src.main.ui.UserInterface;
+import src.world.House;
 import src.world.Room;
 
 public class Inventory {
+    // attributes
     private HashMap<Item, Integer> mapOfItems = new HashMap<>();
     private HashMap<Item, Integer> itemsToShow = new HashMap<>();
     private ArrayList<String> itemNames = new ArrayList<>();
@@ -116,18 +118,25 @@ public class Inventory {
             Sim sim = ui.getCurrentSim();
 
             if (item instanceof Interactables) {
+                House currentHouse = sim.getCurrentHouse();
+                Sim currentHouseOwner = currentHouse.getOwner();
+
+                if (!sim.getName().equals(currentHouseOwner.getName())){
+                    return;
+                }
+
                 Room currentRoom = sim.getCurrentRoom();
                 Interactables newObject = (Interactables) item;
 
                 changeIsOpen();
                 currentRoom.addObject(newObject);
-                
                 sim.changeIsBusyState();
             }
 
             if (item instanceof Food) {
                 Food food = (Food) item;
                 GameTime time = ui.getWorld().getTime();
+
                 food.eat(sim, time);
             }
             

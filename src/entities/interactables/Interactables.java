@@ -11,13 +11,12 @@ import src.items.Item;
 import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {
-    // Atributes
+    // Attributes
     private String name;
     private String interaction;
     private int imageIndex;
     protected boolean occupied;
     private Rectangle bounds;
-
 
     // CONSTRUCTOR
     public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height) {

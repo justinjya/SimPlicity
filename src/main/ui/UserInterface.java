@@ -13,11 +13,10 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 
 public class UserInterface {
-    // Atributes
+    // Attributes
     private World world;
     private Sim currentSim;
     private Inventory inventory;
-    
     private boolean viewingWorld;
     private boolean tabbed;
 
@@ -210,14 +209,6 @@ public class UserInterface {
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
             g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
-            
-            // if (currentSim.getInteractionHandler().isObjectInRange()) {
-            //     Interactables object = currentSim.getInteractionHandler().getInteractableObject();
-            //     if (object != null) {
-            //         g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
-            //         g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
-            //     }
-            // }
         }
     }
 
