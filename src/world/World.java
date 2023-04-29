@@ -119,7 +119,7 @@ public class World {
 
         Sim newSim = getSim(listOfSim.size() - 1);
         Room newRoom = new Room("First Room");
-        newRoom.getListOfObjects().add(new Door(null, gp));
+        newRoom.getListOfObjects().add(new Door(null));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);

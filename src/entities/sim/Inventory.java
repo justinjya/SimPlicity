@@ -9,7 +9,7 @@ import java.awt.Font;
 
 import src.entities.handlers.KeyHandler;
 import src.entities.interactables.Interactables;
-import src.items.Item;
+import src.items.interactables.Item;
 
 public class Inventory {
     private HashMap<Item, Integer> mapOfItems = new HashMap<>();

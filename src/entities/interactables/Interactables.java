@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 
 import src.entities.Entity;
 import src.entities.sim.Sim;
-import src.items.Item;
+import src.items.interactables.Item;
 import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {
@@ -70,14 +70,13 @@ public abstract class Interactables extends Entity implements Item {
         this.bounds.setLocation(getX(), getY());
     }
 
-    // OTHERS
+    // OTHER
     public <T extends Interactables> void draw(Graphics2D g, T interactables) {
         g.drawImage(interactables.getImage(), interactables.getX(), interactables.getY(), null);
     }
     
     public abstract BufferedImage getIcon();
     public abstract BufferedImage getImage();
-    public abstract void changeOccupied(Sim sim);
     public abstract void interact(Sim sim, GameTime time);
 
     // ONLY FOR DEBUGGING

@@ -13,41 +13,22 @@ import src.world.Room;
 public class Door extends Interactables {
     // Atributes
     private Room leadsIntoRoom;
-    private GamePanel gp;
 
     // Images of the door
     private BufferedImage[] images;
 
     // CONSTRUCTOR
-    public Door(Room room, GamePanel gp) {
-        super (
-            "Door",
-            "visit another room",
-            2,
-            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
-            Consts.PLAY_ARENA_Y_DOWN,
-            1,
-            1
-        );
-
-        this.gp = gp;
-        this.leadsIntoRoom = room;
-        this.images = ImageLoader.loadDoor();
-
-        updateBounds();
-    }
-
     public Door(Room room) {
         super (
             "Door",
             "visit another room",
             2,
-            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
-            Consts.PLAY_ARENA_Y_DOWN,
+            4,
+            5,
             1,
             1
         );
-        
+
         this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
 
@@ -129,20 +110,15 @@ public class Door extends Interactables {
         return images[getImageIndex()];
     }
 
-
     @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-    }
-
-    @Override
     public void interact(Sim sim, GameTime time) {
         if (leadsIntoRoom == null) {
-            ActiveActionsUserInterface.showActiveActions(gp);
+            // ActiveActionsUserInterface.showActiveActions(gp);
             return;
         }
 
@@ -218,4 +194,3 @@ public class Door extends Interactables {
         }
     }
 }
-

@@ -1,4 +1,3 @@
-
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
@@ -62,8 +61,8 @@ public class Bed extends Interactables{
             names[imageIndex],
             "sleep",
             imageIndex,
-            Consts.PLAY_ARENA_X_LEFT+ (Consts.SCALED_TILE * 3),
-            Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * 3),
+            0,
+            3,
             width[imageIndex],
             height[imageIndex]
         );
@@ -78,8 +77,8 @@ public class Bed extends Interactables{
             names[1],
             "sleep",
             1,
-            (Consts.CENTER_X / 2) + 76,
-            Consts.CENTER_Y + 15,
+            0,
+            3,
             width[1],
             height[1]
         );
@@ -96,6 +95,18 @@ public class Bed extends Interactables{
         return price;
     }
 
+    @Override
+    public void changeOccupiedState() {
+        if (!isOccupied()) {
+            changeOccupiedState();
+            setImageIndex(getImageIndex() + 3);
+        }
+        else {
+            changeOccupiedState();
+            setImageIndex(getImageIndex() - 3);
+        }
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
@@ -108,30 +119,18 @@ public class Bed extends Interactables{
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-        if (!isOccupied()) {
-            changeOccupiedState();
-            setImageIndex(getImageIndex() + 3);
-        }
-        else {
-            changeOccupiedState();
-            setImageIndex(getImageIndex() - 3);
-        }
-    }
-
-    @Override
     public void interact(Sim sim, GameTime time) {
         Thread interacting = new Thread() {
             @Override
             public void run() {
                 try {
-                    changeOccupied(sim);
+                    changeOccupiedState();
                     time.startDecrementTimeRemaining(duration);
                     sim.setStatus("Sleeping");
 
                     Thread.sleep(duration);
                     
-                    changeOccupied(sim);
+                    changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() + 30);
                     sim.setMood(sim.getMood() + 20);
