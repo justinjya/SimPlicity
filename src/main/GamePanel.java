@@ -5,11 +5,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.assets.ImageLoader;
-import src.main.ui.*;
-import src.entities.*;
-import src.world.Room;
 import src.world.World;
 
 // ini notes aja
@@ -33,23 +31,27 @@ public class GamePanel extends JPanel implements Runnable {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
 
-        gameState = "Main menu";
+        gameState = "Starting a new game";
+        
+        // Create game time
+        time = new GameTime(1, 720, 720);
+
+        // Create sim
+        sim = new Sim("Justin", 3, 3);
+
+        // create a new world
+        world = new World(sim, this, time);
+        
+        // // Create user interface
+        ui = new UserInterface(world, sim);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-
-                KeyHandler.keyBinds(sim, world, ui);
-
-                // testing sim color
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                //     hue += 1 / 180.0f;
-                // }
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                //     hue -= 1 / 180.0f;
-                // }
+                
+                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
             }
             
             @Override
@@ -121,7 +123,16 @@ public class GamePanel extends JPanel implements Runnable {
         //     ui.update();
         // }
 
-        // if (isCurrentState("Viewing active actions")) ActiveActionsUserInterface.update(sim, ui, this);
+                ui.getCurrentSim().getCurrentRoom().update();
+            }
+            else {
+                world.update(this, ui);
+            }
+        }
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.update(sim, ui, this, time);
+        }
+        
     }
     
     public void paintComponent(Graphics g) {
@@ -130,22 +141,23 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-        if (isCurrentState("Main menu")) MainMenu.draw(g2);
 
-        // if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
-        //     Sim currentSim = ui.getCurrentSim();
-        //     Room currentRoom = currentSim.getCurrentRoom();
-
-        //     if (!ui.isViewingWorld()) {
-        //         currentRoom.draw(g2);
-        //     }
-        //     else {
-        //         world.draw(g2);
-        //     }
-        //     ui.draw(g2);
-        // }
-
-        // if (isCurrentState("Viewing active actions")) ActiveActionsUserInterface.draw(g2);
+        if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            if (!ui.isViewingWorld()) {
+                try {
+                    ui.getCurrentSim().getCurrentRoom().draw(g2);
+                }
+                catch (NullPointerException e) { }
+            }
+            else {
+                world.draw(g2);
+            }
+    
+            ui.draw(g2);
+        }
+        else if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.draw(g2);
+        }
 
         // testing sim color
         // testingSimColor(g2);

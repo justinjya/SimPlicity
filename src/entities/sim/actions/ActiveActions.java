@@ -1,53 +1,55 @@
-package src.entities.actions;
+package src.entities.sim.actions;
 
-import src.entities.Sim;
+import src.entities.interactables.Interactables;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.ui.UserInterface;
+import src.world.World;
 
 public class ActiveActions {
     public static void work (Sim sim, GameTime time){
-        Thread working = new Thread() {
-            @Override
-            public void run() {
-                // if it has not ever changed profession or it's been one day since it changed its profession
-                if (!sim.getHasChangedProfession() || 
-                ((((time.getDay() - 1) * 720 + 720 - time.getTimeRemaining())) 
-                - ((sim.getChangeProfessionTime().getDay() - 1) * 720 + 720 - sim.getChangeProfessionTime().getTimeRemaining())) >= 720) { 
-                    try {
-                        sim.setStatus("Working");
-                        time.startDecrementTimeRemaining(240000);
-                        Thread.sleep(240000);
+        // Thread working = new Thread() {
+        //     @Override
+        //     public void run() {
+        //         // if it has not ever changed profession or it's been one day since it changed its profession
+        //         if (!sim.getHasChangedProfession() || 
+        //         ((((time.getDay() - 1) * 720 + 720 - time.getTimeRemaining())) 
+        //         - ((sim.getChangeProfessionTime().getDay() - 1) * 720 + 720 - sim.getChangeProfessionTime().getTimeRemaining())) >= 720) { 
+        //             try {
+        //                 sim.setStatus("Working");
+        //                 time.startDecrementTimeRemaining(240000);
+        //                 Thread.sleep(240000);
 
-                        sim.setDurationOfWork(sim.getDurationOfWork() + 240); // sim's duration of work + 4 mins
-                        sim.setMood(sim.getMood() - 80); // -80 mood per 4 mins
-                        sim.setHunger(sim.getHunger() - 80); // -80 hunger per 4 mins
+        //                 sim.setDurationOfWork(sim.getDurationOfWork() + 240); // sim's duration of work + 4 mins
+        //                 sim.setMood(sim.getMood() - 80); // -80 mood per 4 mins
+        //                 sim.setHunger(sim.getHunger() - 80); // -80 hunger per 4 mins
                         
                 
-                        // add salary according to profession
-                        if (sim.getProfessionId() == 1) {
-                            sim.setMoney(sim.getMoney() + 15);
-                        }
-                        else if (sim.getProfessionId() == 2) {
-                            sim.setMoney(sim.getMoney() + 30);
-                        }
-                        else if (sim.getProfessionId() == 3) {
-                            sim.setMoney(sim.getMoney() + 35);
-                        }
-                        else if (sim.getProfessionId() == 4) {
-                            sim.setMoney(sim.getMoney() + 45);
-                        }
-                        else if (sim.getProfessionId() == 5) {
-                            sim.setMoney(sim.getMoney() + 50);
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        //                 // add salary according to profession
+        //                 if (sim.getProfessionId() == 1) {
+        //                     sim.setMoney(sim.getMoney() + 15);
+        //                 }
+        //                 else if (sim.getProfessionId() == 2) {
+        //                     sim.setMoney(sim.getMoney() + 30);
+        //                 }
+        //                 else if (sim.getProfessionId() == 3) {
+        //                     sim.setMoney(sim.getMoney() + 35);
+        //                 }
+        //                 else if (sim.getProfessionId() == 4) {
+        //                     sim.setMoney(sim.getMoney() + 45);
+        //                 }
+        //                 else if (sim.getProfessionId() == 5) {
+        //                     sim.setMoney(sim.getMoney() + 50);
+        //                 }
+        //             } catch (InterruptedException e) {
+        //                 e.printStackTrace();
+        //             }
                     
-                }
-            }
-        };
-        working.start();
+        //         }
+        //     }
+        // };
+        // working.start();
     }
 
     public static void exercise (Sim sim, GameTime time){
@@ -100,27 +102,20 @@ public class ActiveActions {
         // }
     }
 
-    public static void watchTV(Sim sim){
-        // CODE HERE
-        Television TV = Sim.
-        Thread workingThread = new Thread() {
-            @Override
-            public void run() {
-                sim.setStatus("Watch TV");
-                try {
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
-                }
-                catch (InterruptedException e) {}
-
-                sim.resetStatus();
-            }
-        };
+    public static void interact(UserInterface ui) {
+        Sim sim = ui.getCurrentSim();
+        World world = ui.getWorld();
+        Interactables object = sim.getInteractionHandler().getInteractableObject();
         
-        workingThread.start();
-    }
+        if (object == null) {
+            return;
+        }
+        
+        if (object.isOccupied()) {
+            return;
+        }
 
-    public static void interact(Sim sim) {
-        sim.getInteractionHandler().interact();
+        object.interact(sim, world.getTime());
     }
 
     public static void visitAnotherSim(UserInterface ui) {
