@@ -1,12 +1,14 @@
-package src.entities;
+package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.main.GameTime;
 import src.world.Room;
 import src.world.House;
 
@@ -22,7 +24,11 @@ public class Sim extends Entity{
 
     private Room currentRoom;
     private House currentHouse;
+    private Profession profession;
+    private Inventory inventory;
     
+    private int durationWorked;
+
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
 
@@ -46,7 +52,9 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = true;
+        this.isBusy = false;
+        this.profession = new Profession(); 
+        this.inventory = new Inventory();
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -80,6 +88,14 @@ public class Sim extends Entity{
     public String getStatus() {
         return status;
     }
+    
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     public Room getCurrentRoom() {
         return currentRoom;
@@ -105,6 +121,10 @@ public class Sim extends Entity{
         return isBusy;
     }
 
+    public int getDurationWorked() {
+        return durationWorked;
+    }
+
     // SETTERS
     public void setHealth(int health) {
         this.health = health;
@@ -119,6 +139,10 @@ public class Sim extends Entity{
     public void setMood(int mood) {
         this.mood = mood;
         if (this.mood > 100) this.mood = 100;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public void setStatus(String status) {
@@ -148,8 +172,8 @@ public class Sim extends Entity{
         this.isBusy = !this.isBusy;
     }
 
-    public void interact() {
-        interactionHandler.interact();
+    public void setDurationWorked(int durationWorked) {
+        this.durationWorked = durationWorked;
     }
 
     // OTHERS
@@ -162,7 +186,7 @@ public class Sim extends Entity{
             move(collisionHandler, interactionHandler);
         }
     }
-
+    
     public void draw(Graphics2D g) {
         // Draw the appropriate image based on the direction the sim is facing
         int imageIndex = getDirection();

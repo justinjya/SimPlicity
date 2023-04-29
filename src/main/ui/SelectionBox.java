@@ -4,13 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.Sim;
-import src.entities.actions.ActiveActions;
-import src.entities.actions.AddSimAction;
-import src.entities.actions.NonActiveActions;
-import src.entities.actions.UpgradeActions;
 import src.entities.handlers.KeyHandler;
-import src.items.interactables.Bed;
+import src.entities.interactables.Bed;
+import src.entities.sim.actions.*;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.world.World;
@@ -52,24 +49,26 @@ public class SelectionBox {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(UserInterface ui, GameTime time) {
+    private static void boxEntered(UserInterface ui) {
         ui.tab();
 
         Sim currentSim = ui.getCurrentSim();
         World world = ui.getWorld();
+        GameTime time = world.getTime();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(currentSim.getCurrentRoom());
+                // NonActiveActions.editRoom(currentSim.getCurrentRoom());
+                ActiveActions.work(currentSim, time, 9);
                 break;
             case 1:
-                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room", time);
+                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room");
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(time));
+                currentSim.getCurrentRoom().addObject(new Bed(1));
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);
@@ -82,7 +81,7 @@ public class SelectionBox {
         }
     }
     
-    public static void update(UserInterface ui, GameTime time) {
+    public static void update(UserInterface ui) {
         if (ui.isTabbed()) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
@@ -92,7 +91,7 @@ public class SelectionBox {
                 moveSelectedBox("right");
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                boxEntered(ui, time);
+                boxEntered(ui);
             }
         }
     }

@@ -1,6 +1,6 @@
 package src.entities.actions;
 
-import src.entities.Sim;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.ui.UserInterface;
 

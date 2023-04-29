@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import src.entities.*;
+import src.entities.interactables.Interactables;
 import src.world.Room;
 
 public class InteractionHandler {
@@ -75,23 +76,6 @@ public class InteractionHandler {
     }
     
     // OTHERS
-    public void interact() {
-        if (!(entity instanceof Sim)) return;
-
-        Interactables object = getInteractableObject();
-        
-        if (object == null) {
-            return;
-        }
-        
-        if (object.isOccupied()) {
-            return;
-        }
-        
-        Sim sim = (Sim) entity;
-        object.interact(sim);
-    }
-
     public void update() {
         switch (entity.getDirection()) {
             case 0:

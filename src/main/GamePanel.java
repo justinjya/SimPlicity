@@ -5,10 +5,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
-import src.entities.*;
 import src.world.World;
 
 // ini notes aja
@@ -36,16 +36,16 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = "Starting a new game";
         
         // Create game time
-        time = new GameTime(1, 720, 720);
+        time = new GameTime(1, Consts.ONE_MINUTE * 12);
 
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
+        sim = new Sim("Justin", 3, 3);
 
         // create a new world
         world = new World(sim, this, time);
         
         // // Create user interface
-        ui = new UserInterface(world, sim, time);
+        ui = new UserInterface(world, sim);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -54,14 +54,6 @@ public class GamePanel extends JPanel implements Runnable {
                 KeyHandler.keyPressed(e.getKeyCode());
                 
                 KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
-
-                 // testing sim color
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_D)) {
-                //     hue += 1 / 180.0f;
-                // }
-                // if (KeyHandler.isKeyDown(KeyHandler.KEY_A)) {
-                //     hue -= 1 / 180.0f;
-                // }
             }
             
             @Override
@@ -130,26 +122,29 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update(sim, ui, this);
+            ActiveActionsUserInterface.update(sim, ui, this, time);
         }
+        
     }
     
+    @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
         Graphics2D g2 = (Graphics2D) g;
 
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
+
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
-                // Draw room and sim
                 try {
                     ui.getCurrentSim().getCurrentRoom().draw(g2);
                 }
                 catch (NullPointerException e) { }
             }
             else {
-                // Draw the world
                 world.draw(g2);
             }
     

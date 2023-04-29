@@ -82,10 +82,17 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadBeds() {
-        BufferedImage[] images = new BufferedImage[6];
+        BufferedImage[] images = new BufferedImage[9];
 
-        images[0] = readImage("beds", "bed_idle", 4, 1, true);
-        images[1] = readImage("beds", "bed_occupied", 4, 1, true);
+        images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("beds", "bed_king_idle", 5, 2, true);
+        images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
+        images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
+        images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
+        images[6] = readImage("inventory", "bed_single", 1, 1, false);
+        images[7] = readImage("inventory", "bed_queen", 1, 1, false);
+        images[8] = readImage("inventory", "bed_king", 1, 1, false);
         return images;
     }
 
@@ -93,6 +100,37 @@ public class ImageLoader {
         BufferedImage image = readImage("tiles", "wood", 1, 1, true);
         return image;
     }
+
+    public static BufferedImage[] loadItemsIcon() {
+        BufferedImage[] images = new BufferedImage[12];
+        images[0] = readImage("inventory", "bed_single",1,1,false);
+        images[1] = readImage("inventory", "bed_queen",1,1,false);
+        images[2] = readImage("inventory", "bed_king",1,1,false);
+        images[3] = readImage("inventory", "trash_bin",1,1,false);
+        images[4] = readImage("inventory", "gas_stove",1,1,false);
+        // images[5] = readImage("inventory", "electric_stove",1,1,false);
+        // images[6] = readImage("inventory", "table_and_chair",1,1,false);
+        // images[7] = readImage("inventory", "clock",1,1,false);
+        // images[8] = readImage("inventory", "television",1,1,false);
+        // images[9] = readImage("inventory", "shover",1,1,false);
+        // images[10] = readImage("inventory", "aquarium",1,1,false);
+        // images[11] = readImage("inventory", "trash_bin",1,1,false);
+        // images[12] = readImage("inventory", "rice",1,1,false);
+        // images[13] = readImage("inventory", "potato",1,1,false);
+        // images[14] = readImage("inventory", "chicken",1,1,false);
+        // images[15] = readImage("inventory", "meat",1,1,false);
+        // images[16] = readImage("inventory", "carrot",1,1,false);
+        // images[17] = readImage("inventory", "spinach",1,1,false);
+        // images[18] = readImage("inventory", "peanuts",1,1,false);
+        // images[19] = readImage("inventory", "milk",1,1,false);
+        // images[20] = readImage("inventory", "chicken_and_rice",1,1,false);
+        // images[21] = readImage("inventory", "curry_and_rice",1,1,false);
+        // images[22] = readImage("inventory", "peanut_and_milk",1,1,false);
+        // images[23] = readImage("inventory", "cut_vegetables",1,1,false);
+        // images[24] = readImage("inventory", "steak",1,1,false);
+        return images;
+    }
+
 
     public static BufferedImage loadMockup() {
         try {
@@ -188,4 +226,54 @@ public class ImageLoader {
         }
         return image;
     }
+
+    public static BufferedImage[] loadStove() {
+        BufferedImage[] images = new BufferedImage[4];
+        
+        images[0] = readImage("tiles","grass", 1, 1, true);
+        images[1] = readImage("tiles","grass", 1, 1, true);
+        images[2] = readImage("tiles","grass", 1, 1, true);
+        images[3] = readImage("tiles","grass", 1, 1, true);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadRawFood() {
+        BufferedImage[] images = new BufferedImage[8];
+        
+        images[0] = readImage("tiles","grass", 1, 1, true);
+        images[1] = readImage("tiles","grass", 1, 1, true);
+        images[2] = readImage("tiles","grass", 1, 1, true);
+        images[3] = readImage("tiles","grass", 1, 1, true);
+        images[4] = readImage("tiles","grass", 1, 1, true);
+        images[5] = readImage("tiles","grass", 1, 1, true);
+        images[6] = readImage("tiles","grass", 1, 1, true);
+        images[7] = readImage("tiles","grass", 1, 1, true);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadBakedFood() {
+        BufferedImage[] images = new BufferedImage[5];
+        
+        images[0] = readImage("tiles","grass", 1, 1, true);
+        images[1] = readImage("tiles","grass", 1, 1, true);
+        images[2] = readImage("tiles","grass", 1, 1, true);
+        images[3] = readImage("tiles","grass", 1, 1, true);
+        images[4] = readImage("tiles","grass", 1, 1, true);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadToilet() {
+        BufferedImage[] images = new BufferedImage[2];
+        
+        images[0] = readImage("tiles","grass", 1, 1, true);
+        images[1] = readImage("tiles","grass", 1, 1, true);
+        
+        return images;
+    }
+
+    
+    
 }

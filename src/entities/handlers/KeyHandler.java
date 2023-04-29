@@ -2,8 +2,9 @@ package src.entities.handlers;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.Sim;
-import src.entities.actions.ActiveActions;
+import src.entities.sim.Sim;
+import src.entities.sim.actions.ActiveActions;
+import src.entities.sim.actions.NonActiveActions;
 import src.main.ui.UserInterface;
 import src.world.World;
 
@@ -13,7 +14,16 @@ public class KeyHandler {
     public static final int KEY_D = KeyEvent.VK_D;
     public static final int KEY_S = KeyEvent.VK_S;
     public static final int KEY_F = KeyEvent.VK_F;
+    public static final int KEY_I = KeyEvent.VK_I;
     public static final int KEY_R = KeyEvent.VK_R;
+    public static final int KEY_1 = KeyEvent.VK_1;
+    public static final int KEY_2 = KeyEvent.VK_2;
+    public static final int KEY_3 = KeyEvent.VK_3;
+    public static final int KEY_4 = KeyEvent.VK_4;
+    public static final int KEY_5 = KeyEvent.VK_5;
+    public static final int KEY_6 = KeyEvent.VK_6;
+    public static final int KEY_7 = KeyEvent.VK_7;
+    public static final int KEY_8 = KeyEvent.VK_8;
     public static final int KEY_SPACE = KeyEvent.VK_SPACE;
     public static final int KEY_ENTER = KeyEvent.VK_ENTER;
     public static final int KEY_TAB = KeyEvent.VK_TAB;
@@ -43,14 +53,17 @@ public class KeyHandler {
 
     // public static void keyBinds(Sim sim, UserInterface ui) {
     public static void keyBinds(Sim sim, World world, UserInterface ui) {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB) && !ui.isViewingWorld()) {
+        if (!ui.isViewingWorld() && !sim.getInventory().isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
             ui.debug();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            ActiveActions.interact(sim);
+            ActiveActions.interact(ui);
+        }
+        if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+            NonActiveActions.showInventory(ui);
         }
 
         // testing adding and switching sim

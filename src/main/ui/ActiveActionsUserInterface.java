@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.Sim;
-import src.entities.actions.ActiveActions;
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
+import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
 import src.main.GamePanel;
+import src.main.GameTime;
 
 public class ActiveActionsUserInterface {
     // Selection Box Attributes
@@ -47,13 +48,13 @@ public class ActiveActionsUserInterface {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(Sim sim, UserInterface ui, GamePanel gp) {
+    private static void boxEntered(Sim sim, UserInterface ui, GamePanel gp, GameTime time) {
         switch (selectedBox) {
             case 0:
-                ActiveActions.work(sim);
+                ActiveActions.work(sim, time, Consts.THREAD_ONE_SECOND * 3);
                 break;
             case 1:
-                ActiveActions.exercise(sim);
+                ActiveActions.exercise(sim, time, Consts.THREAD_ONE_SECOND * 3);
                 break;
             case 2:
                 ActiveActions.visitAnotherSim(ui);
@@ -64,7 +65,7 @@ public class ActiveActionsUserInterface {
         gp.setState("Playing");
     }
     
-    public static void update(Sim sim, UserInterface ui, GamePanel gp) {
+    public static void update(Sim sim, UserInterface ui, GamePanel gp, GameTime time) {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             moveSelectedBox("left");
         }
@@ -72,7 +73,7 @@ public class ActiveActionsUserInterface {
             moveSelectedBox("right");
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            boxEntered(sim, ui, gp);
+            boxEntered(sim, ui, gp, time);
         }
     }
 
@@ -107,6 +108,7 @@ public class ActiveActionsUserInterface {
         }
     }
 
+    // TO - DO !!! : Fix this
     public static void showActiveActions(GamePanel gp) {
         gp.setState("Viewing active actions");
     }
