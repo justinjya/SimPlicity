@@ -83,8 +83,13 @@ public class MainMenu {
 
 
         // if (isCurrentState("Main menu")) drawMainMenu(g);
-
+        if (isCurrentState("Main menu")) {
+            drawMainMenu(g);
+        }
         // if (isCurrentState("Creating sim")) drawCreateSimMenu(g);
+        if (isCurrentState("Creating sim")) {
+            drawCreateSimMenu(g);
+        }
     }
 
     private static void drawMainMenu(Graphics2D g) {
