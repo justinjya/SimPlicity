@@ -52,7 +52,7 @@ public class RawFood implements Item{
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[8];
 
-    private BufferedImage placeholder = ImageLoader.readImage("tiles", "wood", 0, 0, false);
+    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public RawFood (int imageIndex) {
@@ -61,7 +61,7 @@ public class RawFood implements Item{
         this.price = prices[imageIndex];
         this.imageIndex = imageIndex;
         // load the images
-        this.icons = ImageLoader.loadRawFood();
+        // this.icons = ImageLoader.loadRawFood();
     }
 
     // Getters

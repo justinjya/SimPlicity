@@ -2,6 +2,7 @@ package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
@@ -11,11 +12,16 @@ import src.entities.handlers.KeyHandler;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
+import src.items.foods.RawFood;
 
 public class Inventory {
     private HashMap<Item, Integer> mapOfItems = new HashMap<>();
+    private HashMap<Item, Integer> itemsToShow = new HashMap<>();
+    private ArrayList<String> itemNames = new ArrayList<>();
     private boolean isOpen = false; // true if the inventory is open, false if closed
     private boolean isObject = true;
+
+    private int slotSelected = 0;
     
     // interface dimensions
     private int slotSize = 45;
@@ -48,7 +54,10 @@ public class Inventory {
         addItem(new Bed(0));
         addItem(new Bed(1));
         addItem(new Bed(2));
-        addItem(new Bed(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(2));
+        addItem(new Bed(2));
+        addItem(new RawFood(0));
     }
 
     // getter
@@ -89,49 +98,64 @@ public class Inventory {
                 return;
             }
         }
-
         mapOfItems.put(item, 1);
     }
 
-    public void removeItem(Item item)
-    {
-        for (Item i : mapOfItems.keySet())
-        {
-            if (i.getName().equals(item.getName()))
-            {
-                int count = mapOfItems.get(i);
-                mapOfItems.put(i, count - 1);
-                return;
-            }
-        }
+    // public void removeItem(Item item)
+    // {
+    //     for (Item i : mapOfItems.keySet())
+    //     {
+    //         if (i.getName().equals(item.getName()))
+    //         {
+    //             int count = mapOfItems.get(i);
+    //             mapOfItems.put(i, count - 1);
+    //             return;
+    //         }
+    //     }
+    //     mapOfItems.remove(item);
+    // }
+    public void removeItem() {
+        if (slotSelected > itemNames.size()) return;
 
-        mapOfItems.remove(item);
+        
     }
 
     public void update()
     {
+        getItemsToShow();
+
         if (KeyHandler.isKeyPressed(KeyEvent.VK_TAB)) {
             switchCategory();
         }
 
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             if (slotCol > 0) {
+                slotSelected--;
                 slotCol--;
             }
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
             if (slotRow < 3) {
+                slotSelected += 2;
                 slotRow++;
             } 
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
             if (slotCol < 2) {
+                slotSelected++;
                 slotCol++;
             }
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
             if (slotRow > 0) {
+                slotSelected -= 2;
                 slotRow--;
+            }
+        }
+        
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            if (slotSelected < itemNames.size()) {
+                // removeItem();
             }
         }
     }
@@ -143,6 +167,28 @@ public class Inventory {
         drawCursor(g);
         
         drawItems(g);
+    }
+
+    private void getItemsToShow() {
+        itemsToShow = new HashMap<>();
+        itemNames = new ArrayList<>();
+
+        for (Item item : mapOfItems.keySet()) {
+            if (isObject){
+                if (item instanceof Interactables) {
+                    itemsToShow.put(item, mapOfItems.get(item));
+                }
+            }
+            else {
+                if (!(item instanceof Interactables)) {
+                    itemsToShow.put(item, mapOfItems.get(item));
+                }
+            }
+        }
+
+        for (Item item : itemsToShow.keySet()) {
+            itemNames.add(item.getName());
+        }
     }
 
     private void drawFrame(Graphics2D g)
@@ -176,42 +222,24 @@ public class Inventory {
     private void drawItems(Graphics2D g)
     {
         int x = slotX, y = slotY; // Starting coordinates
-        int cols = 3, rows = 4; // Number of columns and rows
+        int cols = 3;
         int i = 0;
 
-        for (Item item : mapOfItems.keySet()) {
-            if (isObject && (item instanceof Interactables)){
-                BufferedImage itemIcon = item.getIcon(); // Get the item image
+        for (Item item : itemsToShow.keySet()) {
+            BufferedImage itemIcon = item.getIcon(); // Get the item image
 
-                g.drawImage(itemIcon, x, y, null); // Draw the image
+            g.drawImage(itemIcon, x, y, null); // Draw the image
 
-                if (mapOfItems.get(item) > 1) {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(x + 31, y + 31, 14, 14);
+            if (mapOfItems.get(item) > 1) {
+                g.setColor(Color.WHITE);
+                g.fillRect(x + 31, y + 31, 14, 14);
 
-                    g.setColor(Color.BLACK);
-                    Font font = new Font("Inter", Font.BOLD, 10);
-                    g.setFont(font);
-                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
-                }
+                g.setColor(Color.BLACK);
+                Font font = new Font("Inter", Font.BOLD, 10);
+                g.setFont(font);
+                g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
             }
 
-            if (!isObject && !(item instanceof Interactables)){
-                BufferedImage itemIcon = item.getIcon(); // Get the item image
-
-                g.drawImage(itemIcon, x, y, null); // Draw the image
-
-                if (mapOfItems.get(item) > 1) {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(x + 31, y + 31, 14, 14);
-
-                    g.setColor(Color.BLACK);
-                    Font font = new Font("Inter", Font.BOLD, 10);
-                    g.setFont(font);
-                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
-                }
-            }
-            
             x += slotSize; // Move to the next column
             if (i % cols == cols - 1) { // If we've filled up a row
                 x = slotX; // Reset to the first column
@@ -223,6 +251,8 @@ public class Inventory {
 
     private void drawCursor(Graphics2D g)
     {
+        if (itemNames.isEmpty()) return;
+
         // Cursor
         int cursorX = slotXstart + (slotSize * slotCol);
         int cursorY = slotYstart + (slotSize * slotRow);
@@ -234,5 +264,17 @@ public class Inventory {
 
         g.setColor(Color.WHITE);
         g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        // Item selected
+        g.setColor(Color.BLACK);
+        Font font = new Font("Inter", Font.BOLD, 10);
+        g.setFont(font);
+
+        String itemSelected = null;
+        try {
+            itemSelected = itemNames.get(slotSelected);
+            g.drawString(itemSelected, frameX + 50, frameY + 20);
+        }
+        catch (IndexOutOfBoundsException e) {}
     }
 }

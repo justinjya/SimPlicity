@@ -51,6 +51,9 @@ public class Stove extends Interactables{
         this.price = prices[imageIndex];
         // Load the image of the beds
         this.images = ImageLoader.loadStove();
+
+        // ONLY FOR DEBUGGING
+        this.images[0] = ImageLoader.readImage("tiles", "grass", 2, 1, true);
         
     }
 

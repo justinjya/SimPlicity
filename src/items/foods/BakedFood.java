@@ -40,7 +40,7 @@ public class BakedFood implements Item{
     private BufferedImage[] icons = new BufferedImage[5];
 
     // ONLY FOR DEBUGGING
-    private BufferedImage placeholder = ImageLoader.readImage("tiles", "grass", 0, 0, false);
+    private BufferedImage placeholder = ImageLoader.readImage("tiles", "grass", 1, 1, false);
 
     // Constructor
     public BakedFood (int imageIndex) {
@@ -49,7 +49,7 @@ public class BakedFood implements Item{
         this.ingredient = ingredients[imageIndex];
         this.imageIndex = imageIndex;
         // load the images here
-        this.icons = ImageLoader.loadBakedFood();
+        // this.icons = ImageLoader.loadBakedFood();
     }
 
     // Getters
