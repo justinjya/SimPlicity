@@ -12,7 +12,6 @@ import src.entities.handlers.KeyHandler;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
-import src.items.foods.RawFood;
 import src.world.Room;
 
 public class Inventory {
