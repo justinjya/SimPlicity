@@ -2,13 +2,14 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
+import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.GameTime;
 import src.entities.sim.actions.ActiveActions;
 
 public class Toilet extends Interactables{
     // Images of toilet
-    BufferedImage[] images = new BufferedImage[1]; // will be adding more if available
+    BufferedImage[] images = new BufferedImage[2]; // for idle toilet and occupied toilet
 
     // Attributes
     private int price;
@@ -28,7 +29,7 @@ public class Toilet extends Interactables{
 
         this.price = 50;
         // Load the image of the beds
-        
+        this.images = ImageLoader.loadToilet();
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS
@@ -44,8 +45,23 @@ public class Toilet extends Interactables{
 
     @Override
     public void interact(Sim sim, GameTime time) {
-        changeOccupiedState();
-        ActiveActions.takeALeak(sim, time);
-        changeOccupiedState();
+        Thread takingALeak = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    changeOccupiedState();
+                    time.startDecrementTimeRemaining(10*1000);
+                    sim.setStatus("TakingALeak");
+                    Thread.sleep(10*1000);
+                    changeOccupiedState();
+                    sim.setHunger(sim.getHunger() - 20);
+                    sim.setMood(sim.getMood() + 10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        };
+        takingALeak.start();
     } 
 }
