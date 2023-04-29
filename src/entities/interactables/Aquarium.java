@@ -1,9 +1,8 @@
-package src.items.interactables;
+package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 
@@ -14,7 +13,7 @@ public class Aquarium extends Interactables {
     private BufferedImage image;
 
     // CONSTRUCTOR
-    public Aquarium (int x, int y, GameTime time) {
+    public Aquarium (int x, int y) {
         super (
             "Aquarium",
             "feed the fish",
@@ -22,12 +21,16 @@ public class Aquarium extends Interactables {
             x,
             y,
             2,
-            1,
-            time
+            1
         );
 
         // Load the image of the shower
         image = ImageLoader.readImage("tiles", "grass", 2, 1, true);
+    }
+
+    @Override
+    public BufferedImage getIcon() {
+        return image;
     }
 
     @Override
@@ -36,17 +39,17 @@ public class Aquarium extends Interactables {
     }
 
     @Override
-    public void interact (Sim sim){
+    public void interact (Sim sim, GameTime time){
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
                 try {
-                    changeOccupied();
+                    changeOccupiedState();
                     sim.setStatus("Feeding the fish");
                     // count the time
-                    getTime().startDecrementTimeRemaining(duration);
+                    time.startDecrementTimeRemaining(duration);
                     Thread.sleep(duration);
-                    changeOccupied();
+                    changeOccupiedState();
                     sim.resetStatus();
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
                 } catch (InterruptedException e) {

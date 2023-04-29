@@ -1,18 +1,17 @@
-package src.entities.actions;
+package src.entities.sim.actions;
 
-import src.items.interactables.Door;
-import src.main.GameTime;
+import src.entities.interactables.Door;
 import src.world.Room;
 
 public class UpgradeActions {
-    public static void addRoom(Room room, String name, GameTime time) {
+    public static void addRoom(Room room, String name) {
         Room thisRoom = room;
         
         Thread addNewRoomThread = new Thread() {
             @Override
             public void run() {
-                Room newRoom = new Room(name, time);
-                Door newDoor = new Door(newRoom, time);
+                Room newRoom = new Room(name);
+                Door newDoor = new Door(newRoom);
                 
                 room.addObject(newDoor);
                 while (true) {
@@ -22,7 +21,7 @@ public class UpgradeActions {
                         }
                     }
                 }
-                newRoom.getListOfObjects().add(new Door(newDoor, thisRoom, time));
+                newRoom.getListOfObjects().add(new Door(newDoor, thisRoom));
             }
         };
 

@@ -1,10 +1,11 @@
-package src.entities;
+package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
 import src.main.GameTime;
@@ -23,10 +24,8 @@ public class Sim extends Entity{
 
     private Room currentRoom;
     private House currentHouse;
-    private int professionId;
-    private int durationOfWork;
-    private boolean hasChangedProfession;
-    private GameTime changeProfessionTime;
+    private Profession profession;
+    private Inventory inventory;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -52,11 +51,8 @@ public class Sim extends Entity{
         this.money = 100;
         this.status = "Idle";
         this.isBusy = false;
-        
-        this.professionId = 0;
-        this.durationOfWork = 0;
-        this.hasChangedProfession = false;
-        this.changeProfessionTime = new GameTime(1, 720, 720);
+        this.profession = new Profession(); 
+        this.inventory = new Inventory();
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -90,6 +86,18 @@ public class Sim extends Entity{
     public String getStatus() {
         return status;
     }
+    
+    public String getProfession() {
+        return profession.getName();
+    }
+
+    public int getSimSalary() {
+        return profession.getSalary();
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     public Room getCurrentRoom() {
         return currentRoom;
@@ -113,22 +121,6 @@ public class Sim extends Entity{
 
     public boolean isBusy() {
         return isBusy;
-    }
-
-    public int getProfessionId() {
-        return professionId;
-    }
-
-    public int getDurationOfWork() {
-        return durationOfWork;
-    }
-
-    public boolean getHasChangedProfession() {
-        return hasChangedProfession;
-    }
-
-    public GameTime getChangeProfessionTime() {
-        return changeProfessionTime;
     }
 
     // SETTERS
@@ -174,22 +166,6 @@ public class Sim extends Entity{
         this.isBusy = !this.isBusy;
     }
 
-    public void interact() {
-        interactionHandler.interact();
-    }
-
-    public void setMoney (int money) {
-        this.money = money;
-    }
-
-    public void setDurationOfWork(int duration) {
-        durationOfWork = duration;
-    }
-
-    public void setChangeProfessionTime(GameTime time) {
-        changeProfessionTime = time;
-    }
-
     // OTHERS
     public void update() {
         if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {
@@ -199,38 +175,6 @@ public class Sim extends Entity{
         if (isMoving() && !isBusy) {
             move(collisionHandler, interactionHandler);
         }
-    }
-
-    public void changeProfessionId(int professionId, GameTime time) {
-        if (durationOfWork >= 720) {
-            if (professionId == 1) {
-                if(getMoney() >= 1/2 * 15) {
-                    this.professionId = professionId;
-                }
-            }
-            else if (professionId == 2) {
-                if(getMoney() >= 1/2 * 30) {
-                    this.professionId = professionId;
-                }
-            }
-            else if (professionId == 3) {
-                if(getMoney() >= 1/2 * 35) {
-                    this.professionId = professionId;
-                }
-            }
-            else if (professionId == 4) {
-                if(getMoney() >= 1/2 * 45) {
-                    this.professionId = professionId;
-                }
-            }
-            else if (professionId == 5) {
-                if(getMoney() >= 1/2 * 50) {
-                    this.professionId = professionId;
-                }
-            }
-        }
-        hasChangedProfession = true;
-        setChangeProfessionTime(time);
     }
     
     public void draw(Graphics2D g) {

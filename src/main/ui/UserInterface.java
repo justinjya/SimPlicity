@@ -6,20 +6,17 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
-import src.main.GameTime;
 import src.world.World;
-import src.entities.Sim;
 import src.assets.ImageLoader;
-
-// will delete later?
-import src.entities.Interactables;
+import src.entities.interactables.Interactables;
+import src.entities.sim.Inventory;
+import src.entities.sim.Sim;
 
 public class UserInterface {
     // Atributes
     private World world;
     private Sim currentSim;
-
-    private GameTime time;
+    private Inventory inventory;
     
     private boolean viewingWorld;
     private boolean tabbed;
@@ -32,10 +29,10 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world, Sim sim, GameTime time) {
+    public UserInterface(World world, Sim sim) {
         this.world = world;
         this.currentSim = sim;
-        this.time = time;
+        this.inventory = sim.getInventory();
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
@@ -80,21 +77,38 @@ public class UserInterface {
     }
 
     public void tab() {
-        this.tabbed = !this.tabbed;
-        currentSim.changeIsBusyState();
+        if (!inventory.isOpen()) {
+            this.tabbed = !this.tabbed;
+            currentSim.changeIsBusyState();
+        }
     }
 
     public void debug() {
         this.debug = !this.debug;
     }
 
-    // OTHERS
-    public void update() {
+    public void inventory() {
+        Inventory inventory = currentSim.getInventory();
+
         if (tabbed) {
-            SelectionBox.update(this, time);
+            tab();
         }
+
+        inventory.changeIsOpen();
+        currentSim.changeIsBusyState();
     }
 
+    // OTHERS
+    public void update() {
+        if (tabbed && !currentSim.getInventory().isOpen()) {
+            SelectionBox.update(this);
+        }
+
+        if (inventory.isOpen()) {
+            inventory.update();
+        }
+    }
+    
     public void draw(Graphics2D g) {
         if (viewingWorld) {
             Font font;
@@ -136,8 +150,15 @@ public class UserInterface {
         g.fillRect(11, 294, 182, 58); // Time remaining
         g.fillRect(607, 88, 182, 31); // House name
 
+        g.fillRect(607, 147, 182, 26); // Inventory
+
         drawText(g);
         drawAttributes(g);
+        
+        // Draw currentSim's inventory
+        if (inventory.isOpen()) {
+            inventory.draw(g);
+        }  
 
         // Draw tab boxes
        SelectionBox.draw(g, this);
@@ -152,11 +173,12 @@ public class UserInterface {
         g.setFont(font);
         g.drawString(currentSim.getName(), 83, 68);
         
-        g.drawString("Day " + time.getDay(), 675, 68);
+        g.drawString("Day " + world.getTime().getDay(), 675, 68);
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
         g.drawString(currentSim.getCurrentHouse().getName(), 650, 108);
+        g.drawString("Inventory", 668, 165);
 
         drawAttributes(g);
 
@@ -219,7 +241,7 @@ public class UserInterface {
         drawValue(g, currentSim.getHealth(), 174, 0);
         drawValue(g, currentSim.getHunger(), 174, 1);
         drawValue(g, currentSim.getMood(), 174, 2);
-        drawTime(g, time.getTimeRemaining(), 174, 0);
+        drawTime(g, world.getTime().getTimeRemaining(), 174, 0);
     }
 
     private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {

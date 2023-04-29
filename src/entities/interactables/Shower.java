@@ -1,9 +1,8 @@
-package src.items.interactables;
+package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
-import src.entities.Interactables;
-import src.entities.Sim;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 
@@ -15,7 +14,7 @@ public class Shower extends Interactables {
 
 
     // CONSTRUCTOR
-    public Shower(int x, int y, GameTime time) {
+    public Shower(int x, int y) {
         super (
             "Shower",
             "take a shower",
@@ -23,12 +22,16 @@ public class Shower extends Interactables {
             x,
             y,
             1,
-            1,
-            time
+            1
         );
 
         // Load the image of the shower
         image = ImageLoader.readImage("tiles", "grass", 1, 1, true);
+    }
+
+    @Override
+    public BufferedImage getIcon() {
+        return image;
     }
 
     @Override
@@ -37,17 +40,17 @@ public class Shower extends Interactables {
     }
 
     @Override
-    public void interact (Sim sim){
+    public void interact (Sim sim, GameTime time){
         Thread showering = new Thread() {
             @Override
             public void run() {
                 try {
-                    changeOccupied();
+                    changeOccupiedState();
                     sim.setStatus("Taking a shower");
                     // count the time
-                    getTime().startDecrementTimeRemaining(duration);
+                    time.startDecrementTimeRemaining(duration);
                     Thread.sleep(duration);
-                    changeOccupied();
+                    changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() + 10); // increase sim's health
                     sim.setMood(sim.getMood() + 15); // increase sim's mood

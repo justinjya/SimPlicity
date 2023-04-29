@@ -5,10 +5,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
-import src.entities.*;
 import src.world.World;
 
 // ini notes aja
@@ -39,25 +39,21 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create sim
-        sim = new Sim("Justin", 4, 4);
+        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
 
         // create a new world
         world = new World(sim, this, time);
         
         // // Create user interface
-        ui = new UserInterface(world, sim, time);
+        ui = new UserInterface(world, sim);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
-                KeyHandler.keyBinds(sim, world, ui);
-
-                if (KeyHandler.isKeyPressed(KeyEvent.VK_M)) {
-                    System.out.println("m");
-                    // a.work(sim, time);
-                }
+                
+                KeyHandler.keyBinds(ui.getCurrentSim(), world, ui);
             }
             
             @Override
@@ -128,6 +124,7 @@ public class GamePanel extends JPanel implements Runnable {
         else if (isCurrentState("Viewing active actions")) {
             ActiveActionsUserInterface.update(sim, ui, this, time);
         }
+        
     }
     
     public void paintComponent(Graphics g) {
@@ -136,16 +133,15 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
+
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
-                // Draw room and sim
                 try {
                     ui.getCurrentSim().getCurrentRoom().draw(g2);
                 }
                 catch (NullPointerException e) { }
             }
             else {
-                // Draw the world
                 world.draw(g2);
             }
     

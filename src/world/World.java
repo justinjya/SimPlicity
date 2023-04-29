@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import src.assets.ImageLoader;
-import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
-import src.items.interactables.Door;
+import src.entities.interactables.Door;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GamePanel;
 import src.main.GameTime;
@@ -93,6 +93,10 @@ public class World {
         return null;
     }
 
+    public GameTime getTime() {
+        return time;
+    }
+
     public boolean isAdding() {
         return isAdding;
     }
@@ -114,8 +118,8 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        Room newRoom = new Room("First Room", time);
-        newRoom.getListOfObjects().add(new Door(null, gp, time));
+        Room newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);
