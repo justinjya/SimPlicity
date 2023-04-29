@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
+import src.main.Consts;
 import src.main.GameTime;
 import src.entities.sim.actions.ActiveActions;
 
@@ -50,10 +51,11 @@ public class Toilet extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
-                    time.startDecrementTimeRemaining(10*1000);
+                    time.startDecrementTimeRemaining(10);
                     sim.setStatus("TakingALeak");
-                    Thread.sleep(10*1000);
+                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
                     changeOccupiedState();
+                    sim.resetStatus();
                     sim.setHunger(sim.getHunger() - 20);
                     sim.setMood(sim.getMood() + 10);
                 } catch (InterruptedException e) {

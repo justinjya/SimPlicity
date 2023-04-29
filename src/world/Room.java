@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.entities.handlers.*;
-import src.entities.interactables.Door;
-import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
+import src.entities.interactables.*;
 
 public class Room {
     // Atributes
@@ -44,6 +43,9 @@ public class Room {
 
         // ONLY FOR DEBUGGING
         // testRoom();
+        listOfObjects.add(new Bed(1,1,0));
+        listOfObjects.add(new Toilet(2, 2, 0));
+        listOfObjects.add(new Stove(3, 2, 0));
     }
 
     // GETTERS

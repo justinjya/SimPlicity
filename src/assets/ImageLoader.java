@@ -230,10 +230,10 @@ public class ImageLoader {
     public static BufferedImage[] loadStove() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage(null,"icon", 1, 1, true);
-        images[1] = readImage(null,"icon", 1, 1, true);
-        images[2] = readImage(null,"icon", 1, 1, true);
-        images[3] = readImage(null,"icon", 1, 1, true);
+        images[0] = readImage("tiles","wood", 1, 1, false);
+        images[1] = readImage("tiles","wood", 1, 1, false);
+        images[2] = readImage("tiles","wood", 1, 1, false);
+        images[3] = readImage("tiles","wood", 1, 1, false);
     
         return images;
     }
@@ -241,14 +241,14 @@ public class ImageLoader {
     public static BufferedImage[] loadRawFood() {
         BufferedImage[] images = new BufferedImage[8];
         
-        images[0] = readImage(null,"icon", 1, 1, true);
-        images[1] = readImage(null,"icon", 1, 1, true);
-        images[2] = readImage(null,"icon", 1, 1, true);
-        images[3] = readImage(null,"icon", 1, 1, true);
-        images[4] = readImage(null,"icon", 1, 1, true);
-        images[5] = readImage(null,"icon", 1, 1, true);
-        images[6] = readImage(null,"icon", 1, 1, true);
-        images[7] = readImage(null,"icon", 1, 1, true);
+        images[0] = readImage("tiles","wood", 1, 1, false);
+        images[1] = readImage("tiles","wood", 1, 1, false);
+        images[2] = readImage("tiles","wood", 1, 1, false);
+        images[3] = readImage("tiles","wood", 1, 1, false);
+        images[4] = readImage("tiles","wood", 1, 1, false);
+        images[5] = readImage("tiles","wood", 1, 1, false);
+        images[6] = readImage("tiles","wood", 1, 1, false);
+        images[7] = readImage("tiles","wood", 1, 1, false);
     
         return images;
     }
@@ -256,11 +256,11 @@ public class ImageLoader {
     public static BufferedImage[] loadBakedFood() {
         BufferedImage[] images = new BufferedImage[5];
         
-        images[0] = readImage(null,"icon", 1, 1, true);
-        images[1] = readImage(null,"icon", 1, 1, true);
-        images[2] = readImage(null,"icon", 1, 1, true);
-        images[3] = readImage(null,"icon", 1, 1, true);
-        images[4] = readImage(null,"icon", 1, 1, true);
+        images[0] = readImage("tiles","wood", 1, 1, false);
+        images[1] = readImage("tiles","wood", 1, 1, false);
+        images[2] = readImage("tiles","wood", 1, 1, false);
+        images[3] = readImage("tiles","wood", 1, 1, false);
+        images[4] = readImage("tiles","wood", 1, 1, false);
     
         return images;
     }
@@ -268,9 +268,9 @@ public class ImageLoader {
     public static BufferedImage[] loadToilet() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage(null,"icon", 1, 1, true);
-        images[1] = readImage(null,"icon", 1, 1, true);
-    
+        images[0] = readImage("tiles","wood", 1, 1, false);
+        images[1] = readImage("tiles","wood", 1, 1, false);
+        
         return images;
     }
 
