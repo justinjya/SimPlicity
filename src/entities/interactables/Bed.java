@@ -32,10 +32,11 @@ public class Bed extends Interactables{
 
     // Atributes
     private int price;
-    private int duration = Consts.ONE_SECOND * 5; // Change this to * 4 once the project is done
+    private int duration = Consts.ONE_SECOND * 10; // Change this to * 4 once the project is done
 
     // Image of the beds
-    private BufferedImage[] images = new BufferedImage[9];
+    private BufferedImage[] icons = new BufferedImage[3];
+    private BufferedImage[] images = new BufferedImage[6];
 
     // CONSTRUCTOR
     public Bed(int x, int y, int imageIndex) {
@@ -52,6 +53,7 @@ public class Bed extends Interactables{
         this.price = prices[imageIndex];
 
         // Load the image of the beds
+        icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();
     }
 
@@ -69,6 +71,7 @@ public class Bed extends Interactables{
         this.price = prices[imageIndex];
 
         // Load the image of the beds
+        icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();
     }
 
@@ -87,6 +90,7 @@ public class Bed extends Interactables{
         this.price = prices[1];
 
         // Load the image of the beds
+        icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();
     }
 
@@ -110,7 +114,7 @@ public class Bed extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return images[getImageIndex() + 6];
+        return icons[getImageIndex()];
     }
 
     @Override

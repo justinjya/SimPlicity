@@ -105,7 +105,7 @@ public class UserInterface {
         }
 
         if (inventory.isOpen()) {
-            inventory.update();
+            inventory.update(this);
         }
     }
     

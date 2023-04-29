@@ -35,9 +35,9 @@ public abstract class Food {
             public void run() {
                 try {
                     sim.setStatus("Eating");
-                    time.startDecrementTimeRemaining(Consts.ONE_SECOND * 30);
+                    time.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
 
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 30);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
                     
                     sim.resetStatus();
                     sim.setHunger(sim.getHunger() + hungerPoint);

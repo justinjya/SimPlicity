@@ -12,7 +12,11 @@ import src.entities.handlers.KeyHandler;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
+import src.items.foods.Food;
 import src.items.foods.RawFood;
+import src.main.GameTime;
+import src.main.ui.UserInterface;
+import src.world.Room;
 
 public class Inventory {
     private HashMap<Item, Integer> mapOfItems = new HashMap<>();
@@ -101,13 +105,44 @@ public class Inventory {
         mapOfItems.put(item, 1);
     }
 
-    public void removeItem() {
+    public void interact(UserInterface ui) {
         if (slotSelected > itemNames.size()) return;
 
-        
+        String selectedItem = itemNames.get(slotSelected);
+
+        for (Item item : mapOfItems.keySet()) {
+            if (!item.getName().equals(selectedItem)) continue;
+
+            Sim sim = ui.getCurrentSim();
+
+            if (item instanceof Interactables) {
+                Room currentRoom = sim.getCurrentRoom();
+                Interactables newObject = (Interactables) item;
+
+                changeIsOpen();
+                currentRoom.addObject(newObject);
+                
+                sim.changeIsBusyState();
+            }
+
+            if (item instanceof Food) {
+                Food food = (Food) item;
+                GameTime time = ui.getWorld().getTime();
+                food.eat(sim, time);
+            }
+            
+            int count = mapOfItems.get(item);
+            if (count > 1) {
+                mapOfItems.put(item, count - 1);
+            }
+            else {
+                mapOfItems.remove(item);
+            }
+            return;
+        }
     }
 
-    public void update()
+    public void update(UserInterface ui)
     {
         getItemsToShow();
 
@@ -142,7 +177,7 @@ public class Inventory {
         
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (slotSelected < itemNames.size()) {
-                // removeItem();
+                interact(ui);
             }
         }
     }
@@ -208,32 +243,35 @@ public class Inventory {
 
     private void drawItems(Graphics2D g)
     {
-        int x = slotX, y = slotY; // Starting coordinates
-        int cols = 3;
-        int i = 0;
-
-        for (Item item : itemsToShow.keySet()) {
-            BufferedImage itemIcon = item.getIcon(); // Get the item image
-
-            g.drawImage(itemIcon, x, y, null); // Draw the image
-
-            if (mapOfItems.get(item) > 1) {
-                g.setColor(Color.WHITE);
-                g.fillRect(x + 31, y + 31, 14, 14);
-
-                g.setColor(Color.BLACK);
-                Font font = new Font("Inter", Font.BOLD, 10);
-                g.setFont(font);
-                g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+        try {
+            int x = slotX, y = slotY; // Starting coordinates
+            int cols = 3;
+            int i = 0;
+    
+            for (Item item : itemsToShow.keySet()) {
+                BufferedImage itemIcon = item.getIcon(); // Get the item image
+    
+                g.drawImage(itemIcon, x, y, null); // Draw the image
+    
+                if (mapOfItems.get(item) > 1) {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(x + 31, y + 31, 14, 14);
+    
+                    g.setColor(Color.BLACK);
+                    Font font = new Font("Inter", Font.BOLD, 10);
+                    g.setFont(font);
+                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+                }
+    
+                x += slotSize; // Move to the next column
+                if (i % cols == cols - 1) { // If we've filled up a row
+                    x = slotX; // Reset to the first column
+                    y += slotSize; // Move to the next row
+                }
+                i++;
             }
-
-            x += slotSize; // Move to the next column
-            if (i % cols == cols - 1) { // If we've filled up a row
-                x = slotX; // Reset to the first column
-                y += slotSize; // Move to the next row
-            }
-            i++;
         }
+        catch (NullPointerException e) {}
     }
 
     private void drawCursor(Graphics2D g)
