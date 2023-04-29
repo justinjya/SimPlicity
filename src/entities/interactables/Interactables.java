@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import src.entities.Entity;
 import src.entities.sim.Sim;
 import src.items.Item;
+import src.items.foods.BakedFood;
 import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {

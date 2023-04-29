@@ -1,5 +1,6 @@
 package src.items.foods;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
@@ -36,7 +37,7 @@ public class BakedFood implements Item{
     private int imageIndex;
 
     // Images of the raw foods
-    private BufferedImage[] images = new BufferedImage[5];
+    private BufferedImage[] icons = new BufferedImage[5];
 
     // ONLY FOR DEBUGGING
     private BufferedImage placeholder = ImageLoader.readImage("tiles", "grass", 0, 0, false);
@@ -48,6 +49,7 @@ public class BakedFood implements Item{
         this.ingredient = ingredients[imageIndex];
         this.imageIndex = imageIndex;
         // load the images here
+        this.icons = ImageLoader.loadBakedFood();
     }
 
     // Getters

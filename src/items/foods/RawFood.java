@@ -50,7 +50,7 @@ public class RawFood implements Item{
     private int imageIndex;
 
     // Images of the raw foods
-    private BufferedImage[] images = new BufferedImage[8];
+    private BufferedImage[] icons = new BufferedImage[8];
 
     private BufferedImage placeholder = ImageLoader.readImage("tiles", "wood", 0, 0, false);
 
@@ -61,6 +61,7 @@ public class RawFood implements Item{
         this.price = prices[imageIndex];
         this.imageIndex = imageIndex;
         // load the images
+        this.icons = ImageLoader.loadRawFood();
     }
 
     // Getters
@@ -83,7 +84,7 @@ public class RawFood implements Item{
         return placeholder;
     }
 
-    public void buy(RawFood rawfood, Inventory inventory, Sim sim, GameTime time) { // ini ntar di implementasinya rawfood diisi this (refer to the currrent rawfood itself)
-        UpgradeActions.buyRawFood(inventory, rawfood, sim, time);
+    public void buy(Sim sim, GameTime time) {
+        UpgradeActions.buyRawFood(sim, time);
     }
 }

@@ -123,68 +123,11 @@ public class ActiveActions {
     }
 
     public void cook (Inventory inventory, BakedFood bakedfood, Stove stove, Sim sim, GameTime time){
-        Thread cooking = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    // check available ingredients first
-                    boolean isAllIngredientAvailable = true;
-                    for (String ingredient : bakedfood.getIngredients()) {
-                        boolean isIngredientAvailable = false;
-                        for (Item rawfood : inventory.getMapOfItems().keySet()) {
-                            if (ingredient.equals(rawfood.getName())) {
-                                isIngredientAvailable = true;
-                                break;
-                            }
-                        }  
-                        if (!isIngredientAvailable) {
-                            isAllIngredientAvailable = false;
-                            break;
-                        }
-                    }
-                    if (isAllIngredientAvailable) {
-                        stove.changeOccupiedState();
-                        double cookDuration = bakedfood.getHungerPoint() * 1.5;
-                        time.startDecrementTimeRemaining((int) cookDuration*1000);
-                        sim.setStatus("Cooking");
-
-                        Thread.sleep((int) cookDuration*1000);
-                        
-                        stove.changeOccupiedState();
-                        sim.setMood(sim.getMood() + 10);
-                        // must add code to add to inventory
-                        inventory.addItem(bakedfood);
-                    }
-                    
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        cooking.start();
+        // ini hapus ya, jadi langsung call interact bawah?
     }
 
     public static void takeALeak(Sim sim, GameTime time) {
-        Thread takingALeak = new Thread() {
-            @Override
-            public void run() {
-                try {
-            
-                    time.startDecrementTimeRemaining(10*1000);
-                    sim.setStatus("TakingALeak");
-                    Thread.sleep(10*1000);
-                    
-                    sim.setHunger(sim.getHunger() - 20);
-                    sim.setMood(sim.getMood() + 10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            
-        };
-        takingALeak.start();
-        
+        // ini jg  
     }
 
     public void readABook(Sim sim, GameTime time) {
