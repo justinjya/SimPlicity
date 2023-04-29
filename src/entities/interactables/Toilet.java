@@ -20,7 +20,7 @@ public class Toilet extends Interactables{
     public Toilet(int x, int y, int imageIndex) {
         super (
             "Toilet",
-            "takeALeak",
+            "take a leak",
             imageIndex,
             x,
             y,
@@ -51,9 +51,9 @@ public class Toilet extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
-                    time.startDecrementTimeRemaining(10);
-                    sim.setStatus("TakingALeak");
-                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
+                    time.startDecrementTimeRemaining(10 * Consts.ONE_SECOND);
+                    sim.setStatus("Taking a Leak");
+                    Thread.sleep(10 * Consts.THREAD_ONE_SECOND);
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHunger(sim.getHunger() - 20);
@@ -62,7 +62,6 @@ public class Toilet extends Interactables{
                     e.printStackTrace();
                 }
             }
-            
         };
         takingALeak.start();
     } 
