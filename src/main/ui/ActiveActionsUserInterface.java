@@ -9,7 +9,6 @@ import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
 import src.main.GamePanel;
-import src.main.GameTime;
 
 public class ActiveActionsUserInterface {
     // Selection Box Attributes
@@ -48,13 +47,13 @@ public class ActiveActionsUserInterface {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(Sim sim, UserInterface ui, GamePanel gp, GameTime time) {
+    private static void boxEntered(Sim sim, UserInterface ui) {
         switch (selectedBox) {
             case 0:
-                ActiveActions.work(sim, time, Consts.THREAD_ONE_SECOND * 3);
+                ActiveActions.work(sim, 9);
                 break;
             case 1:
-                ActiveActions.exercise(sim, time, Consts.THREAD_ONE_SECOND * 3);
+                ActiveActions.exercise(sim, 15);
                 break;
             case 2:
                 ActiveActions.visitAnotherSim(ui);
@@ -62,10 +61,10 @@ public class ActiveActionsUserInterface {
             default:
                 break;
         }
-        gp.setState("Playing");
+        GamePanel.gameState = "Playing";
     }
     
-    public static void update(Sim sim, UserInterface ui, GamePanel gp, GameTime time) {
+    public static void update(Sim sim, UserInterface ui) {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             moveSelectedBox("left");
         }
@@ -73,7 +72,7 @@ public class ActiveActionsUserInterface {
             moveSelectedBox("right");
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            boxEntered(sim, ui, gp, time);
+            boxEntered(sim, ui);
         }
     }
 
@@ -89,7 +88,7 @@ public class ActiveActionsUserInterface {
     }
 
     private static void drawSelectedBoxText(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 12);
+        Font font = new Font("Inter", Font.PLAIN, 12);
 
         g.setFont(font);
         switch (selectedBox) {
@@ -108,8 +107,7 @@ public class ActiveActionsUserInterface {
         }
     }
 
-    // TO - DO !!! : Fix this
-    public static void showActiveActions(GamePanel gp) {
-        gp.setState("Viewing active actions");
+    public static void showActiveActions() {
+        GamePanel.gameState = "Viewing active actions";
     }
 }

@@ -7,7 +7,7 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class TrashBin extends Interactables {
-    private int duration = Consts.THREAD_ONE_SECOND * 2;
+    private int duration = Consts.ONE_SECOND * 2;
 
     // Images of the trashbin
     private BufferedImage image;
@@ -39,7 +39,7 @@ public class TrashBin extends Interactables {
     }
 
     @Override
-    public void interact (Sim sim, GameTime time){
+    public void interact (Sim sim){
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
@@ -47,8 +47,8 @@ public class TrashBin extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Kicking the Bin");
                     // count the time
-                    time.startDecrementTimeRemaining(duration);
-                    Thread.sleep(duration);
+                    GameTime.startDecrementTimeRemaining(duration);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() - 2); // decrease sim's health

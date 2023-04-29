@@ -75,7 +75,7 @@ public abstract class Interactables extends Entity implements Item {
     
     public abstract BufferedImage getIcon();
     public abstract BufferedImage getImage();
-    public abstract void interact(Sim sim, GameTime time);
+    public abstract void interact(Sim sim);
 
     // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {

@@ -29,13 +29,13 @@ public abstract class Food {
         return imageIndex;
     }
 
-    public void eat(Sim sim, GameTime time) {
+    public void eat(Sim sim) {
         Thread eating = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Eating");
-                    time.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
 
                     Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
                     

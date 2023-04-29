@@ -14,7 +14,6 @@ import src.entities.interactables.Interactables;
 import src.items.Item;
 import src.items.foods.Food;
 import src.items.foods.RawFood;
-import src.main.GameTime;
 import src.main.ui.UserInterface;
 import src.world.House;
 import src.world.Room;
@@ -135,9 +134,8 @@ public class Inventory {
 
             if (item instanceof Food) {
                 Food food = (Food) item;
-                GameTime time = ui.getWorld().getTime();
 
-                food.eat(sim, time);
+                food.eat(sim);
             }
             
             int count = mapOfItems.get(item);

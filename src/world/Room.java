@@ -40,12 +40,6 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
-
-        // ONLY FOR DEBUGGING
-        // testRoom();
-        // listOfObjects.add(new Bed(0,5,0));
-        // listOfObjects.add(new Toilet(0, 2, 0));
-        // listOfObjects.add(new Stove(3, 2, 0));
     }
 
     // GETTERS

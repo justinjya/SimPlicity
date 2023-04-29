@@ -120,7 +120,7 @@ public class Cursor {
         }
     }
 
-    public void enterPressed(GamePanel gp, UserInterface ui) {
+    public void enterPressed(UserInterface ui) {
         if (world.isAdding()) {
             if (isAboveHouse()) return;
             
@@ -128,10 +128,10 @@ public class Cursor {
                 world.addHouse();
             }
         }
-        enterHouse(gp, ui);
+        enterHouse(ui);
     }
 
-    private void enterHouse(GamePanel gp, UserInterface ui) {
+    private void enterHouse(UserInterface ui) {
         int x = getGridX();
         int y = getGridY();
         Sim currentSim;
@@ -166,8 +166,7 @@ public class Cursor {
                     double deltaYsquared = Math.pow((double) (y2 - y1), 2);
                     int duration = (int) Math.sqrt(deltaXsquared + deltaYsquared);
 
-                    GameTime time = ui.getWorld().getTime();
-                    time.decreaseTimeRemaining(duration);
+                    GameTime.decreaseTimeRemaining(duration);
                 }
 
                 currentSim.setCurrentHouse(houseToVisit);
@@ -175,8 +174,8 @@ public class Cursor {
                 ui.changeIsViewingWorldState();
             }
 
-            if (gp.isCurrentState("Starting a new game")) {
-                gp.setState("Playing");
+            if (GamePanel.isCurrentState("Starting a new game")) {
+                GamePanel.gameState = "Playing";
             }
         }
         catch (Exception e) {System.out.println("Unexpected Error!");}

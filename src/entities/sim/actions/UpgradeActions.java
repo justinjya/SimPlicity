@@ -33,7 +33,7 @@ public class UpgradeActions {
         addNewRoomThread.start();
     }
 
-    public static void buyRawFood(Sim sim, GameTime time) {
+    public static void buyRawFood(Sim sim) {
         Thread buying = new Thread(){
             @Override
             public void run() {
@@ -66,7 +66,7 @@ public class UpgradeActions {
                 int upperBound = 30;
                 int lowerBound = 1;
                 int deliveryTime = (int) Math.random()*(upperBound-lowerBound) + lowerBound;
-                time.startDecrementTimeRemaining(deliveryTime);
+                GameTime.startDecrementTimeRemaining(deliveryTime);
                 if(sim.getMoney() >= rawFood.getPrice()){
                     // must put the code to add to inventory
                     sim.getInventory().addItem(rawFood);

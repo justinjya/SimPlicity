@@ -4,9 +4,7 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
-import src.main.GamePanel;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.ui.ActiveActionsUserInterface;
 import src.world.Room;
 
@@ -115,11 +113,10 @@ public class Door extends Interactables {
         return images[getImageIndex()];
     }
     
-    // TO - DO !!! : Figure out working and exercise
     @Override
-    public void interact(Sim sim, GameTime time) {
+    public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
-            // ActiveActionsUserInterface.showActiveActions(gp);
+            ActiveActionsUserInterface.showActiveActions();
             return;
         }
 

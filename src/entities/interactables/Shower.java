@@ -7,7 +7,7 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Shower extends Interactables {
-    private int duration = Consts.THREAD_ONE_SECOND * 10;
+    private int duration = Consts.ONE_SECOND * 10;
 
     // Images of the shower
     private BufferedImage image;
@@ -39,7 +39,7 @@ public class Shower extends Interactables {
     }
 
     @Override
-    public void interact (Sim sim, GameTime time){
+    public void interact (Sim sim){
         Thread showering = new Thread() {
             @Override
             public void run() {
@@ -47,8 +47,8 @@ public class Shower extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Taking a shower");
                     // count the time
-                    time.startDecrementTimeRemaining(duration);
-                    Thread.sleep(duration);
+                    GameTime.startDecrementTimeRemaining(duration);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() + 10); // increase sim's health

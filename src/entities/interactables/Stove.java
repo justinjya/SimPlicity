@@ -7,6 +7,7 @@ import src.entities.handlers.KeyHandler;
 import src.assets.ImageLoader;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
+import src.main.Consts;
 import src.main.GameTime;
 import src.items.foods.BakedFood;
 import src.items.Item;
@@ -70,7 +71,7 @@ public class Stove extends Interactables{
     }
 
     @Override
-    public void interact(Sim sim, GameTime time) {
+    public void interact(Sim sim) {
         // call ActiveAction.cook, but dont know how to insert the parameter required by cook since interact can only accept sim
         // my view: 
         // changeOccupied(sim);
@@ -117,10 +118,10 @@ public class Stove extends Interactables{
                         if (isAllIngredientAvailable) {
                             changeOccupiedState();
                             double cookDuration = bakedFood.getHungerPoint() * 1.5;
-                            time.startDecrementTimeRemaining((int) cookDuration*1000);
+                            GameTime.startDecrementTimeRemaining((int) cookDuration*Consts.THREAD_ONE_SECOND);
                             sim.setStatus("Cooking");
 
-                            Thread.sleep((int) cookDuration*1000);
+                            Thread.sleep((int) cookDuration*Consts.THREAD_ONE_SECOND);
                             
                             changeOccupiedState();
                             sim.setMood(sim.getMood() + 10);

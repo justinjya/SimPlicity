@@ -123,14 +123,14 @@ public class Bed extends Interactables{
     }
 
     @Override
-    public void interact(Sim sim, GameTime time) {
+    public void interact(Sim sim) {
         Thread interacting = new Thread() {
             @Override
             public void run() {
                 try {
                     changeOccupiedState();
                     sim.setStatus("Sleeping");
-                    time.startDecrementTimeRemaining(duration);
+                    GameTime.startDecrementTimeRemaining(duration);
 
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     

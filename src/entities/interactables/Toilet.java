@@ -6,7 +6,6 @@ import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
-import src.entities.sim.actions.ActiveActions;
 
 public class Toilet extends Interactables{
     // Images of toilet
@@ -45,13 +44,13 @@ public class Toilet extends Interactables{
     }
 
     @Override
-    public void interact(Sim sim, GameTime time) {
+    public void interact(Sim sim) {
         Thread takingALeak = new Thread() {
             @Override
             public void run() {
                 try {
                     changeOccupiedState();
-                    time.startDecrementTimeRemaining(10 * Consts.ONE_SECOND);
+                    GameTime.startDecrementTimeRemaining(10 * Consts.ONE_SECOND);
                     sim.setStatus("Taking a Leak");
                     Thread.sleep(10 * Consts.THREAD_ONE_SECOND);
                     changeOccupiedState();

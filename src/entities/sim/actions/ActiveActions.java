@@ -3,17 +3,16 @@ package src.entities.sim.actions;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.ui.UserInterface;
-import src.world.World;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 
 public class ActiveActions {
-    public static void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
+    public static void work (Sim sim, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
         Thread working = new Thread() {
             @Override
             public void run() {
                 int initialDurationWorked = sim.getDurationWorked();
-                Thread t = time.startDecrementTimeRemaining(duration);
+                Thread t = GameTime.startDecrementTimeRemaining(duration * Consts.ONE_SECOND);
                 
                 sim.setStatus("Working");
                 while (t.isAlive()) {
@@ -27,14 +26,16 @@ public class ActiveActions {
 
                         if (durationWorked == 0) continue;
                         
-                        if (durationWorked % (Consts.ONE_SECOND * 3) == 0) {
+                        // decrease sim mood and hunger every 30 seconds
+                        if (durationWorked % (Consts.ONE_SECOND * 3) == 0) { // TO - DO !!! : Change to specs
                             int simHunger = sim.getHunger();
                             int simMood = sim.getMood();
                             sim.setHunger(simHunger - 10);
                             sim.setMood(simMood - 10);
                         }
 
-                        if (durationWorked == (Consts.ONE_SECOND * 5)) {
+                        // increase sim salary every 4 minutes of work done
+                        if (durationWorked == (Consts.ONE_SECOND * 5)) { // TO - DO !!! : Change to spec
                             int simMoney = sim.getMoney();
                             int salary = sim.getProfession().getSalary();
                             sim.setMoney(simMoney + salary);
@@ -48,36 +49,41 @@ public class ActiveActions {
         working.start();
     }
 
-    public static void exercise (Sim sim, GameTime time, int duration){
+    public static void exercise (Sim sim, int duration){
         Thread exercising = new Thread() {
             @Override
             public void run() {
-                try {
-                    sim.setStatus("Exercising");
-                    // count the time
-                    time.startDecrementTimeRemaining(duration*1000);
-                    Thread.sleep(duration*1000);
+                sim.setStatus("Exercising");
+                // count the time
+                Thread t = GameTime.startDecrementTimeRemaining(duration*Consts.ONE_SECOND);
+                int timeExercised = 0;
+                while (t.isAlive()) {
+                    try {
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
 
-                    int multiplier20Secs = duration / 20; 
-                    sim.setHealth(sim.getHealth() + 5 * multiplier20Secs); // increase sim's health by 5 every 20 seconds 
-                    sim.setHunger(sim.getHunger() - 5 * multiplier20Secs); // decrease sim's hunger by 5 every 20 seconds
-                    sim.setMood(sim.getMood() + 10 * multiplier20Secs); // increase sim's mood by 10 every 20 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                        timeExercised++;
+                        if (timeExercised % 5 == 0) {
+                            sim.setHealth(sim.getHealth() + 5); // increase sim's health by 5 every 20 seconds 
+                            sim.setHunger(sim.getHunger() - 5); // decrease sim's hunger by 5 every 20 seconds
+                            sim.setMood(sim.getMood() + 10); // increase sim's mood by 10 every 20 seconds
+                        }
+                    }
+                    catch (InterruptedException e) {}
                 }
+                sim.resetStatus();
             }
         };
         exercising.start();
     }
 
-    public void readABook(Sim sim, GameTime time) {
+    public void readABook(Sim sim) {
         Thread readingABook = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("ReadingABook");
-                    time.startDecrementTimeRemaining(10*1000);
-                    Thread.sleep(10*1000);
+                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
+                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
                     sim.setMood(sim.getMood() + 10);
                     sim.setHunger(sim.getHunger() - 10);
                 } catch (InterruptedException e) {
@@ -88,14 +94,14 @@ public class ActiveActions {
         readingABook.start();
     }
 
-    public void karaoke(Sim sim, GameTime time) {
+    public void karaoke(Sim sim) {
         Thread karaoke = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Karaoke");
-                    time.startDecrementTimeRemaining(10*1000);
-                    Thread.sleep(10*1000);
+                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
+                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
                     sim.setMood(sim.getMood() + 10);
                     sim.setHunger(sim.getHunger() - 10);
                 }
@@ -107,14 +113,14 @@ public class ActiveActions {
         
     }
 
-    public void cleanTheBin(Sim sim, GameTime time) {
+    public void cleanTheBin(Sim sim) {
         Thread cleaningTheBin = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("CleaningTheBin");
-                    time.startDecrementTimeRemaining(10*1000);
-                    Thread.sleep(10*1000);
+                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
+                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
                     sim.setMood(sim.getMood() + 10);
                     sim.setHealth(sim.getHealth() + 10);
                     sim.setHunger(sim.getHunger() - 10);
@@ -128,7 +134,6 @@ public class ActiveActions {
 
     public static void interact(UserInterface ui) {
         Sim sim = ui.getCurrentSim();
-        World world = ui.getWorld();
         Interactables object = sim.getInteractionHandler().getInteractableObject();
         
         if (object == null) {
@@ -139,22 +144,22 @@ public class ActiveActions {
             return;
         }
 
-        object.interact(sim, world.getTime());
+        object.interact(sim);
     }
 
     public static void visitAnotherSim(UserInterface ui) {
         ui.changeIsViewingWorldState();
     }
 
-    public void shower (Sim sim, GameTime time){
+    public void shower (Sim sim){
         Thread showering = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Showering");
                     // count the time
-                    time.startDecrementTimeRemaining(10000);
-                    Thread.sleep(10000);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 10);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * 10);
                     sim.setHealth(sim.getHealth() + 10); // increase sim's health
                     sim.setMood(sim.getMood() + 15); // increase sim's mood
                 } catch (InterruptedException e) {
@@ -165,15 +170,15 @@ public class ActiveActions {
         showering.start();
     }
 
-    public void feedingfish (Sim sim, GameTime time){
+    public void feedingfish (Sim sim){
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Feeding Fish");
                     // count the time
-                    time.startDecrementTimeRemaining(5000);
-                    Thread.sleep(5000);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -183,15 +188,15 @@ public class ActiveActions {
         feedingfish.start();
     }
 
-    public void kickTheBin (Sim sim, GameTime time){
+    public void kickTheBin (Sim sim){
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Kicking The Bin");
                     // count the time
-                    time.startDecrementTimeRemaining(2000);
-                    Thread.sleep(2000);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 2);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * 2);
                     sim.setHealth(sim.getHealth() - 2); // decrease sim's health
                     sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
                     sim.setMood(sim.getMood() + 5); // increase sim's mood
