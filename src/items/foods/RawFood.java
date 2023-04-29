@@ -2,14 +2,10 @@ package src.items.foods;
 
 import java.awt.image.BufferedImage;
 
-import src.main.GameTime;
 import src.items.Item;
-import src.entities.sim.Sim;
-import src.entities.sim.actions.UpgradeActions;
 import src.assets.ImageLoader;
-import src.entities.sim.Inventory;;
 
-public class RawFood implements Item{
+public class RawFood extends Food implements Item{
     // Types of raw food
     private static String[] names = {
         "Nasi",
@@ -42,49 +38,39 @@ public class RawFood implements Item{
         1
     };
 
-
     // Atributes
-    private String name;
-    private int hungerPoint;
     private int price;
     private int imageIndex;
 
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[8];
 
-    private BufferedImage placeholder = ImageLoader.readImage("tiles", "wood", 0, 0, false);
+    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public RawFood (int imageIndex) {
-        this.name = names[imageIndex];
-        this.hungerPoint = hungerPoints[imageIndex];
+        super (
+            names[imageIndex],
+            hungerPoints[imageIndex],
+            imageIndex
+        );
         this.price = prices[imageIndex];
         this.imageIndex = imageIndex;
         // load the images
-        this.icons = ImageLoader.loadRawFood();
+        // this.icons = ImageLoader.loadRawFood();
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
-    public int getHungerPoint() {
-        return hungerPoint;
-    }
-
     public int getPrice() {
         return price;
     }
 
+    // Implementation of abstract methods
+    @Override
     public BufferedImage getIcon() {
         // return images[imageIndex];
 
         // ONLY FOR DEBUGGING
         return placeholder;
-    }
-
-    public void buy(Sim sim, GameTime time) {
-        UpgradeActions.buyRawFood(sim, time);
     }
 }

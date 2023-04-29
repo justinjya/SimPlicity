@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.entities.handlers.KeyHandler;
-import src.entities.interactables.Bed;
+import src.entities.interactables.*;
 import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
 import src.main.Consts;
@@ -68,7 +68,7 @@ public class SelectionBox {
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(1));
+                currentSim.getCurrentRoom().addObject(new Bed(2));
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);

@@ -33,6 +33,7 @@ public class UserInterface {
         this.world = world;
         this.currentSim = sim;
         this.inventory = sim.getInventory();
+
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;

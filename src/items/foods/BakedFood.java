@@ -1,12 +1,11 @@
 package src.items.foods;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.items.Item;
 
-public class BakedFood implements Item{
+public class BakedFood extends Food implements Item{
     // Types of baked food
     private static String[] names = {
         "Nasi Ayam",
@@ -31,8 +30,6 @@ public class BakedFood implements Item{
     };
 
     // Atributes
-    private String name;
-    private int hungerPoint;
     private String[] ingredient;
     private int imageIndex;
 
@@ -40,27 +37,22 @@ public class BakedFood implements Item{
     private BufferedImage[] icons = new BufferedImage[5];
 
     // ONLY FOR DEBUGGING
-    private BufferedImage placeholder = ImageLoader.readImage("tiles", "grass", 0, 0, false);
+    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public BakedFood (int imageIndex) {
-        this.name = names[imageIndex];
-        this.hungerPoint = hungerPoints[imageIndex];
+        super (
+            names[imageIndex],
+            hungerPoints[imageIndex],
+            imageIndex
+        );
         this.ingredient = ingredients[imageIndex];
         this.imageIndex = imageIndex;
         // load the images here
-        this.icons = ImageLoader.loadBakedFood();
+        // this.icons = ImageLoader.loadBakedFood();
     }
 
     // Getters
-    public String getName() {
-        return name;
-    }
-
-    public int getHungerPoint() {
-        return hungerPoint;
-    }
-
     public String[] getIngredients() {
         return ingredient;
     }
@@ -71,5 +63,4 @@ public class BakedFood implements Item{
         // ONLY FOR DEBUGGING
         return placeholder;
     }
-    
 }
