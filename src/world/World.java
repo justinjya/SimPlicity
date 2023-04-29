@@ -18,7 +18,6 @@ public class World {
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
-    private GamePanel gp;
     private GameTime time;
     
     // State of the world (is adding a house or selecting a house to visit)
@@ -59,7 +58,6 @@ public class World {
         this.cursor = new Cursor(Consts.TILE_SIZE * 16, Consts.TILE_SIZE * 16, this);
 
         // For the start of the game
-        this.gp = gp;
         this.time = time;
         listOfSim.add(sim);
         
@@ -115,7 +113,7 @@ public class World {
 
         Sim newSim = getSim(listOfSim.size() - 1);
         Room newRoom = new Room("First Room", time);
-        newRoom.getListOfObjects().add(new Door(null, gp, time));
+        newRoom.getListOfObjects().add(new Door(null, time));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);

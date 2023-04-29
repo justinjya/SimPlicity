@@ -40,9 +40,6 @@ public class UserInterface {
         this.viewingWorld = true;
         this.tabbed = false;
         this.debug = false;
-
-        // ONLY FOR DEBUGGING
-        this.mockup = ImageLoader.loadMockup();
     }
 
     // GETTERS
@@ -140,7 +137,7 @@ public class UserInterface {
         drawAttributes(g);
 
         // Draw tab boxes
-       SelectionBox.draw(g, this);
+        SelectionBox.draw(g, this);
     }
 
     private void drawText(Graphics2D g) {

@@ -76,6 +76,16 @@ public class ImageLoader {
 
         return images;
     }
+
+    public static BufferedImage[] loadCreatingSimMenu() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 180, y = 172
+        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 131, y = 302
+        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 603, y = 302
+
+        return images;
+    }
     
     public static BufferedImage[] loadSim() {
         BufferedImage[] images = new BufferedImage[12];
@@ -106,72 +116,6 @@ public class ImageLoader {
     public static BufferedImage loadWood() {
         BufferedImage image = readImage("tiles", "wood", 1, 1, true);
         return image;
-    }
-
-    public static BufferedImage loadMockup() {
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/gameLayoutMockup.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
-    public static BufferedImage loadMenuMockup(){
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/menu_display.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static BufferedImage loadStartButton(){
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/start_button.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static BufferedImage loadHelpButton(){
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/help_button.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static BufferedImage loadExitButton(){
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/exit_button.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static BufferedImage loadLoadButton(){
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/assets/mockup/load_button.png"));
-            return image;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public static BufferedImage[] loadDoor() {
