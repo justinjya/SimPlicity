@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
+import src.world.Room;
 import src.world.World;
 import src.assets.ImageLoader;
 import src.entities.interactables.Interactables;
@@ -17,6 +18,7 @@ public class UserInterface {
     private World world;
     private Sim currentSim;
     private Inventory inventory;
+    private Room currentRoom;
     
     private boolean viewingWorld;
     private boolean tabbed;
@@ -51,6 +53,10 @@ public class UserInterface {
         return currentSim;
     }
 
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
     public boolean isViewingWorld() {
         return viewingWorld;
     }
@@ -62,6 +68,7 @@ public class UserInterface {
     // SETTERS
     public void setCurrentSim(Sim sim) {
         currentSim = sim;
+        currentRoom = currentSim.getCurrentRoom();
 
         if (currentSim.isBusy()) currentSim.changeIsBusyState();
 
@@ -105,7 +112,7 @@ public class UserInterface {
         }
 
         if (inventory.isOpen()) {
-            inventory.update();
+            inventory.update(currentSim);
         }
     }
     

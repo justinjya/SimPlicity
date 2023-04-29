@@ -5,11 +5,7 @@ import src.main.GameTime;
 import src.main.ui.UserInterface;
 import src.world.World;
 import src.entities.interactables.Interactables;
-import src.entities.interactables.Stove;
 import src.entities.sim.Sim;
-import src.items.foods.BakedFood;
-import src.entities.sim.Inventory;
-import src.items.Item;
 
 public class ActiveActions {
     public static void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
@@ -72,14 +68,6 @@ public class ActiveActions {
             }
         };
         exercising.start();
-    }
-
-    public void cook (Inventory inventory, BakedFood bakedfood, Stove stove, Sim sim, GameTime time){
-        // ini hapus ya, jadi langsung call interact bawah?
-    }
-
-    public static void takeALeak(Sim sim, GameTime time) {
-        // ini jg  
     }
 
     public void readABook(Sim sim, GameTime time) {

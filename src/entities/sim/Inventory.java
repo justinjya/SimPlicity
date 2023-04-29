@@ -13,6 +13,7 @@ import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
 import src.items.foods.RawFood;
+import src.world.Room;
 
 public class Inventory {
     private HashMap<Item, Integer> mapOfItems = new HashMap<>();
@@ -101,26 +102,34 @@ public class Inventory {
         mapOfItems.put(item, 1);
     }
 
-    // public void removeItem(Item item)
-    // {
-    //     for (Item i : mapOfItems.keySet())
-    //     {
-    //         if (i.getName().equals(item.getName()))
-    //         {
-    //             int count = mapOfItems.get(i);
-    //             mapOfItems.put(i, count - 1);
-    //             return;
-    //         }
-    //     }
-    //     mapOfItems.remove(item);
-    // }
-    public void removeItem() {
+    public void interact(Sim sim) {
         if (slotSelected > itemNames.size()) return;
 
-        
+        String selectedItem = itemNames.get(slotSelected);
+
+        for (Item item : mapOfItems.keySet()) {
+            if (!item.getName().equals(selectedItem)) continue;
+
+            int count = mapOfItems.get(item);
+            if (count > 1) {
+                mapOfItems.put(item, count - 1);
+            }
+            else {
+                mapOfItems.remove(item);
+            }
+
+            if (item instanceof Interactables) {
+                Room currentRoom = sim.getCurrentRoom();
+                
+                currentRoom.addObject((Interactables) item);
+                sim.changeIsBusyState();
+                changeIsOpen();
+            }
+            return;
+        }
     }
 
-    public void update()
+    public void update(Sim sim)
     {
         getItemsToShow();
 
@@ -136,7 +145,7 @@ public class Inventory {
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
             if (slotRow < 3) {
-                slotSelected += 2;
+                slotSelected += 3;
                 slotRow++;
             } 
         }
@@ -148,14 +157,14 @@ public class Inventory {
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
             if (slotRow > 0) {
-                slotSelected -= 2;
+                slotSelected -= 3;
                 slotRow--;
             }
         }
         
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (slotSelected < itemNames.size()) {
-                // removeItem();
+                interact(sim);
             }
         }
     }
@@ -230,15 +239,18 @@ public class Inventory {
 
             g.drawImage(itemIcon, x, y, null); // Draw the image
 
-            if (mapOfItems.get(item) > 1) {
-                g.setColor(Color.WHITE);
-                g.fillRect(x + 31, y + 31, 14, 14);
-
-                g.setColor(Color.BLACK);
-                Font font = new Font("Inter", Font.BOLD, 10);
-                g.setFont(font);
-                g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+            try {
+                if (mapOfItems.get(item) > 1) {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(x + 31, y + 31, 14, 14);
+    
+                    g.setColor(Color.BLACK);
+                    Font font = new Font("Inter", Font.BOLD, 10);
+                    g.setFont(font);
+                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+                }
             }
+            catch (NullPointerException e) {}
 
             x += slotSize; // Move to the next column
             if (i % cols == cols - 1) { // If we've filled up a row

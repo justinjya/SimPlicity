@@ -137,7 +137,6 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
                 try {
