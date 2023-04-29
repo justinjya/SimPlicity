@@ -51,10 +51,10 @@ public class ActiveActionsUserInterface {
     private static void boxEntered(Sim sim, UserInterface ui, GamePanel gp, GameTime time) {
         switch (selectedBox) {
             case 0:
-                ActiveActions.work(sim, time);
+                ActiveActions.work(sim, time, Consts.THREAD_ONE_SECOND * 3);
                 break;
             case 1:
-                ActiveActions.exercise(sim, time);
+                ActiveActions.exercise(sim, time, Consts.THREAD_ONE_SECOND * 3);
                 break;
             case 2:
                 ActiveActions.visitAnotherSim(ui);

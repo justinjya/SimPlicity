@@ -1,69 +1,71 @@
 package src.entities.sim.actions;
 
-import src.entities.interactables.Interactables;
-import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.ui.UserInterface;
 import src.world.World;
+import src.entities.interactables.Interactables;
+import src.entities.interactables.Stove;
+import src.entities.sim.Sim;
+import src.items.foods.BakedFood;
+import src.entities.sim.Inventory;
+import src.items.Item;
 
 public class ActiveActions {
-    public static void work (Sim sim, GameTime time){
-        // Thread working = new Thread() {
-        //     @Override
-        //     public void run() {
-        //         // if it has not ever changed profession or it's been one day since it changed its profession
-        //         if (!sim.getHasChangedProfession() || 
-        //         ((((time.getDay() - 1) * 720 + 720 - time.getTimeRemaining())) 
-        //         - ((sim.getChangeProfessionTime().getDay() - 1) * 720 + 720 - sim.getChangeProfessionTime().getTimeRemaining())) >= 720) { 
-        //             try {
-        //                 sim.setStatus("Working");
-        //                 time.startDecrementTimeRemaining(240000);
-        //                 Thread.sleep(240000);
-
-        //                 sim.setDurationOfWork(sim.getDurationOfWork() + 240); // sim's duration of work + 4 mins
-        //                 sim.setMood(sim.getMood() - 80); // -80 mood per 4 mins
-        //                 sim.setHunger(sim.getHunger() - 80); // -80 hunger per 4 mins
-                        
+    public static void work (Sim sim, GameTime time, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
+        Thread working = new Thread() {
+            @Override
+            public void run() {
+                int initialDurationWorked = sim.getDurationWorked();
+                Thread t = time.startDecrementTimeRemaining(duration);
                 
-        //                 // add salary according to profession
-        //                 if (sim.getProfessionId() == 1) {
-        //                     sim.setMoney(sim.getMoney() + 15);
-        //                 }
-        //                 else if (sim.getProfessionId() == 2) {
-        //                     sim.setMoney(sim.getMoney() + 30);
-        //                 }
-        //                 else if (sim.getProfessionId() == 3) {
-        //                     sim.setMoney(sim.getMoney() + 35);
-        //                 }
-        //                 else if (sim.getProfessionId() == 4) {
-        //                     sim.setMoney(sim.getMoney() + 45);
-        //                 }
-        //                 else if (sim.getProfessionId() == 5) {
-        //                     sim.setMoney(sim.getMoney() + 50);
-        //                 }
-        //             } catch (InterruptedException e) {
-        //                 e.printStackTrace();
-        //             }
-                    
-        //         }
-        //     }
-        // };
-        // working.start();
+                sim.setStatus("Working");
+                while (t.isAlive()) {
+                    try {
+                        int durationWorked = sim.getDurationWorked();
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                        
+                        if (durationWorked <  initialDurationWorked + duration) {
+                            sim.setDurationWorked(sim.getDurationWorked() + 1);
+                        }
+
+                        if (durationWorked == 0) continue;
+                        
+                        if (durationWorked % (Consts.ONE_SECOND * 3) == 0) {
+                            int simHunger = sim.getHunger();
+                            int simMood = sim.getMood();
+                            sim.setHunger(simHunger - 10);
+                            sim.setMood(simMood - 10);
+                        }
+
+                        if (durationWorked == (Consts.ONE_SECOND * 5)) {
+                            int simMoney = sim.getMoney();
+                            int salary = sim.getProfession().getSalary();
+                            sim.setMoney(simMoney + salary);
+                            sim.setDurationWorked(0);
+                        }
+                    } catch (InterruptedException e) {}
+                }
+                sim.resetStatus();
+            }
+        };
+        working.start();
     }
 
-    public static void exercise (Sim sim, GameTime time){
+    public static void exercise (Sim sim, GameTime time, int duration){
         Thread exercising = new Thread() {
             @Override
             public void run() {
                 try {
                     sim.setStatus("Exercising");
                     // count the time
-                    time.startDecrementTimeRemaining(20000);
-                    Thread.sleep(20000);
-                    sim.setHealth(sim.getHealth() + 5); // increase sim's health
-                    sim.setHunger(sim.getHunger() - 5); // decrease sim's hunger
-                    sim.setMood(sim.getMood() + 10); // increase sim's mood
+                    time.startDecrementTimeRemaining(duration*1000);
+                    Thread.sleep(duration*1000);
+
+                    int multiplier20Secs = duration / 20; 
+                    sim.setHealth(sim.getHealth() + 5 * multiplier20Secs); // increase sim's health by 5 every 20 seconds 
+                    sim.setHunger(sim.getHunger() - 5 * multiplier20Secs); // decrease sim's hunger by 5 every 20 seconds
+                    sim.setMood(sim.getMood() + 10 * multiplier20Secs); // increase sim's mood by 10 every 20 seconds
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -72,34 +74,68 @@ public class ActiveActions {
         exercising.start();
     }
 
-    // UNCOMMENT LATER
-    public void eat(Sim sim) {
-        // Makan berarti Sim mengambil makanan yang ada di Inventory untuk kemudian dikonsumsi
-        // Konsumsi makanan akan mengurangi jumlah makanan terkait pada inventory sejumlah 1 buah
-        // dan meningkatkan tingkat kekenyangan Sim sejumlah satuan kekenyangan makanan terkait
-        // Room currentRoom = sim.getCurrentRoom();
-        // if (!sim.isBusy() && !currentRoom.isAddingObject()) {
-        //     sim.setStatus("Eating");
-        //     sim.changeIsBusyState();
+    public void cook (Inventory inventory, BakedFood bakedfood, Stove stove, Sim sim, GameTime time){
+        // ini hapus ya, jadi langsung call interact bawah?
+    }
 
-        //     // Mengkonsumsi makanan yang ada di inventory
-        //     Inventory inventory = currentRoom.getInventory();
-        //     Food food = inventory.takeFood(); // Mengambil makanan dari inventory
-        //     if (food != null) {
-        //         int hungerIncrease = food.getSaturation(); // Mendapatkan jumlah kekenyangan dari makanan yang dikonsumsi
-        //         sim.setHunger(sim.getHunger() + hungerIncrease); // Menambahkan kekenyangan Sim dengan jumlah kekenyangan makanan yang dikonsumsi
-        //     }
+    public static void takeALeak(Sim sim, GameTime time) {
+        // ini jg  
+    }
 
-        //     // Mengatur waktu makan
-        //     try {
-        //         Thread.sleep(Consts.ONE_SECOND);
-        //     } catch (InterruptedException e) {
-        //         e.printStackTrace();
-        //     }
+    public void readABook(Sim sim, GameTime time) {
+        Thread readingABook = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("ReadingABook");
+                    time.startDecrementTimeRemaining(10*1000);
+                    Thread.sleep(10*1000);
+                    sim.setMood(sim.getMood() + 10);
+                    sim.setHunger(sim.getHunger() - 10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        readingABook.start();
+    }
 
-        //     sim.setStatus("Idle");
-        //     sim.changeIsBusyState();
-        // }
+    public void karaoke(Sim sim, GameTime time) {
+        Thread karaoke = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("Karaoke");
+                    time.startDecrementTimeRemaining(10*1000);
+                    Thread.sleep(10*1000);
+                    sim.setMood(sim.getMood() + 10);
+                    sim.setHunger(sim.getHunger() - 10);
+                }
+                catch (InterruptedException e) {}
+                sim.resetStatus();
+            }
+        };
+        karaoke.start();
+        
+    }
+
+    public void cleanTheBin(Sim sim, GameTime time) {
+        Thread cleaningTheBin = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sim.setStatus("CleaningTheBin");
+                    time.startDecrementTimeRemaining(10*1000);
+                    Thread.sleep(10*1000);
+                    sim.setMood(sim.getMood() + 10);
+                    sim.setHealth(sim.getHealth() + 10);
+                    sim.setHunger(sim.getHunger() - 10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        cleaningTheBin.start();
     }
 
     public static void interact(UserInterface ui) {

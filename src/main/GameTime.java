@@ -3,15 +3,14 @@ package src.main;
 public class GameTime implements Runnable {    
     // Atributes
     private int day;
-    private int initialTimeRemaining;
+    private int initialTimeRemaining = Consts.ONE_MINUTE * 12;
     private int timeRemaining;
     private int decrements;
-    private Thread thread;
+    private Thread timeThread;
     
     // CONSTRUCTOR
-    public GameTime(int day, int initialTimeRemaining, int timeRemaining) {
+    public GameTime(int day, int timeRemaining) {
         this.day = day;
-        this.initialTimeRemaining = initialTimeRemaining;
         this.timeRemaining = timeRemaining;
         this.decrements = 0;
     }
@@ -19,14 +18,18 @@ public class GameTime implements Runnable {
     // IMPLEMENTATION OF INTERFACE
     @Override
     public void run() {
-        while (decrements > 0) {
-            try {
-                Thread.sleep(Consts.THREAD_ONE_SECOND);
+        synchronized (this) {
+            while (decrements > 0) {
+                try {
+                    Thread.sleep(Consts.THREAD_ONE_SECOND);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                decrementTimeRemaining();
+                decrements--;
             }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            decrementTimeRemaining(initialTimeRemaining);
         }
     }
 
@@ -48,13 +51,16 @@ public class GameTime implements Runnable {
     }
 
     public Thread getThread() {
-        return thread;
+        return timeThread;
+    }
+
+    public boolean isAlive() {
+        return timeThread.isAlive();
     }
 
     // SETTERS
-    public void decrementTimeRemaining(int initialTimeRemaining) {
+    public synchronized void decrementTimeRemaining() {
         timeRemaining--;
-        decrements--;
         if (timeRemaining == 0)
         {
             timeRemaining = initialTimeRemaining;
@@ -67,20 +73,24 @@ public class GameTime implements Runnable {
     }
 
     public void setDecrements(int decrements) {
-        this.decrements = decrements / Consts.THREAD_ONE_SECOND;
+        if (decrements > this.decrements) {
+            this.decrements = decrements;
+        }
     }
     
     // OTHERS
-    public void startDecrementTimeRemaining(int decrements) {
+    public Thread startDecrementTimeRemaining(int decrements) {
         setDecrements(decrements);
-        thread = new Thread(this);
-        thread.start();
+        timeThread = new Thread(this);
+        timeThread.start();
+
+        return timeThread;
     }
 
     public void decreaseTimeRemaining(int time) {
         timeRemaining -= time;
-        if(timeRemaining <= 0){
-            int timeLeft = 0-timeRemaining;
+        if (timeRemaining <= 0){
+            int timeLeft = 0 - timeRemaining;
             timeRemaining = initialTimeRemaining - timeLeft;
             incrementDay();
         }

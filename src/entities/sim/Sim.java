@@ -27,6 +27,8 @@ public class Sim extends Entity{
     private Profession profession;
     private Inventory inventory;
     
+    private int durationWorked;
+
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
 
@@ -87,12 +89,8 @@ public class Sim extends Entity{
         return status;
     }
     
-    public String getProfession() {
-        return profession.getName();
-    }
-
-    public int getSimSalary() {
-        return profession.getSalary();
+    public Profession getProfession() {
+        return profession;
     }
 
     public Inventory getInventory() {
@@ -123,6 +121,10 @@ public class Sim extends Entity{
         return isBusy;
     }
 
+    public int getDurationWorked() {
+        return durationWorked;
+    }
+
     // SETTERS
     public void setHealth(int health) {
         this.health = health;
@@ -137,6 +139,10 @@ public class Sim extends Entity{
     public void setMood(int mood) {
         this.mood = mood;
         if (this.mood > 100) this.mood = 100;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     public void setStatus(String status) {
@@ -164,6 +170,10 @@ public class Sim extends Entity{
 
     public void changeIsBusyState() {
         this.isBusy = !this.isBusy;
+    }
+
+    public void setDurationWorked(int durationWorked) {
+        this.durationWorked = durationWorked;
     }
 
     // OTHERS

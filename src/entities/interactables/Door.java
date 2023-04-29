@@ -114,7 +114,7 @@ public class Door extends Interactables {
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
-
+    
     @Override
     public void interact(Sim sim, GameTime time) {
         if (leadsIntoRoom == null) {
