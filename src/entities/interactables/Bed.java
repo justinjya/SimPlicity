@@ -100,14 +100,14 @@ public class Bed extends Interactables{
 
     @Override
     public void changeOccupiedState() {
-        this.occupied = !this.occupied;
-
         if (!isOccupied()) {
             setImageIndex(getImageIndex() + 3);
         }
         else {
             setImageIndex(getImageIndex() - 3);
         }
+
+        this.occupied = !this.occupied;
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS
