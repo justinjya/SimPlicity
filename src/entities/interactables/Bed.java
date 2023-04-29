@@ -1,3 +1,4 @@
+
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;

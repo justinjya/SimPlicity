@@ -41,6 +41,7 @@ public class Inventory {
     private int slotX = slotXstart;
     private int slotY = slotYstart;
 
+    
     // constructor
     public Inventory() {}
 

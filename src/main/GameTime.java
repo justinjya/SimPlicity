@@ -43,12 +43,16 @@ public class GameTime implements Runnable {
         return decrements;
     }
 
+    public int getInitialTimeRemaining() {
+        return initialTimeRemaining;
+    }
+
     public Thread getThread() {
         return thread;
     }
 
     // SETTERS
-    private void decrementTimeRemaining(int initialTimeRemaining) {
+    public void decrementTimeRemaining(int initialTimeRemaining) {
         timeRemaining--;
         decrements--;
         if (timeRemaining == 0)
