@@ -1,6 +1,5 @@
 package src.entities.interactables;
 
-import java.io.BufferedInputStream;
 import java.awt.image.BufferedImage;
 
 import src.entities.sim.Sim;
@@ -16,7 +15,7 @@ public class Toilet extends Interactables{
     private int duration;
 
     // CONSTRUCTOR
-    public Toilet(int x, int y, int imageIndex, GameTime time) {
+    public Toilet(int x, int y, int imageIndex) {
         super (
             "Toilet",
             "takeALeak",
@@ -24,8 +23,7 @@ public class Toilet extends Interactables{
             x,
             y,
             1,
-            1,
-            time
+            1
         );
 
         this.price = 50;
@@ -35,25 +33,19 @@ public class Toilet extends Interactables{
 
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
+    public BufferedImage getIcon() {
+        return images[getImageIndex()];
+    }
+
+    @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
+    public void interact(Sim sim, GameTime time) {
         changeOccupiedState();
-        if (!isOccupied()) {
-            //setImageIndex(getImageIndex() + 1);
-        }
-        else {
-            //setImageIndex(getImageIndex() - 1);
-        }
-    }
-
-    @Override
-    public void interact(Sim sim) {
-        changeOccupied(sim);
-        ActiveActions.takeALeak(sim, getTime());
-        changeOccupied(sim);
+        ActiveActions.takeALeak(sim, time);
+        changeOccupiedState();
     } 
 }

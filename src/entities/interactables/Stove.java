@@ -1,6 +1,5 @@
 package src.entities.interactables;
 
-import java.io.BufferedInputStream;
 import java.awt.image.BufferedImage;
 
 import src.entities.sim.Sim;
@@ -32,7 +31,7 @@ public class Stove extends Interactables{
     private int duration;
 
     // CONSTRUCTOR
-    public Stove(int x, int y, int imageIndex, GameTime time) {
+    public Stove(int x, int y, int imageIndex) {
         super (
             names[imageIndex],
             "cook",
@@ -40,8 +39,7 @@ public class Stove extends Interactables{
             x,
             y,
             width[imageIndex],
-            height[imageIndex],
-            time
+            height[imageIndex]
         );
 
         this.price = prices[imageIndex];
@@ -51,23 +49,17 @@ public class Stove extends Interactables{
 
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
+    public BufferedImage getIcon() {
+        return images[getImageIndex()];
+    }
+
+    @Override
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
 
     @Override
-    public void changeOccupied(Sim sim) {
-        changeOccupiedState();
-        if (!isOccupied()) {
-            //setImageIndex(getImageIndex() + 1);
-        }
-        else {
-            //setImageIndex(getImageIndex() - 1);
-        }
-    }
-
-    @Override
-    public void interact(Sim sim) {
+    public void interact(Sim sim, GameTime time) {
         // call ActiveAction.cook, but dont know how to insert the parameter required by cook since interact can only accept sim
         // my view: 
         // changeOccupied(sim);

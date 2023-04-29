@@ -59,7 +59,7 @@ public class BakedFood implements Item{
         return ingredient;
     }
 
-    public BufferedImage getImage() {
+    public BufferedImage getIcon() {
         return images[imageIndex];
     }
     

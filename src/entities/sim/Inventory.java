@@ -174,7 +174,7 @@ public class Inventory {
 
         for (Item item : mapOfItems.keySet()) {
             if (isObject && (item instanceof Interactables)){
-                BufferedImage itemIcon = item.getImage(); // Get the item image
+                BufferedImage itemIcon = item.getIcon(); // Get the item image
 
                 g.drawImage(itemIcon, x, y, null); // Draw the image
 
@@ -190,7 +190,7 @@ public class Inventory {
             }
 
             if (!isObject && !(item instanceof Interactables)){
-                BufferedImage itemIcon = item.getImage(); // Get the item image
+                BufferedImage itemIcon = item.getIcon(); // Get the item image
 
                 g.drawImage(itemIcon, x, y, null); // Draw the image
 

@@ -73,7 +73,7 @@ public class RawFood implements Item{
         return price;
     }
 
-    public BufferedImage getImage() {
+    public BufferedImage getIcon() {
         return images[imageIndex];
     }
 

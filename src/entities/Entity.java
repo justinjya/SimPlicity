@@ -98,7 +98,7 @@ public abstract class Entity {
 
     // FOR MOVING THE SIM
     public void move(CollisionHandler collisionHandler, InteractionHandler interactionHandler) {
-        // Update the entity position when moving
+        // Update the sim position when moving
         int newX = x;
         int newY = y;
         int initialSpeed = speed;
@@ -131,44 +131,29 @@ public abstract class Entity {
             checkCollision(collisionHandler, newX, newY);
         }
         speed = initialSpeed;
-
-        // Keybinds for the entity to interact with the game or window
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) { // check if the F key has been pressed since the last update
-            System.out.println("press");
-            interactionHandler.interact();
-        }
     }
 
-    // FOR ADDING OBJECTS
+    // FOR MOVING OBJECTS
     public void move(CollisionHandler collisionHandler) {
-        // Update the entity position when moving
+        // Update the object position when moving
         int newX = x;
         int newY = y;
-        double speed = this.speed * 12.8;
-        double initialSpeed = speed;
+        speed = Consts.SCALED_TILE; // Move object by one tile
 
-        if(isMovingDiagonally()){
-            speed *= 0.707;
-        }
- 
         if (isMoving()) {
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                newX -= speed; // Move left by one tile
-
+                newX -= speed;
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                newX += speed; // Move right by one tile
+                newX += speed;
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
-                newY -= speed; // Move up by one tile
+                newY -= speed;
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
-                newY += speed; // Move down by one tile
+                newY += speed;
             }
             checkCollision(collisionHandler, newX, newY);
         }
-        speed = initialSpeed;
     }
-
-    
 }
