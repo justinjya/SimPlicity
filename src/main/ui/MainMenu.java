@@ -104,6 +104,9 @@ public class MainMenu {
     }
 
     private static void drawCreateSimMenu(Graphics2D g) {
-
+        g.drawImage(creatingSimMenu[0], 0, 0, null); // background
+        g.drawImage(creatingSimMenu[1], 120, 80, null); // title
+        g.drawImage(creatingSimMenu[2], 220, 280, null); // input field
+        g.drawImage(creatingSimMenu[3], 250, 350, null); // submit button
     }
 }
