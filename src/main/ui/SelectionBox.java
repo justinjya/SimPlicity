@@ -6,9 +6,10 @@ import java.awt.Graphics2D;
 
 import src.entities.handlers.KeyHandler;
 import src.entities.interactables.Bed;
-import src.entities.sim.Sim;
 import src.entities.sim.actions.*;
+import src.entities.sim.Sim;
 import src.main.Consts;
+import src.main.GameTime;
 import src.world.World;
 
 public class SelectionBox {
@@ -53,19 +54,21 @@ public class SelectionBox {
 
         Sim currentSim = ui.getCurrentSim();
         World world = ui.getWorld();
+        GameTime time = world.getTime();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(currentSim.getCurrentRoom());
+                // NonActiveActions.editRoom(currentSim.getCurrentRoom());
+                ActiveActions.work(currentSim, time, 9);
                 break;
             case 1:
                 UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room");
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(0));
+                currentSim.getCurrentRoom().addObject(new Bed(1));
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);

@@ -172,6 +172,10 @@ public class Sim extends Entity{
         this.isBusy = !this.isBusy;
     }
 
+    public void setDurationWorked(int durationWorked) {
+        this.durationWorked = durationWorked;
+    }
+
     // OTHERS
     public void update() {
         if (!isStatusCurrently("Idle") || currentRoom.isEditingRoom()) {

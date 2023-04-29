@@ -16,85 +16,37 @@ public class ActiveActions {
         Thread working = new Thread() {
             @Override
             public void run() {
-                // if it has not ever changed profession or it's been one day since it changed its profession
-            //     if (!sim.getHasChangedProfession() || 
-            //     ((((time.getDay() - 1) * 720 + 720 - time.getTimeRemaining())) 
-            //     - ((sim.getChangeProfessionTime().getDay() - 1) * 720 + 720 - sim.getChangeProfessionTime().getTimeRemaining())) >= 720) { 
-            //         try {
-            //             sim.setStatus("Working");
-            //             time.startDecrementTimeRemaining(duration*1000);
-            //             Thread.sleep(duration*1000);
-
-            //             // sim's duration of work + duration
-            //             sim.setDurationOfWork(sim.getDurationOfWork() + duration); // for subtracting mood and hunger
-            //             sim.setDurationOfWork1(sim.getDurationOfWork1() + duration); // for adding salary
-
-            //             // check if the duration work is enough to be subtracted for mood and hunger
-            //             int moodAndHungerSubtractedAmount = 10 * sim.getDurationOfWork() / 30; // 30 seconds for every 10 mood and hunger decreased
-            //             sim.setMood(sim.getMood() -  moodAndHungerSubtractedAmount);
-            //             sim.setHunger(sim.getHunger() - moodAndHungerSubtractedAmount);
-            //             sim.setDurationOfWork(sim.getDurationOfWork() % 30);
-
-            //             // check if the mood and hunger is negative after subtraction
-            //             if (sim.getMood() < 0) {
-            //                 sim.setMood(0);
-            //             }
-
-            //             if (sim.getHunger() < 0) {
-            //                 sim.setHunger(0);
-            //             }
+                int initialDurationWorked = sim.getDurationWorked();
+                Thread t = time.startDecrementTimeRemaining(duration);
+                
+                sim.setStatus("Working");
+                while (t.isAlive()) {
+                    try {
+                        int durationWorked = sim.getDurationWorked();
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
                         
-            //             // check if the duration work is enough to be added for money
-            //             // add salary according to profession
-            //             int salaryMultiplier = sim.getDurationOfWork1() / 240; // 4 minutes or 240 seconds for every salary received
-            //             if (sim.getProfession().getName().equals("Clone")) {
-            //                 sim.setMoney(sim.getMoney() + 15 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Chef")) {
-            //                 sim.setMoney(sim.getMoney() + 30 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Police")) {
-            //                 sim.setMoney(sim.getMoney() + 35 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Programmer")) {
-            //                 sim.setMoney(sim.getMoney() + 45 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Doctor")) {
-            //                 sim.setMoney(sim.getMoney() + 50 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Barista")) {
-            //                 sim.setMoney(sim.getMoney() + 20 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Model")) {
-            //                 sim.setMoney(sim.getMoney() + 45 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Dentist")) {
-            //                 sim.setMoney(sim.getMoney() + 40 * salaryMultiplier);
-            //             }
-            //             else if (sim.getProfession().getName().equals("Security")) {
-            //                 sim.setMoney(sim.getMoney() + 15 * salaryMultiplier);
-            //             }
-            //             sim.setDurationOfWork1(sim.getDurationOfWork1() % 240);
-            //         } catch (InterruptedException e) {
-            //             e.printStackTrace();
-            //         }
-                    
-            //     }
-                try {
-                    time.startDecrementTimeRemaining(duration);
-                    sim.setStatus("Working");
+                        if (durationWorked <  initialDurationWorked + duration) {
+                            sim.setDurationWorked(sim.getDurationWorked() + 1);
+                        }
 
-                    if (sim.getDurationWorked() == Consts.ONE_MINUTE * 4) {
-                        int simMoney = sim.getMoney();
-                        int salary = sim.getProfession().getSalary();
-                        sim.setMoney(simMoney + salary);
-                    }
+                        if (durationWorked == 0) continue;
+                        
+                        if (durationWorked % (Consts.ONE_SECOND * 3) == 0) {
+                            int simHunger = sim.getHunger();
+                            int simMood = sim.getMood();
+                            sim.setHunger(simHunger - 10);
+                            sim.setMood(simMood - 10);
+                        }
 
-                    Thread.sleep(duration);
-
-                    sim.resetStatus();
+                        if (durationWorked == (Consts.ONE_SECOND * 5)) {
+                            int simMoney = sim.getMoney();
+                            int salary = sim.getProfession().getSalary();
+                            sim.setMoney(simMoney + salary);
+                            sim.setDurationWorked(0);
+                        }
+                    } catch (InterruptedException e) {}
                 }
-                catch (InterruptedException e) {}
+                sim.resetStatus();
             }
         };
         working.start();

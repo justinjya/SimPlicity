@@ -32,7 +32,7 @@ public class Bed extends Interactables{
 
     // Atributes
     private int price;
-    private int duration;
+    private int duration = Consts.ONE_SECOND * 5; // Change this to * 4 once the project is done
 
     // Image of the beds
     private BufferedImage[] images = new BufferedImage[9];
@@ -50,7 +50,6 @@ public class Bed extends Interactables{
         );
 
         this.price = prices[imageIndex];
-        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();
@@ -68,7 +67,6 @@ public class Bed extends Interactables{
         );
 
         this.price = prices[imageIndex];
-        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();
@@ -87,7 +85,6 @@ public class Bed extends Interactables{
         );
         
         this.price = prices[1];
-        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
 
         // Load the image of the beds
         images = ImageLoader.loadBeds();
@@ -128,10 +125,10 @@ public class Bed extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
-                    time.startDecrementTimeRemaining(duration);
                     sim.setStatus("Sleeping");
+                    time.startDecrementTimeRemaining(duration);
 
-                    Thread.sleep(duration);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     
                     changeOccupiedState();
                     sim.resetStatus();

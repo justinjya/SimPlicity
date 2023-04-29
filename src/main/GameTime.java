@@ -54,6 +54,10 @@ public class GameTime implements Runnable {
         return timeThread;
     }
 
+    public boolean isAlive() {
+        return timeThread.isAlive();
+    }
+
     // SETTERS
     public synchronized void decrementTimeRemaining() {
         timeRemaining--;
@@ -69,14 +73,18 @@ public class GameTime implements Runnable {
     }
 
     public void setDecrements(int decrements) {
-        this.decrements = decrements;
+        if (decrements > this.decrements) {
+            this.decrements = decrements;
+        }
     }
     
     // OTHERS
-    public void startDecrementTimeRemaining(int decrements) {
+    public Thread startDecrementTimeRemaining(int decrements) {
         setDecrements(decrements);
         timeThread = new Thread(this);
         timeThread.start();
+
+        return timeThread;
     }
 
     public void decreaseTimeRemaining(int time) {

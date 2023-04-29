@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = "Starting a new game";
         
         // Create game time
-        time = new GameTime(1, 720, 720);
+        time = new GameTime(1, Consts.ONE_MINUTE * 12);
 
         // Create sim
         sim = new Sim("Justin", 3, 3);

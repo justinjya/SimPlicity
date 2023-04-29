@@ -25,7 +25,7 @@ public class UserInterface {
     private BufferedImage[] images;
 
     //ONLY FOR DEBUGGING
-    private boolean debug;
+    private boolean debug = true;
     private BufferedImage mockup;
 
     // CONSTRUCTOR
@@ -36,7 +36,6 @@ public class UserInterface {
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
-        this.debug = false;
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
@@ -208,14 +207,16 @@ public class UserInterface {
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
+            g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
+            g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
             
-            if (currentSim.getInteractionHandler().isObjectInRange()) {
-                Interactables object = currentSim.getInteractionHandler().getInteractableObject();
-                if (object != null) {
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
-                }
-            }
+            // if (currentSim.getInteractionHandler().isObjectInRange()) {
+            //     Interactables object = currentSim.getInteractionHandler().getInteractableObject();
+            //     if (object != null) {
+            //         g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
+            //         g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
+            //     }
+            // }
         }
     }
 
