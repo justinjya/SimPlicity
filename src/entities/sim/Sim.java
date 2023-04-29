@@ -27,6 +27,8 @@ public class Sim extends Entity{
     private Profession profession;
     private Inventory inventory;
     
+    private int durationWorked;
+
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
 
@@ -87,12 +89,8 @@ public class Sim extends Entity{
         return status;
     }
     
-    public String getProfession() {
-        return profession.getName();
-    }
-
-    public int getSimSalary() {
-        return profession.getSalary();
+    public Profession getProfession() {
+        return profession;
     }
 
     public Inventory getInventory() {
@@ -121,6 +119,10 @@ public class Sim extends Entity{
 
     public boolean isBusy() {
         return isBusy;
+    }
+
+    public int getDurationWorked() {
+        return durationWorked;
     }
 
     // SETTERS

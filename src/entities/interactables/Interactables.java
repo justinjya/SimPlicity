@@ -16,7 +16,7 @@ public abstract class Interactables extends Entity implements Item {
     private String name;
     private String interaction;
     private int imageIndex;
-    private boolean occupied;
+    protected boolean occupied;
     private Rectangle bounds;
 
 

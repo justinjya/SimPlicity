@@ -2,6 +2,7 @@ package src.items.foods;
 
 import java.awt.image.BufferedImage;
 
+import src.assets.ImageLoader;
 import src.items.Item;
 
 public class BakedFood implements Item{
@@ -37,6 +38,9 @@ public class BakedFood implements Item{
     // Images of the raw foods
     private BufferedImage[] images = new BufferedImage[5];
 
+    // ONLY FOR DEBUGGING
+    private BufferedImage placeholder = ImageLoader.readImage("tiles", "grass", 0, 0, false);
+
     // Constructor
     public BakedFood (int imageIndex) {
         this.name = names[imageIndex];
@@ -60,7 +64,10 @@ public class BakedFood implements Item{
     }
 
     public BufferedImage getIcon() {
-        return images[imageIndex];
+        // return images[imageIndex];
+        
+        // ONLY FOR DEBUGGING
+        return placeholder;
     }
     
 }

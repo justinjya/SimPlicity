@@ -67,6 +67,9 @@ public class Bed extends Interactables{
             height[imageIndex]
         );
 
+        this.price = prices[imageIndex];
+        this.duration = Consts.THREAD_ONE_MINUTE / 4; // Change this to * 4 once the project is done
+
         // Load the image of the beds
         images = ImageLoader.loadBeds();
     }
@@ -97,6 +100,8 @@ public class Bed extends Interactables{
 
     @Override
     public void changeOccupiedState() {
+        this.occupied = !this.occupied;
+
         if (!isOccupied()) {
             setImageIndex(getImageIndex() + 3);
         }

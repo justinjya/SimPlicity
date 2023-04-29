@@ -6,6 +6,7 @@ import src.main.GameTime;
 import src.items.Item;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.UpgradeActions;
+import src.assets.ImageLoader;
 import src.entities.sim.Inventory;;
 
 public class RawFood implements Item{
@@ -51,6 +52,8 @@ public class RawFood implements Item{
     // Images of the raw foods
     private BufferedImage[] images = new BufferedImage[8];
 
+    private BufferedImage placeholder = ImageLoader.readImage("tiles", "wood", 0, 0, false);
+
     // Constructor
     public RawFood (int imageIndex) {
         this.name = names[imageIndex];
@@ -74,7 +77,10 @@ public class RawFood implements Item{
     }
 
     public BufferedImage getIcon() {
-        return images[imageIndex];
+        // return images[imageIndex];
+
+        // ONLY FOR DEBUGGING
+        return placeholder;
     }
 
     public void buy(RawFood rawfood, Inventory inventory, Sim sim, GameTime time) { // ini ntar di implementasinya rawfood diisi this (refer to the currrent rawfood itself)
