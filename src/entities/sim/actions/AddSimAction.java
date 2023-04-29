@@ -1,7 +1,6 @@
 package src.entities.sim.actions;
 
 import src.entities.sim.Sim;
-import src.main.Consts;
 import src.main.ui.UserInterface;
 import src.world.World;
 
@@ -11,7 +10,7 @@ public class AddSimAction {
     }
 
     public static void addSim(UserInterface ui, World world) {
-        Sim newSim = new Sim("nitsuJ", Consts.CENTER_X, Consts.CENTER_Y);
+        Sim newSim = new Sim("nitsuJ", 3, 3);
 
         ui.changeIsViewingWorldState();
         world.addSim(newSim);

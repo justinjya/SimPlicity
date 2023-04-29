@@ -23,8 +23,8 @@ public class Door extends Interactables {
             "Door",
             "visit another room",
             2,
-            Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * 4),
-            Consts.PLAY_ARENA_Y_DOWN,
+            4,
+            5,
             1,
             1
         );
@@ -109,7 +109,6 @@ public class Door extends Interactables {
     public BufferedImage getIcon() {
         return images[getImageIndex()];
     }
-
 
     @Override
     public BufferedImage getImage() {

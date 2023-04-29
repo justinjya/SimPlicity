@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
         time = new GameTime(1, 720, 720);
 
         // Create sim
-        sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
+        sim = new Sim("Justin", 3, 3);
 
         // create a new world
         world = new World(sim, this, time);

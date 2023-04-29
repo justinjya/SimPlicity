@@ -61,8 +61,8 @@ public class Bed extends Interactables{
             names[imageIndex],
             "sleep",
             imageIndex,
-            Consts.PLAY_ARENA_X_LEFT+ (Consts.SCALED_TILE * 3),
-            Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * 3),
+            0,
+            3,
             width[imageIndex],
             height[imageIndex]
         );
@@ -77,8 +77,8 @@ public class Bed extends Interactables{
             names[1],
             "sleep",
             1,
-            (Consts.CENTER_X / 2) + 76,
-            Consts.CENTER_Y + 15,
+            0,
+            3,
             width[1],
             height[1]
         );
