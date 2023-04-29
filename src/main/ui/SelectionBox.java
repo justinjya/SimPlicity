@@ -68,7 +68,7 @@ public class SelectionBox {
                 break;
             case 2:
                 // This is just a test
-                currentSim.getCurrentRoom().addObject(new Stove(3, 3, 0));
+                currentSim.getCurrentRoom().addObject(new Bed(2));
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);
