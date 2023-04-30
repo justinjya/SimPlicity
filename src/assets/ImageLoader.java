@@ -229,9 +229,14 @@ public class ImageLoader {
 
     // }
 
-    // public static BufferedImage[] loadTelevision() {
+    public static BufferedImage[] loadTelevision() {
+        BufferedImage [] images = new BufferedImage[2];
 
-    // }
+        images[0] = readImage("television", "television_off", 1, 1, true);
+        images[1] = readImage("television", "television_on", 1, 1, true);
+
+        return images;
+    }
 
     // public static BufferedImage loadTelevisionIcon() {
 
