@@ -47,7 +47,7 @@ public class Shower extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Taking a shower");
                     // count the time
-                    GameTime.startDecrementTimeRemaining(duration);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     changeOccupiedState();
                     sim.resetStatus();
