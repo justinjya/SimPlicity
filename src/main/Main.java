@@ -15,7 +15,7 @@ public class Main {
 
         // Set the icon of the JFrame
         frame.setIconImage(icon.getImage());
-
+        
         GamePanel gamePanel = new GamePanel();
         frame.add(gamePanel);
 

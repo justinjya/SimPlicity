@@ -76,7 +76,7 @@ public class ActiveActionsUserInterface {
         }
     }
 
-    public static void draw(Graphics2D g) {
+    public static void draw(GamePanel gp, Graphics2D g) {
         g.fillRect(283, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);
         g.fillRect(364, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);
         g.fillRect(445, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);

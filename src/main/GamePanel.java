@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
     private Sim sim;
     private UserInterface ui;
 
+    private JTextField inputField;
+
     // testing sim color
     private float hue = 0.0f;
     private float sat = 1.0f;
@@ -32,8 +34,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
-        setOpaque(true);
         setBackground(new Color(44, 39, 35));
+        setDoubleBuffered(true);
 
         gameState = "Starting a new game";
         
@@ -86,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
                 update();
                 accumulator -= OPTIMAL_TIME / 1000000000.0;
             }
+            revalidate();
             repaint();
             fps++;
             time += deltaTime;
@@ -137,7 +140,6 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
                 try {
@@ -154,7 +156,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(g2);
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.draw(g2);
+            ActiveActionsUserInterface.draw(this, g2);
         }
 
         // testing sim color
