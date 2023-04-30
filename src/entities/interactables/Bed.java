@@ -10,9 +10,9 @@ import src.entities.sim.Sim;
 public class Bed extends Interactables{
     // Types of beds
     private static String[] names = {
-        "Kasur Single",
-        "Kasur Queen Size",
-        "Kasur King Size"
+        "Single Bed",
+        "Queen Size Bed",
+        "King Size Bed"
     };
     private static int[] width = {
         4,
