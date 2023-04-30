@@ -9,6 +9,9 @@ import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.assets.ImageLoader;
 import src.world.World;
+import src.main.ui.MainMenu;
+import src.main.ui.UserInterface;
+import src.world.Room;
 
 // ini notes aja
 // x + 12 pas dikiri 6x6 grid
@@ -106,24 +109,18 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = state;
     }
 
-    private void update() {   
-        if (isCurrentState("Main menu")) MainMenu.update(this);
-
-        // if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
-        //     Sim currentSim = ui.getCurrentSim();
-        //     Room currentRoom = currentSim.getCurrentRoom();
+    private void update() {
+        if (isCurrentState("Main menu")) {
+            MainMenu.update(this);
+        }
+        else if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
+            Sim currentSim = ui.getCurrentSim();
+            Room currentRoom = currentSim.getCurrentRoom();
             
-        //     if (!ui.isViewingWorld()) {
-        //         currentSim.update();
-        //         currentRoom.update();
-        //     }
-        //     else {
-        //         world.update(this, ui);
-        //     }
-        //     ui.update();
-        // }
-
-                ui.getCurrentSim().getCurrentRoom().update();
+            if (!ui.isViewingWorld()) {
+                currentSim.update();
+                currentRoom.update();
+                ui.update();
             }
             else {
                 world.update(this, ui);
@@ -132,9 +129,9 @@ public class GamePanel extends JPanel implements Runnable {
         else if (isCurrentState("Viewing active actions")) {
             ActiveActionsUserInterface.update(sim, ui, this, time);
         }
-        
     }
     
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
