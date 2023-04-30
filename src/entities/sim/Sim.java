@@ -8,24 +8,27 @@ import src.assets.ImageLoader;
 import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
-import src.main.GameTime;
 import src.world.Room;
 import src.world.House;
 
 public class Sim extends Entity{
-    // Atributes
+    // Attributes
     private String name;
     private int health;
     private int hunger;
     private int mood;
     private int money;
     private String status;
-    private boolean isBusy;
-
-    private Room currentRoom;
-    private House currentHouse;
     private Profession profession;
     private Inventory inventory;
+
+    // Supporting Attributes
+    private boolean isBusy;
+    private House currentHouse;
+    private Room currentRoom;
+    private int durationWorked;
+    private int timeNotSlept;
+    private int timeNotTakenLeak;
     
     // Image of the sim
     private BufferedImage[] images = new BufferedImage[12];
@@ -36,7 +39,7 @@ public class Sim extends Entity{
 
     // CONSTRUCTOR
     public Sim(String name, int x, int y) {
-        // Atributes
+        // Attributes
         super (
             x,
             y,
@@ -50,9 +53,12 @@ public class Sim extends Entity{
         this.mood = 80;
         this.money = 100;
         this.status = "Idle";
-        this.isBusy = false;
         this.profession = new Profession(); 
         this.inventory = new Inventory();
+        this.isBusy = false;
+        this.durationWorked = 0;
+        this.timeNotSlept = 0;
+        this.timeNotTakenLeak = 0;
 
         // Load the image of the sim
         images = ImageLoader.loadSim();
@@ -87,12 +93,8 @@ public class Sim extends Entity{
         return status;
     }
     
-    public String getProfession() {
-        return profession.getName();
-    }
-
-    public int getSimSalary() {
-        return profession.getSalary();
+    public Profession getProfession() {
+        return profession;
     }
 
     public Inventory getInventory() {
@@ -107,20 +109,32 @@ public class Sim extends Entity{
         return currentHouse;
     }
 
-    public InteractionHandler getInteractionHandler() {
-        return interactionHandler;
-    }
-
-    public CollisionHandler getCollisionHandler() {
-        return collisionHandler;
-    }
-
     public boolean isStatusCurrently(String status) {
         return this.status.equals(status);
     }
 
     public boolean isBusy() {
         return isBusy;
+    }
+
+    public int getDurationWorked() {
+        return durationWorked;
+    }
+
+    public int getTimeNotSlept() {
+        return timeNotSlept;
+    }
+
+    public int getTimeNotTakenLeak() {
+        return timeNotTakenLeak;
+    }
+
+    public InteractionHandler getInteractionHandler() {
+        return interactionHandler;
+    }
+
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
     }
 
     // SETTERS
@@ -139,12 +153,32 @@ public class Sim extends Entity{
         if (this.mood > 100) this.mood = 100;
     }
 
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
     public void resetStatus() {
         setStatus("Idle");
+    }
+
+    public void changeIsBusyState() {
+        this.isBusy = !this.isBusy;
+    }
+
+    public void setDurationWorked(int durationWorked) {
+        this.durationWorked = durationWorked;
+    }
+
+    public void setTimeNotSlept(int timeNotSlept) {
+        this.timeNotSlept = timeNotSlept;
+    }
+
+    public void setTimeNotTakenLeak(int timeNotTakenLeak) {
+        this.timeNotTakenLeak = timeNotTakenLeak;
     }
 
     public void setCurrentHouse(House house) {
@@ -160,10 +194,6 @@ public class Sim extends Entity{
         this.currentRoom.addSim(this);
         collisionHandler = new CollisionHandler(this, room);
         interactionHandler = new InteractionHandler(this, room);
-    }
-
-    public void changeIsBusyState() {
-        this.isBusy = !this.isBusy;
     }
 
     // OTHERS

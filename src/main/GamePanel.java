@@ -9,6 +9,7 @@ import src.entities.sim.Sim;
 import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.assets.ImageLoader;
+import src.world.Room;
 import src.world.World;
 
 // ini notes aja
@@ -17,12 +18,14 @@ import src.world.World;
 // y + 283 pas dibawah 6x6 grid
 
 public class GamePanel extends JPanel implements Runnable {
-    private String gameState;
-    private GameTime time;
+    public static String gameState;
+    public static GameTime time;
 
     private World world;
     private Sim sim;
     private UserInterface ui;
+
+    private JTextField inputField;
 
     // testing sim color
     private float hue = 0.0f;
@@ -32,20 +35,21 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
+        setDoubleBuffered(true);
 
         gameState = "Starting a new game";
         
-        // Create game time
-        time = new GameTime(1, 720, 720);
-
         // Create sim
         sim = new Sim("Justin", 3, 3);
-
+        
         // create a new world
-        world = new World(sim, this, time);
+        world = new World(sim);
         
         // // Create user interface
         ui = new UserInterface(world, sim);
+
+        // Create game time
+        GameTime.init(1, Consts.ONE_MINUTE * 12);
 
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -84,6 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
                 update();
                 accumulator -= OPTIMAL_TIME / 1000000000.0;
             }
+            revalidate();
             repaint();
             fps++;
             time += deltaTime;
@@ -100,12 +105,9 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public boolean isCurrentState(String state) {
+    // GETTERS
+    public static boolean isCurrentState(String state) {
         return gameState.equals(state); 
-    }
-
-    public void setState(String state) {
-        gameState = state;
     }
 
     private void update() {
@@ -113,16 +115,18 @@ public class GamePanel extends JPanel implements Runnable {
             ui.update();
 
             if (!ui.isViewingWorld()) {
-                ui.getCurrentSim().update();
-
-                ui.getCurrentSim().getCurrentRoom().update();
+                Sim currentSim = ui.getCurrentSim();
+                Room currentRoom = currentSim.getCurrentRoom();
+                
+                currentSim.update();
+                currentRoom.update();
             }
             else {
-                world.update(this, ui);
+                world.update(ui);
             }
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update(sim, ui, this, time);
+            ActiveActionsUserInterface.update(sim, ui);
         }
         
     }
@@ -136,11 +140,12 @@ public class GamePanel extends JPanel implements Runnable {
         // ONLY FOR DEBUGGING
         // ui.drawMockup(g2);
 
-
         if (isCurrentState("Starting a new game") || isCurrentState("Playing")) {
             if (!ui.isViewingWorld()) {
                 try {
-                    ui.getCurrentSim().getCurrentRoom().draw(g2);
+                    Sim currentSim = ui.getCurrentSim();
+                    Room currentRoom = currentSim.getCurrentRoom();
+                    currentRoom.draw(g2);
                 }
                 catch (NullPointerException e) { }
             }
@@ -151,7 +156,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(g2);
         }
         else if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.draw(g2);
+            ActiveActionsUserInterface.draw(this, g2);
         }
 
         // testing sim color

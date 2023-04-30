@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.entities.handlers.*;
-import src.entities.interactables.Door;
-import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
+import src.entities.interactables.*;
 
 public class Room {
-    // Atributes
+    // Attributes
     private String name;
     private ArrayList<Interactables> listOfObjects;
     private ArrayList<Sim> listOfSims;
@@ -33,7 +32,7 @@ public class Room {
 
     // CONSTRUCTOR
     public Room(String name) {
-        // Atributes
+        // Attributes
         this.name = name;
         this.listOfObjects = new ArrayList<>(); 
         this.listOfSims = new ArrayList<>();
@@ -41,9 +40,6 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
-
-        // ONLY FOR DEBUGGING
-        // testRoom();
     }
 
     // GETTERS

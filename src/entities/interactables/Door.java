@@ -4,14 +4,12 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
-import src.main.GamePanel;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.ui.ActiveActionsUserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {
-    // Atributes
+    // Attributes
     private Room leadsIntoRoom;
 
     // Images of the door
@@ -114,11 +112,11 @@ public class Door extends Interactables {
     public BufferedImage getImage() {
         return images[getImageIndex()];
     }
-
+    
     @Override
-    public void interact(Sim sim, GameTime time) {
+    public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
-            // ActiveActionsUserInterface.showActiveActions(gp);
+            ActiveActionsUserInterface.showActiveActions();
             return;
         }
 

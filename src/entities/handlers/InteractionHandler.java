@@ -8,7 +8,7 @@ import src.entities.interactables.Interactables;
 import src.world.Room;
 
 public class InteractionHandler {
-    // Atributes
+    // Attributes
     private Entity entity;
     private Rectangle interactionRange;
     private Room currentRoom;
