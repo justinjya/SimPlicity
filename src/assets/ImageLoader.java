@@ -66,13 +66,12 @@ public class ImageLoader {
     public static BufferedImage[] loadMainMenu() {
         BufferedImage[] images = new BufferedImage[7];
 
-        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false);
-        images[1] = ImageLoader.readImage("mockup", "main menu", "title", 0, 0, false);
-        images[2] = ImageLoader.readImage("mockup", "main menu", "menu_button_bg", 0, 0, false);
-        images[3] = ImageLoader.readImage("mockup", "main menu", "start_button", 0, 0, false);
-        images[4] = ImageLoader.readImage("mockup", "main menu", "load_button", 0, 0, false);
-        images[5] = ImageLoader.readImage("mockup", "main menu", "help_button", 0, 0, false);
-        images[6] = ImageLoader.readImage("mockup", "main menu", "exit_button", 0, 0, false);
+        images[0] = ImageLoader.readImage("main menu", "background", 0, 0, false);
+        images[1] = ImageLoader.readImage("main menu",  "game_tittle0", 0, 0, false);
+        images[2] = ImageLoader.readImage("main menu",  "start_button1", 0, 0, false);
+        images[3] = ImageLoader.readImage("main menu",  "load_button", 0, 0, false);
+        images[4] = ImageLoader.readImage("main menu",  "about_button", 0, 0, false);
+        images[5] = ImageLoader.readImage("main menu",  "exit_button", 0, 0, false);
 
         return images;
     }
