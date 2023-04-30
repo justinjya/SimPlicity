@@ -23,18 +23,12 @@ public class GamePanel extends JPanel implements Runnable {
     public static String gameState;
     public static GameTime time;
 
-    private World world;
     private Sim sim;
+    private Room room;
+    private World world;
     private UserInterface ui;
 
-    private JTextField inputField;
-
-    // testing sim color
-    private float hue = 0.0f;
-    private float sat = 1.0f;
-    private float bri = 0.92f;
-
-    public GamePanel() {
+    public GamePanel(String simName, String roomName, Color shirtColor) {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
         setBackground(new Color(44, 39, 35));
         setDoubleBuffered(true);
@@ -42,12 +36,14 @@ public class GamePanel extends JPanel implements Runnable {
         gameState = "Starting a new game";
         
         // Create sim
-        sim = new Sim("Justin", 3, 3);
+        sim = new Sim(simName, shirtColor);
+
+        room = new Room(roomName);
         
         // create a new world
-        world = new World(sim);
+        world = new World(sim, room);
         
-        // // Create user interface
+        // Create user interface
         ui = new UserInterface(world, sim);
 
         // Create game time
@@ -170,20 +166,5 @@ public class GamePanel extends JPanel implements Runnable {
        
         // To free resources
         g2.dispose();
-    }
-
-    private void testingSimColor(Graphics2D g) {
-        Font font;
-        g.setColor(Color.WHITE);
-
-        font = new Font("Arial", Font.PLAIN, 15);
-
-        g.setFont(font);
-        g.drawString("hue: " + hue, 10, 30);
-        g.drawString("sat: " + sat, 10, 50);
-        g.drawString("bri: " + bri, 10, 70);
-
-        g.drawImage(ImageLoader.testSimColor(hue), Consts.CENTER_X - (Consts.SCALED_TILE * 2), Consts.CENTER_Y - (Consts.SCALED_TILE * 2), Consts.SCALED_TILE * 4, Consts.SCALED_TILE * 4, null);
-
     }
 }
