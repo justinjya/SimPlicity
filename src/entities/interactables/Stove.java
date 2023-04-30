@@ -15,8 +15,8 @@ import src.items.Item;
 public class Stove extends Interactables{
     // Types of stove
     private static String[] names = {
-        "Kompor Gas",
-        "Kompor Listrik"
+        "Gas Stove",
+        "Electric Stove"
     };
     private static int[] width = {
         2,
@@ -32,7 +32,8 @@ public class Stove extends Interactables{
     };
     
     // Images of stove
-    BufferedImage[] images = new BufferedImage[4]; // buat kompor gas dan listrik (pas idle sama occupied)
+    BufferedImage[] images = new BufferedImage[4];
+    BufferedImage[] icons = new BufferedImage[2]; 
 
     // Attributes
     private int price;
@@ -51,12 +52,10 @@ public class Stove extends Interactables{
         );
 
         this.price = prices[imageIndex];
-        // Load the image of the beds
-        this.images = ImageLoader.loadStove();
 
-        // ONLY FOR DEBUGGING
-        this.images[0] = ImageLoader.readImage("tiles", "grass", 2, 1, true);
-        
+        // Load the images and icons of the stoves
+        this.images = ImageLoader.loadStoves();
+        this.icons = ImageLoader.loadStovesIcons(); 
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS

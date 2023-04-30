@@ -38,6 +38,7 @@ public class TrashBin extends Interactables {
         return image;
     }
 
+    // TO - DO!!! : Change interact depending on image index
     @Override
     public void interact (Sim sim){
         Thread kickthebin = new Thread() {
@@ -45,9 +46,9 @@ public class TrashBin extends Interactables {
             public void run() {
                 try {
                     changeOccupiedState();
-                    sim.setStatus("Kicking the Bin");
+                    sim.setStatus("Kicking The Bin");
                     // count the time
-                    GameTime.startDecrementTimeRemaining(duration);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     changeOccupiedState();
                     sim.resetStatus();
@@ -60,5 +61,24 @@ public class TrashBin extends Interactables {
             }
         };
         kickthebin.start();
+
+        Thread cleaningTheBin = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    changeOccupiedState();
+                    sim.setStatus("Cleaning The Bin");
+                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
+                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
+                    changeOccupiedState();
+                    sim.setMood(sim.getMood() + 10);
+                    sim.setHealth(sim.getHealth() + 10);
+                    sim.setHunger(sim.getHunger() - 10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        cleaningTheBin.start();
     }
 }
