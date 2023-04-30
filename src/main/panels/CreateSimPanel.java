@@ -33,7 +33,7 @@ public class CreateSimPanel extends JPanel {
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
                     // The Done button was selected, switch panels
                     System.out.println("Switching panels");
-                    // Here you can add the code to switch to another panel
+                    
                     JPanel parent = (JPanel) getParent();
                     GamePanel gamePanel = new GamePanel(textFields[0], textFields[1], ImageLoader.setColor(selectedColor));
                     parent.removeAll();
@@ -63,20 +63,12 @@ public class CreateSimPanel extends JPanel {
                     }
                 }
                 else {
-                    if (keyCode == KeyEvent.VK_D) {
-                        selectedColor++;
-                    }
-                    if (keyCode == KeyEvent.VK_A) {
-                        selectedColor--;
-                    }
-
-                    if (selectedColor > 7) {
-                        selectedColor = 0;
-                    }
-                    if (selectedColor < 0) {
-                        selectedColor = 7;
-                    }
+                    if (keyCode == KeyEvent.VK_D) selectedColor++;
+                    if (keyCode == KeyEvent.VK_A) selectedColor--;
+                    if (selectedColor > 7) selectedColor = 0;
+                    if (selectedColor < 0) selectedColor = 7;
                 }
+
                 // Check if the Tab key was pressed
                 if (keyCode == KeyEvent.VK_TAB) {
                     // Move to the next field or the Done button
@@ -98,6 +90,8 @@ public class CreateSimPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         
+        // TO - DO!!! : Draw selector
+
         BufferedImage newSim = ImageLoader.simColorSelector(selectedColor);
 
         g2.setColor(new Color(110, 196, 213));
@@ -127,14 +121,14 @@ public class CreateSimPanel extends JPanel {
         g2.setFont(new Font("Inter", Font.PLAIN, 12));
         g2.setColor(new Color(110, 54, 81));
 
-        if (textFields[0] == "") {
+        if (textFields[0].equals("")) {
             g2.drawString("Enter sim name...", 282, 321);
         }
         else {
             g2.drawString(textFields[0], 282, 321);
         }
 
-        if (textFields[1] == "") {
+        if (textFields[1].equals("")) {
             g2.drawString("Enter room name...", 282, 372);
         }
         else{

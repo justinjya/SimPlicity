@@ -64,6 +64,19 @@ public class ImageLoader {
         return rotated;
     }
 
+    public static BufferedImage[] loadMainMenu() {
+        BufferedImage[] images = new BufferedImage[6];
+
+        images[0] = readImage("main_menu", "background", 1, 1, false);
+        images[1] = readImage("main_menu", "game_title", 1, 1, false);
+        images[2] = readImage("main_menu", "start_button", 1, 1, false);
+        images[3] = readImage("main_menu", "load_button", 1, 1, false);
+        images[4] = readImage("main_menu", "about_button", 1, 1, false);
+        images[5] = readImage("main_menu", "exit_button", 1, 1, false);
+        
+        return images;
+    }
+
     public static BufferedImage[] loadCreateSimMenu() {
         BufferedImage[] images = new BufferedImage[7];
 
