@@ -7,7 +7,7 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Aquarium extends Interactables {
-    private int duration = Consts.THREAD_ONE_SECOND * 5;
+    private int duration = Consts.ONE_SECOND * 5;
 
     // Images of the aquarium
     private BufferedImage image;
@@ -39,7 +39,7 @@ public class Aquarium extends Interactables {
     }
 
     @Override
-    public void interact (Sim sim, GameTime time){
+    public void interact (Sim sim){
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
@@ -47,8 +47,8 @@ public class Aquarium extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Feeding the fish");
                     // count the time
-                    time.startDecrementTimeRemaining(duration);
-                    Thread.sleep(duration);
+                    GameTime.startDecrementTimeRemaining(duration);
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setMood(sim.getMood() + 5); // increase sim's mood

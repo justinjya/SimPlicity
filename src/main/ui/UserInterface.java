@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
+import src.main.GamePanel;
+import src.main.GameTime;
 import src.world.World;
 import src.assets.ImageLoader;
 import src.entities.interactables.Interactables;
@@ -13,11 +15,10 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 
 public class UserInterface {
-    // Atributes
+    // Attributes
     private World world;
     private Sim currentSim;
     private Inventory inventory;
-    
     private boolean viewingWorld;
     private boolean tabbed;
 
@@ -25,7 +26,7 @@ public class UserInterface {
     private BufferedImage[] images;
 
     //ONLY FOR DEBUGGING
-    private boolean debug;
+    private boolean debug = true;
     private BufferedImage mockup;
 
     // CONSTRUCTOR
@@ -33,10 +34,13 @@ public class UserInterface {
         this.world = world;
         this.currentSim = sim;
         this.inventory = sim.getInventory();
+
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
-        this.debug = false;
+
+        // ONLY FOR DEBUGGING
+        this.mockup = ImageLoader.loadMockup();
     }
 
     // GETTERS
@@ -102,7 +106,7 @@ public class UserInterface {
         }
 
         if (inventory.isOpen()) {
-            inventory.update();
+            inventory.update(this);
         }
     }
     
@@ -111,7 +115,7 @@ public class UserInterface {
             Font font;
             g.setColor(Color.WHITE);
 
-            font = new Font("Arial", Font.PLAIN, 12);
+            font = new Font("Inter", Font.PLAIN, 12);
 
             g.setFont(font);
             g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
@@ -165,12 +169,12 @@ public class UserInterface {
         Font font;
         g.setColor(Color.BLACK);
 
-        font = new Font("Arial", Font.BOLD, 13);
+        font = new Font("Inter", Font.BOLD, 13);
 
         g.setFont(font);
         g.drawString(currentSim.getName(), 83, 68);
         
-        g.drawString("Day " + world.getTime().getDay(), 675, 68);
+        g.drawString("Day " + GameTime.day, 675, 68);
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
@@ -179,7 +183,7 @@ public class UserInterface {
 
         drawAttributes(g);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
 
         try {
@@ -194,7 +198,7 @@ public class UserInterface {
 
         // ONLY FOR DEBUGGING
         if (debug) {
-            font = new Font("Arial", Font.PLAIN, 10);
+            font = new Font("Inter", Font.PLAIN, 10);
             g.setFont(font);
 
             g.drawString("x: " + currentSim.getX(), 33, 374);
@@ -205,26 +209,20 @@ public class UserInterface {
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-            
-            if (currentSim.getInteractionHandler().isObjectInRange()) {
-                Interactables object = currentSim.getInteractionHandler().getInteractableObject();
-                if (object != null) {
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
-                }
-            }
+            g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
+            g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
         }
     }
 
     private void drawAttributes(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 10);
+        Font font = new Font("Inter", Font.PLAIN, 10);
 
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.drawString("" + currentSim.getStatus(), 90, 93);
         g.drawString("" + currentSim.getCurrentRoom().getName(), 670, 130);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
         g.setColor(Color.WHITE);
 
@@ -238,11 +236,11 @@ public class UserInterface {
         drawValue(g, currentSim.getHealth(), 174, 0);
         drawValue(g, currentSim.getHunger(), 174, 1);
         drawValue(g, currentSim.getMood(), 174, 2);
-        drawTime(g, world.getTime().getTimeRemaining(), 174, 0);
+        drawTime(g, GameTime.timeRemaining, 174, 0);
     }
 
     private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {
@@ -254,7 +252,7 @@ public class UserInterface {
     }
 
     private void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {

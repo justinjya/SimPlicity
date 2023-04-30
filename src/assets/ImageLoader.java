@@ -102,11 +102,12 @@ public class ImageLoader {
         images[9] = readImage("sim", "walk_down_2", 1, 1, true);
         images[10] = readImage("sim", "walk_left_1", 1, 1, true);
         images[11] = readImage("sim", "walk_left_2", 1, 1, true);
+
         return images;
     }
 
     public static BufferedImage[] loadBeds() {
-        BufferedImage[] images = new BufferedImage[9];
+        BufferedImage[] images = new BufferedImage[6];
 
         images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
         images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
@@ -114,24 +115,28 @@ public class ImageLoader {
         images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
         images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
         images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
-        images[6] = readImage("inventory", "bed_single", 1, 1, false);
-        images[7] = readImage("inventory", "bed_queen", 1, 1, false);
-        images[8] = readImage("inventory", "bed_king", 1, 1, false);
+
         return images;
+    }
+
+    public static BufferedImage[] loadBedsIcons() {
+        BufferedImage[] icons = new BufferedImage[3];
+
+        icons[0] = readImage("inventory", "bed_single", 1, 1, false);
+        icons[1] = readImage("inventory", "bed_queen", 1, 1, false);
+        icons[2] = readImage("inventory", "bed_king", 1, 1, false);
+
+        return icons;
     }
 
     public static BufferedImage loadWood() {
         BufferedImage image = readImage("tiles", "wood", 1, 1, true);
+        
         return image;
     }
 
     public static BufferedImage[] loadItemsIcon() {
         BufferedImage[] images = new BufferedImage[12];
-        images[0] = readImage("inventory", "bed_single",1,1,false);
-        images[1] = readImage("inventory", "bed_queen",1,1,false);
-        images[2] = readImage("inventory", "bed_king",1,1,false);
-        images[3] = readImage("inventory", "trash_bin",1,1,false);
-        images[4] = readImage("inventory", "gas_stove",1,1,false);
         // images[5] = readImage("inventory", "electric_stove",1,1,false);
         // images[6] = readImage("inventory", "table_and_chair",1,1,false);
         // images[7] = readImage("inventory", "clock",1,1,false);
@@ -260,4 +265,54 @@ public class ImageLoader {
         }
         return image;
     }
+
+    public static BufferedImage[] loadStove() {
+        BufferedImage[] images = new BufferedImage[4];
+        
+        images[0] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[1] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[2] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[3] = readImage("inventory", "gas_stove", 1, 1, false);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadRawFood() {
+        BufferedImage[] images = new BufferedImage[8];
+        
+        images[0] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[1] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[2] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[3] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[4] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[5] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[6] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[7] = readImage("inventory", "gas_stove", 1, 1, false);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadBakedFood() {
+        BufferedImage[] images = new BufferedImage[5];
+        
+        images[0] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[1] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[2] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[3] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[4] = readImage("inventory", "gas_stove", 1, 1, false);
+    
+        return images;
+    }
+
+    public static BufferedImage[] loadToilet() {
+        BufferedImage[] images = new BufferedImage[2];
+        
+        images[0] = readImage("inventory", "gas_stove", 1, 1, false);
+        images[1] = readImage("inventory", "gas_stove", 1, 1, false);
+    
+        return images;
+    }
+
+    
+    
 }

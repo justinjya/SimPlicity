@@ -3,7 +3,6 @@ package src.entities.interactables;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.entities.Entity;
@@ -12,13 +11,12 @@ import src.items.Item;
 import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {
-    // Atributes
+    // Attributes
     private String name;
     private String interaction;
     private int imageIndex;
-    private boolean occupied;
+    protected boolean occupied;
     private Rectangle bounds;
-
 
     // CONSTRUCTOR
     public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height) {
@@ -77,7 +75,7 @@ public abstract class Interactables extends Entity implements Item {
     
     public abstract BufferedImage getIcon();
     public abstract BufferedImage getImage();
-    public abstract void interact(Sim sim, GameTime time);
+    public abstract void interact(Sim sim);
 
     // ONLY FOR DEBUGGING
     public void drawCollisionBox(Graphics2D g) {

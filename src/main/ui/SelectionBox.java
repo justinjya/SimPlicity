@@ -5,10 +5,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import src.entities.handlers.KeyHandler;
-import src.entities.interactables.Bed;
-import src.entities.sim.Sim;
+import src.entities.interactables.*;
 import src.entities.sim.actions.*;
+import src.entities.sim.Sim;
 import src.main.Consts;
+import src.world.Room;
 import src.world.World;
 
 public class SelectionBox {
@@ -50,22 +51,22 @@ public class SelectionBox {
     // TO - DO !!! : Integrate with Store
     private static void boxEntered(UserInterface ui) {
         ui.tab();
-
-        Sim currentSim = ui.getCurrentSim();
+        
         World world = ui.getWorld();
+        Sim currentSim = ui.getCurrentSim();
+        Room currentRoom = currentSim.getCurrentRoom();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(currentSim.getCurrentRoom());
+                NonActiveActions.editRoom(currentRoom);
                 break;
             case 1:
-                UpgradeActions.addRoom(currentSim.getCurrentRoom(), "Second Room");
+                UpgradeActions.addRoom(currentRoom, "Second Room");
                 break;
             case 2:
-                // This is just a test
-                currentSim.getCurrentRoom().addObject(new Bed(2));
+                // ITEM STORE
                 break;
             case 3:
                 AddSimAction.addSim(ui, world);
@@ -111,7 +112,7 @@ public class SelectionBox {
     }
 
     private static void drawSelectedBoxText(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 12);
+        Font font = new Font("Inter", Font.PLAIN, 12);
 
         g.setFont(font);
         switch (selectedBox) {
@@ -122,7 +123,7 @@ public class SelectionBox {
                 g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
                 break;
             case 2:
-                g.drawString("Add Object", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                g.drawString("Buy Items", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
                 break;
             case 3:
                 g.drawString("Add Sims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
