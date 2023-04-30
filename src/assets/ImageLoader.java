@@ -80,8 +80,8 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[4];
 
         images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 180, y = 172
-        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 131, y = 302
-        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 603, y = 302
+         // x = 131, y = 302
+         // x = 603, y = 302
 
         return images;
     }
