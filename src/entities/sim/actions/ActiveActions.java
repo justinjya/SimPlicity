@@ -113,25 +113,6 @@ public class ActiveActions {
         
     }
 
-    public void cleanTheBin(Sim sim) {
-        Thread cleaningTheBin = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sim.setStatus("CleaningTheBin");
-                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
-                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
-                    sim.setMood(sim.getMood() + 10);
-                    sim.setHealth(sim.getHealth() + 10);
-                    sim.setHunger(sim.getHunger() - 10);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        cleaningTheBin.start();
-    }
-
     public static void interact(UserInterface ui) {
         Sim sim = ui.getCurrentSim();
         Interactables object = sim.getInteractionHandler().getInteractableObject();
@@ -149,62 +130,5 @@ public class ActiveActions {
 
     public static void visitAnotherSim(UserInterface ui) {
         ui.changeIsViewingWorldState();
-    }
-
-    public void shower (Sim sim){
-        Thread showering = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sim.setStatus("Showering");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 10);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 10);
-                    sim.setHealth(sim.getHealth() + 10); // increase sim's health
-                    sim.setMood(sim.getMood() + 15); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        showering.start();
-    }
-
-    public void feedingfish (Sim sim){
-        Thread feedingfish = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sim.setStatus("Feeding Fish");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
-                    sim.setMood(sim.getMood() + 5); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        feedingfish.start();
-    }
-
-    public void kickTheBin (Sim sim){
-        Thread kickthebin = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sim.setStatus("Kicking The Bin");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 2);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 2);
-                    sim.setHealth(sim.getHealth() - 2); // decrease sim's health
-                    sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
-                    sim.setMood(sim.getMood() + 5); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        kickthebin.start();
     }
 }
