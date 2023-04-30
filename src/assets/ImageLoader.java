@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import src.entities.sim.Sim;
 import src.main.Consts;
 
 public class ImageLoader {
@@ -63,7 +64,7 @@ public class ImageLoader {
         return rotated;
     }
     
-    public static BufferedImage[] loadSim() {
+    public static BufferedImage[] loadSim(Sim sim) {
         BufferedImage[] images = new BufferedImage[12];
 
         images[0] = readImage("sim", "sim_up", 1, 1, true);
@@ -78,6 +79,10 @@ public class ImageLoader {
         images[9] = readImage("sim", "sim_walk_down_2", 1, 1, true);
         images[10] = readImage("sim", "sim_walk_left_1", 1, 1, true);
         images[11] = readImage("sim", "sim_walk_left_2", 1, 1, true);
+
+        for (int i = 0; i < images.length; i++) {
+            images[i] = changeSimColor(images[i], sim);
+        }
 
         return images;
     }
@@ -130,9 +135,9 @@ public class ImageLoader {
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
 
-        images[0] = readImage("beds", "bed_single_sim", 4, 1, true);
-        images[1] = readImage("beds", "bed_queen_sim", 4, 2, true);
-        images[2] = readImage("beds", "bed_king_sim", 5, 2, true);
+        images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("beds", "bed_king_idle", 5, 2, true);
         images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
         images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
         images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
@@ -165,13 +170,13 @@ public class ImageLoader {
         return icon;
     }
 
-    public static BufferedImage[] loadShower() {
+    // public static BufferedImage[] loadShower() {
 
-    }
+    // }
 
-    public static BufferedImage loadShowerIcon() {
+    // public static BufferedImage loadShowerIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadStoves() {
         BufferedImage[] images = new BufferedImage[4];
@@ -193,21 +198,21 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage[] loadTableAndChair() {
+    // public static BufferedImage[] loadTableAndChair() {
 
-    }
+    // }
 
-    public static BufferedImage loadTableAndChairIcon() {
+    // public static BufferedImage loadTableAndChairIcon() {
 
-    }
+    // }
 
-    public static BufferedImage[] loadTelevision() {
+    // public static BufferedImage[] loadTelevision() {
 
-    }
+    // }
 
-    public static BufferedImage loadTelevisionIcon() {
+    // public static BufferedImage loadTelevisionIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadToilet() {
         BufferedImage[] images = new BufferedImage[2];
@@ -218,9 +223,9 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage loadToiletIcon() {
+    // public static BufferedImage loadToiletIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadRawFood() {
         BufferedImage[] images = new BufferedImage[8];
@@ -249,59 +254,100 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage testSimColor(float hue) {
-        Color redColor = new Color(215, 0, 20); // red color
-        Color greenColor = new Color(0, 254, 10); // green color
-        Color newShirtColor = new Color(0, 255, 0); // purple color
-        Color newHairColor = new Color(87, 52, 37); // brown color
-        
-        BufferedImage image;
-        float[] redHsb = new float[3];
-        float[] greenHsb = new float[3];
-        float[] newShirtHsb = new float[3];
-        float[] newHairHsb = new float[3];
+    public static Color setColor(int selectedColor) {
+        Color color = null;
+        if (selectedColor == 0) color = Color.YELLOW;
+        if (selectedColor == 1) color = Color.ORANGE;
+        if (selectedColor == 2) color = new Color(215, 0, 20); // red color
+        if (selectedColor == 3) color = Color.MAGENTA;
+        if (selectedColor == 4) color = Color.PINK;
+        if (selectedColor == 5) color = Color.BLUE;
+        if (selectedColor == 6) color = Color.CYAN;
+        if (selectedColor == 7) color = new Color(0, 254, 10); // green color
+
+        return color;
+    }
+
+    public static BufferedImage simColorSelector(int selectedShirtColor, int selectedHairColor) {
+        BufferedImage newImage = readImage("sim", "sim_down", 1, 1, false);
+        Color oldShirtColor = new Color(215, 0, 20); // red color
+        Color newShirtColor = setColor(selectedShirtColor);
+
+        float[] oldShirtColorHsb = new float[3];
+        float[] newShirtColorHsb = new float[3];
         float hueDiff;
 
-        Color.RGBtoHSB(redColor.getRed(), redColor.getGreen(), redColor.getBlue(), redHsb);
-        Color.RGBtoHSB(greenColor.getRed(), greenColor.getGreen(), greenColor.getBlue(), greenHsb);
-        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtHsb);
-        Color.RGBtoHSB(newHairColor.getRed(), newHairColor.getGreen(), newHairColor.getBlue(), newHairHsb);
+        Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
+        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
+
+        System.out.println(newShirtColorHsb[0] + " " + newShirtColorHsb[1] + " " + newShirtColorHsb[2]);
     
-        image = readImage("sim", "sim_down", 1, 1, true);
-    
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int rgb = image.getRGB(x, y);
+        // to change the shirt color
+        for (int x = 0; x < newImage.getWidth(); x++) {
+            for (int y = 0; y < newImage.getHeight(); y++) {
+                int rgb = newImage.getRGB(x, y);
                 if ((rgb >> 24) == 0x00) continue; // if pixel is transparent, skip color transformation
 
                 Color pixelColor = new Color(rgb);
     
-                // Check if the pixel color is within the range of red hues
+                // Check if the pixel color is within the range of hues
                 float[] pixelHsb = new float[3];
                 Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
-                hueDiff = Math.abs(pixelHsb[0] - redHsb[0]);
+                hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
+                System.out.println("pixelHsb");
+                System.out.println(pixelHsb[0] + " " + pixelHsb[1] + " " + pixelHsb[2]);
 
                 if (hueDiff <= 0.1 || hueDiff >= 0.9) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
-                    newShirtHsb[0] = hue;
-                    newShirtHsb[1] = pixelHsb[1]; // keep saturation value
-                    newShirtHsb[2] = pixelHsb[2]; // keep brightness value
-                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtHsb[0], newShirtHsb[1], newShirtHsb[2]));
+                    newShirtColorHsb[1] = pixelHsb[1]; // keep saturation value
+                    newShirtColorHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtColorHsb[0], newShirtColorHsb[1], newShirtColorHsb[2]));
     
-                    image.setRGB(x, y, newPixelColor.getRGB());
-                }
-
-                hueDiff = Math.abs(pixelHsb[0] - greenHsb[0]);
-                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
-                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
-                    newHairHsb[1] = pixelHsb[1]; // keep saturation value
-                    newHairHsb[2] = pixelHsb[2]; // keep brightness value
-                    Color newPixelColor = new Color(Color.HSBtoRGB(newHairHsb[0], newHairHsb[1], newHairHsb[2]));
-    
-                    image.setRGB(x, y, newPixelColor.getRGB());
+                    newImage.setRGB(x, y, newPixelColor.getRGB());
                 }
             }
         }
-        return image;
+        return newImage;
+    }
+
+    private static BufferedImage changeSimColor(BufferedImage simImage, Sim sim) {
+        Color oldShirtColor = new Color(215, 0, 20); // red color
+        Color newShirtColor = sim.getShirtColor();
+
+        float[] oldShirtColorHsb = new float[3];
+        float[] newShirtColorHsb = new float[3];
+        float hueDiff;
+
+        Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
+        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
+
+        System.out.println(newShirtColorHsb[0] + " " + newShirtColorHsb[1] + " " + newShirtColorHsb[2]);
+    
+        // to change the shirt color
+        for (int x = 0; x < simImage.getWidth(); x++) {
+            for (int y = 0; y < simImage.getHeight(); y++) {
+                int rgb = simImage.getRGB(x, y);
+                if ((rgb >> 24) == 0x00) continue; // if pixel is transparent, skip color transformation
+
+                Color pixelColor = new Color(rgb);
+    
+                // Check if the pixel color is within the range of hues
+                float[] pixelHsb = new float[3];
+                Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
+                hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
+                System.out.println("pixelHsb");
+                System.out.println(pixelHsb[0] + " " + pixelHsb[1] + " " + pixelHsb[2]);
+
+                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
+                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
+                    newShirtColorHsb[1] = pixelHsb[1]; // keep saturation value
+                    newShirtColorHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtColorHsb[0], newShirtColorHsb[1], newShirtColorHsb[2]));
+    
+                    simImage.setRGB(x, y, newPixelColor.getRGB());
+                }
+            }
+        }
+        return simImage;
     }
 }

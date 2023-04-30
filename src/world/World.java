@@ -16,6 +16,7 @@ public class World {
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
+    private Room unaddedRoom = null;
     
     // State of the world (is adding a house or selecting a house to visit)
     private boolean isAdding = true;
@@ -36,7 +37,7 @@ public class World {
     private int lowerBoundsY, upperBoundsY;
 
     // Constructor 
-    public World(Sim sim) {
+    public World(Sim sim, Room room) {
         // Attributes
         listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
@@ -55,9 +56,7 @@ public class World {
         this.cursor = new Cursor(Consts.TILE_SIZE * 16, Consts.TILE_SIZE * 16, this);
 
         listOfSim.add(sim);
-        
-        // ONLY FOR DEBUGGING
-        // listOfHouse.add(new House(1, 1, this));
+        unaddedRoom = room;
     }
 
     // Getter and setter
@@ -90,6 +89,10 @@ public class World {
         return isAdding;
     }
 
+    public Room getUnaddedRoom() {
+        return unaddedRoom;
+    }
+
     public Cursor getCursor() {
         return cursor;
     }
@@ -107,9 +110,11 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        Room newRoom = new Room("First Room");
+        Room newRoom = unaddedRoom;
         newRoom.getListOfObjects().add(new Door(null));
         House newHouse = new House(x, y, this, newSim, newRoom);
+        setMap(x, y, 1);
+        unaddedRoom = null;
 
         listOfHouse.add(newHouse);
     }
