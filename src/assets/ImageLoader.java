@@ -63,6 +63,20 @@ public class ImageLoader {
         }
         return rotated;
     }
+
+    public static BufferedImage[] loadCreateSimMenu() {
+        BufferedImage[] images = new BufferedImage[7];
+
+        images[0] = readImage("create_sim_menu", "create_sim_box", 1, 1, false);
+        images[1] = readImage("create_sim_menu", "title_box", 1, 1, false);
+        images[2] = readImage("create_sim_menu", "sim_preview_box", 1, 1, false);
+        images[3] = readImage("create_sim_menu", "input_box", 1, 1, false);
+        images[4] = readImage("create_sim_menu", "color_slider", 1, 1, false);
+        images[5] = readImage("create_sim_menu", "cursor", 1, 1, false);
+        images[6] = readImage("create_sim_menu", "button_done", 1, 1, false);
+
+        return images;
+    }
     
     public static BufferedImage[] loadSim(Sim sim) {
         BufferedImage[] images = new BufferedImage[12];
@@ -268,10 +282,10 @@ public class ImageLoader {
         return color;
     }
 
-    public static BufferedImage simColorSelector(int selectedShirtColor, int selectedHairColor) {
+    public static BufferedImage simColorSelector(int selectedColor) {
         BufferedImage newImage = readImage("sim", "sim_down", 1, 1, false);
         Color oldShirtColor = new Color(215, 0, 20); // red color
-        Color newShirtColor = setColor(selectedShirtColor);
+        Color newShirtColor = setColor(selectedColor);
 
         float[] oldShirtColorHsb = new float[3];
         float[] newShirtColorHsb = new float[3];
@@ -279,8 +293,6 @@ public class ImageLoader {
 
         Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
         Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
-
-        System.out.println(newShirtColorHsb[0] + " " + newShirtColorHsb[1] + " " + newShirtColorHsb[2]);
     
         // to change the shirt color
         for (int x = 0; x < newImage.getWidth(); x++) {
@@ -294,8 +306,6 @@ public class ImageLoader {
                 float[] pixelHsb = new float[3];
                 Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
                 hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
-                System.out.println("pixelHsb");
-                System.out.println(pixelHsb[0] + " " + pixelHsb[1] + " " + pixelHsb[2]);
 
                 if (hueDiff <= 0.1 || hueDiff >= 0.9) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
@@ -320,8 +330,6 @@ public class ImageLoader {
 
         Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
         Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
-
-        System.out.println(newShirtColorHsb[0] + " " + newShirtColorHsb[1] + " " + newShirtColorHsb[2]);
     
         // to change the shirt color
         for (int x = 0; x < simImage.getWidth(); x++) {
@@ -335,8 +343,6 @@ public class ImageLoader {
                 float[] pixelHsb = new float[3];
                 Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
                 hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
-                System.out.println("pixelHsb");
-                System.out.println(pixelHsb[0] + " " + pixelHsb[1] + " " + pixelHsb[2]);
 
                 if (hueDiff <= 0.1 || hueDiff >= 0.9) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
