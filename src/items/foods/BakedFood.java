@@ -37,7 +37,7 @@ public class BakedFood extends Food implements Item{
     private BufferedImage[] icons = new BufferedImage[5];
 
     // ONLY FOR DEBUGGING
-    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
+    // private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public BakedFood (int imageIndex) {
@@ -49,7 +49,7 @@ public class BakedFood extends Food implements Item{
         this.ingredient = ingredients[imageIndex];
         this.imageIndex = imageIndex;
         // load the images here
-        // this.icons = ImageLoader.loadBakedFood();
+        this.icons = ImageLoader.loadBakedFood();
     }
 
     // Getters
@@ -58,9 +58,9 @@ public class BakedFood extends Food implements Item{
     }
 
     public BufferedImage getIcon() {
-        // return images[imageIndex];
+        return icons[imageIndex];
         
         // ONLY FOR DEBUGGING
-        return placeholder;
+        // return placeholder;
     }
 }

@@ -11,6 +11,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.items.foods.BakedFood;
 import src.items.Item;
+import src.main.ui.UserInterface;
 
 public class Stove extends Interactables{
     // Types of stove
@@ -80,52 +81,102 @@ public class Stove extends Interactables{
             @Override
             public void run() {
                 try {
+                    UserInterface.changeIsViewingRecipes();
+                    sim.changeIsBusyState();
+                    int slotColumn = 0;
+                    int slotRow = 0;
                     // choose the food to be cooked
                     BakedFood bakedFood = null;
-                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_1)) {
-                        bakedFood = new BakedFood(0);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_2)) {
-                        bakedFood = new BakedFood(1);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_3)) {
-                        bakedFood = new BakedFood(2);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_4)) {
-                        bakedFood = new BakedFood(3);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_5)) {
-                        bakedFood = new BakedFood(4);
-                    }
-
-                    if(bakedFood != null){
-                        // check available ingredients first
-                        boolean isAllIngredientAvailable = true;
-                        for (String ingredient : bakedFood.getIngredients()) {
-                            boolean isIngredientAvailable = false;
-                            for (Item rawfood : sim.getInventory().getMapOfItems().keySet()) {
-                                if (ingredient.equals(rawfood.getName())) {
-                                    isIngredientAvailable = true;
-                                    break;
-                                }
-                            }  
-                            if (!isIngredientAvailable) {
-                                isAllIngredientAvailable = false;
-                                break;
+                    while (bakedFood == null) {
+                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+                            if (slotColumn > 0) {
+                                slotColumn--;
+                                UserInterface.setSlotColumn(slotColumn);
                             }
                         }
-                        if (isAllIngredientAvailable) {
-                            changeOccupiedState();
-                            double cookDuration = bakedFood.getHungerPoint() * 1.5;
-                            GameTime.startDecrementTimeRemaining((int) cookDuration*Consts.THREAD_ONE_SECOND);
-                            sim.setStatus("Cooking");
+                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
+                            if (slotRow < 1) {
+                                if (slotColumn < 2) {
+                                    slotRow++;
+                                    UserInterface.setSlotRow(slotRow);
+                                }
+                                
+                            }
+                        }
+                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+                            if (slotColumn < 2) {
+                                if (!(slotRow == 1 && slotColumn == 1)) {
+                                    slotColumn++;
+                                    UserInterface.setSlotColumn(slotColumn);
+                                }
+                            }
+                        }
+                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
+                            if (slotRow > 0 && slotRow < 2) {
+                                slotRow--;
+                                UserInterface.setSlotRow(slotRow);
+                            }
+                        }
+                        if(KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                            if (slotRow == 0 && slotColumn == 0) {
+                                bakedFood = new BakedFood(0);
+                            }
+                            else if (slotRow == 0 && slotColumn == 1) {
+                                bakedFood = new BakedFood(1);
+                            }
+                            else if (slotRow == 0 && slotColumn == 2) {
+                                bakedFood = new BakedFood(2);
+                            }
+                            else if (slotRow == 1 && slotColumn == 0) {
+                                bakedFood = new BakedFood(3);
+                            }
+                            else if (slotRow == 1 && slotColumn == 1) {
+                                bakedFood = new BakedFood(4);
+                            }
+                        }
+                    }
+                    UserInterface.changeIsViewingRecipes();
+                    
 
-                            Thread.sleep((int) cookDuration*Consts.THREAD_ONE_SECOND);
+                    // check available ingredients first
+                    boolean isAllIngredientAvailable = true;
+                    for (String ingredient : bakedFood.getIngredients()) {
+                        boolean isIngredientAvailable = false;
+                        for (Item rawfood : sim.getInventory().getMapOfItems().keySet()) {
+                            if (ingredient.equals(rawfood.getName())) {
+                                isIngredientAvailable = true;
+                                break;
+                            }
+                        }  
+                        if (!isIngredientAvailable) {
+                            isAllIngredientAvailable = false;
+                            break;
+                        }
+                    }
+                    if (isAllIngredientAvailable) {
+                        changeOccupiedState();
+                        
+                        double cookDuration = bakedFood.getHungerPoint() * 1.5;
+                        GameTime.startDecrementTimeRemaining((int) cookDuration);
+                        sim.setStatus("Cooking");
+
+                        Thread.sleep((int) cookDuration*Consts.THREAD_ONE_SECOND);
+                        
+                        changeOccupiedState();
+                        sim.resetStatus();
+                        sim.setMood(sim.getMood() + 10);
+                        // must add code to add to inventory
+                        sim.getInventory().addItem(bakedFood);
+                        sim.changeIsBusyState();
+                    }
+                    else {
+                        UserInterface.changeIsAbleToCook();
+                        while (UserInterface.getIsAbleToCook() == false){
                             
-                            changeOccupiedState();
-                            sim.setMood(sim.getMood() + 10);
-                            // must add code to add to inventory
-                            sim.getInventory().addItem(bakedFood);
+                            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                                UserInterface.changeIsAbleToCook();
+                                sim.changeIsBusyState();
+                            }
                         }
                     }
                     

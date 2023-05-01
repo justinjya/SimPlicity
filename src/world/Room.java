@@ -10,6 +10,7 @@ import src.main.Consts;
 import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.*;
+import src.entities.interactables.Stove;
 
 public class Room {
     // Attributes
@@ -40,6 +41,9 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
+
+        // only for debug
+        this.listOfObjects.add(new Stove(0, 0, 0));
     }
 
     // GETTERS

@@ -57,7 +57,7 @@ public class RawFood extends Food implements Item{
         this.price = prices[imageIndex];
         this.imageIndex = imageIndex;
         // load the images
-        // this.icons = ImageLoader.loadRawFood();
+        this.icons = ImageLoader.loadRawFood();
     }
 
     // Getters
@@ -68,9 +68,9 @@ public class RawFood extends Food implements Item{
     // Implementation of abstract methods
     @Override
     public BufferedImage getIcon() {
-        // return images[imageIndex];
+        return icons[imageIndex];
 
         // ONLY FOR DEBUGGING
-        return placeholder;
+        // return placeholder;
     }
 }
