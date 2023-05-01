@@ -2,10 +2,11 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GamePanel;
+import src.main.GameTime;
 import src.main.ui.UserInterface;
 
 public class Cursor {
@@ -119,56 +120,62 @@ public class Cursor {
         }
     }
 
-    public void enterPressed(GamePanel gp, UserInterface ui) {
+    public void enterPressed(UserInterface ui) {
         if (world.isAdding()) {
-            if (gp.isCurrentState("Starting a new game")) {
-                gp.setState("Playing");
-            }
-
             if (isAboveHouse()) return;
             
             if (!isAboveHouse()) {
                 world.addHouse();
             }
         }
-        enterHouse(gp, ui);
+        enterHouse(ui);
     }
 
-    private void enterHouse(GamePanel gp, UserInterface ui) {
+    private void enterHouse(UserInterface ui) {
         int x = getGridX();
         int y = getGridY();
         Sim currentSim;
-        House currentHouse;
-        Room currentRoom;
+        House houseToVisit, currentHouse;
+        Room roomToVisit;
 
         try {
             currentSim = ui.getCurrentSim();
-            currentHouse = world.getHouse(x, y);
-            currentRoom = currentHouse.getRoomWhenEntered();
+            currentHouse = currentSim.getCurrentHouse();
+            houseToVisit = world.getHouse(x, y);
+            roomToVisit = houseToVisit.getRoomWhenEntered();
 
-            if (gp.isCurrentState("Starting a new game")) {
-                currentSim = world.getSim(0);
-            }
-
-            if (currentSim.getCurrentHouse() == currentHouse) {
+            if (currentHouse == houseToVisit) {
                 ui.changeIsViewingWorldState();
                 System.out.println("You cannot enter a house you're already in!");
                 return;
             }
     
-            if (world.isAdding()) {
-                int newSim = world.getListOfSim().size() - 1;
-    
-                currentSim = world.getSim(newSim);
-                currentSim.changeIsBusyState();
-                ui.setCurrentSim(currentSim);
-                world.changeIsAddingState();
-            }
-            
             if (isAboveHouse()) {
-                currentSim.setCurrentHouse(currentHouse);
-                currentSim.setCurrentRoom(currentRoom);
+                if (world.isAdding()) {
+                    int newSim = world.getListOfSim().size() - 1;
+        
+                    currentSim = world.getSim(newSim);
+                    currentSim.changeIsBusyState();
+                    ui.setCurrentSim(currentSim);
+                    world.changeIsAddingState();
+                }
+                else {
+                    int x1 = currentHouse.getX(); int x2 = houseToVisit.getX();
+                    int y1 = currentHouse.getY(); int y2 = houseToVisit.getY();
+                    double deltaXsquared = Math.pow((double) (x2 - x1), 2);
+                    double deltaYsquared = Math.pow((double) (y2 - y1), 2);
+                    int duration = (int) Math.sqrt(deltaXsquared + deltaYsquared);
+
+                    GameTime.decreaseTimeRemaining(duration);
+                }
+
+                currentSim.setCurrentHouse(houseToVisit);
+                currentSim.setCurrentRoom(roomToVisit);
                 ui.changeIsViewingWorldState();
+            }
+
+            if (GamePanel.isCurrentState("Starting a new game")) {
+                GamePanel.gameState = "Playing";
             }
         }
         catch (Exception e) {System.out.println("Unexpected Error!");}

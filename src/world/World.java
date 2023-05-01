@@ -5,21 +5,17 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import src.assets.ImageLoader;
-import src.entities.Sim;
 import src.entities.handlers.KeyHandler;
-import src.items.interactables.Door;
+import src.entities.interactables.Door;
+import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GamePanel;
-import src.main.GameTime;
 import src.main.ui.UserInterface;
 
 public class World {
-    // Atributes
+    // Attributes
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
-    private GamePanel gp;
-    private GameTime time;
     
     // State of the world (is adding a house or selecting a house to visit)
     private boolean isAdding = true;
@@ -40,8 +36,8 @@ public class World {
     private int lowerBoundsY, upperBoundsY;
 
     // Constructor 
-    public World(Sim sim, GamePanel gp, GameTime time) {
-        // Atributes
+    public World(Sim sim) {
+        // Attributes
         listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
 
@@ -58,9 +54,6 @@ public class World {
         // Initialize the cursor in the center of the grid
         this.cursor = new Cursor(Consts.TILE_SIZE * 16, Consts.TILE_SIZE * 16, this);
 
-        // For the start of the game
-        this.gp = gp;
-        this.time = time;
         listOfSim.add(sim);
         
         // ONLY FOR DEBUGGING
@@ -114,8 +107,8 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        Room newRoom = new Room("First Room", time);
-        newRoom.getListOfObjects().add(new Door(null, gp, time));
+        Room newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null));
         House newHouse = new House(x, y, this, newSim, newRoom);
 
         listOfHouse.add(newHouse);
@@ -126,12 +119,12 @@ public class World {
     }
 
     // Others
-    public void update(GamePanel gp, UserInterface ui) {
+    public void update(UserInterface ui) {
         if (ui.isViewingWorld()) {
             cursor.move();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            cursor.enterPressed(gp, ui);
+            cursor.enterPressed(ui);
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
             ui.changeIsViewingWorldState();
@@ -208,7 +201,7 @@ public class World {
         Font font;
         g.setColor(Color.WHITE);
 
-        font = new Font("Arial", Font.PLAIN, 9);
+        font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
 

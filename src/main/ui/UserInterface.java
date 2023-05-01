@@ -6,21 +6,19 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
+import src.main.GamePanel;
 import src.main.GameTime;
 import src.world.World;
-import src.entities.Sim;
 import src.assets.ImageLoader;
-
-// will delete later?
-import src.entities.Interactables;
+import src.entities.interactables.Interactables;
+import src.entities.sim.Inventory;
+import src.entities.sim.Sim;
 
 public class UserInterface {
-    // Atributes
+    // Attributes
     private World world;
     private Sim currentSim;
-
-    private GameTime time;
-    
+    private Inventory inventory;
     private boolean viewingWorld;
     private boolean tabbed;
 
@@ -28,18 +26,18 @@ public class UserInterface {
     private BufferedImage[] images;
 
     //ONLY FOR DEBUGGING
-    private boolean debug;
+    private boolean debug = true;
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world, Sim sim, GameTime time) {
+    public UserInterface(World world, Sim sim) {
         this.world = world;
         this.currentSim = sim;
-        this.time = time;
+        this.inventory = sim.getInventory();
+
         // For the start of the game
         this.viewingWorld = true;
         this.tabbed = false;
-        this.debug = false;
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
@@ -80,27 +78,44 @@ public class UserInterface {
     }
 
     public void tab() {
-        this.tabbed = !this.tabbed;
-        currentSim.changeIsBusyState();
+        if (!inventory.isOpen()) {
+            this.tabbed = !this.tabbed;
+            currentSim.changeIsBusyState();
+        }
     }
 
     public void debug() {
         this.debug = !this.debug;
     }
 
-    // OTHERS
-    public void update() {
+    public void inventory() {
+        Inventory inventory = currentSim.getInventory();
+
         if (tabbed) {
-            SelectionBox.update(this, time);
+            tab();
         }
+
+        inventory.changeIsOpen();
+        currentSim.changeIsBusyState();
     }
 
+    // OTHERS
+    public void update() {
+        if (tabbed && !currentSim.getInventory().isOpen()) {
+            SelectionBox.update(this);
+        }
+
+        if (inventory.isOpen()) {
+            inventory.update(this);
+        }
+    }
+    
     public void draw(Graphics2D g) {
         if (viewingWorld) {
             Font font;
             g.setColor(Color.WHITE);
 
-            font = new Font("Arial", Font.PLAIN, 12);
+            font = new Font("Inter", Font.PLAIN, 12);
 
             g.setFont(font);
             g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
@@ -136,8 +151,15 @@ public class UserInterface {
         g.fillRect(11, 294, 182, 58); // Time remaining
         g.fillRect(607, 88, 182, 31); // House name
 
+        g.fillRect(607, 147, 182, 26); // Inventory
+
         drawText(g);
         drawAttributes(g);
+        
+        // Draw currentSim's inventory
+        if (inventory.isOpen()) {
+            inventory.draw(g);
+        }  
 
         // Draw tab boxes
        SelectionBox.draw(g, this);
@@ -147,20 +169,21 @@ public class UserInterface {
         Font font;
         g.setColor(Color.BLACK);
 
-        font = new Font("Arial", Font.BOLD, 13);
+        font = new Font("Inter", Font.BOLD, 13);
 
         g.setFont(font);
         g.drawString(currentSim.getName(), 83, 68);
         
-        g.drawString("Day " + time.getDay(), 675, 68);
+        g.drawString("Day " + GameTime.day, 675, 68);
         g.drawString("Time Remaining", 53, 285);
 
         g.setColor(Color.WHITE);
         g.drawString(currentSim.getCurrentHouse().getName(), 650, 108);
+        g.drawString("Inventory", 668, 165);
 
         drawAttributes(g);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
 
         try {
@@ -175,7 +198,7 @@ public class UserInterface {
 
         // ONLY FOR DEBUGGING
         if (debug) {
-            font = new Font("Arial", Font.PLAIN, 10);
+            font = new Font("Inter", Font.PLAIN, 10);
             g.setFont(font);
 
             g.drawString("x: " + currentSim.getX(), 33, 374);
@@ -186,26 +209,20 @@ public class UserInterface {
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-            
-            if (currentSim.getInteractionHandler().isObjectInRange()) {
-                Interactables object = currentSim.getInteractionHandler().getInteractableObject();
-                if (object != null) {
-                    g.drawString("isOccupied: " + object.isOccupied(), 33, 418);
-                    g.drawString("imageIndex: " + object.getImageIndex(), 33, 428);
-                }
-            }
+            g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
+            g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
         }
     }
 
     private void drawAttributes(Graphics2D g) {
-        Font font = new Font("Arial", Font.PLAIN, 10);
+        Font font = new Font("Inter", Font.PLAIN, 10);
 
         g.setColor(Color.BLACK);
         g.setFont(font);
         g.drawString("" + currentSim.getStatus(), 90, 93);
         g.drawString("" + currentSim.getCurrentRoom().getName(), 670, 130);
 
-        font = new Font("Arial", Font.PLAIN, 12);
+        font = new Font("Inter", Font.PLAIN, 12);
         g.setFont(font);
         g.setColor(Color.WHITE);
 
@@ -219,11 +236,11 @@ public class UserInterface {
         drawValue(g, currentSim.getHealth(), 174, 0);
         drawValue(g, currentSim.getHunger(), 174, 1);
         drawValue(g, currentSim.getMood(), 174, 2);
-        drawTime(g, time.getTimeRemaining(), 174, 0);
+        drawTime(g, GameTime.timeRemaining, 174, 0);
     }
 
     private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {
@@ -235,7 +252,7 @@ public class UserInterface {
     }
 
     private void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Arial", Font.PLAIN, 9);
+        Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
         if (value < 100) {
