@@ -44,7 +44,6 @@ public class Room {
         this.image = ImageLoader.loadWood();
 
         this.listOfObjects.add(new Door(null));
-        this.listOfObjects.add(new Bed(0, 0, 0));
     }
 
     // GETTERS

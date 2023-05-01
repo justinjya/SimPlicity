@@ -51,7 +51,7 @@ public class TabUserInterface {
         ui.tab();
         
         Sim currentSim = ui.getCurrentSim();
-        Room currentRoom = ui.getCurrentSim().getCurrentRoom();
+        Room currentRoom = currentSim.getCurrentRoom();
 
         if (currentSim.isBusy()) return;
 

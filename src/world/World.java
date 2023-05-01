@@ -36,7 +36,6 @@ public class World {
     private int lowerBoundsY, upperBoundsY;
 
     // Constructor 
-    // For starting a new game
     public World() {
         // Attributes
         listOfSim = new ArrayList<>();
@@ -109,7 +108,6 @@ public class World {
         House newHouse = new House(x, y, this, newSim, newRoom);
         newRoom.setHouseInsideOf(newHouse);
 
-        setMap(x, y, 1);
         listOfHouse.add(newHouse);
     }
 

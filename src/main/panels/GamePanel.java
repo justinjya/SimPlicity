@@ -8,6 +8,7 @@ import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
+import src.main.ui.ActiveActionsUserInterface;
 import src.main.ui.UserInterface;
 import src.world.Room;
 import src.world.World;
@@ -102,6 +103,11 @@ public class GamePanel extends JPanel implements Runnable {
         if (ui == null || world == null) {
             return;
         }
+
+        if (isCurrentState("Viewing active actions")) {
+            // ActiveActionsUserInterface.update(sim, ui);
+            return;
+        }
         
         if (!ui.isViewingWorld()) {
             Sim currentSim = ui.getCurrentSim();
@@ -115,10 +121,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ui.update();
-        // }
-        // else if (isCurrentState("Viewing active actions")) {
-        //     ActiveActionsUserInterface.update(sim, ui);
-        // }
     }
     
     @Override
@@ -139,6 +141,11 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
+        if (isCurrentState("Viewing active actions")) {
+            ActiveActionsUserInterface.draw(this, g2);
+            return;
+        }
+
         if (!ui.isViewingWorld()) {
             Sim currentSim = ui.getCurrentSim();
             Room currentRoom = currentSim.getCurrentRoom();
@@ -149,9 +156,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ui.draw(g2);
-        // else if (isCurrentState("Viewing active actions")) {
-        //     ActiveActionsUserInterface.draw(this, g2);
-        // }
        
         // To free resources
         g2.dispose();

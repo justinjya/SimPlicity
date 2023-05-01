@@ -10,22 +10,25 @@ import src.main.ui.UserInterface;
 import src.world.World;
 
 public class GameLoader {
-    public static String simName = CreateSimPanel.textFields[0];
-    public static String roomName = CreateSimPanel.textFields[1];
+    public static String simName = CreateSimPanel.simName;
+    public static String roomName = CreateSimPanel.roomName;
     public static int selectedColor = CreateSimPanel.selectedColor;
 
     public static void startNewGame() {
         GameTime.init(1, Consts.ONE_MINUTE * 12);
         World world = GamePanel.world = new World();
-        String simName = CreateSimPanel.textFields[0];
+        String simName = CreateSimPanel.simName;
         int selectedColor = CreateSimPanel.selectedColor;
         
+        // Create the new sim
         Color shirtColor = ImageLoader.setColor(selectedColor);
         Sim newSim = new Sim(simName, shirtColor);
         
+        // Add the new sim to the world
         world.addSim(newSim);
         world.changeIsAddingState();
         
+        // Actually start the game by changing the state into adding a house
         UserInterface ui = GamePanel.ui = new UserInterface(GamePanel.world);
         ui.changeIsViewingWorldState();
     }
@@ -36,9 +39,11 @@ public class GameLoader {
         String simName = CreateSimPanel.textFields[0];
         int selectedColor = CreateSimPanel.selectedColor;
         
+        // Create the sim
         Color shirtColor = ImageLoader.setColor(selectedColor);
         Sim newSim = new Sim(simName, shirtColor);
         
+        // Add the sim to the world and change the state of game into adding a house
         world.addSim(newSim);
         world.changeIsAddingState();
         ui.changeIsViewingWorldState();

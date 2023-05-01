@@ -47,7 +47,8 @@ public class ActiveActionsUserInterface {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(Sim sim, UserInterface ui) {
+    private static void boxEntered(UserInterface ui) {
+        Sim sim = ui.getCurrentSim();
         switch (selectedBox) {
             case 0:
                 ActiveActions.work(sim, 9);
@@ -64,7 +65,7 @@ public class ActiveActionsUserInterface {
         GamePanel.gameState = "Playing";
     }
     
-    public static void update(Sim sim, UserInterface ui) {
+    public static void update(UserInterface ui) {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             moveSelectedBox("left");
         }
@@ -72,7 +73,7 @@ public class ActiveActionsUserInterface {
             moveSelectedBox("right");
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            boxEntered(sim, ui);
+            boxEntered(ui);
         }
     }
 

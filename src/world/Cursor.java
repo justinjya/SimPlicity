@@ -128,8 +128,8 @@ public class Cursor {
             
             if (!isAboveHouse()) {
                 world.addHouse(GameLoader.roomName);
-                CreateSimPanel.textFields[0] = "";
-                CreateSimPanel.textFields[1] = "";
+                CreateSimPanel.simName = "";
+                CreateSimPanel.simName = "";
             }
         }
         enterHouse(ui);
@@ -182,9 +182,6 @@ public class Cursor {
                 GamePanel.gameState = "Playing";
             }
         }
-        catch (Exception e) {
-            // System.out.println("Unexpected Error!");
-            e.printStackTrace();
-        }
+        catch (Exception e) {System.out.println("Unexpected Error!");}
     }
 }
