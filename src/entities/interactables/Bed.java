@@ -31,12 +31,11 @@ public class Bed extends Interactables{
     };
 
     // Attributes
-    private int price;
-    private int duration = Consts.ONE_SECOND * 10; // Change this to * 4 once the project is done
+    private int duration = Consts.ONE_MINUTE / 4; // CHANGE TO * 4 ONCE PROJECT IS DONE
 
     // Image of the beds
-    private BufferedImage[] icons = new BufferedImage[3];
-    private BufferedImage[] images = new BufferedImage[6];
+    private BufferedImage[] icons;
+    private BufferedImage[] images;
 
     // CONSTRUCTOR
     public Bed(int x, int y, int imageIndex) {
@@ -50,7 +49,8 @@ public class Bed extends Interactables{
             height[imageIndex]
         );
 
-        this.price = prices[imageIndex];
+        setPrice(prices[imageIndex]);
+        setDuration(duration);
 
         // Load the image of the beds
         icons = ImageLoader.loadBedsIcons();
@@ -68,7 +68,8 @@ public class Bed extends Interactables{
             height[imageIndex]
         );
 
-        this.price = prices[imageIndex];
+        setPrice(prices[imageIndex]);
+        setDuration(duration);
 
         // Load the image of the beds
         icons = ImageLoader.loadBedsIcons();
@@ -86,17 +87,13 @@ public class Bed extends Interactables{
             width[1],
             height[1]
         );
-        
-        this.price = prices[1];
 
+        setPrice(prices[1]);
+        setDuration(duration);
+        
         // Load the image of the beds
         icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();
-    }
-
-    // GETTERS
-    public int getPrice() {
-        return price;
     }
 
     @Override
@@ -129,10 +126,15 @@ public class Bed extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
+                    BufferedImage initialImage = images[getImageIndex()];
+                    images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                    
                     sim.setStatus("Sleeping");
                     GameTime.startDecrementTimeRemaining(duration);
 
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+
+                    images[getImageIndex()] = initialImage;
                     
                     changeOccupiedState();
                     sim.resetStatus();

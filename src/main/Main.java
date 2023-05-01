@@ -3,6 +3,8 @@ package src.main;
 import java.awt.*;
 import javax.swing.*;
 
+import src.main.panels.MainMenuPanel;
+
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("SimPlicity");
@@ -15,14 +17,11 @@ public class Main {
 
         // Set the icon of the JFrame
         frame.setIconImage(icon.getImage());
-        
-        GamePanel gamePanel = new GamePanel();
-        frame.add(gamePanel);
+
+        frame.add(MainMenuPanel.getInstance());
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        new Thread(gamePanel).start();
     }
 }

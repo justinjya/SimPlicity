@@ -2,13 +2,11 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
-import src.entities.handlers.KeyHandler;
-
 import src.assets.ImageLoader;
-import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
+import src.main.KeyHandler;
 import src.items.foods.BakedFood;
 import src.items.Item;
 
@@ -32,12 +30,8 @@ public class Stove extends Interactables{
     };
     
     // Images of stove
-    BufferedImage[] images = new BufferedImage[4];
-    BufferedImage[] icons = new BufferedImage[2]; 
-
-    // Attributes
-    private int price;
-    private int duration;
+    private BufferedImage[] images;
+    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Stove(int x, int y, int imageIndex) {
@@ -51,7 +45,7 @@ public class Stove extends Interactables{
             height[imageIndex]
         );
 
-        this.price = prices[imageIndex];
+        setPrice(prices[imageIndex]);
 
         // Load the images and icons of the stoves
         this.images = ImageLoader.loadStoves();
@@ -61,7 +55,7 @@ public class Stove extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return images[getImageIndex()];
+        return icons[getImageIndex()];
     }
 
     @Override

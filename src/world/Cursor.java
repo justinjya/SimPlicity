@@ -2,11 +2,13 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.handlers.KeyHandler;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GamePanel;
+import src.main.GameLoader;
 import src.main.GameTime;
+import src.main.KeyHandler;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
 import src.main.ui.UserInterface;
 
 public class Cursor {
@@ -125,7 +127,8 @@ public class Cursor {
             if (isAboveHouse()) return;
             
             if (!isAboveHouse()) {
-                world.addHouse();
+                world.addHouse(GameLoader.roomName);
+                CreateSimPanel.reset();
             }
         }
         enterHouse(ui);
@@ -174,7 +177,7 @@ public class Cursor {
                 ui.changeIsViewingWorldState();
             }
 
-            if (GamePanel.isCurrentState("Starting a new game")) {
+            if (GamePanel.isCurrentState("Placing a new house")) {
                 GamePanel.gameState = "Playing";
             }
         }

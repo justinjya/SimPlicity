@@ -40,7 +40,6 @@ public class RawFood extends Food implements Item{
 
     // Attributes
     private int price;
-    private int imageIndex;
 
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[8];
@@ -55,7 +54,7 @@ public class RawFood extends Food implements Item{
             imageIndex
         );
         this.price = prices[imageIndex];
-        this.imageIndex = imageIndex;
+        
         // load the images
         // this.icons = ImageLoader.loadRawFood();
     }
