@@ -241,7 +241,7 @@ public class Room {
             // Cancel adding or moving an object if escape is pressed and add object into sim inventory
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
                 Sim sim = houseInsideOf.getOwner();
-                moveableObject.setX(3);
+                moveableObject.setX(0);
                 moveableObject.setY(3);
                 sim.getInventory().addItem(moveableObject);
                 moveableObject = null;
