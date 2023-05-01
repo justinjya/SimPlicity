@@ -5,10 +5,10 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 import src.assets.ImageLoader;
-import src.entities.handlers.KeyHandler;
 import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
+import src.main.KeyHandler;
 import src.main.ui.UserInterface;
 
 public class World {
@@ -16,10 +16,9 @@ public class World {
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
-    private Room unaddedRoom = null;
     
     // State of the world (is adding a house or selecting a house to visit)
-    private boolean isAdding = true;
+    private boolean isAdding = false;
 
     // Images of the world
     private BufferedImage[] images;
@@ -37,7 +36,8 @@ public class World {
     private int lowerBoundsY, upperBoundsY;
 
     // Constructor 
-    public World(Sim sim, Room room) {
+    // For starting a new game
+    public World() {
         // Attributes
         listOfSim = new ArrayList<>();
         listOfHouse = new ArrayList<>();
@@ -54,9 +54,6 @@ public class World {
 
         // Initialize the cursor in the center of the grid
         this.cursor = new Cursor(Consts.TILE_SIZE * 16, Consts.TILE_SIZE * 16, this);
-
-        listOfSim.add(sim);
-        unaddedRoom = room;
     }
 
     // Getter and setter
@@ -88,11 +85,6 @@ public class World {
     public boolean isAdding() {
         return isAdding;
     }
-
-    public Room getUnaddedRoom() {
-        return unaddedRoom;
-    }
-
     public Cursor getCursor() {
         return cursor;
     }
@@ -105,17 +97,19 @@ public class World {
         listOfSim.add(sim);
     }
 
-    public void addHouse() {
+    public void addHouse(String roomName) {
         int x = cursor.getGridX();
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        Room newRoom = unaddedRoom;
-        newRoom.getListOfObjects().add(new Door(null));
-        House newHouse = new House(x, y, this, newSim, newRoom);
-        setMap(x, y, 1);
-        unaddedRoom = null;
 
+        Room newRoom = new Room(roomName);
+        newRoom.getListOfObjects().add(new Door(null));
+
+        House newHouse = new House(x, y, this, newSim, newRoom);
+        newRoom.setHouseInsideOf(newHouse);
+
+        setMap(x, y, 1);
         listOfHouse.add(newHouse);
     }
 

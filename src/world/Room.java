@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
+import src.main.KeyHandler;
 import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.*;
@@ -18,6 +19,7 @@ public class Room {
     private ArrayList<Sim> listOfSims;
     
     // For adding, editing, and removing objects
+    private House houseInsideOf;
     private boolean isEditingRoom;
     private CollisionHandler collisionHandler;
     private Interactables moveableObject = null;
@@ -40,6 +42,9 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
+
+        this.listOfObjects.add(new Door(null));
+        this.listOfObjects.add(new Bed(0, 0, 0));
     }
 
     // GETTERS
@@ -58,6 +63,10 @@ public class Room {
     public ArrayList<Sim> getListOfSims() {
         return listOfSims;
     }
+
+    public House getHouseInsideOf() {
+        return houseInsideOf;
+    }
     
     // SETTERS
     public void addSim(Sim sim) {
@@ -70,6 +79,10 @@ public class Room {
 
     public void changeisEditingRoomState() {
         this.isEditingRoom = !this.isEditingRoom;
+    }
+
+    public void setHouseInsideOf(House house) {
+        this.houseInsideOf = house;
     }
 
     public void addObject(Interactables object) {
@@ -86,15 +99,11 @@ public class Room {
     
     public void selectObject() {
         changeisEditingRoomState();
-        try {
-            selectedObject = listOfObjects.get(0);
-            if (selectedObject instanceof Door) {
-                throw new IndexOutOfBoundsException();
-            }
-        }
-        catch (IndexOutOfBoundsException e) {
-            selectedObject = null;
-            changeisEditingRoomState();
+        for (Interactables object : listOfObjects) {
+            if (object instanceof Door) continue;
+
+            selectedObject = object;
+            break;
         }
     }
 
@@ -230,8 +239,12 @@ public class Room {
                 changeisEditingRoomState();
             }
 
-            // Cancel adding or moving an object if escape is pressed
+            // Cancel adding or moving an object if escape is pressed and add object into sim inventory
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                Sim sim = houseInsideOf.getOwner();
+                moveableObject.setX(3);
+                moveableObject.setY(3);
+                sim.getInventory().addItem(moveableObject);
                 moveableObject = null;
                 changeisEditingRoomState();
             }

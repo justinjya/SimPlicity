@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.handlers.KeyHandler;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
-import src.main.GamePanel;
+import src.main.KeyHandler;
+import src.main.panels.GamePanel;
 
 public class ActiveActionsUserInterface {
     // Selection Box Attributes

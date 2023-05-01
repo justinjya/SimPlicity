@@ -4,6 +4,7 @@ import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.Door;
 import src.main.Consts;
+import src.main.KeyHandler;
 
 public abstract class Entity {
     private int x;

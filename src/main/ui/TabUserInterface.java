@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.handlers.KeyHandler;
-import src.entities.interactables.*;
 import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
 import src.main.Consts;
+import src.main.KeyHandler;
 import src.world.Room;
-import src.world.World;
 
-public class SelectionBox {
+public class TabUserInterface {
     // Selection Box Attributes
     private static int selectedBox = 0; // Boxes starting from 0 to 4
     private static int selectedBoxX = 203;
@@ -52,15 +50,14 @@ public class SelectionBox {
     private static void boxEntered(UserInterface ui) {
         ui.tab();
         
-        World world = ui.getWorld();
         Sim currentSim = ui.getCurrentSim();
-        Room currentRoom = currentSim.getCurrentRoom();
+        Room currentRoom = ui.getCurrentSim().getCurrentRoom();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(currentRoom);
+                NonActiveActions.editRoom(ui, currentRoom);
                 break;
             case 1:
                 UpgradeActions.addRoom(currentRoom, "Second Room");
@@ -69,7 +66,7 @@ public class SelectionBox {
                 // ITEM STORE
                 break;
             case 3:
-                AddSimAction.addSim(ui, world);
+                AddSimAction.addSim();
                 break;
             case 4:
                 ActiveActions.visitAnotherSim(ui);

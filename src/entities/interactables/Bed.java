@@ -129,10 +129,15 @@ public class Bed extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
+                    BufferedImage initialImage = images[getImageIndex()];
+                    images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                    
                     sim.setStatus("Sleeping");
                     GameTime.startDecrementTimeRemaining(duration);
 
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+
+                    images[getImageIndex()] = initialImage;
                     
                     changeOccupiedState();
                     sim.resetStatus();

@@ -2,13 +2,12 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
-import src.entities.handlers.KeyHandler;
-
 import src.assets.ImageLoader;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
+import src.main.KeyHandler;
 import src.items.foods.BakedFood;
 import src.items.Item;
 

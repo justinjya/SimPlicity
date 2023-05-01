@@ -5,8 +5,8 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.items.foods.RawFood;
 import src.main.GameTime;
+import src.main.KeyHandler;
 import src.world.Room;
-import src.entities.handlers.KeyHandler;
 
 public class UpgradeActions {
     public static void addRoom(Room room, String name) {

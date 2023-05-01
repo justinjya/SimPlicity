@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
-import src.main.GamePanel;
 import src.main.GameTime;
 import src.world.World;
 import src.assets.ImageLoader;
@@ -19,8 +18,10 @@ public class UserInterface {
     private World world;
     private Sim currentSim;
     private Inventory inventory;
-    private boolean viewingWorld;
-    private boolean tabbed;
+
+    // User Interface States
+    private boolean viewingWorld = false;
+    private boolean tabbed = false;
 
     // User Interface Images
     private BufferedImage[] images;
@@ -30,14 +31,10 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world, Sim sim) {
+    public UserInterface(World world) {
         this.world = world;
-        this.currentSim = sim;
-        this.inventory = sim.getInventory();
-
-        // For the start of the game
-        this.viewingWorld = true;
-        this.tabbed = false;
+        this.currentSim = world.getListOfSim().get(0);
+        this.inventory = currentSim.getInventory();
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
@@ -63,6 +60,7 @@ public class UserInterface {
     // SETTERS
     public void setCurrentSim(Sim sim) {
         currentSim = sim;
+        inventory = currentSim.getInventory();
 
         if (currentSim.isBusy()) currentSim.changeIsBusyState();
 
@@ -102,7 +100,7 @@ public class UserInterface {
     // OTHERS
     public void update() {
         if (tabbed && !currentSim.getInventory().isOpen()) {
-            SelectionBox.update(this);
+            TabUserInterface.update(this);
         }
 
         if (inventory.isOpen()) {
@@ -162,7 +160,7 @@ public class UserInterface {
         }  
 
         // Draw tab boxes
-       SelectionBox.draw(g, this);
+       TabUserInterface.draw(g, this);
     }
 
     private void drawText(Graphics2D g) {

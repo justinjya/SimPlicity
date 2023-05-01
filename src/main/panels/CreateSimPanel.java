@@ -11,16 +11,22 @@ import java.awt.event.KeyAdapter;
 import javax.swing.JPanel;
 
 import src.assets.ImageLoader;
-import src.main.GamePanel;
+import src.main.GameLoader;
+import src.main.KeyHandler;
 
 public class CreateSimPanel extends JPanel {
-    private String[] textFields = { "", "" };
+    public static CreateSimPanel csp = new CreateSimPanel();
+
+    public static String[] textFields = { "", "" };
+    public static String simName = textFields[0];
+    public static String roomName = textFields[1];
+    public static int selectedColor = 2;
+    
     private int selectedField = 0; // 0 to 3
-    private int selectedColor = 2;
 
     private BufferedImage[] images = ImageLoader.loadCreateSimMenu();
 
-    public CreateSimPanel() {
+    private CreateSimPanel() {
         setPreferredSize(new Dimension(800, 600));
         setFocusTraversalKeysEnabled(false);
 
@@ -29,40 +35,27 @@ public class CreateSimPanel extends JPanel {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
 
-                // Check if the Enter key was pressed
+                // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
-                    // The Done button was selected, switch panels
-                    System.out.println("Switching panels");
+                    if (GamePanel.isCurrentState("Starting a new game")) {
+                        GameLoader.startNewGame();
+                    }
+                    if (GamePanel.isCurrentState("Creating a new sim")) {
+                        GameLoader.addSim();
+                    }
+                    GamePanel.gameState = "Placing a new house";
                     
-                    JPanel parent = (JPanel) getParent();
-                    GamePanel gamePanel = new GamePanel(textFields[0], textFields[1], ImageLoader.setColor(selectedColor));
-                    parent.removeAll();
-                    parent.add(gamePanel);
-                    parent.revalidate();
-                    parent.repaint();
-                    gamePanel.requestFocusInWindow();
-                    new Thread(gamePanel).start();
+                    PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
                 }
                 
+                // names text feild
                 if (selectedField < 2) {
-                    // Check if the Backspace key was pressed
-                    if (keyCode == KeyEvent.VK_BACK_SPACE) {
-                        // Remove the last character from the selected field
-                        String text = textFields[selectedField];
-                        if (text.length() > 0) {
-                            textFields[selectedField] = text.substring(0, text.length() - 1);
-                        }
-                    }
-                    // Check if the key is a letter or a number
-                    if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) ||
-                        (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) ||
-                        (keyCode == KeyEvent.VK_SPACE)) {
-                        // Append the character to the selected field
-                        char c = e.getKeyChar();
-                        textFields[selectedField] += c;
-                    }
+                    textFields[selectedField] = KeyHandler.receiveStringInput(e, textFields[selectedField]);
+                    simName = textFields[0];
+                    roomName = textFields[1];
                 }
-                else {
+                // color selector
+                if (selectedField  == 2) {
                     if (keyCode == KeyEvent.VK_D) selectedColor++;
                     if (keyCode == KeyEvent.VK_A) selectedColor--;
                     if (selectedColor > 7) selectedColor = 0;
@@ -82,6 +75,10 @@ public class CreateSimPanel extends JPanel {
         };
         addKeyListener(keyAdapter);
         setFocusable(true);
+    }
+
+    public static CreateSimPanel getInstance() {
+        return csp;
     }
 
     @Override

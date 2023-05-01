@@ -11,13 +11,17 @@ import javax.swing.JPanel;
 import src.assets.ImageLoader;
 
 public class MainMenuPanel extends JPanel {
-    private int selectedBox = 0; // 0 to 3
+    public static MainMenuPanel mmp = new MainMenuPanel();
+
+    private int selectedBox = 0; // 0 to 4
 
     private BufferedImage[] images = ImageLoader.loadMainMenu();
 
     public MainMenuPanel() {
         setPreferredSize(new Dimension(800, 600));
         setFocusTraversalKeysEnabled(false);
+
+        GamePanel.gameState = "Main menu";
 
         KeyAdapter keyAdapter = new KeyAdapter() {
             @Override
@@ -27,15 +31,21 @@ public class MainMenuPanel extends JPanel {
                 // Check if the Enter key was pressed
                 if (keyCode == KeyEvent.VK_ENTER) {
                     if (selectedBox == 0) {
-                        System.out.println("Switching panels");
+                        GamePanel.gameState = "Starting a new game";
                         
-                        JPanel parent = (JPanel) getParent();
-                        CreateSimPanel createSimPanel = new CreateSimPanel();
-                        parent.removeAll();
-                        parent.add(createSimPanel);
-                        parent.revalidate();
-                        parent.repaint();
-                        createSimPanel.requestFocusInWindow();
+                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
+                    }
+                    if (selectedBox == 1) {
+                        GamePanel.gameState = "Playing";
+
+                        // LOAD GAME HERE
+                        
+                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), GamePanel.getInstance());
+                    }
+                    if (selectedBox == 2) {
+
+                        // ABOUT GAME HERE
+
                     }
                     if (selectedBox == 3) {
                         System.exit(0);
@@ -67,26 +77,31 @@ public class MainMenuPanel extends JPanel {
         setFocusable(true);
     }
 
+    public static MainMenuPanel getInstance() {
+        return mmp;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
 
-        // TO - DO!!! : Draw selector
-
         g2.drawImage(images[0], 0, 0, null); // background
-
         g2.drawImage(images[1], 201, 102, null); // title
-
+        
+        // Draw boxes
         g2.drawImage(images[2], 132, 304, null); // start
-
         g2.drawImage(images[3], 417, 304, null); // load
-
         g2.drawImage(images[4], 132, 392, null); // about
-
         g2.drawImage(images[5], 417, 392, null); // exit
         
+        // Draw highlighted boxes
+        if (selectedBox == 0) g2.drawImage(images[6], 123, 296, null); // start highlighted
+        if (selectedBox == 1) g2.drawImage(images[7], 408, 296, null); // load highlighted
+        if (selectedBox == 2) g2.drawImage(images[8], 123, 384, null); // about highlighted
+        if (selectedBox == 3) g2.drawImage(images[9], 408, 384, null); // exit highlighted
+
         g2.dispose();
     }
 }

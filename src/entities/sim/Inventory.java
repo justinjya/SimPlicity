@@ -8,12 +8,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Font;
 
-import src.entities.handlers.KeyHandler;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
 import src.items.foods.Food;
 import src.items.foods.RawFood;
+import src.main.KeyHandler;
 import src.main.ui.UserInterface;
 import src.world.House;
 import src.world.Room;
