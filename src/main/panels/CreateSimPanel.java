@@ -21,8 +21,7 @@ public class CreateSimPanel extends JPanel {
     public static String simName = textFields[0];
     public static String roomName = textFields[1];
     public static int selectedColor = 2;
-    
-    private int selectedField = 0; // 0 to 3
+    private static int selectedField = 0; // 0 to 3
 
     private BufferedImage[] images = ImageLoader.loadCreateSimMenu();
 
@@ -46,6 +45,17 @@ public class CreateSimPanel extends JPanel {
                     GamePanel.gameState = "Placing a new house";
                     
                     PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
+                }
+
+                if (keyCode == KeyEvent.VK_ESCAPE) {
+                    if (GamePanel.isCurrentState("Starting a new game")) {
+                        GamePanel.gameState = "Main menu";
+                        PanelHandler.switchPanel(CreateSimPanel.getInstance(), MainMenuPanel.getInstance());
+                    }
+                    if (GamePanel.isCurrentState("Creating a new sim")) {
+                        GamePanel.gameState = "Playing";
+                        PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
+                    } 
                 }
                 
                 // names text feild
@@ -81,6 +91,13 @@ public class CreateSimPanel extends JPanel {
         return csp;
     }
 
+    public static void reset() {
+        textFields[0] = "";
+        textFields[1] = "";
+        selectedField = 0;
+        selectedColor = 2;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -101,19 +118,21 @@ public class CreateSimPanel extends JPanel {
         g2.setColor(Color.WHITE);
         g2.drawString("Create New Sim", 352, 82);
 
+        // draw boxes
         g2.drawImage(images[2], 264, 108, null); // sim preview box
-
         g2.drawImage(images[3], 270, 300, null); // name input box
-
         g2.drawImage(images[3], 270, 351, null); // room input box
-
         g2.drawImage(images[4], 318, 416, null); // color picker
-
-        g2.drawImage(images[5], 324 + (selectedColor * 19), 434, null);
-
         g2.drawImage(images[6], 334, 466, null); // done button
 
-        g2.drawImage(newSim, 336, 130, 128, 128, null);
+        // draw highlighted boxes and color picker cursor
+        if (selectedField == 0) g2.drawImage(images[7], 267, 297, null);
+        if (selectedField == 1) g2.drawImage(images[7], 267, 348, null);
+        if (selectedField == 2) g2.drawImage(images[8], 315, 413, null);
+        if (selectedField == 3) g2.drawImage(images[9], 337, 465, null);
+
+        g2.drawImage(images[5], 324 + (selectedColor * 19), 434, null); // color picker cursor
+        g2.drawImage(newSim, 336, 130, 128, 128, null); // sim preview image
 
         g2.setFont(new Font("Inter", Font.PLAIN, 12));
         g2.setColor(new Color(110, 54, 81));

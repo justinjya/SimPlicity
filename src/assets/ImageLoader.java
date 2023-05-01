@@ -83,7 +83,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadCreateSimMenu() {
-        BufferedImage[] images = new BufferedImage[7];
+        BufferedImage[] images = new BufferedImage[10];
 
         images[0] = readImage("create_sim_menu", "create_sim_box", 1, 1, false);
         images[1] = readImage("create_sim_menu", "title_box", 1, 1, false);
@@ -92,6 +92,9 @@ public class ImageLoader {
         images[4] = readImage("create_sim_menu", "color_slider", 1, 1, false);
         images[5] = readImage("create_sim_menu", "cursor", 1, 1, false);
         images[6] = readImage("create_sim_menu", "button_done", 1, 1, false);
+        images[7] = readImage("create_sim_menu", "input_box_highlight", 1, 1, false);
+        images[8] = readImage("create_sim_menu", "color_slider_highlight", 1, 1, false);
+        images[9] = readImage("create_sim_menu", "button_done_highlight", 1, 1, false);
 
         return images;
     }

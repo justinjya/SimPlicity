@@ -7,10 +7,13 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Shower extends Interactables {
-    private int duration = Consts.ONE_SECOND * 10;
+    // Attributes
+    private int price = 0; // TO BE DETERMINED
+    private int duration = 10;
 
     // Images of the shower
-    private BufferedImage image;
+    private BufferedImage[] images;
+    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Shower(int x, int y) {
@@ -24,18 +27,21 @@ public class Shower extends Interactables {
             1
         );
 
+        setPrice(price);
+        setDuration(duration);
+
         // Load the image of the shower
-        image = ImageLoader.readImage("tiles", "grass", 1, 1, true);
+        // CODE HERE
     }
 
     @Override
     public BufferedImage getIcon() {
-        return image;
+        return icons[getImageIndex()];
     }
 
     @Override
     public BufferedImage getImage() {
-        return image;
+        return images[getImageIndex()];
     }
 
     @Override
@@ -47,8 +53,8 @@ public class Shower extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Taking a shower");
                     // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() + 10); // increase sim's health

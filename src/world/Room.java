@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
@@ -43,7 +44,9 @@ public class Room {
         // Load the image of the room
         this.image = ImageLoader.loadWood();
 
+        // ONLY FOR DEBUGGING
         this.listOfObjects.add(new Door(null));
+        this.listOfObjects.add(new Bed(0, 0, 0));
     }
 
     // GETTERS
@@ -98,12 +101,15 @@ public class Room {
     
     public void selectObject() {
         changeisEditingRoomState();
-        for (Interactables object : listOfObjects) {
-            if (object instanceof Door) continue;
-
-            selectedObject = object;
-            break;
+        try {
+            for (Interactables object : listOfObjects) {
+                if (object instanceof Door) continue;
+    
+                selectedObject = object;
+                break;
+            }
         }
+        catch (ConcurrentModificationException e) {}
     }
 
     // OTHERS
@@ -241,9 +247,12 @@ public class Room {
             // Cancel adding or moving an object if escape is pressed and add object into sim inventory
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
                 Sim sim = houseInsideOf.getOwner();
-                moveableObject.setX(0);
-                moveableObject.setY(3);
-                sim.getInventory().addItem(moveableObject);
+                
+                if (!(moveableObject instanceof Door)) {
+                    moveableObject.setX(0);
+                    moveableObject.setY(3);
+                    sim.getInventory().addItem(moveableObject);
+                }
                 moveableObject = null;
                 changeisEditingRoomState();
             }
@@ -261,29 +270,42 @@ public class Room {
     }
 
     private void drawObjects(Graphics2D g) {
-        for (Interactables object : listOfObjects) {
-            object.draw(g, object);
+        try {
+            for (Interactables object : listOfObjects) {
+                object.draw(g, object);
+            }
         }
+        catch (ConcurrentModificationException e) {}
     }
 
     private void drawSims(Graphics2D g) {
-        for (Sim sim: listOfSims) {
-            sim.draw(g);
+        try {
+            for (Sim sim: listOfSims) {
+                sim.draw(g);
+            }
         }
+        catch (ConcurrentModificationException e) {}
     }
 
     // TO - DO !!! : Find a better way to show selecting an object
+    // TO - DO !!! : Fix edit room when room is empty
     private void drawObjectSelector(Graphics2D g) {
-        if (isEditingRoom && moveableObject == null) {
-            g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
-            g.fillRect(selectedObject.getX(), selectedObject.getY(), selectedObject.getWidth(), selectedObject.getHeight());
+        try {
+            if (isEditingRoom && moveableObject == null) {
+                g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
+                g.fillRect(selectedObject.getX(), selectedObject.getY(), selectedObject.getWidth(), selectedObject.getHeight());
+            }
         }
+        catch (NullPointerException e) {}
     }
 
     private void drawSelectedObject(Graphics2D g) {
-        if (isEditingRoom && moveableObject != null) {
-            moveableObject.draw(g, moveableObject);
+        try {
+            if (isEditingRoom && moveableObject != null) {
+                moveableObject.draw(g, moveableObject);
+            }
         }
+        catch (NullPointerException e) {}
     }
 
     // ONLY FOR DEBUGGING

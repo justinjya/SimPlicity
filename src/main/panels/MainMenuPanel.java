@@ -98,8 +98,8 @@ public class MainMenuPanel extends JPanel {
         
         // Draw highlighted boxes
         if (selectedBox == 0) g2.drawImage(images[6], 123, 296, null); // start highlighted
-        if (selectedBox == 1) g2.drawImage(images[7], 408, 296, null); // load highlighted
-        if (selectedBox == 2) g2.drawImage(images[8], 123, 384, null); // about highlighted
+        if (selectedBox == 1) g2.drawImage(images[7], 408, 297, null); // load highlighted
+        if (selectedBox == 2) g2.drawImage(images[8], 123, 385, null); // about highlighted
         if (selectedBox == 3) g2.drawImage(images[9], 408, 384, null); // exit highlighted
 
         g2.dispose();

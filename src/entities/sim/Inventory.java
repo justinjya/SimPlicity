@@ -56,13 +56,13 @@ public class Inventory {
     // constructor
     public Inventory() {
         // ONLY FOR DEBUGGING
-        addItem(new Bed(0));
-        addItem(new Bed(1));
-        addItem(new Bed(2));
-        addItem(new RawFood(0));
-        addItem(new RawFood(2));
-        addItem(new Bed(2));
-        addItem(new RawFood(0));
+        addItem(new Bed(0)); // single
+        addItem(new Bed(1)); // queen
+        addItem(new Bed(1)); // queen
+        addItem(new Bed(2)); // king
+        addItem(new RawFood(0)); // nasi
+        addItem(new RawFood(0)); // ayam
+        addItem(new RawFood(0)); // ayam
     }
 
     // getter
@@ -80,11 +80,6 @@ public class Inventory {
     public void changeIsOpen()
     {
         isOpen = !isOpen;
-    }
-
-    public void resetIsOpen()
-    {
-        isOpen = false;
     }
 
     public void switchCategory()
@@ -149,6 +144,7 @@ public class Inventory {
         }
     }
 
+    // others
     public void update(UserInterface ui)
     {
         getItemsToShow();
@@ -165,7 +161,7 @@ public class Inventory {
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
             if (slotRow < 3) {
-                slotSelected += 2;
+                slotSelected += 3;
                 slotRow++;
             } 
         }
@@ -177,7 +173,7 @@ public class Inventory {
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
             if (slotRow > 0) {
-                slotSelected -= 2;
+                slotSelected -= 3;
                 slotRow--;
             }
         }

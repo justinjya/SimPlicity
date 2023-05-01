@@ -8,12 +8,13 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Toilet extends Interactables{
-    // Images of toilet
-    BufferedImage[] images = new BufferedImage[2]; // for idle toilet and occupied toilet
-
     // Attributes
-    private int price;
-    private int duration;
+    private int price = 50;
+    private int duration = 5;
+
+    // Images of toilet
+    private BufferedImage[] images;
+    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Toilet(int x, int y, int imageIndex) {
@@ -27,7 +28,9 @@ public class Toilet extends Interactables{
             1
         );
 
-        this.price = 50;
+        setPrice(price);
+        setDuration(duration);
+
         // Load the image of the beds
         this.images = ImageLoader.loadToilet();
     }
@@ -35,7 +38,7 @@ public class Toilet extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return images[getImageIndex()];
+        return icons[getImageIndex()];
     }
 
     @Override
@@ -50,9 +53,9 @@ public class Toilet extends Interactables{
             public void run() {
                 try {
                     changeOccupiedState();
-                    GameTime.startDecrementTimeRemaining(10 * Consts.ONE_SECOND);
+                    GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
                     sim.setStatus("Taking a Leak");
-                    Thread.sleep(10 * Consts.THREAD_ONE_SECOND);
+                    Thread.sleep(getDuration() * Consts.THREAD_ONE_SECOND);
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHunger(sim.getHunger() - 20);

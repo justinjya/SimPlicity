@@ -105,7 +105,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (isCurrentState("Viewing active actions")) {
-            // ActiveActionsUserInterface.update(sim, ui);
+            ActiveActionsUserInterface.update(ui);
             return;
         }
         
@@ -142,7 +142,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.draw(this, g2);
+            ActiveActionsUserInterface.draw(g2);
             return;
         }
 

@@ -63,7 +63,9 @@ public class TabUserInterface {
                 UpgradeActions.addRoom(currentRoom, "Second Room");
                 break;
             case 2:
-                // ITEM STORE
+
+                // ITEM STORE HERE
+                
                 break;
             case 3:
                 AddSimAction.addSim();

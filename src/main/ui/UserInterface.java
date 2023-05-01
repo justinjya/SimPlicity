@@ -27,7 +27,7 @@ public class UserInterface {
     private BufferedImage[] images;
 
     //ONLY FOR DEBUGGING
-    private boolean debug = true;
+    private boolean debug = false;
     private BufferedImage mockup;
 
     // CONSTRUCTOR

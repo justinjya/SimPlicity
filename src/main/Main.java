@@ -3,8 +3,6 @@ package src.main;
 import java.awt.*;
 import javax.swing.*;
 
-import src.main.panels.CreateSimPanel;
-import src.main.panels.GamePanel;
 import src.main.panels.MainMenuPanel;
 
 public class Main {
@@ -25,7 +23,5 @@ public class Main {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        // new Thread(GamePanel.getInstance()).start();
     }
 }

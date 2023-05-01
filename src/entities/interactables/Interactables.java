@@ -8,15 +8,16 @@ import java.awt.Graphics2D;
 import src.entities.Entity;
 import src.entities.sim.Sim;
 import src.items.Item;
-import src.main.GameTime;
 
 public abstract class Interactables extends Entity implements Item {
     // Attributes
     private String name;
     private String interaction;
-    private int imageIndex;
+    private int price = 0;
+    private int duration = 0;
     protected boolean occupied;
     private Rectangle bounds;
+    private int imageIndex;
 
     // CONSTRUCTOR
     public Interactables(String name, String interaction, int imageIndex, int x, int y, int width, int height) {
@@ -29,9 +30,9 @@ public abstract class Interactables extends Entity implements Item {
         
         this.name = name;
         this.interaction = interaction;
-        this.imageIndex = imageIndex;
         this.occupied = false;
         this.bounds = new Rectangle(getX(), getY(), getWidth(), getHeight());
+        this.imageIndex = imageIndex;
     }
 
     // GETTERS
@@ -41,6 +42,14 @@ public abstract class Interactables extends Entity implements Item {
 
     public String getInteraction() {
         return interaction;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getDuration() {
+        return duration;
     }
     
     public boolean isOccupied() {
@@ -56,6 +65,14 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     // SETTERS
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+    
     public void changeOccupiedState() {
         this.occupied = !this.occupied;
     }

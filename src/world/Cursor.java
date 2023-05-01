@@ -128,8 +128,7 @@ public class Cursor {
             
             if (!isAboveHouse()) {
                 world.addHouse(GameLoader.roomName);
-                CreateSimPanel.simName = "";
-                CreateSimPanel.simName = "";
+                CreateSimPanel.reset();
             }
         }
         enterHouse(ui);
