@@ -43,10 +43,6 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadWood();
-
-        // ONLY FOR DEBUGGING
-        this.listOfObjects.add(new Door(null));
-        this.listOfObjects.add(new Bed(0, 0, 0));
     }
 
     // GETTERS
@@ -106,8 +102,9 @@ public class Room {
                 if (object instanceof Door) continue;
     
                 selectedObject = object;
-                break;
+                return;
             }
+            changeisEditingRoomState();
         }
         catch (ConcurrentModificationException e) {}
     }

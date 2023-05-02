@@ -8,6 +8,7 @@ import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.world.House;
 import src.world.Room;
 
 public class TabUserInterface {
@@ -52,16 +53,22 @@ public class TabUserInterface {
         
         Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
+        House currentHouse = currentRoom.getHouseInsideOf();
+        Sim currentHouseOwner = currentHouse.getOwner();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(currentRoom);
-                break;
+                if (currentSim.getName().equals(currentHouseOwner.getName())) {
+                    NonActiveActions.editRoom(currentRoom);
+                    break;
+                }
             case 1:
-                UpgradeActions.addRoom(currentRoom, "Second Room");
-                break;
+                if (currentSim.getName().equals(currentHouseOwner.getName())) {
+                    UpgradeActions.addRoom(currentRoom, "Second Room");
+                    break;
+                }
             case 2:
 
                 // ITEM STORE HERE

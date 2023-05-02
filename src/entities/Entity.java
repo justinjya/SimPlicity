@@ -45,10 +45,18 @@ public abstract class Entity {
 
     // SETTERS
     public void setX(int x) {
-        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x);
+        this.x = x;
     }
 
     public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setPlayAreaX(int x) {
+        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x);
+    }
+
+    public void setPlayAreaY(int y) {
         this.y = Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * y);
     }
 

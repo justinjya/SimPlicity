@@ -9,6 +9,7 @@ import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
 import src.main.ui.UserInterface;
 
 public class Cursor {
@@ -71,7 +72,7 @@ public class Cursor {
         int newY = y;
         int speed = 5;
         int initialSpeed = speed;
-
+        
         if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
             gridMovement = !gridMovement;
         }

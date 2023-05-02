@@ -99,34 +99,25 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (world == null) {
-            return;
+        try {
+            if (isCurrentState("Viewing active actions")) {
+                ActiveActionsUserInterface.update();
+                return;
+            }
+    
+            if (UserInterface.isViewingWorld()) {
+                world.update();
+            }
+            else {
+                Sim currentSim = UserInterface.getCurrentSim();
+                Room currentRoom = currentSim.getCurrentRoom();
+                
+                currentSim.update();
+                currentRoom.update();
+            }
+            UserInterface.update();
         }
-
-        if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update();
-            return;
-        }
-
-        if (UserInterface.getCurrentSim() == null) {
-            return;
-        }
-
-        System.out.println(UserInterface.getCurrentSim().getName());
-        System.out.println(UserInterface.getCurrentSim().getInventory());
-
-        if (!UserInterface.isViewingWorld()) {
-            Sim currentSim = UserInterface.getCurrentSim();
-            // Room currentRoom = currentSim.getCurrentRoom();
-            
-            currentSim.update();
-            // currentRoom.update();
-        }
-        else {
-            world.update();
-        }
-
-        UserInterface.update();
+        catch (NullPointerException e) {System.out.println("Loading . . .");}
     }
     
     @Override
@@ -143,26 +134,25 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (world == null) {
-            return;
+        try {
+            if (isCurrentState("Viewing active actions")) {
+                ActiveActionsUserInterface.draw(g2);
+                return;
+            }
+    
+            if (UserInterface.isViewingWorld()) {
+                world.draw(g2);
+            }
+            else {
+                Sim currentSim = UserInterface.getCurrentSim();
+                Room currentRoom = currentSim.getCurrentRoom();
+                currentRoom.draw(g2);
+            }
+    
+            UserInterface.draw(g2);
         }
-
-        if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.draw(g2);
-            return;
-        }
-
-        if (!UserInterface.isViewingWorld()) {
-            Sim currentSim = UserInterface.getCurrentSim();
-            Room currentRoom = currentSim.getCurrentRoom();
-            currentRoom.draw(g2);
-        }
-        else {
-            world.draw(g2);
-        }
-
-        UserInterface.draw(g2);
-       
+        catch (NullPointerException e) {System.out.println("Loading . . .");}
+        
         // To free resources
         g2.dispose();
     }

@@ -61,24 +61,24 @@ public class Door extends Interactables {
             case 0:
                 setImageIndex(2);
                 setX(door.getX());
-                setY(5);
+                setPlayAreaY(5);
                 getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 1:
                 setImageIndex(3);
-                setX(0);
+                setPlayAreaX(0);
                 setY(door.getY());
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
                 setImageIndex(0);
                 setX(door.getX());
-                setY(0);
+                setPlayAreaY(0);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 3:
                 setImageIndex(1);
-                setX(5);
+                setPlayAreaX(5);
                 setY(door.getY());
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
@@ -92,19 +92,19 @@ public class Door extends Interactables {
     public void updateBounds() {
         switch (this.getImageIndex()) {
             case 0:
-                setY(0);
+                setPlayAreaY(0);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 1:
-                setX(5);
+                setPlayAreaX(5);
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
-                setY(5);
+                setPlayAreaY(5);
                 getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 3:
-                setX(0);
+                setPlayAreaX(0);
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             default:

@@ -33,6 +33,7 @@ public class MainMenuPanel extends JPanel {
                     if (selectedBox == 0) {
                         GamePanel.gameState = "Starting a new game: Creating a new sim";
                         
+                        CreateSimPanel.init();
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
                     }
                     if (selectedBox == 1) {
@@ -79,6 +80,10 @@ public class MainMenuPanel extends JPanel {
 
     public static MainMenuPanel getInstance() {
         return mmp;
+    }
+
+    public static void init() {
+        mmp = new MainMenuPanel();
     }
 
     @Override

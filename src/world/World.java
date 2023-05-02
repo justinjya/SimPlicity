@@ -127,15 +127,20 @@ public class World {
             cursor.enterPressed();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                if (GamePanel.isCurrentState("Placing a new house")) {
-                    GamePanel.gameState = "Creating a new sim";
-                }
-                if (GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
-                    GamePanel.gameState = "Starting a new game: Creating a new sim";
-                }
-                CreateSimPanel.reset();
+            if (GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
+                GamePanel.gameState = "Starting a new game: Creating a new sim";
+            }
+            if (GamePanel.isCurrentState("Placing a new house")) {
+                GamePanel.gameState = "Creating a new sim";
+
+                int newSimIndex = listOfSim.size() - 1;
+                listOfSim.remove(newSimIndex);
+            }
+
+            if (!GamePanel.isCurrentState("Playing")) {
+                CreateSimPanel.init();
                 PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
+                changeIsAddingState();
             }
             UserInterface.changeIsViewingWorldState();
         }

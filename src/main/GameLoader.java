@@ -27,11 +27,9 @@ public class GameLoader {
         
         // Add the new sim to the world
         world.addSim(newSim);
-        world.changeIsAddingState();
         
         // Actually start the game by changing the state into adding a house
         UserInterface.init(world);
-        UserInterface.changeIsViewingWorldState();
     }
 
     public static void addSim() {

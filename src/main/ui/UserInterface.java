@@ -15,7 +15,7 @@ import src.entities.sim.Sim;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
-    ;
+    
     // Attributes
     private static World world;
     private static Sim currentSim;
@@ -42,6 +42,8 @@ public class UserInterface {
         UserInterface.world = world;
         UserInterface.currentSim = world.getListOfSim().get(0);
         UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
+        UserInterface.world.changeIsAddingState();
+        viewingWorld = true;
     }
 
     // GETTERS
@@ -111,9 +113,9 @@ public class UserInterface {
             TabUserInterface.update();
         }
 
-        // if (currentSimInventory.isOpen()) {
-        //     currentSimInventory.update();
-        // }
+        if (currentSimInventory.isOpen()) {
+            currentSimInventory.update();
+        }
     }
     
     public static void draw(Graphics2D g) {
