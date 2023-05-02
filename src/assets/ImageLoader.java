@@ -261,7 +261,7 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[2];
         
         images[0] = readImage("items", "television", "television_off", 2, 1, true);
-        images[1] = readImage("items", "television", "television_occupied", 2, 1, true);
+        images[1] = readImage("items", "television", "television_occupied", 2, 2, true);
     
         return images;
     }
