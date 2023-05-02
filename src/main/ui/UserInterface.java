@@ -24,6 +24,7 @@ public class UserInterface {
     // User Interface States
     private static boolean viewingWorld = false;
     private static boolean tabbed = false;
+    private boolean pause = false;
 
     // User Interface Images
     private static BufferedImage[] images;
@@ -67,6 +68,10 @@ public class UserInterface {
         return tabbed;
     }
 
+    public boolean isPause(){
+        return pause;
+    }
+
     // SETTERS
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
@@ -92,6 +97,11 @@ public class UserInterface {
         }
     }
 
+    public void pause() {
+        this.pause = !this.pause;
+    }
+
+
     public static void inventory() {
         Inventory inventory = currentSim.getInventory();
 
@@ -104,7 +114,7 @@ public class UserInterface {
     }
 
     public static void debug() {
-        UserInterface.debug = !UserInterface.debug;
+        debug = !debug;
     }
 
     // OTHERS
@@ -130,6 +140,15 @@ public class UserInterface {
         }
         else {
             drawUI(g);
+        }
+    }
+
+    public void drawPause(Graphics2D g){
+        if(pause){
+            currentSim.changeIsBusyState();
+        }
+        else{
+            draw(g);
         }
     }
 

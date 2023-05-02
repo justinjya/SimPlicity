@@ -98,6 +98,18 @@ public class ImageLoader {
 
         return images;
     }
+
+    public static BufferedImage[]loadPause(){
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("pause", "background", 1, 1, false);
+        images[1] = readImage("pause", "help", 1, 1, false);
+        images[2] = readImage("pause", "exit", 1, 1, false);
+        images[3] = readImage("pause", "help_highlight", 1, 1, false);
+        images[4] = readImage("pause", "exit_highlight", 1, 1, false);
+
+        return images;
+    }
     
     public static BufferedImage[] loadSim(Sim sim) {
         BufferedImage[] images = new BufferedImage[12];
