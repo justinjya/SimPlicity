@@ -3,6 +3,7 @@ package src.entities.sim.actions;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.ui.UserInterface;
+import src.world.Room;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 
@@ -115,6 +116,7 @@ public class ActiveActions {
 
     public static void interact() {
         Sim sim = UserInterface.getCurrentSim();
+        Room currentRoom = sim.getCurrentRoom();
         Interactables object = sim.getInteractionHandler().getInteractableObject();
         
         if (object == null) {
@@ -122,6 +124,10 @@ public class ActiveActions {
         }
         
         if (object.isOccupied()) {
+            return;
+        }
+
+        if (currentRoom.isEditingRoom()) {
             return;
         }
 

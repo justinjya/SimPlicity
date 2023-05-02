@@ -36,6 +36,11 @@ public class Door extends Interactables {
         this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
 
+        if (room != null) {
+            setImageIndex(1);
+            setPlayAreaY(3);
+        }
+
         updateBounds();
     }
 
