@@ -9,10 +9,10 @@ import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
 import src.main.panels.PanelHandler;
-import src.main.ui.UserInterface;
 
 public class World {
     // Attributes

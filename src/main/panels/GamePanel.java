@@ -8,8 +8,8 @@ import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
-import src.main.ui.ActiveActionsUserInterface;
-import src.main.ui.UserInterface;
+import src.main.UserInterface;
+import src.main.menus.ActiveActionsUserInterface;
 import src.world.Room;
 import src.world.World;
 
@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
-        setBackground(new Color(44, 39, 35));
+        setBackground(new Color(110, 196, 213));
         setDoubleBuffered(true);
         // Create a KeyAdapter and add it as a key listener to the panel
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -134,6 +134,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         try {
+            // UserInterface.drawMockup(g2);
             if (isCurrentState("Main menu")) {
                 return;
             }
@@ -153,6 +154,8 @@ public class GamePanel extends JPanel implements Runnable {
             else {
                 Sim currentSim = UserInterface.getCurrentSim();
                 Room currentRoom = currentSim.getCurrentRoom();
+
+                drawPlayAreaBorder(g2);
                 currentRoom.draw(g2);
             }
     
@@ -169,5 +172,10 @@ public class GamePanel extends JPanel implements Runnable {
         
         // To free resources
         g2.dispose();
+    }
+
+    private static void drawPlayAreaBorder(Graphics2D g) {
+        g.setColor(new Color(61, 30, 45));
+        g.fillRect(203, 47, 394, 394);
     }
 }

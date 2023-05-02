@@ -1,4 +1,4 @@
-package src.main.ui;
+package src.main.menus;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,6 +8,7 @@ import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.UserInterface;
 import src.main.panels.GamePanel;
 
 public class ActiveActionsUserInterface {

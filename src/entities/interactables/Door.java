@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.ui.ActiveActionsUserInterface;
+import src.main.menus.ActiveActionsUserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {

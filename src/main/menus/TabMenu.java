@@ -1,24 +1,25 @@
-package src.main.ui;
+package src.main.menus;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-import src.entities.sim.actions.*;
-import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.assets.ImageLoader;
+import src.main.UserInterface;
+import src.entities.sim.actions.*;
+import src.entities.sim.Sim;
 import src.world.House;
 import src.world.Room;
 
-public class TabUserInterface {
+public class TabMenu {
+    // Tab Menu Images
+    private static BufferedImage[] images = ImageLoader.loadTabMenu();
+
     // Selection Box Attributes
     private static int selectedBox = 0; // Boxes starting from 0 to 4
-    private static int selectedBoxX = 203;
-    private static int selectedBoxY = 479;
-    private static int selectedBoxWidth = Consts.SCALED_TILE + 8;
-    private static int selectedBoxHeight = Consts.SCALED_TILE + 8;
-    private static int boxStep = 81;
 
     private static void moveSelectedBox(String direction) {
         switch (direction)  {
@@ -26,20 +27,12 @@ public class TabUserInterface {
                 selectedBox--;
                 if (selectedBox < 0) {
                     selectedBox = 4;
-                    selectedBoxX += boxStep * 4;
-                }
-                else {
-                    selectedBoxX -= boxStep;
                 }
                 break;
             case "right":
                 selectedBox++;
                 if (selectedBox > 4) {
                     selectedBox = 0;
-                    selectedBoxX -= boxStep * 4;
-                }
-                else {
-                    selectedBoxX += boxStep;
                 }
                 break;
             default:
@@ -70,9 +63,7 @@ public class TabUserInterface {
                     break;
                 }
             case 2:
-
                 // ITEM STORE HERE
-                
                 break;
             case 3:
                 AddSimAction.addSim();
@@ -101,19 +92,16 @@ public class TabUserInterface {
     }
 
     public static void draw(Graphics2D g) {
-        g.setColor(Color.GRAY);
+        g.drawImage(images[0], 204, 488, null);
+        g.drawImage(images[1], 284, 488, null);
+        g.drawImage(images[2], 364, 488, null);
+        g.drawImage(images[3], 444, 488, null);
+        g.drawImage(images[4], 524, 488, null);
         
-        g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(288, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(369, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(450, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-        g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
-
+        
         // Draw selected box
         if (UserInterface.isTabbed()) {
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
-            drawSelectedBoxText(g);
+            g.drawImage(images[selectedBox], 199 + (selectedBox * 80), 484, Consts.SCALED_TILE + 15, Consts.SCALED_TILE + 14, null);
         }
     }
 

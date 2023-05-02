@@ -1,12 +1,11 @@
-package src.main.ui;
+package src.main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import src.main.Consts;
-import src.main.GameTime;
 import src.world.House;
 import src.world.Room;
 import src.world.World;
@@ -15,6 +14,8 @@ import src.entities.interactables.Door;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
+import src.main.menus.GameMenu;
+import src.main.menus.TabMenu;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
@@ -30,11 +31,11 @@ public class UserInterface {
     private boolean pause = false;
 
     // User Interface Images
-    private static BufferedImage[] images;
+    private static BufferedImage[] images = ImageLoader.loadGameMenu();
 
     //ONLY FOR DEBUGGING
     private static boolean debug = false;
-    private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout default", 1, 1, false);
+    private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout inventory", 1, 1, false);
 
     // CONSTRUCTOR
     public UserInterface() {
@@ -121,13 +122,11 @@ public class UserInterface {
 
 
     public static void inventory() {
-        Inventory inventory = currentSim.getInventory();
-
         if (tabbed) {
             tab();
         }
 
-        inventory.changeIsOpen();
+        currentSimInventory.changeIsOpen();
         currentSim.changeIsBusyState();
     }
 
@@ -138,7 +137,7 @@ public class UserInterface {
     // OTHERS
     public static void update() {
         if (tabbed && !currentSimInventory.isOpen()) {
-            TabUserInterface.update();
+            TabMenu.update();
         }
 
         if (currentSimInventory.isOpen()) {
@@ -147,19 +146,44 @@ public class UserInterface {
     }
     
     public static void draw(Graphics2D g) {
-        if (viewingWorld) {
-            Font font;
-            g.setColor(Color.WHITE);
+        // if (viewingWorld) {
+            // Font font;
+            // g.setColor(Color.WHITE);
 
-            font = new Font("Inter", Font.PLAIN, 12);
+            // font = new Font("Inter", Font.PLAIN, 12);
 
-            g.setFont(font);
-            g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
-        }
-        else {
-            drawUI(g);
-        }
+            // g.setFont(font);
+            // g.drawString("press shift to switch cursor movement", Consts.CENTER_X - 100, 25);
+        // }
+        // else {
+        //     drawUI(g);
+        // }
+
+        GameMenu.draw(g);
+
+        currentSimInventory.draw(g);
+
+        TabMenu.draw(g);
     }
+
+    public static void centerText(Graphics2D g, BufferedImage image, int x, int y, String text) {
+        int stringLength = text.length();
+        int centerX = (image.getWidth() - stringLength) / 2;
+
+        g.drawString(text, x + centerX, y);
+    }
+
+    public static void addCenteredText(BufferedImage image, String text) {
+        Graphics2D g2d = image.createGraphics();
+        FontMetrics fm = g2d.getFontMetrics();
+    
+        int x = (image.getWidth() - fm.stringWidth(text)) / 2;
+        int y = (image.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+    
+        g2d.drawString(text, x, y);
+        g2d.dispose();
+    }
+    
 
     public void drawPause(Graphics2D g){
         if(pause){
@@ -207,7 +231,7 @@ public class UserInterface {
         }  
 
         // Draw tab boxes
-       TabUserInterface.draw(g);
+       TabMenu.draw(g);
     }
 
     private static void drawText(Graphics2D g) {
@@ -285,21 +309,15 @@ public class UserInterface {
     }
 
     private static void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Inter", Font.PLAIN, 9);
-
-        g.setFont(font);
         if (value < 100) {
-            g.drawString("" + value, offsetX, 177 + (37 * offsetY));
+            g.drawString("" + value, offsetX, 188 + (36 * offsetY));
         }
         else {
-            g.drawString("" + value, offsetX - 5, 177 + (37 * offsetY));
+            g.drawString("" + value, offsetX - 5, 188 + (36 * offsetY));
         }
     }
 
     private static void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
-        Font font = new Font("Inter", Font.PLAIN, 9);
-
-        g.setFont(font);
         if (value < 100) {
             g.drawString("" + value, offsetX, 340 + (37 * offsetY));
         }

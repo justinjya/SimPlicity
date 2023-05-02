@@ -1,7 +1,7 @@
 package src.entities.sim.actions;
 
 import src.entities.sim.Sim;
-import src.main.ui.UserInterface;
+import src.main.UserInterface;
 import src.world.House;
 import src.world.Room;
 

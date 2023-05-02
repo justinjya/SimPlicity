@@ -119,7 +119,41 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadGameMenu() {
-        BufferedImage[] images = new BufferedImage[10];
+        BufferedImage[] images = new BufferedImage[8];
+
+        images[0] = readImage("menus/game_menu/game_info", "double_info_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/sim_info", "money_box", 1, 1, false);
+        images[2] = readImage("menus/game_menu/sim_info", "sim_info_box", 1, 1, false);
+        images[3] = readImage("menus/game_menu/game_info", "day_box", 1, 1, false);
+        images[4] = readImage("menus/game_menu/sim_info", "icon_health", 1, 1, false);
+        images[5] = readImage("menus/game_menu/sim_info", "icon_hunger", 1, 1, false);
+        images[6] = readImage("menus/game_menu/sim_info", "icon_mood", 1, 1, false);
+        images[7] = readImage("menus/game_menu", "help_box", 1, 1, false);
+
+        return images;
+    }
+
+    public static BufferedImage[] loadTabMenu() {
+        BufferedImage[] images = new BufferedImage[5];
+
+        images[0] = readImage("menus/game_menu/tab_menu", "icon_add_room", 1, 1, false);
+        images[1] = readImage("menus/game_menu/tab_menu", "icon_upgrade_house", 1, 1, false);
+        images[2] = readImage("menus/game_menu/tab_menu", "icon_store", 1, 1, false);
+        images[3] = readImage("menus/game_menu/tab_menu", "icon_view_sims", 1, 1, false);
+        images[4] = readImage("menus/game_menu/tab_menu", "icon_visit_sim", 1, 1, false);
+
+        return images;
+    }
+
+    public static BufferedImage[] loadInventory() {
+        BufferedImage[] images = new BufferedImage[6];
+
+        images[0] = readImage("menus/game_menu/inventory", "inventory_title", 1, 1, false);
+        images[1] = readImage("menus/game_menu/inventory", "inventory_box", 1, 1, false);
+        images[2] = readImage("menus/game_menu/inventory", "inventory_catalogue_box", 1, 1, false);
+        images[3] = readImage("menus/game_menu/inventory", "category_box", 1, 1, false);
+        images[4] = readImage("menus/game_menu/inventory", "foods_box", 1, 1, false);
+        images[5] = readImage("menus/game_menu/inventory", "selector", 1, 1, false);
 
         return images;
     }

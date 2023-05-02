@@ -2,7 +2,7 @@ package src.entities.sim.actions;
 
 import src.main.Consts;
 import src.main.GameTime;
-import src.main.ui.UserInterface;
+import src.main.UserInterface;
 import src.world.Room;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;

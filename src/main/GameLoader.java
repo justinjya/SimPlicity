@@ -6,7 +6,6 @@ import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
-import src.main.ui.UserInterface;
 import src.world.World;
 
 public class GameLoader {

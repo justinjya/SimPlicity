@@ -9,13 +9,14 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Font;
 
+import src.assets.ImageLoader;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
 import src.items.Item;
 import src.items.foods.Food;
 import src.items.foods.RawFood;
 import src.main.KeyHandler;
-import src.main.ui.UserInterface;
+import src.main.UserInterface;
 import src.world.House;
 import src.world.Room;
 
@@ -33,26 +34,10 @@ public class Inventory {
     private int slotSize = 45;
     private int slotRow = 0;
     private int slotCol = 0;
+    private int slotX = 621;
+    private int slotY = 208;
 
-    private int frameX = 607;
-    private int frameY = 173;
-    private int frameWidth = 182;
-    private int frameHeight = 262;
-
-    private int boxWidth = (slotSize * 3) + 20;
-    private int boxHeight = (slotSize * 4) + 20;
-    private int boxX = frameX + ((frameWidth - boxWidth) / 2);
-    private int boxY = frameY + ((frameHeight - boxHeight) / 2);
-
-    private int categoryWidth = boxWidth / 2;
-    private int categoryHeight = 20;
-    private int categoryX = boxX;
-    private int categoryY = boxHeight + boxY;
-    
-    private int slotXstart = boxX + ((boxWidth - (slotSize * 3)) / 2);
-    private int slotYstart = boxY + ((boxHeight - (slotSize * 4)) / 2);
-    private int slotX = slotXstart;
-    private int slotY = slotYstart;
+    private BufferedImage[] images = ImageLoader.loadInventory();
 
     // constructor
     public Inventory() {
@@ -173,6 +158,31 @@ public class Inventory {
     }
 
     // others
+    private void getItemsToShow() {
+        itemsToShow = new HashMap<>();
+        itemNames = new ArrayList<>();
+
+        try {
+            for (Item item : mapOfItems.keySet()) {
+                if (isObject){
+                    if (item instanceof Interactables) {
+                        itemsToShow.put(item, mapOfItems.get(item));
+                    }
+                }
+                else {
+                    if ((item instanceof Food)) {
+                        itemsToShow.put(item, mapOfItems.get(item));
+                    }
+                }
+            }
+    
+            for (Item item : itemsToShow.keySet()) {
+                itemNames.add(item.getName());
+            }
+        }
+        catch (ConcurrentModificationException cme) {}
+    }
+
     public void update()
     {
         getItemsToShow();
@@ -215,70 +225,48 @@ public class Inventory {
 
     public void draw(Graphics2D g)
     {
-        drawFrame(g);
+        if (isOpen) {
+            g.drawImage(images[1], 605, 174, null); // inventory box
+            g.drawImage(images[2], 614, 201, null); // inventory catalogue box
+            g.drawImage(images[3], 615, 404, null); // interactables box
+            g.drawImage(images[3], 700, 404, null); // foods box
 
-        drawCursor(g);
+            g.setColor(Color.WHITE);
+            if (isObject) {
+                g.drawImage(images[3], 614, 403, images[3].getWidth() + 4, images[3].getHeight() + 3, null); // if interactables
+                g.setFont(new Font("Inter", Font.BOLD, 9));
+                g.drawString("Interactables", 627, 419);
+                g.setFont(new Font("Inter", Font.BOLD, 8));
+                g.drawString("Foods", 729, 419);
+            }
+            else {
+                g.drawImage(images[3], 699, 403, images[3].getWidth() + 4, images[3].getHeight() + 3, null); // if food
+                g.setFont(new Font("Inter", Font.BOLD, 8));
+                g.drawString("Interactables", 628, 419);
+                g.setFont(new Font("Inter", Font.BOLD, 9));
+                g.drawString("Foods", 728, 419);
+            }
+
+            g.drawImage(images[5], slotX + (slotSize * slotCol) + (slotCol * 7), slotY + (slotSize * slotRow), null); // selector
+            
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Inter", Font.BOLD, 8));
+            String itemName = "";
+            try {
+                itemName = itemNames.get(slotSelected);
+                g.drawString(itemName, 669, 193);
+            }
+            catch (IndexOutOfBoundsException iobe) {}
+            drawItems(g);
+        }
         
-        drawItems(g);
-    }
-
-    private void getItemsToShow() {
-        itemsToShow = new HashMap<>();
-        itemNames = new ArrayList<>();
-
-        try {
-            for (Item item : mapOfItems.keySet()) {
-                if (isObject){
-                    if (item instanceof Interactables) {
-                        itemsToShow.put(item, mapOfItems.get(item));
-                    }
-                }
-                else {
-                    if (!(item instanceof Interactables)) {
-                        itemsToShow.put(item, mapOfItems.get(item));
-                    }
-                }
-            }
-    
-            for (Item item : itemsToShow.keySet()) {
-                itemNames.add(item.getName());
-            }
-        }
-        catch (ConcurrentModificationException cme) {}
-    }
-
-    private void drawFrame(Graphics2D g)
-    {
-        // Frame
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(frameX, frameY, frameWidth, frameHeight);
-
-        // Box
-        g.setColor(Color.GRAY);
-        g.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-        if (isObject) {
-            // Selected category = object
-            g.fillRect(categoryX, categoryY, categoryWidth, categoryHeight);
-            g.setColor(Color.WHITE);
-            Font font = new Font("Inter", Font.BOLD, 10);
-            g.setFont(font);
-            g.drawString("Objects", categoryX + (categoryWidth / 4), categoryY + (categoryHeight / 2));
-        }
-        else {
-            // Selected category = foods
-            g.fillRect(categoryX + (categoryWidth + 1), categoryY, categoryWidth, categoryHeight);
-            g.setColor(Color.WHITE);
-            Font font = new Font("Inter", Font.BOLD, 10);
-            g.setFont(font);
-            g.drawString("Foods", categoryX + (categoryWidth + 23), categoryY + (categoryHeight / 2));
-        }
+        g.drawImage(images[0], 599, 146, null); // inventory title
     }
 
     private void drawItems(Graphics2D g)
     {
         try {
-            int x = slotX, y = slotY; // Starting coordinates
+            int x = slotX + 2, y = slotY + 2; // Starting coordinates
             int cols = 3;
             int i = 0;
     
@@ -297,7 +285,7 @@ public class Inventory {
                     g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
                 }
     
-                x += slotSize; // Move to the next column
+                x += slotSize + 7; // Move to the next column
                 if (i % cols == cols - 1) { // If we've filled up a row
                     x = slotX; // Reset to the first column
                     y += slotSize; // Move to the next row
@@ -307,34 +295,5 @@ public class Inventory {
         }
         catch (NullPointerException npe) {}
         catch (ConcurrentModificationException cme) {}
-    }
-
-    private void drawCursor(Graphics2D g)
-    {
-        if (itemNames.isEmpty()) return;
-
-        // Cursor
-        int cursorX = slotXstart + (slotSize * slotCol);
-        int cursorY = slotYstart + (slotSize * slotRow);
-        int cursorWidth = slotSize;
-        int cursorHeight = slotSize;
-
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
-        g.setColor(Color.WHITE);
-        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
-
-        // Item selected
-        g.setColor(Color.BLACK);
-        Font font = new Font("Inter", Font.BOLD, 10);
-        g.setFont(font);
-
-        String itemSelected = null;
-        try {
-            itemSelected = itemNames.get(slotSelected);
-            g.drawString(itemSelected, frameX + 50, frameY + 20);
-        }
-        catch (IndexOutOfBoundsException iobe) {}
     }
 }

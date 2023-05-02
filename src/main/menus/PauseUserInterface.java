@@ -1,4 +1,4 @@
-package src.main.ui;
+package src.main.menus;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,6 +12,7 @@ import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.UserInterface;
 import src.world.Room;
 import src.assets.ImageLoader;
 
