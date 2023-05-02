@@ -17,6 +17,7 @@ public class GameLoader {
     public static void startNewGame() {
         GameTime.init(1, Consts.ONE_MINUTE * 12);
         World world = GamePanel.world = new World();
+        
         String simName = CreateSimPanel.simName;
         int selectedColor = CreateSimPanel.selectedColor;
         
@@ -29,12 +30,11 @@ public class GameLoader {
         world.changeIsAddingState();
         
         // Actually start the game by changing the state into adding a house
-        UserInterface ui = GamePanel.ui = new UserInterface(GamePanel.world);
-        ui.changeIsViewingWorldState();
+        UserInterface.init(world);
+        UserInterface.changeIsViewingWorldState();
     }
 
     public static void addSim() {
-        UserInterface ui = GamePanel.ui;
         World world = GamePanel.world;
         String simName = CreateSimPanel.textFields[0];
         int selectedColor = CreateSimPanel.selectedColor;
@@ -46,7 +46,7 @@ public class GameLoader {
         // Add the sim to the world and change the state of game into adding a house
         world.addSim(newSim);
         world.changeIsAddingState();
-        ui.changeIsViewingWorldState();
+        UserInterface.changeIsViewingWorldState();
     }
 
     public static void loadGame() {

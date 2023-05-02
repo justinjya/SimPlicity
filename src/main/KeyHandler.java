@@ -53,34 +53,34 @@ public class KeyHandler {
         return pressed;
     }
 
-    // public static void keyBinds(Sim sim, UserInterface ui) {
-    public static void keyBinds(UserInterface ui) {
-        World world = ui.getWorld();
-        Sim currentSim = ui.getCurrentSim();
+    // public static void keyBinds(Sim sim, UserInterface UserInterface) {
+    public static void keyBinds() {
+        World world = UserInterface.getWorld();
+        Sim currentSim = UserInterface.getCurrentSim();
         Inventory currentSimInventory = currentSim.getInventory();
-        if (!ui.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
-            ui.tab();
+        if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+            UserInterface.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
-            ui.debug();
+            UserInterface.debug();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            ActiveActions.interact(ui);
+            ActiveActions.interact();
         }
         if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
-            NonActiveActions.showInventory(ui);
+            NonActiveActions.showInventory();
         }
 
         // testing adding and switching sim
         try {
             Room currentRoom = currentSim.getCurrentRoom();
-            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !currentRoom.isEditingRoom();
+            boolean simControllable = !UserInterface.isViewingWorld() && !UserInterface.isTabbed() && !currentRoom.isEditingRoom();
             if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
-                if (ui.getCurrentSim() == world.getSim(1)) {
-                    ui.setCurrentSim(world.getSim(0));
+                if (UserInterface.getCurrentSim() == world.getSim(1)) {
+                    UserInterface.setCurrentSim(world.getSim(0));
                 }
                 else {
-                    ui.setCurrentSim(world.getSim(1));
+                    UserInterface.setCurrentSim(world.getSim(1));
                 }
             }
         }

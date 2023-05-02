@@ -101,7 +101,7 @@ public class Inventory {
         mapOfItems.put(item, 1);
     }
 
-    public void interact(UserInterface ui) {
+    public void interact() {
         if (slotSelected > itemNames.size()) return;
 
         String selectedItem = itemNames.get(slotSelected);
@@ -109,7 +109,7 @@ public class Inventory {
         for (Item item : mapOfItems.keySet()) {
             if (!item.getName().equals(selectedItem)) continue;
 
-            Sim sim = ui.getCurrentSim();
+            Sim sim = UserInterface.getCurrentSim();
 
             if (item instanceof Interactables) {
                 House currentHouse = sim.getCurrentHouse();
@@ -145,7 +145,7 @@ public class Inventory {
     }
 
     // others
-    public void update(UserInterface ui)
+    public void update()
     {
         getItemsToShow();
 
@@ -180,7 +180,7 @@ public class Inventory {
         
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (slotSelected < itemNames.size()) {
-                interact(ui);
+                interact();
             }
         }
     }

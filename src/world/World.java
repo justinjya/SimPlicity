@@ -9,6 +9,9 @@ import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
 import src.main.ui.UserInterface;
 
 public class World {
@@ -116,15 +119,25 @@ public class World {
     }
 
     // Others
-    public void update(UserInterface ui) {
-        if (ui.isViewingWorld()) {
+    public void update() {
+        if (UserInterface.isViewingWorld()) {
             cursor.move();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            cursor.enterPressed(ui);
+            cursor.enterPressed();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            ui.changeIsViewingWorldState();
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                if (GamePanel.isCurrentState("Placing a new house")) {
+                    GamePanel.gameState = "Creating a new sim";
+                }
+                if (GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
+                    GamePanel.gameState = "Starting a new game: Creating a new sim";
+                }
+                CreateSimPanel.reset();
+                PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
+            }
+            UserInterface.changeIsViewingWorldState();
         }
     }
 

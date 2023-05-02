@@ -122,7 +122,7 @@ public class Cursor {
         }
     }
 
-    public void enterPressed(UserInterface ui) {
+    public void enterPressed() {
         if (world.isAdding()) {
             if (isAboveHouse()) return;
             
@@ -131,10 +131,10 @@ public class Cursor {
                 CreateSimPanel.reset();
             }
         }
-        enterHouse(ui);
+        enterHouse();
     }
 
-    private void enterHouse(UserInterface ui) {
+    private void enterHouse() {
         int x = getGridX();
         int y = getGridY();
         Sim currentSim;
@@ -142,13 +142,13 @@ public class Cursor {
         Room roomToVisit;
 
         try {
-            currentSim = ui.getCurrentSim();
+            currentSim = UserInterface.getCurrentSim();
             currentHouse = currentSim.getCurrentHouse();
             houseToVisit = world.getHouse(x, y);
             roomToVisit = houseToVisit.getRoomWhenEntered();
 
             if (currentHouse == houseToVisit) {
-                ui.changeIsViewingWorldState();
+                UserInterface.changeIsViewingWorldState();
                 System.out.println("You cannot enter a house you're already in!");
                 return;
             }
@@ -159,7 +159,7 @@ public class Cursor {
         
                     currentSim = world.getSim(newSim);
                     currentSim.changeIsBusyState();
-                    ui.setCurrentSim(currentSim);
+                    UserInterface.setCurrentSim(currentSim);
                     world.changeIsAddingState();
                 }
                 else {
@@ -174,10 +174,11 @@ public class Cursor {
 
                 currentSim.setCurrentHouse(houseToVisit);
                 currentSim.setCurrentRoom(roomToVisit);
-                ui.changeIsViewingWorldState();
+                UserInterface.changeIsViewingWorldState();
             }
 
-            if (GamePanel.isCurrentState("Placing a new house")) {
+            if (GamePanel.isCurrentState("Placing a new house") || 
+                GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
                 GamePanel.gameState = "Playing";
             }
         }

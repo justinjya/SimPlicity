@@ -31,7 +31,7 @@ public class MainMenuPanel extends JPanel {
                 // Check if the Enter key was pressed
                 if (keyCode == KeyEvent.VK_ENTER) {
                     if (selectedBox == 0) {
-                        GamePanel.gameState = "Starting a new game";
+                        GamePanel.gameState = "Starting a new game: Creating a new sim";
                         
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
                     }

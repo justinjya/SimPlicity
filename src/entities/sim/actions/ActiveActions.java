@@ -113,8 +113,8 @@ public class ActiveActions {
         
     }
 
-    public static void interact(UserInterface ui) {
-        Sim sim = ui.getCurrentSim();
+    public static void interact() {
+        Sim sim = UserInterface.getCurrentSim();
         Interactables object = sim.getInteractionHandler().getInteractableObject();
         
         if (object == null) {
@@ -128,7 +128,7 @@ public class ActiveActions {
         object.interact(sim);
     }
 
-    public static void visitAnotherSim(UserInterface ui) {
-        ui.changeIsViewingWorldState();
+    public static void visitAnotherSim() {
+        UserInterface.changeIsViewingWorldState();
     }
 }

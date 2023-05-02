@@ -14,51 +14,59 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 
 public class UserInterface {
+    public static UserInterface ui = new UserInterface();
+    ;
     // Attributes
-    private World world;
-    private Sim currentSim;
-    private Inventory currentSimInventory;
-
+    private static World world;
+    private static Sim currentSim;
+    private static Inventory currentSimInventory;
+    
     // User Interface States
-    private boolean viewingWorld = false;
-    private boolean tabbed = false;
+    private static boolean viewingWorld = false;
+    private static boolean tabbed = false;
 
     // User Interface Images
-    private BufferedImage[] images;
+    private static BufferedImage[] images;
 
     //ONLY FOR DEBUGGING
-    private boolean debug = false;
-    private BufferedImage mockup;
+    private static boolean debug = false;
+    private static BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world) {
-        this.world = world;
-        this.currentSim = world.getListOfSim().get(0);
-        this.currentSimInventory = currentSim.getInventory();
-
+    public UserInterface() {
         // ONLY FOR DEBUGGING
-        this.mockup = ImageLoader.loadMockup();
+        UserInterface.mockup = ImageLoader.loadMockup();
+    }
+
+    public static void init(World world) {
+        UserInterface.world = world;
+        UserInterface.currentSim = world.getListOfSim().get(0);
+        UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
     }
 
     // GETTERS
-    public World getWorld() {
+    public static UserInterface getInstance() {
+        return ui;
+    }
+
+    public static World getWorld() {
         return world;
     }
 
-    public Sim getCurrentSim() {
+    public static Sim getCurrentSim() {
         return currentSim;
     }
 
-    public boolean isViewingWorld() {
+    public static boolean isViewingWorld() {
         return viewingWorld;
     }
 
-    public boolean isTabbed() {
+    public static boolean isTabbed() {
         return tabbed;
     }
 
     // SETTERS
-    public void setCurrentSim(Sim sim) {
+    public static void setCurrentSim(Sim sim) {
         currentSim = sim;
         currentSimInventory = currentSim.getInventory();
 
@@ -71,22 +79,18 @@ public class UserInterface {
         }
     }
 
-    public void changeIsViewingWorldState() {
-        this.viewingWorld = !this.viewingWorld;
+    public static void changeIsViewingWorldState() {
+        viewingWorld = !viewingWorld;
     }
 
-    public void tab() {
+    public static void tab() {
         if (!currentSimInventory.isOpen()) {
-            this.tabbed = !this.tabbed;
+            UserInterface.tabbed = !UserInterface.tabbed;
             currentSim.changeIsBusyState();
         }
     }
 
-    public void debug() {
-        this.debug = !this.debug;
-    }
-
-    public void inventory() {
+    public static void inventory() {
         Inventory inventory = currentSim.getInventory();
 
         if (tabbed) {
@@ -97,18 +101,22 @@ public class UserInterface {
         currentSim.changeIsBusyState();
     }
 
+    public static void debug() {
+        UserInterface.debug = !UserInterface.debug;
+    }
+
     // OTHERS
-    public void update() {
-        if (tabbed && !currentSim.getInventory().isOpen()) {
-            TabUserInterface.update(this);
+    public static void update() {
+        if (tabbed && !currentSimInventory.isOpen()) {
+            TabUserInterface.update();
         }
 
-        if (currentSimInventory.isOpen()) {
-            currentSimInventory.update(this);
-        }
+        // if (currentSimInventory.isOpen()) {
+        //     currentSimInventory.update();
+        // }
     }
     
-    public void draw(Graphics2D g) {
+    public static void draw(Graphics2D g) {
         if (viewingWorld) {
             Font font;
             g.setColor(Color.WHITE);
@@ -123,7 +131,7 @@ public class UserInterface {
         }
     }
 
-    private void drawUI(Graphics2D g) {
+    private static void drawUI(Graphics2D g) {
         // ONLY FOR DEBUGGING
         if (debug) {
             currentSim.drawCollisionBox(g);
@@ -160,10 +168,10 @@ public class UserInterface {
         }  
 
         // Draw tab boxes
-       TabUserInterface.draw(g, this);
+       TabUserInterface.draw(g);
     }
 
-    private void drawText(Graphics2D g) {
+    private static void drawText(Graphics2D g) {
         Font font;
         g.setColor(Color.BLACK);
 
@@ -212,7 +220,7 @@ public class UserInterface {
         }
     }
 
-    private void drawAttributes(Graphics2D g) {
+    private static void drawAttributes(Graphics2D g) {
         Font font = new Font("Inter", Font.PLAIN, 10);
 
         g.setColor(Color.BLACK);
@@ -237,7 +245,7 @@ public class UserInterface {
         drawTime(g, GameTime.timeRemaining, 174, 0);
     }
 
-    private void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
+    private static void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
         Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
@@ -249,7 +257,7 @@ public class UserInterface {
         }
     }
 
-    private void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
+    private static void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
         Font font = new Font("Inter", Font.PLAIN, 9);
 
         g.setFont(font);
@@ -262,7 +270,7 @@ public class UserInterface {
     }
 
     // ONLY FOR DEBUGGING
-    public void drawMockup(Graphics2D g) {
+    public static void drawMockup(Graphics2D g) {
         g.drawImage(mockup, 0, 0, null);
     }
 }

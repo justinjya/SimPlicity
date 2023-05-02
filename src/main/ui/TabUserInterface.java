@@ -47,17 +47,17 @@ public class TabUserInterface {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(UserInterface ui) {
-        ui.tab();
+    private static void boxEntered() {
+        UserInterface.tab();
         
-        Sim currentSim = ui.getCurrentSim();
+        Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                NonActiveActions.editRoom(ui, currentRoom);
+                NonActiveActions.editRoom(currentRoom);
                 break;
             case 1:
                 UpgradeActions.addRoom(currentRoom, "Second Room");
@@ -71,15 +71,15 @@ public class TabUserInterface {
                 AddSimAction.addSim();
                 break;
             case 4:
-                ActiveActions.visitAnotherSim(ui);
+                ActiveActions.visitAnotherSim();
                 break;
             default:
                 break;
         }
     }
     
-    public static void update(UserInterface ui) {
-        if (ui.isTabbed()) {
+    public static void update() {
+        if (UserInterface.isTabbed()) {
             // Change selected box based on key input
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
                 moveSelectedBox("left");
@@ -88,12 +88,12 @@ public class TabUserInterface {
                 moveSelectedBox("right");
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                boxEntered(ui);
+                boxEntered();
             }
         }
     }
 
-    public static void draw(Graphics2D g, UserInterface ui) {
+    public static void draw(Graphics2D g) {
         g.setColor(Color.GRAY);
         
         g.fillRect(207, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
@@ -103,7 +103,7 @@ public class TabUserInterface {
         g.fillRect(531, 483, Consts.SCALED_TILE, Consts.SCALED_TILE);
 
         // Draw selected box
-        if (ui.isTabbed()) {
+        if (UserInterface.isTabbed()) {
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(selectedBoxX, selectedBoxY, selectedBoxWidth, selectedBoxHeight);
             drawSelectedBoxText(g);

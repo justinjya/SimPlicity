@@ -20,7 +20,6 @@ public class GamePanel extends JPanel implements Runnable {
     public static GameTime time;
 
     public static World world;
-    public static UserInterface ui;
 
     private GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
@@ -32,7 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
             public void keyPressed(KeyEvent e) {
                 KeyHandler.keyPressed(e.getKeyCode());
                 
-                KeyHandler.keyBinds(ui);
+                KeyHandler.keyBinds();
             }
             
             @Override
@@ -96,31 +95,38 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (isCurrentState("Starting a new game") || isCurrentState("Creating a new sim")) {
+        if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
             return;
         }
 
-        if (ui == null || world == null) {
+        if (world == null) {
             return;
         }
 
         if (isCurrentState("Viewing active actions")) {
-            ActiveActionsUserInterface.update(ui);
+            ActiveActionsUserInterface.update();
             return;
         }
-        
-        if (!ui.isViewingWorld()) {
-            Sim currentSim = ui.getCurrentSim();
-            Room currentRoom = currentSim.getCurrentRoom();
-            
-            currentSim.update();
-            currentRoom.update();
-        }
-        else {
-            world.update(ui);
+
+        if (UserInterface.getCurrentSim() == null) {
+            return;
         }
 
-        ui.update();
+        System.out.println(UserInterface.getCurrentSim().getName());
+        System.out.println(UserInterface.getCurrentSim().getInventory());
+
+        if (!UserInterface.isViewingWorld()) {
+            Sim currentSim = UserInterface.getCurrentSim();
+            // Room currentRoom = currentSim.getCurrentRoom();
+            
+            currentSim.update();
+            // currentRoom.update();
+        }
+        else {
+            world.update();
+        }
+
+        UserInterface.update();
     }
     
     @Override
@@ -133,11 +139,11 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (isCurrentState("Starting a new game") || isCurrentState("Creating a new sim")) {
+        if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
             return;
         }
 
-        if (ui == null) {
+        if (world == null) {
             return;
         }
 
@@ -146,8 +152,8 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (!ui.isViewingWorld()) {
-            Sim currentSim = ui.getCurrentSim();
+        if (!UserInterface.isViewingWorld()) {
+            Sim currentSim = UserInterface.getCurrentSim();
             Room currentRoom = currentSim.getCurrentRoom();
             currentRoom.draw(g2);
         }
@@ -155,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
             world.draw(g2);
         }
 
-        ui.draw(g2);
+        UserInterface.draw(g2);
        
         // To free resources
         g2.dispose();

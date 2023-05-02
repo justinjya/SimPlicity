@@ -36,19 +36,20 @@ public class CreateSimPanel extends JPanel {
 
                 // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
-                    if (GamePanel.isCurrentState("Starting a new game")) {
+                    if (GamePanel.isCurrentState("Starting a new game: Creating a new sim")) {
+                        GamePanel.gameState = "Starting a new game: Placing a new house";
                         GameLoader.startNewGame();
                     }
                     if (GamePanel.isCurrentState("Creating a new sim")) {
+                        GamePanel.gameState = "Placing a new house";
                         GameLoader.addSim();
                     }
-                    GamePanel.gameState = "Placing a new house";
                     
                     PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
                 }
 
                 if (keyCode == KeyEvent.VK_ESCAPE) {
-                    if (GamePanel.isCurrentState("Starting a new game")) {
+                    if (GamePanel.isCurrentState("Starting a new game: Creating a new sim")) {
                         GamePanel.gameState = "Main menu";
                         PanelHandler.switchPanel(CreateSimPanel.getInstance(), MainMenuPanel.getInstance());
                     }

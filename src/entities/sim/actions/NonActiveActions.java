@@ -6,12 +6,12 @@ import src.world.House;
 import src.world.Room;
 
 public class NonActiveActions {
-    public static void showInventory(UserInterface ui) {
-        ui.inventory();
+    public static void showInventory() {
+        UserInterface.inventory();
     }
 
-    public static void editRoom(UserInterface ui, Room room) {
-        Sim currentSim = ui.getCurrentSim();
+    public static void editRoom(Room room) {
+        Sim currentSim = UserInterface.getCurrentSim();
         House currentHouse = currentSim.getCurrentHouse();
         Sim currentHouseOwner = currentHouse.getOwner();
 
