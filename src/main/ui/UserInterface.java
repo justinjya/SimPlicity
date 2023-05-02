@@ -22,6 +22,7 @@ public class UserInterface {
     // User Interface States
     private boolean viewingWorld = false;
     private boolean tabbed = false;
+    private boolean pause = false;
 
     // User Interface Images
     private BufferedImage[] images;
@@ -57,6 +58,10 @@ public class UserInterface {
         return tabbed;
     }
 
+    public boolean isPause(){
+        return pause;
+    }
+
     // SETTERS
     public void setCurrentSim(Sim sim) {
         currentSim = sim;
@@ -80,6 +85,10 @@ public class UserInterface {
             this.tabbed = !this.tabbed;
             currentSim.changeIsBusyState();
         }
+    }
+
+    public void pause() {
+        this.pause = !this.pause;
     }
 
     public void debug() {
@@ -120,6 +129,15 @@ public class UserInterface {
         }
         else {
             drawUI(g);
+        }
+    }
+
+    public void drawPause(Graphics2D g){
+        if(pause){
+            currentSim.changeIsBusyState();
+        }
+        else{
+            draw(g);
         }
     }
 
