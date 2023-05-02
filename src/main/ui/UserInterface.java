@@ -14,7 +14,7 @@ import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.items.foods.BakedFood;
-import src.entities.handlers.KeyHandler;;
+import src.entities.handlers.KeyHandler;
 
 public class UserInterface {
     // Attributes

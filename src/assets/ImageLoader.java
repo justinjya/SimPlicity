@@ -165,13 +165,13 @@ public class ImageLoader {
         return icon;
     }
 
-    public static BufferedImage[] loadShower() {
+    // public static BufferedImage[] loadShower() {
 
-    }
+    // }
 
-    public static BufferedImage loadShowerIcon() {
+    // public static BufferedImage loadShowerIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadStoves() {
         BufferedImage[] images = new BufferedImage[4];
@@ -193,21 +193,21 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage[] loadTableAndChair() {
+    // public static BufferedImage[] loadTableAndChair() {
 
-    }
+    // }
 
-    public static BufferedImage loadTableAndChairIcon() {
+    // public static BufferedImage loadTableAndChairIcon() {
 
-    }
+    // }
 
-    public static BufferedImage[] loadTelevision() {
+    // public static BufferedImage[] loadTelevision() {
 
-    }
+    // }
 
-    public static BufferedImage loadTelevisionIcon() {
+    // public static BufferedImage loadTelevisionIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadToilet() {
         BufferedImage[] images = new BufferedImage[2];
@@ -218,9 +218,9 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage loadToiletIcon() {
+    // public static BufferedImage loadToiletIcon() {
 
-    }
+    // }
 
     public static BufferedImage[] loadRawFood() {
         BufferedImage[] images = new BufferedImage[8];
