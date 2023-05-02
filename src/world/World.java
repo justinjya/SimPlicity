@@ -16,6 +16,7 @@ public class World {
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
+    private Room unaddedRoom = null;
     
     // State of the world (is adding a house or selecting a house to visit)
     private boolean isAdding = false;

@@ -6,6 +6,7 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
+import src.main.GamePanel;
 import src.main.ui.UserInterface;
 import src.world.Room;
 import src.world.World;
