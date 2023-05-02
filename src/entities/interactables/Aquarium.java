@@ -10,6 +10,7 @@ public class Aquarium extends Interactables {
     private int duration = Consts.ONE_SECOND * 5;
 
     // Images of the aquarium
+    private BufferedImage icon;
     private BufferedImage[] images;
 
     // CONSTRUCTOR
@@ -24,13 +25,14 @@ public class Aquarium extends Interactables {
             1
         );
 
-        // Load the image of the shower
+        // Load the icon and image of the aquarium
+        icon = ImageLoader.loadAquariumIcon();
         images = ImageLoader.loadAquarium();
     }
 
     @Override
     public BufferedImage getIcon() {
-        return images[0];
+        return icon;
     }
 
     @Override

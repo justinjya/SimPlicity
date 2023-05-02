@@ -35,8 +35,6 @@ public class UserInterface {
 
     // CONSTRUCTOR
     public UserInterface() {
-        // ONLY FOR DEBUGGING
-        UserInterface.mockup = ImageLoader.loadMockup();
     }
 
     public static void init(World world) {

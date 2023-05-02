@@ -15,8 +15,8 @@ public class Door extends Interactables {
     private Room leadsIntoRoom;
 
     // Images of the door
-    private BufferedImage[] images;
     private BufferedImage icon;
+    private BufferedImage[] images;
 
     // CONSTRUCTOR
     public Door(Room room) {

@@ -12,8 +12,8 @@ public class TrashBin extends Interactables {
     private int cleaningDuration = 5; // TO BE DETERMINED
 
     // Images of the trash bin
+    private BufferedImage icon;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public TrashBin(int x, int y) {
@@ -33,7 +33,8 @@ public class TrashBin extends Interactables {
         getBounds().setSize(16, 16);
         updateBounds();
 
-        // Load the images and icons of the shower
+        // Load the icon and images of the trash bin
+        icon = ImageLoader.loadTrashBinIcon();
         images = ImageLoader.loadTrashBin();
     }
 
@@ -49,7 +50,7 @@ public class TrashBin extends Interactables {
 
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icon;
     }
 
     @Override

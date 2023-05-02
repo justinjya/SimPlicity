@@ -57,19 +57,31 @@ public class Inventory {
     // constructor
     public Inventory() {
         // ONLY FOR DEBUGGING
+        // objects
         addItem(new Shower(0, 0));
         addItem(new Stove(0, 1, 0));
         addItem(new Stove(0, 1, 1));
         addItem(new Television(0, 2));
         addItem(new Toilet(0, 0));
         addItem(new TrashBin(0, 4));
-        addItem(new Bed(0)); // single
-        addItem(new Bed(1)); // queen
-        addItem(new Bed(1)); // queen
-        addItem(new Bed(2)); // king
-        addItem(new RawFood(0)); // nasi
-        addItem(new RawFood(2)); // ayam
-        addItem(new RawFood(2)); // ayam
+        addItem(new Bed(0));
+        addItem(new Bed(1));
+        addItem(new Bed(1));
+        addItem(new Bed(2));
+        
+        // foods
+        addItem(new RawFood(0));
+        addItem(new RawFood(1));
+        addItem(new RawFood(2));
+        addItem(new RawFood(3));
+        addItem(new RawFood(4));
+        addItem(new RawFood(5));
+        addItem(new RawFood(6));
+        addItem(new RawFood(7));
+        addItem(new RawFood(0));
+        addItem(new RawFood(1));
+        addItem(new RawFood(2));
+        addItem(new RawFood(2));
 
         getItemsToShow();
     }

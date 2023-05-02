@@ -8,34 +8,34 @@ import src.assets.ImageLoader;
 public class RawFood extends Food implements Item{
     // Types of raw food
     private static String[] names = {
-        "Nasi",
-        "Kentang",
-        "Ayam",
-        "Sapi",
-        "Wortel",
-        "Bayam",
-        "Kacang",
-        "Susu"
+        "Carrot",
+        "Chicken",
+        "Milk",
+        "Meat",
+        "Peanuts",
+        "Potato",
+        "Rice",
+        "Spinach"
     };
     private static int[] hungerPoints = {
-        5,
-        3,
-        10,
-        12,
-        3,
-        3,
         2,
+        8,
+        1,
+        15,
+        2,
+        4,
+        5,
         2
     };
     private static int[] prices = {
+        3,
+        10,
+        2,
+        12,
+        2,
+        3,
         5,
-        4,
-        8,
-        15,
-        2,
-        2,
-        2,
-        1
+        3
     };
 
     // Attributes
@@ -43,8 +43,6 @@ public class RawFood extends Food implements Item{
 
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[8];
-
-    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public RawFood (int imageIndex) {
@@ -55,8 +53,8 @@ public class RawFood extends Food implements Item{
         );
         this.price = prices[imageIndex];
         
-        // load the images
-        // this.icons = ImageLoader.loadRawFood();
+        // load the icons
+        this.icons = ImageLoader.loadRawFood();
     }
 
     // Getters
@@ -67,9 +65,6 @@ public class RawFood extends Food implements Item{
     // Implementation of abstract methods
     @Override
     public BufferedImage getIcon() {
-        // return images[imageIndex];
-
-        // ONLY FOR DEBUGGING
-        return placeholder;
+        return icons[getImageIndex()];
     }
 }

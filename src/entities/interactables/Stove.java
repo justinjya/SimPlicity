@@ -30,8 +30,8 @@ public class Stove extends Interactables{
     };
     
     // Images of stove
+    private BufferedImage[] icons   ;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Stove(int x, int y, int imageIndex) {
@@ -47,9 +47,9 @@ public class Stove extends Interactables{
 
         setPrice(prices[imageIndex]);
 
-        // Load the images and icons of the stoves
-        this.images = ImageLoader.loadStoves();
+        // Load the icons and images of the stoves
         this.icons = ImageLoader.loadStovesIcons(); 
+        this.images = ImageLoader.loadStoves();
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS

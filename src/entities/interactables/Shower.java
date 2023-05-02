@@ -12,8 +12,8 @@ public class Shower extends Interactables {
     private int duration = 10;
 
     // Images of the shower
+    private BufferedImage icon;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Shower(int x, int y) {
@@ -30,13 +30,14 @@ public class Shower extends Interactables {
         setPrice(price);
         setDuration(duration);
 
-        // Load the image of the shower
+        // Load the icon and image of the shower
+        icon = ImageLoader.loadShowerIcon();
         images = ImageLoader.loadShower();
     }
 
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icon;
     }
 
     @Override

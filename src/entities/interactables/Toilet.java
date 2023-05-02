@@ -14,8 +14,8 @@ public class Toilet extends Interactables{
     private int duration = 5;
 
     // Images of toilet
+    private BufferedImage icon;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public Toilet(int x, int y) {
@@ -32,7 +32,8 @@ public class Toilet extends Interactables{
         setPrice(price);
         setDuration(duration);
 
-        // Load the image of the beds
+        // Load the icons and image of the toilet
+        this.icon = ImageLoader.loadToiletIcon();
         this.images = ImageLoader.loadToilet();
     }
 
@@ -61,7 +62,7 @@ public class Toilet extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icon;
     }
 
     @Override

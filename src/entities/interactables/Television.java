@@ -29,6 +29,7 @@ public class Television extends Interactables{
         setPrice(price);
         setDuration(duration);
 
+        this.icon = ImageLoader.loadTelevisionIcon();
         this.images = ImageLoader.loadTelevision();
     }
 
