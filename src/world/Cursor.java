@@ -9,6 +9,7 @@ import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
 import src.main.ui.UserInterface;
 
 public class Cursor {
@@ -64,13 +65,20 @@ public class Cursor {
         return false;
     }
 
-    public void move(){
+    public void move(UserInterface ui){
         int upperX = (Consts.TILE_SIZE * 64) - 14;
         int upperY = (Consts.TILE_SIZE * 64) - 14;
         int newX = x;
         int newY = y;
         int speed = 5;
         int initialSpeed = speed;
+
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            if (GamePanel.isCurrentState("Placing a new house")) {
+                CreateSimPanel.reset();
+                PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
+            }
+        }
 
         if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
             gridMovement = !gridMovement;

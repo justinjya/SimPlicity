@@ -16,7 +16,6 @@ public class World {
     private int[][] map = new int[64][64];
     private ArrayList<Sim> listOfSim;
     private ArrayList<House> listOfHouse;
-    private Room unaddedRoom = null;
     
     // State of the world (is adding a house or selecting a house to visit)
     private boolean isAdding = false;
@@ -119,7 +118,7 @@ public class World {
     // Others
     public void update(UserInterface ui) {
         if (ui.isViewingWorld()) {
-            cursor.move();
+            cursor.move(ui);
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             cursor.enterPressed(ui);

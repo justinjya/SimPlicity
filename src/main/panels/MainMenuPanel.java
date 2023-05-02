@@ -33,6 +33,7 @@ public class MainMenuPanel extends JPanel {
                     if (selectedBox == 0) {
                         GamePanel.gameState = "Starting a new game";
                         
+                        CreateSimPanel.reset();
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
                     }
                     if (selectedBox == 1) {
