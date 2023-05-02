@@ -24,13 +24,14 @@ public class Sim extends Entity{
 
     // Supporting Attributes
     private boolean isBusy;
-    private House currentHouse;
     private Room currentRoom;
+    private House currentHouse;
     private int durationWorked;
     private int timeNotSlept;
     private int timeNotTakenLeak;
     
     // Image of the sim
+    private Color shirtColor;
     private BufferedImage[] images = new BufferedImage[12];
 
     // Collisions and interactions
@@ -38,11 +39,11 @@ public class Sim extends Entity{
     private InteractionHandler interactionHandler;
 
     // CONSTRUCTOR
-    public Sim(String name, int x, int y) {
+    public Sim(String name, Color shirtColor) {
         // Attributes
         super (
-            x,
-            y,
+            4,
+            4,
             1,
             1
         );
@@ -61,7 +62,8 @@ public class Sim extends Entity{
         this.timeNotTakenLeak = 0;
 
         // Load the image of the sim
-        images = ImageLoader.loadSim();
+        this.shirtColor = shirtColor;
+        images = ImageLoader.loadSim(this);
 
         // Collisions and interactions
         collisionHandler = new CollisionHandler(this, currentRoom);
@@ -137,6 +139,10 @@ public class Sim extends Entity{
         return collisionHandler;
     }
 
+    public Color getShirtColor() {
+        return shirtColor;
+    }
+
     // SETTERS
     public void setHealth(int health) {
         this.health = health;
@@ -165,6 +171,21 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
+    public void setCurrentHouse(House house) {
+        this.currentHouse = house;
+    }
+
+    public void setCurrentRoom(Room room) {
+        if (currentRoom != null) {
+            this.currentRoom.removeSim(this);
+        }
+        
+        this.currentRoom = room;
+        this.currentRoom.addSim(this);
+        collisionHandler = new CollisionHandler(this, room);
+        interactionHandler = new InteractionHandler(this, room);
+    }
+
     public void changeIsBusyState() {
         this.isBusy = !this.isBusy;
     }
@@ -179,21 +200,6 @@ public class Sim extends Entity{
 
     public void setTimeNotTakenLeak(int timeNotTakenLeak) {
         this.timeNotTakenLeak = timeNotTakenLeak;
-    }
-
-    public void setCurrentHouse(House house) {
-        this.currentHouse = house;
-    }
-
-    public void setCurrentRoom(Room room) {
-        if (currentRoom != null) {
-            this.currentRoom.removeSim(this);
-        }
-        
-        this.currentRoom = room;
-        this.currentRoom.addSim(this);
-        collisionHandler = new CollisionHandler(this, room);
-        interactionHandler = new InteractionHandler(this, room);
     }
 
     // OTHERS

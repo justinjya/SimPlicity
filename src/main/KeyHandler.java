@@ -1,11 +1,13 @@
-package src.entities.handlers;
+package src.main;
 
 import java.awt.event.KeyEvent;
 
+import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
 import src.main.ui.UserInterface;
+import src.world.Room;
 import src.world.World;
 
 public class KeyHandler {
@@ -31,7 +33,7 @@ public class KeyHandler {
     public static final int KEY_ESCAPE = KeyEvent.VK_ESCAPE;
     private static boolean[] keys = new boolean[256];
     private static boolean[] prevKeys = new boolean[256];
-
+    
     public static void keyPressed(int keyCode) {
         keys[keyCode] = true;
     }
@@ -52,8 +54,11 @@ public class KeyHandler {
     }
 
     // public static void keyBinds(Sim sim, UserInterface ui) {
-    public static void keyBinds(Sim sim, World world, UserInterface ui) {
-        if (!ui.isViewingWorld() && !sim.getInventory().isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+    public static void keyBinds(UserInterface ui) {
+        World world = ui.getWorld();
+        Sim currentSim = ui.getCurrentSim();
+        Inventory currentSimInventory = currentSim.getInventory();
+        if (!ui.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
@@ -68,7 +73,8 @@ public class KeyHandler {
 
         // testing adding and switching sim
         try {
-            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !ui.getCurrentSim().getCurrentRoom().isEditingRoom();
+            Room currentRoom = currentSim.getCurrentRoom();
+            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !currentRoom.isEditingRoom();
             if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
                 if (ui.getCurrentSim() == world.getSim(1)) {
                     ui.setCurrentSim(world.getSim(0));
@@ -81,5 +87,25 @@ public class KeyHandler {
         catch (Exception e) {
             System.out.println("No sim found!");
         }
+    }
+
+    public static String receiveStringInput(KeyEvent e, String input) {
+        int keyCode = e.getKeyCode();
+
+        // Check if the key is a letter or a number
+        if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) ||
+            (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9)) {
+            // Append the character to the input string
+            char c = e.getKeyChar();
+            input += c;
+        }
+        // Check if the key is the backspace key
+        else if (keyCode == KeyEvent.VK_BACK_SPACE) {
+            // Remove the last character from the input string
+            if (input.length() > 0) {
+                input = input.substring(0, input.length() - 1);
+            }
+        }
+        return input;
     }
 }

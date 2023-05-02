@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
-import src.main.GamePanel;
 import src.main.GameTime;
 import src.world.World;
 import src.assets.ImageLoader;
@@ -14,15 +13,17 @@ import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.items.foods.BakedFood;
-import src.entities.handlers.KeyHandler;
+import src.main.KeyHandler;
 
 public class UserInterface {
     // Attributes
     private World world;
     private Sim currentSim;
-    private Inventory inventory;
-    private boolean viewingWorld;
-    private boolean tabbed;
+    private Inventory currentSimInventory;
+
+    // User Interface States
+    private boolean viewingWorld = false;
+    private boolean tabbed = false;
 
     // User Interface Images
     private BufferedImage[] images;
@@ -32,14 +33,10 @@ public class UserInterface {
     private BufferedImage mockup;
 
     // CONSTRUCTOR
-    public UserInterface(World world, Sim sim) {
+    public UserInterface(World world) {
         this.world = world;
-        this.currentSim = sim;
-        this.inventory = sim.getInventory();
-
-        // For the start of the game
-        this.viewingWorld = true;
-        this.tabbed = false;
+        this.currentSim = world.getListOfSim().get(0);
+        this.currentSimInventory = currentSim.getInventory();
 
         // ONLY FOR DEBUGGING
         this.mockup = ImageLoader.loadMockup();
@@ -65,6 +62,7 @@ public class UserInterface {
     // SETTERS
     public void setCurrentSim(Sim sim) {
         currentSim = sim;
+        currentSimInventory = currentSim.getInventory();
 
         if (currentSim.isBusy())
             currentSim.changeIsBusyState();
@@ -83,7 +81,7 @@ public class UserInterface {
     }
 
     public void tab() {
-        if (!inventory.isOpen()) {
+        if (!currentSimInventory.isOpen()) {
             this.tabbed = !this.tabbed;
             currentSim.changeIsBusyState();
         }
@@ -107,11 +105,11 @@ public class UserInterface {
     // OTHERS
     public void update() {
         if (tabbed && !currentSim.getInventory().isOpen()) {
-            SelectionBox.update(this);
+            TabUserInterface.update(this);
         }
 
-        if (inventory.isOpen()) {
-            inventory.update(this);
+        if (currentSimInventory.isOpen()) {
+            currentSimInventory.update(this);
         }
     }
 
@@ -286,12 +284,18 @@ public class UserInterface {
         drawAttributes(g);
 
         // Draw currentSim's inventory
-        if (inventory.isOpen()) {
-            inventory.draw(g);
+        if (currentSimInventory.isOpen()) {
+            currentSimInventory.draw(g);
         }
 
         // Draw tab boxes
-        SelectionBox.draw(g, this);
+        TabUserInterface.draw(g, this);
+        if (currentSimInventory.isOpen()) {
+            currentSimInventory.draw(g);
+        }  
+
+        // Draw tab boxes
+       TabUserInterface.draw(g, this);
     }
 
     private void drawText(Graphics2D g) {

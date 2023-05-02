@@ -4,6 +4,7 @@ import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.Door;
 import src.main.Consts;
+import src.main.KeyHandler;
 
 public abstract class Entity {
     private int x;
@@ -15,8 +16,8 @@ public abstract class Entity {
 
     // CONSTRUCTOR
     public Entity(int x, int y, int width, int height) {
-        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x);
-        this.y = Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * y);
+        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x); // relative to the play area
+        this.y = Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * y); // relative to the play area
         this.width = Consts.SCALED_TILE * width;
         this.height = Consts.SCALED_TILE * height;
     }
@@ -44,11 +45,11 @@ public abstract class Entity {
 
     // SETTERS
     public void setX(int x) {
-        this.x = x;
+        this.x = Consts.PLAY_ARENA_X_LEFT + (Consts.SCALED_TILE * x);
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.y = Consts.PLAY_ARENA_Y_UP + (Consts.SCALED_TILE * y);
     }
 
     // OTHERS

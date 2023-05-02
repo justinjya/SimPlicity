@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import src.entities.sim.Sim;
 import src.main.Consts;
 
 public class ImageLoader {
@@ -63,7 +64,42 @@ public class ImageLoader {
         return rotated;
     }
     
-    public static BufferedImage[] loadSim() {
+    public static BufferedImage[] loadMainMenu() {
+        BufferedImage[] images = new BufferedImage[10];
+
+        images[0] = readImage("main_menu", "background", 1, 1, false);
+        images[1] = readImage("main_menu", "game_title", 1, 1, false);
+        images[2] = readImage("main_menu", "start_button", 1, 1, false);
+        images[3] = readImage("main_menu", "load_button", 1, 1, false);
+        images[4] = readImage("main_menu", "about_button", 1, 1, false);
+        images[5] = readImage("main_menu", "exit_button", 1, 1, false);
+        images[6] = readImage("main_menu", "start_highlight", 1, 1, false);
+        images[7] = readImage("main_menu", "load_highlight", 1, 1, false);
+        images[8] = readImage("main_menu", "about_highlight", 1, 1, false);
+        images[9] = readImage("main_menu", "exit_highlight", 1, 1, false);
+    
+
+        return images;
+    }
+
+    public static BufferedImage[] loadCreateSimMenu() {
+        BufferedImage[] images = new BufferedImage[10];
+
+        images[0] = readImage("create_sim_menu", "create_sim_box", 1, 1, false);
+        images[1] = readImage("create_sim_menu", "title_box", 1, 1, false);
+        images[2] = readImage("create_sim_menu", "sim_preview_box", 1, 1, false);
+        images[3] = readImage("create_sim_menu", "input_box", 1, 1, false);
+        images[4] = readImage("create_sim_menu", "color_slider", 1, 1, false);
+        images[5] = readImage("create_sim_menu", "cursor", 1, 1, false);
+        images[6] = readImage("create_sim_menu", "button_done", 1, 1, false);
+        images[7] = readImage("create_sim_menu", "input_box_highlight", 1, 1, false);
+        images[8] = readImage("create_sim_menu", "color_slider_highlight", 1, 1, false);
+        images[9] = readImage("create_sim_menu", "button_done_highlight", 1, 1, false);
+
+        return images;
+    }
+    
+    public static BufferedImage[] loadSim(Sim sim) {
         BufferedImage[] images = new BufferedImage[12];
 
         images[0] = readImage("sim", "sim_up", 1, 1, true);
@@ -78,6 +114,10 @@ public class ImageLoader {
         images[9] = readImage("sim", "sim_walk_down_2", 1, 1, true);
         images[10] = readImage("sim", "sim_walk_left_1", 1, 1, true);
         images[11] = readImage("sim", "sim_walk_left_2", 1, 1, true);
+
+        for (int i = 0; i < images.length; i++) {
+            images[i] = changeSimColor(images[i], sim);
+        }
 
         return images;
     }
@@ -154,7 +194,9 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[4];
 
         images[0] = readImage("bin", "trash_bin_empty_on_floor", 1, 1, true);
-        // terusin
+        images[1] = readImage("bin", "trash_bin_empty", 1, 1, true);
+        images[2] = readImage("bin", "trash_bin_filled", 1, 1, true);
+        images[3] = readImage("bin", "trash_bin_filled_on_floor", 1, 1, true);
     
         return images;
     }
@@ -165,13 +207,20 @@ public class ImageLoader {
         return icon;
     }
 
-    // public static BufferedImage[] loadShower() {
+    public static BufferedImage[] loadShower() {
+        BufferedImage[] images = new BufferedImage[2];
+        
+        images[0] = readImage("tiles", "shower", 1, 2, true);
+        images[1] = readImage("tiles", "shower_occupied", 1, 2, true);
+    
+        return images;
+    }
 
-    // }
-
-    // public static BufferedImage loadShowerIcon() {
-
-    // }
+    public static BufferedImage loadShowerIcon() {
+        BufferedImage icon = readImage("inventory", "shower", 1, 1, false);
+    
+        return icon;
+    }
 
     public static BufferedImage[] loadStoves() {
         BufferedImage[] images = new BufferedImage[4];
@@ -193,34 +242,67 @@ public class ImageLoader {
         return images;
     }
 
-    // public static BufferedImage[] loadTableAndChair() {
+    public static BufferedImage[] loadTableAndChair() {
+        BufferedImage[] images = new BufferedImage[2];
+        
+        images[0] = readImage("tiles", "table_and_chair", 3, 3, true);
+        images[1] = readImage("tiles", "table_and_chair_occupied", 4, 3, true);
 
-    // }
+        return images;
+    }
 
-    // public static BufferedImage loadTableAndChairIcon() {
+    public static BufferedImage loadTableAndChairIcon() {
+        BufferedImage icon = readImage("inventory", "table_and_chair", 3, 3, false);
+    
+        return icon;
+    }
 
-    // }
+    public static BufferedImage[] loadTelevision() {
+        BufferedImage[] images = new BufferedImage[2];
+        
+        images[0] = readImage("tiles", "television", 1, 1, true);
+        images[1] = readImage("tiles", "television_occupied", 2, 2, true);
+    
+        return images;
+    }
 
-    // public static BufferedImage[] loadTelevision() {
-
-    // }
-
-    // public static BufferedImage loadTelevisionIcon() {
-
-    // }
+    public static BufferedImage loadTelevisionIcon() {
+        BufferedImage icon = readImage("inventory", "television", 2, 1, false);
+    
+        return icon;
+    }
 
     public static BufferedImage[] loadToilet() {
         BufferedImage[] images = new BufferedImage[2];
         
         images[0] = readImage("toilet", "toilet_idle", 1, 1, true);
         images[1] = readImage("toilet", "toilet_occupied", 1, 1, true);
+
+        return images;
+    }
+
+    public static BufferedImage loadToiletIcon() {
+        BufferedImage icon = readImage("inventory", "toilet", 1, 1, false);
+    
+        return icon;
+    }
+
+    public static BufferedImage[] loadAquarium() {
+        BufferedImage[] images = new BufferedImage[4];
+        
+        images[0] = readImage("tiles", "aquarium_1", 1, 1, true);
+        images[1] = readImage("tiles", "aquarium_2", 1, 1, true);
+        images[2] = readImage("tiles", "aquarium_1_occupied", 2, 1, true);
+        images[3] = readImage("tiles", "aquarium_2_occupied", 2, 1, true);
     
         return images;
     }
 
-    // public static BufferedImage loadToiletIcon() {
-
-    // }
+    public static BufferedImage loadAquariumIcon() {
+        BufferedImage icon = readImage("inventory", "aquarium", 1, 1, false);
+    
+        return icon;
+    }
 
     public static BufferedImage[] loadRawFood() {
         BufferedImage[] images = new BufferedImage[8];
@@ -249,59 +331,92 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage testSimColor(float hue) {
-        Color redColor = new Color(215, 0, 20); // red color
-        Color greenColor = new Color(0, 254, 10); // green color
-        Color newShirtColor = new Color(0, 255, 0); // purple color
-        Color newHairColor = new Color(87, 52, 37); // brown color
-        
-        BufferedImage image;
-        float[] redHsb = new float[3];
-        float[] greenHsb = new float[3];
-        float[] newShirtHsb = new float[3];
-        float[] newHairHsb = new float[3];
+    public static Color setColor(int selectedColor) {
+        Color color = null;
+        if (selectedColor == 0) color = Color.YELLOW;
+        if (selectedColor == 1) color = Color.ORANGE;
+        if (selectedColor == 2) color = new Color(215, 0, 20); // red color
+        if (selectedColor == 3) color = Color.MAGENTA;
+        if (selectedColor == 4) color = Color.PINK;
+        if (selectedColor == 5) color = Color.BLUE;
+        if (selectedColor == 6) color = Color.CYAN;
+        if (selectedColor == 7) color = new Color(0, 254, 10); // green color
+
+        return color;
+    }
+
+    public static BufferedImage simColorSelector(int selectedColor) {
+        BufferedImage newImage = readImage("sim", "sim_down", 1, 1, false);
+        Color oldShirtColor = new Color(215, 0, 20); // red color
+        Color newShirtColor = setColor(selectedColor);
+
+        float[] oldShirtColorHsb = new float[3];
+        float[] newShirtColorHsb = new float[3];
         float hueDiff;
 
-        Color.RGBtoHSB(redColor.getRed(), redColor.getGreen(), redColor.getBlue(), redHsb);
-        Color.RGBtoHSB(greenColor.getRed(), greenColor.getGreen(), greenColor.getBlue(), greenHsb);
-        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtHsb);
-        Color.RGBtoHSB(newHairColor.getRed(), newHairColor.getGreen(), newHairColor.getBlue(), newHairHsb);
+        Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
+        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
     
-        image = readImage("sim", "sim_down", 1, 1, true);
-    
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int rgb = image.getRGB(x, y);
+        // to change the shirt color
+        for (int x = 0; x < newImage.getWidth(); x++) {
+            for (int y = 0; y < newImage.getHeight(); y++) {
+                int rgb = newImage.getRGB(x, y);
                 if ((rgb >> 24) == 0x00) continue; // if pixel is transparent, skip color transformation
 
                 Color pixelColor = new Color(rgb);
     
-                // Check if the pixel color is within the range of red hues
+                // Check if the pixel color is within the range of hues
                 float[] pixelHsb = new float[3];
                 Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
-                hueDiff = Math.abs(pixelHsb[0] - redHsb[0]);
+                hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
 
                 if (hueDiff <= 0.1 || hueDiff >= 0.9) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
-                    newShirtHsb[0] = hue;
-                    newShirtHsb[1] = pixelHsb[1]; // keep saturation value
-                    newShirtHsb[2] = pixelHsb[2]; // keep brightness value
-                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtHsb[0], newShirtHsb[1], newShirtHsb[2]));
+                    newShirtColorHsb[1] = pixelHsb[1]; // keep saturation value
+                    newShirtColorHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtColorHsb[0], newShirtColorHsb[1], newShirtColorHsb[2]));
     
-                    image.setRGB(x, y, newPixelColor.getRGB());
-                }
-
-                hueDiff = Math.abs(pixelHsb[0] - greenHsb[0]);
-                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
-                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
-                    newHairHsb[1] = pixelHsb[1]; // keep saturation value
-                    newHairHsb[2] = pixelHsb[2]; // keep brightness value
-                    Color newPixelColor = new Color(Color.HSBtoRGB(newHairHsb[0], newHairHsb[1], newHairHsb[2]));
-    
-                    image.setRGB(x, y, newPixelColor.getRGB());
+                    newImage.setRGB(x, y, newPixelColor.getRGB());
                 }
             }
         }
-        return image;
+        return newImage;
+    }
+
+    public static BufferedImage changeSimColor(BufferedImage simImage, Sim sim) {
+        Color oldShirtColor = new Color(215, 0, 20); // red color
+        Color newShirtColor = sim.getShirtColor();
+
+        float[] oldShirtColorHsb = new float[3];
+        float[] newShirtColorHsb = new float[3];
+        float hueDiff;
+
+        Color.RGBtoHSB(oldShirtColor.getRed(), oldShirtColor.getGreen(), oldShirtColor.getBlue(), oldShirtColorHsb);
+        Color.RGBtoHSB(newShirtColor.getRed(), newShirtColor.getGreen(), newShirtColor.getBlue(), newShirtColorHsb);
+    
+        // to change the shirt color
+        for (int x = 0; x < simImage.getWidth(); x++) {
+            for (int y = 0; y < simImage.getHeight(); y++) {
+                int rgb = simImage.getRGB(x, y);
+                if ((rgb >> 24) == 0x00) continue; // if pixel is transparent, skip color transformation
+
+                Color pixelColor = new Color(rgb);
+    
+                // Check if the pixel color is within the range of hues
+                float[] pixelHsb = new float[3];
+                Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
+                hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
+
+                if (hueDiff <= 0.05 || hueDiff >= 0.95) {
+                    // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
+                    newShirtColorHsb[1] = pixelHsb[1]; // keep saturation value
+                    newShirtColorHsb[2] = pixelHsb[2]; // keep brightness value
+                    Color newPixelColor = new Color(Color.HSBtoRGB(newShirtColorHsb[0], newShirtColorHsb[1], newShirtColorHsb[2]));
+    
+                    simImage.setRGB(x, y, newPixelColor.getRGB());
+                }
+            }
+        }
+        return simImage;
     }
 }
