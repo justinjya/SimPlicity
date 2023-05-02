@@ -3,6 +3,7 @@ package src.entities.sim;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
@@ -97,59 +98,66 @@ public class Inventory {
 
     public void addItem(Item item)
     {
-        for (Item i : mapOfItems.keySet())
-        {
-            if (i.getName().equals(item.getName()))
+        try {
+            for (Item i : mapOfItems.keySet())
             {
-                int count = mapOfItems.get(i);
-                mapOfItems.put(i, count + 1);
-                return;
+                if (i.getName().equals(item.getName()))
+                {
+                    int count = mapOfItems.get(i);
+                    mapOfItems.put(i, count + 1);
+                    return;
+                }
             }
+            mapOfItems.put(item, 1);
         }
-        mapOfItems.put(item, 1);
+        catch (ConcurrentModificationException cme) {}
     }
 
     public void interact() {
         if (slotSelected > itemNames.size()) return;
 
-        String selectedItem = itemNames.get(slotSelected);
-
-        for (Item item : mapOfItems.keySet()) {
-            if (!item.getName().equals(selectedItem)) continue;
-
-            Sim sim = UserInterface.getCurrentSim();
-
-            if (item instanceof Interactables) {
-                House currentHouse = sim.getCurrentHouse();
-                Sim currentHouseOwner = currentHouse.getOwner();
-
-                if (!sim.getName().equals(currentHouseOwner.getName())){
-                    return;
+        try {
+            String selectedItem = itemNames.get(slotSelected);
+    
+            for (Item item : mapOfItems.keySet()) {
+                if (!item.getName().equals(selectedItem)) continue;
+    
+                Sim sim = UserInterface.getCurrentSim();
+    
+                if (item instanceof Interactables) {
+                    House currentHouse = sim.getCurrentHouse();
+                    Sim currentHouseOwner = currentHouse.getOwner();
+    
+                    if (!sim.getName().equals(currentHouseOwner.getName())){
+                        return;
+                    }
+    
+                    Room currentRoom = sim.getCurrentRoom();
+                    Interactables newObject = (Interactables) item;
+    
+                    changeIsOpen();
+                    currentRoom.addObject(newObject);
+                    sim.changeIsBusyState();
                 }
-
-                Room currentRoom = sim.getCurrentRoom();
-                Interactables newObject = (Interactables) item;
-
-                changeIsOpen();
-                currentRoom.addObject(newObject);
-                sim.changeIsBusyState();
+    
+                if (item instanceof Food) {
+                    Food food = (Food) item;
+    
+                    food.eat(sim);
+                }
+                
+                int count = mapOfItems.get(item);
+                if (count > 1) {
+                    mapOfItems.put(item, count - 1);
+                }
+                else {
+                    mapOfItems.remove(item);
+                }
+                return;
             }
-
-            if (item instanceof Food) {
-                Food food = (Food) item;
-
-                food.eat(sim);
-            }
-            
-            int count = mapOfItems.get(item);
-            if (count > 1) {
-                mapOfItems.put(item, count - 1);
-            }
-            else {
-                mapOfItems.remove(item);
-            }
-            return;
         }
+        catch (IndexOutOfBoundsException iobe) {}
+        catch (ConcurrentModificationException cme) {}
     }
 
     // others
@@ -206,22 +214,25 @@ public class Inventory {
         itemsToShow = new HashMap<>();
         itemNames = new ArrayList<>();
 
-        for (Item item : mapOfItems.keySet()) {
-            if (isObject){
-                if (item instanceof Interactables) {
-                    itemsToShow.put(item, mapOfItems.get(item));
+        try {
+            for (Item item : mapOfItems.keySet()) {
+                if (isObject){
+                    if (item instanceof Interactables) {
+                        itemsToShow.put(item, mapOfItems.get(item));
+                    }
+                }
+                else {
+                    if (!(item instanceof Interactables)) {
+                        itemsToShow.put(item, mapOfItems.get(item));
+                    }
                 }
             }
-            else {
-                if (!(item instanceof Interactables)) {
-                    itemsToShow.put(item, mapOfItems.get(item));
-                }
+    
+            for (Item item : itemsToShow.keySet()) {
+                itemNames.add(item.getName());
             }
         }
-
-        for (Item item : itemsToShow.keySet()) {
-            itemNames.add(item.getName());
-        }
+        catch (ConcurrentModificationException cme) {}
     }
 
     private void drawFrame(Graphics2D g)
@@ -282,7 +293,8 @@ public class Inventory {
                 i++;
             }
         }
-        catch (NullPointerException e) {}
+        catch (NullPointerException npe) {}
+        catch (ConcurrentModificationException cme) {}
     }
 
     private void drawCursor(Graphics2D g)
@@ -311,6 +323,6 @@ public class Inventory {
             itemSelected = itemNames.get(slotSelected);
             g.drawString(itemSelected, frameX + 50, frameY + 20);
         }
-        catch (IndexOutOfBoundsException e) {}
+        catch (IndexOutOfBoundsException iobe) {}
     }
 }

@@ -10,7 +10,7 @@ import src.main.GameTime;
 public class Television extends Interactables{
     // Attributes
     private int price = 100;
-    private int duration = 0; // TO BE DETERMINED
+    private int duration = 10; // TO BE DETERMINED
 
     private BufferedImage icon;
     private BufferedImage[] images;
@@ -49,9 +49,11 @@ public class Television extends Interactables{
             public void run(){
                 try {
                     sim.setStatus("watching");
+                    changeOccupiedState();
                     GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                     
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+                    changeOccupiedState();
                     sim.resetStatus();
                     sim.setMood(sim.getMood() + 10);
                     sim.setHealth(sim.getHealth() - 10);
