@@ -53,7 +53,6 @@ public class KeyHandler {
         return pressed;
     }
 
-    // public static void keyBinds(Sim sim, UserInterface UserInterface) {
     public static void keyBinds() {
         World world = UserInterface.getWorld();
         Sim currentSim = UserInterface.getCurrentSim();
@@ -84,9 +83,7 @@ public class KeyHandler {
                 }
             }
         }
-        catch (Exception e) {
-            System.out.println("No sim found!");
-        }
+        catch (Exception e) {System.out.println("No sim found!");}
     }
 
     public static String receiveStringInput(KeyEvent e, String input) {

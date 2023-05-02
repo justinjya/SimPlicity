@@ -9,7 +9,6 @@ import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
-import src.main.panels.PanelHandler;
 import src.main.ui.UserInterface;
 
 public class Cursor {
