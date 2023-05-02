@@ -44,7 +44,7 @@ public class TrashBin extends Interactables {
 
     @Override
     public void updateBounds() {
-        getBounds().setLocation(getX() + 26, getY() + 40);
+        getBounds().setLocation(getX() + 6, getY() + 40);
     }
 
     @Override
