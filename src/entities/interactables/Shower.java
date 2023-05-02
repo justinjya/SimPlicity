@@ -24,14 +24,14 @@ public class Shower extends Interactables {
             x,
             y,
             1,
-            1
+            2
         );
 
         setPrice(price);
         setDuration(duration);
 
         // Load the image of the shower
-        // CODE HERE
+        images = ImageLoader.loadShower();
     }
 
     @Override

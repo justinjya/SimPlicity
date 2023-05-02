@@ -124,7 +124,7 @@ public class CreateSimPanel extends JPanel {
         g2.drawString("Create New Sim", 352, 82);
 
         // draw boxes
-        g2.drawImage(images[2], 264, 98, null); // sim preview box
+        g2.drawImage(images[2], 264, 108, null); // sim preview box
         g2.drawImage(images[3], 270, 290, null); // name input box
         g2.drawImage(images[3], 270, 331, null); // room input box
         g2.drawImage(images[4], 318, 391, null); // color picker

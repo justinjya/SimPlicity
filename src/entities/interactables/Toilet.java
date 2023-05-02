@@ -1,5 +1,6 @@
 package src.entities.interactables;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
@@ -17,11 +18,11 @@ public class Toilet extends Interactables{
     private BufferedImage[] icons;
 
     // CONSTRUCTOR
-    public Toilet(int x, int y, int imageIndex) {
+    public Toilet(int x, int y) {
         super (
             "Toilet",
             "take a leak",
-            imageIndex,
+            0,
             x,
             y,
             1,
@@ -35,6 +36,28 @@ public class Toilet extends Interactables{
         this.images = ImageLoader.loadToilet();
     }
 
+    private static BufferedImage combine(BufferedImage image1, BufferedImage image2) {
+        // Create the new image
+        BufferedImage combined = new BufferedImage(image1.getWidth(), image1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = combined.getGraphics();
+    
+        // Draw the first image
+        g.drawImage(image1, 0, 0, null);
+    
+        // Draw the second image
+        g.drawImage(image2, 0, 0, null);
+    
+        // Dispose of the graphics object
+        g.dispose();
+    
+        return combined;
+    }
+
+    public void rotate() {
+        images[0] = ImageLoader.rotate90Clockwise(images[0]);
+        images[1] = ImageLoader.rotate90Clockwise(images[1]);
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
@@ -43,7 +66,8 @@ public class Toilet extends Interactables{
 
     @Override
     public BufferedImage getImage() {
-        return images[getImageIndex()];
+        BufferedImage toiletImage = combine(images[2], images[getImageIndex()]);
+        return toiletImage;
     }
 
     @Override

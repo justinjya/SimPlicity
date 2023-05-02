@@ -225,15 +225,19 @@ public class Room {
             moveableObject.updateBounds();
 
             // To rotate the door
-            if (moveableObject instanceof Door) {
-                Door door = (Door) moveableObject;
-                isWallOccupied = collisionHandler.isWallOccupied(door);
-
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
+                if (moveableObject instanceof Door) {
+                    Door door = (Door) moveableObject;
+                    isWallOccupied = collisionHandler.isWallOccupied(door);
                     door.rotate(door.getX(), door.getY());
                 }
+                
+                if (moveableObject instanceof Toilet) {
+                    Toilet toilet = (Toilet) moveableObject;
+                    toilet.rotate();
+                }
             }
-
+                
             // Add the object if enter is pressed and object is not in collision with another object
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && (!inCollision && !isWallOccupied && !isCollidingWithSim)) {
                 listOfObjects.add(moveableObject);

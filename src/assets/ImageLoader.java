@@ -67,16 +67,16 @@ public class ImageLoader {
     public static BufferedImage[] loadMainMenu() {
         BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = readImage("main_menu", "background", 1, 1, false);
-        images[1] = readImage("main_menu", "game_title", 1, 1, false);
-        images[2] = readImage("main_menu", "start_button", 1, 1, false);
-        images[3] = readImage("main_menu", "load_button", 1, 1, false);
-        images[4] = readImage("main_menu", "about_button", 1, 1, false);
-        images[5] = readImage("main_menu", "exit_button", 1, 1, false);
-        images[6] = readImage("main_menu", "start_highlight", 1, 1, false);
-        images[7] = readImage("main_menu", "load_highlight", 1, 1, false);
-        images[8] = readImage("main_menu", "about_highlight", 1, 1, false);
-        images[9] = readImage("main_menu", "exit_highlight", 1, 1, false);
+        images[0] = readImage("menus", "main_menu", "background", 1, 1, false);
+        images[1] = readImage("menus", "main_menu", "game_title", 1, 1, false);
+        images[2] = readImage("menus", "main_menu", "start_button", 1, 1, false);
+        images[3] = readImage("menus", "main_menu", "load_button", 1, 1, false);
+        images[4] = readImage("menus", "main_menu", "about_button", 1, 1, false);
+        images[5] = readImage("menus", "main_menu", "exit_button", 1, 1, false);
+        images[6] = readImage("menus", "main_menu", "start_highlight", 1, 1, false);
+        images[7] = readImage("menus", "main_menu", "load_highlight", 1, 1, false);
+        images[8] = readImage("menus", "main_menu", "about_highlight", 1, 1, false);
+        images[9] = readImage("menus", "main_menu", "exit_highlight", 1, 1, false);
     
 
         return images;
@@ -85,16 +85,16 @@ public class ImageLoader {
     public static BufferedImage[] loadCreateSimMenu() {
         BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = readImage("create_sim_menu", "create_sim_box", 1, 1, false);
-        images[1] = readImage("create_sim_menu", "title_box", 1, 1, false);
-        images[2] = readImage("create_sim_menu", "sim_preview_box", 1, 1, false);
-        images[3] = readImage("create_sim_menu", "input_box", 1, 1, false);
-        images[4] = readImage("create_sim_menu", "color_slider", 1, 1, false);
-        images[5] = readImage("create_sim_menu", "cursor", 1, 1, false);
-        images[6] = readImage("create_sim_menu", "button_done", 1, 1, false);
-        images[7] = readImage("create_sim_menu", "input_box_highlight", 1, 1, false);
-        images[8] = readImage("create_sim_menu", "color_slider_highlight", 1, 1, false);
-        images[9] = readImage("create_sim_menu", "button_done_highlight", 1, 1, false);
+        images[0] = readImage("menus", "create_sim_menu", "create_sim_box", 1, 1, false);
+        images[1] = readImage("menus", "create_sim_menu", "title_box", 1, 1, false);
+        images[2] = readImage("menus", "create_sim_menu", "sim_preview_box", 1, 1, false);
+        images[3] = readImage("menus", "create_sim_menu", "input_box", 1, 1, false);
+        images[4] = readImage("menus", "create_sim_menu", "color_slider", 1, 1, false);
+        images[5] = readImage("menus", "create_sim_menu", "cursor", 1, 1, false);
+        images[6] = readImage("menus", "create_sim_menu", "button_done", 1, 1, false);
+        images[7] = readImage("menus", "create_sim_menu", "input_box_highlight", 1, 1, false);
+        images[8] = readImage("menus", "create_sim_menu", "color_slider_highlight", 1, 1, false);
+        images[9] = readImage("menus", "create_sim_menu", "button_done_highlight", 1, 1, false);
 
         return images;
     }
@@ -167,15 +167,32 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadAquarium() {
+        BufferedImage[] images = new BufferedImage[4];
+        
+        images[0] = readImage("tiles", "aquarium_1", 1, 1, true);
+        images[1] = readImage("tiles", "aquarium_2", 1, 1, true);
+        images[2] = readImage("tiles", "aquarium_1_occupied", 2, 1, true);
+        images[3] = readImage("tiles", "aquarium_2_occupied", 2, 1, true);
+    
+        return images;
+    }
+
+    public static BufferedImage loadAquariumIcon() {
+        BufferedImage icon = readImage("inventory", "aquarium", 1, 1, false);
+    
+        return icon;
+    }
+
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
 
-        images[0] = readImage("beds", "bed_single_idle", 4, 1, true);
-        images[1] = readImage("beds", "bed_queen_idle", 4, 2, true);
-        images[2] = readImage("beds", "bed_king_idle", 5, 2, true);
-        images[3] = readImage("beds", "bed_single_occupied", 4, 1, true);
-        images[4] = readImage("beds", "bed_queen_occupied", 4, 2, true);
-        images[5] = readImage("beds", "bed_king_occupied", 5, 2, true);
+        images[0] = readImage("items", "beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("items", "beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("items", "beds", "bed_king_idle", 5, 2, true);
+        images[3] = readImage("items", "beds", "bed_single_occupied", 4, 1, true);
+        images[4] = readImage("items", "beds", "bed_queen_occupied", 4, 2, true);
+        images[5] = readImage("items", "beds", "bed_king_occupied", 5, 2, true);
 
         return images;
     }
@@ -190,28 +207,11 @@ public class ImageLoader {
         return icons;
     }
 
-    public static BufferedImage[] loadBin() {
-        BufferedImage[] images = new BufferedImage[4];
-
-        images[0] = readImage("bin", "trash_bin_empty_on_floor", 1, 1, true);
-        images[1] = readImage("bin", "trash_bin_empty", 1, 1, true);
-        images[2] = readImage("bin", "trash_bin_filled", 1, 1, true);
-        images[3] = readImage("bin", "trash_bin_filled_on_floor", 1, 1, true);
-    
-        return images;
-    }
-
-    public static BufferedImage loadBinIcon() {
-        BufferedImage icon = readImage("inventory", "bin", 1, 1, false);
-    
-        return icon;
-    }
-
     public static BufferedImage[] loadShower() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("tiles", "shower", 1, 2, true);
-        images[1] = readImage("tiles", "shower_occupied", 1, 2, true);
+        images[0] = readImage("items", "shower", "shower_idle", 1, 2, true);
+        images[1] = readImage("items", "shower", "shower_occupied", 1, 2, true);
     
         return images;
     }
@@ -225,10 +225,10 @@ public class ImageLoader {
     public static BufferedImage[] loadStoves() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("tiles", "gas_stove", 1, 1, true);
-        images[1] = readImage("tiles", "gas_stove", 1, 1, true);
-        images[2] = readImage("tiles", "electric_stove", 1, 1, true);
-        images[3] = readImage("tiles", "electric_stove", 1, 1, true);
+        images[0] = readImage("items", "stoves", "gas_stove_idle", 2, 1, true);
+        images[1] = readImage("items", "stoves", "electric_stove_idle", 1, 1, true);
+        images[2] = readImage("items", "stoves", "gas_stove_occupied", 2, 1, true);
+        images[3] = readImage("items", "stoves", "electric_stove_occupied", 1, 1, true);
     
         return images;
     }
@@ -236,8 +236,8 @@ public class ImageLoader {
     public static BufferedImage[] loadStovesIcons() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("inventory", "gas_stove", 1, 1, false);
-        images[1] = readImage("inventory", "electric_stove", 1, 1, false);
+        images[0] = readImage("items", "inventory", "gas_stove", 1, 1, false);
+        images[1] = readImage("items", "inventory", "electric_stove", 1, 1, false);
     
         return images;
     }
@@ -245,8 +245,8 @@ public class ImageLoader {
     public static BufferedImage[] loadTableAndChair() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("tiles", "table_and_chair", 3, 3, true);
-        images[1] = readImage("tiles", "table_and_chair_occupied", 4, 3, true);
+        images[0] = readImage("items", "table_and_chair", "table_and_chair", 3, 3, true);
+        images[1] = readImage("items", "table_and_chair", "table_and_chair_occupied", 4, 3, true);
 
         return images;
     }
@@ -260,8 +260,8 @@ public class ImageLoader {
     public static BufferedImage[] loadTelevision() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("tiles", "television_off", 1, 1, true);
-        images[1] = readImage("tiles", "television_occupied", 2, 2, true);
+        images[0] = readImage("items", "television", "television_off", 2, 1, true);
+        images[1] = readImage("items", "television", "television_occupied", 2, 1, true);
     
         return images;
     }
@@ -273,10 +273,11 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadToilet() {
-        BufferedImage[] images = new BufferedImage[2];
+        BufferedImage[] images = new BufferedImage[3];
         
-        images[0] = readImage("toilet", "toilet_idle", 1, 1, true);
-        images[1] = readImage("toilet", "toilet_occupied", 1, 1, true);
+        images[0] = readImage("items", "toilet", "toilet_idle", 1, 1, true);
+        images[1] = readImage("items", "toilet", "toilet_occupied", 1, 1, true);
+        images[2] = readImage("tiles", "polished_quartz", 1, 1, true);
 
         return images;
     }
@@ -287,19 +288,19 @@ public class ImageLoader {
         return icon;
     }
 
-    public static BufferedImage[] loadAquarium() {
+    public static BufferedImage[] loadTrashBin() {
         BufferedImage[] images = new BufferedImage[4];
-        
-        images[0] = readImage("tiles", "aquarium_1", 1, 1, true);
-        images[1] = readImage("tiles", "aquarium_2", 1, 1, true);
-        images[2] = readImage("tiles", "aquarium_1_occupied", 2, 1, true);
-        images[3] = readImage("tiles", "aquarium_2_occupied", 2, 1, true);
+
+        images[0] = readImage("items", "trash_bin", "trash_bin_empty", 1, 1, true);
+        images[1] = readImage("items", "trash_bin", "trash_bin_filled", 1, 1, true);
+        images[2] = readImage("items", "trash_bin", "trash_bin_empty_on_floor", 1, 1, true);
+        images[3] = readImage("items", "trash_bin", "trash_bin_filled_on_floor", 1, 1, true);
     
         return images;
     }
 
-    public static BufferedImage loadAquariumIcon() {
-        BufferedImage icon = readImage("inventory", "aquarium", 1, 1, false);
+    public static BufferedImage loadTrashBinIcon() {
+        BufferedImage icon = readImage("inventory", "bin", 1, 1, false);
     
         return icon;
     }

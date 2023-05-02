@@ -74,6 +74,13 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     public void changeOccupiedState() {
+        if (!isOccupied()) {
+            setImageIndex(getImageIndex() + 1);
+        }
+        else {
+            setImageIndex(getImageIndex() - 1);
+        }
+
         this.occupied = !this.occupied;
     }
     

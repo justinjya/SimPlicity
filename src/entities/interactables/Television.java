@@ -15,7 +15,7 @@ public class Television extends Interactables{
     private BufferedImage icon;
     private BufferedImage[] images;
 
-    public Television(int x, int y, int imageIndex) {
+    public Television(int x, int y) {
         super (
             "Television",
             "watch the television",
