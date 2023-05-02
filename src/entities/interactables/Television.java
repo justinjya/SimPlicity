@@ -8,36 +8,25 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class Television extends Interactables{
-    private static String[] names = {
-        "Television"
-    };
-    private static int[] width = {
-        2
-    };
-    private static int[] height = {
-        1
-    };
-    private static int[] prices = {
-        100
-    };
+    // Attributes
+    private int price = 100;
+    private int duration = 0; // TO BE DETERMINED
 
     private BufferedImage icon;
     private BufferedImage[] images;
 
-    private int duration = 0; // TO BE DETERMINED
-
     public Television(int x, int y, int imageIndex) {
         super (
-            names[imageIndex],
-            "watch",
-            imageIndex,
+            "Television",
+            "watch the television",
+            0,
             x,
             y,
-            width[imageIndex],
-            height[imageIndex]
+            2,
+            1
         );
 
-        setPrice(prices[imageIndex]);
+        setPrice(price);
         setDuration(duration);
 
         this.images = ImageLoader.loadTelevision();
