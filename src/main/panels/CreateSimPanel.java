@@ -11,16 +11,21 @@ import java.awt.event.KeyAdapter;
 import javax.swing.JPanel;
 
 import src.assets.ImageLoader;
-import src.main.GamePanel;
+import src.main.GameLoader;
+import src.main.KeyHandler;
 
 public class CreateSimPanel extends JPanel {
-    private String[] textFields = { "", "" };
-    private int selectedField = 0; // 0 to 3
-    private int selectedColor = 2;
+    public static CreateSimPanel csp = new CreateSimPanel();
+
+    public static String[] textFields = { "", "" };
+    public static String simName = textFields[0];
+    public static String roomName = textFields[1];
+    public static int selectedColor = 2;
+    private static int selectedField = 0; // 0 to 3
 
     private BufferedImage[] images = ImageLoader.loadCreateSimMenu();
 
-    public CreateSimPanel() {
+    private CreateSimPanel() {
         setPreferredSize(new Dimension(800, 600));
         setFocusTraversalKeysEnabled(false);
 
@@ -29,54 +34,44 @@ public class CreateSimPanel extends JPanel {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
 
-                // Check if the Enter key was pressed
+                // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
-                    // The Done button was selected, switch panels
-                    System.out.println("Switching panels");
-                    // Here you can add the code to switch to another panel
-                    JPanel parent = (JPanel) getParent();
-                    GamePanel gamePanel = new GamePanel(textFields[0], textFields[1], ImageLoader.setColor(selectedColor));
-                    parent.removeAll();
-                    parent.add(gamePanel);
-                    parent.revalidate();
-                    parent.repaint();
-                    gamePanel.requestFocusInWindow();
-                    new Thread(gamePanel).start();
+                    if (GamePanel.isCurrentState("Starting a new game")) {
+                        GameLoader.startNewGame();
+                    }
+                    if (GamePanel.isCurrentState("Creating a new sim")) {
+                        GameLoader.addSim();
+                    }
+                    GamePanel.gameState = "Placing a new house";
+                    
+                    PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
+                }
+
+                if (keyCode == KeyEvent.VK_ESCAPE) {
+                    if (GamePanel.isCurrentState("Starting a new game")) {
+                        GamePanel.gameState = "Main menu";
+                        PanelHandler.switchPanel(CreateSimPanel.getInstance(), MainMenuPanel.getInstance());
+                    }
+                    if (GamePanel.isCurrentState("Creating a new sim")) {
+                        GamePanel.gameState = "Playing";
+                        PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
+                    } 
                 }
                 
+                // names text feild
                 if (selectedField < 2) {
-                    // Check if the Backspace key was pressed
-                    if (keyCode == KeyEvent.VK_BACK_SPACE) {
-                        // Remove the last character from the selected field
-                        String text = textFields[selectedField];
-                        if (text.length() > 0) {
-                            textFields[selectedField] = text.substring(0, text.length() - 1);
-                        }
-                    }
-                    // Check if the key is a letter or a number
-                    if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) ||
-                        (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) ||
-                        (keyCode == KeyEvent.VK_SPACE)) {
-                        // Append the character to the selected field
-                        char c = e.getKeyChar();
-                        textFields[selectedField] += c;
-                    }
+                    textFields[selectedField] = KeyHandler.receiveStringInput(e, textFields[selectedField]);
+                    simName = textFields[0];
+                    roomName = textFields[1];
                 }
-                else {
-                    if (keyCode == KeyEvent.VK_D) {
-                        selectedColor++;
-                    }
-                    if (keyCode == KeyEvent.VK_A) {
-                        selectedColor--;
-                    }
+                // color selector
+                if (selectedField  == 2) {
+                    if (keyCode == KeyEvent.VK_D) selectedColor++;
+                    if (keyCode == KeyEvent.VK_A) selectedColor--;
+                    if (selectedColor > 7) selectedColor = 0;
+                    if (selectedColor < 0) selectedColor = 7;
+                }
 
-                    if (selectedColor > 7) {
-                        selectedColor = 0;
-                    }
-                    if (selectedColor < 0) {
-                        selectedColor = 7;
-                    }
-                }
                 // Check if the Tab key was pressed
                 if (keyCode == KeyEvent.VK_TAB) {
                     // Move to the next field or the Done button
@@ -92,12 +87,25 @@ public class CreateSimPanel extends JPanel {
         setFocusable(true);
     }
 
+    public static CreateSimPanel getInstance() {
+        return csp;
+    }
+
+    public static void reset() {
+        textFields[0] = "";
+        textFields[1] = "";
+        selectedField = 0;
+        selectedColor = 2;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
         
+        // TO - DO!!! : Draw selector
+
         BufferedImage newSim = ImageLoader.simColorSelector(selectedColor);
 
         g2.setColor(new Color(110, 196, 213));
@@ -110,31 +118,33 @@ public class CreateSimPanel extends JPanel {
         g2.setColor(Color.WHITE);
         g2.drawString("Create New Sim", 352, 82);
 
+        // draw boxes
         g2.drawImage(images[2], 264, 108, null); // sim preview box
-
         g2.drawImage(images[3], 270, 300, null); // name input box
-
         g2.drawImage(images[3], 270, 351, null); // room input box
-
         g2.drawImage(images[4], 318, 416, null); // color picker
-
-        g2.drawImage(images[5], 324 + (selectedColor * 19), 434, null);
-
         g2.drawImage(images[6], 334, 466, null); // done button
 
-        g2.drawImage(newSim, 336, 130, 128, 128, null);
+        // draw highlighted boxes and color picker cursor
+        if (selectedField == 0) g2.drawImage(images[7], 267, 297, null);
+        if (selectedField == 1) g2.drawImage(images[7], 267, 348, null);
+        if (selectedField == 2) g2.drawImage(images[8], 315, 413, null);
+        if (selectedField == 3) g2.drawImage(images[9], 337, 465, null);
+
+        g2.drawImage(images[5], 324 + (selectedColor * 19), 434, null); // color picker cursor
+        g2.drawImage(newSim, 336, 130, 128, 128, null); // sim preview image
 
         g2.setFont(new Font("Inter", Font.PLAIN, 12));
         g2.setColor(new Color(110, 54, 81));
 
-        if (textFields[0] == "") {
+        if (textFields[0].equals("")) {
             g2.drawString("Enter sim name...", 282, 321);
         }
         else {
             g2.drawString(textFields[0], 282, 321);
         }
 
-        if (textFields[1] == "") {
+        if (textFields[1].equals("")) {
             g2.drawString("Enter room name...", 282, 372);
         }
         else{

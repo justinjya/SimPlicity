@@ -3,7 +3,7 @@ package src.main;
 import java.awt.*;
 import javax.swing.*;
 
-import src.main.panels.CreateSimPanel;
+import src.main.panels.MainMenuPanel;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,9 +17,8 @@ public class Main {
         
         // Set the icon of the JFrame
         frame.setIconImage(icon.getImage());
-        
-        CreateSimPanel createSimPanel = new CreateSimPanel();
-        frame.add(createSimPanel);
+
+        frame.add(MainMenuPanel.getInstance());
 
         frame.pack();
         frame.setLocationRelativeTo(null);

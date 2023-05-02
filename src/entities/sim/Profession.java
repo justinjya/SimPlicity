@@ -34,10 +34,18 @@ public class Profession
     private static int count = names.length;
     private int randomizer = (int) (Math.random() * 100) % count;
     
+    // for creating a new sim
     public Profession()
     {
         name = names[randomizer];
         salary = salaries[randomizer];
+    }
+
+    // for changing the profession of a sim
+    public Profession(int index)
+    {
+        name = names[index];
+        salary = salaries[index];
     }
 
     public String getName()

@@ -32,7 +32,6 @@ public class Sim extends Entity{
     
     // Image of the sim
     private Color shirtColor;
-    private Color hairColor;
     private BufferedImage[] images = new BufferedImage[12];
 
     // Collisions and interactions
@@ -45,37 +44,6 @@ public class Sim extends Entity{
         super (
             4,
             4,
-            1,
-            1
-        );
-        
-        this.name = name;
-        this.health = 80;
-        this.hunger = 80;
-        this.mood = 80;
-        this.money = 100;
-        this.status = "Idle";
-        this.profession = new Profession(); 
-        this.inventory = new Inventory();
-        this.isBusy = false;
-        this.durationWorked = 0;
-        this.timeNotSlept = 0;
-        this.timeNotTakenLeak = 0;
-
-        // Load the image of the sim
-        this.shirtColor = shirtColor;
-        images = ImageLoader.loadSim(this);
-
-        // Collisions and interactions
-        collisionHandler = new CollisionHandler(this, currentRoom);
-        interactionHandler = new InteractionHandler(this, currentRoom);
-    }
-    
-    public Sim(String name, int x, int y) {
-        // Attributes
-        super (
-            x,
-            y,
             1,
             1
         );
@@ -173,10 +141,6 @@ public class Sim extends Entity{
 
     public Color getShirtColor() {
         return shirtColor;
-    }
-
-    public Color getHairColor() {
-        return hairColor;
     }
 
     // SETTERS

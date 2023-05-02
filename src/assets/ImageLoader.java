@@ -65,24 +65,36 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadMainMenu() {
-        BufferedImage[] images = new BufferedImage[7];
+        BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = ImageLoader.readImage("main menu", "background", 0, 0, false);
-        images[1] = ImageLoader.readImage("main menu",  "game_tittle0", 0, 0, false);
-        images[2] = ImageLoader.readImage("main menu",  "start_button1", 0, 0, false);
-        images[3] = ImageLoader.readImage("main menu",  "load_button", 0, 0, false);
-        images[4] = ImageLoader.readImage("main menu",  "about_button", 0, 0, false);
-        images[5] = ImageLoader.readImage("main menu",  "exit_button", 0, 0, false);
+        images[0] = readImage("main_menu", "background", 1, 1, false);
+        images[1] = readImage("main_menu", "game_title", 1, 1, false);
+        images[2] = readImage("main_menu", "start_button", 1, 1, false);
+        images[3] = readImage("main_menu", "load_button", 1, 1, false);
+        images[4] = readImage("main_menu", "about_button", 1, 1, false);
+        images[5] = readImage("main_menu", "exit_button", 1, 1, false);
+        images[6] = readImage("main_menu", "start_highlight", 1, 1, false);
+        images[7] = readImage("main_menu", "load_highlight", 1, 1, false);
+        images[8] = readImage("main_menu", "about_highlight", 1, 1, false);
+        images[9] = readImage("main_menu", "exit_highlight", 1, 1, false);
+    
 
         return images;
     }
 
-    public static BufferedImage[] loadCreatingSimMenu() {
-        BufferedImage[] images = new BufferedImage[4];
+    public static BufferedImage[] loadCreateSimMenu() {
+        BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = ImageLoader.readImage("mockup", "main menu", "menu_bg", 0, 0, false); // x = 180, y = 172
-         // x = 131, y = 302
-         // x = 603, y = 302
+        images[0] = readImage("create_sim_menu", "create_sim_box", 1, 1, false);
+        images[1] = readImage("create_sim_menu", "title_box", 1, 1, false);
+        images[2] = readImage("create_sim_menu", "sim_preview_box", 1, 1, false);
+        images[3] = readImage("create_sim_menu", "input_box", 1, 1, false);
+        images[4] = readImage("create_sim_menu", "color_slider", 1, 1, false);
+        images[5] = readImage("create_sim_menu", "cursor", 1, 1, false);
+        images[6] = readImage("create_sim_menu", "button_done", 1, 1, false);
+        images[7] = readImage("create_sim_menu", "input_box_highlight", 1, 1, false);
+        images[8] = readImage("create_sim_menu", "color_slider_highlight", 1, 1, false);
+        images[9] = readImage("create_sim_menu", "button_done_highlight", 1, 1, false);
 
         return images;
     }
@@ -334,7 +346,7 @@ public class ImageLoader {
         return newImage;
     }
 
-    private static BufferedImage changeSimColor(BufferedImage simImage, Sim sim) {
+    public static BufferedImage changeSimColor(BufferedImage simImage, Sim sim) {
         Color oldShirtColor = new Color(215, 0, 20); // red color
         Color newShirtColor = sim.getShirtColor();
 
@@ -358,7 +370,7 @@ public class ImageLoader {
                 Color.RGBtoHSB(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelHsb);
                 hueDiff = Math.abs(pixelHsb[0] - oldShirtColorHsb[0]);
 
-                if (hueDiff <= 0.1 || hueDiff >= 0.9) {
+                if (hueDiff <= 0.05 || hueDiff >= 0.95) {
                     // Keep the saturation and brightness values of the pixel, but change its hue to the new hue
                     newShirtColorHsb[1] = pixelHsb[1]; // keep saturation value
                     newShirtColorHsb[2] = pixelHsb[2]; // keep brightness value

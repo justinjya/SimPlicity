@@ -1,7 +1,8 @@
-package src.entities.handlers;
+package src.main;
 
 import java.awt.event.KeyEvent;
 
+import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
@@ -54,8 +55,11 @@ public class KeyHandler {
     }
 
     // public static void keyBinds(Sim sim, UserInterface ui) {
-    public static void keyBinds(Sim sim, World world, UserInterface ui) {
-        if (!ui.isViewingWorld() && !sim.getInventory().isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+    public static void keyBinds(UserInterface ui) {
+        World world = ui.getWorld();
+        Sim currentSim = ui.getCurrentSim();
+        Inventory currentSimInventory = currentSim.getInventory();
+        if (!ui.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             ui.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
@@ -70,7 +74,8 @@ public class KeyHandler {
 
         // testing adding and switching sim
         try {
-            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !ui.getCurrentSim().getCurrentRoom().isEditingRoom();
+            Room currentRoom = currentSim.getCurrentRoom();
+            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !currentRoom.isEditingRoom();
             if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
                 if (ui.getCurrentSim() == world.getSim(1)) {
                     ui.setCurrentSim(world.getSim(0));

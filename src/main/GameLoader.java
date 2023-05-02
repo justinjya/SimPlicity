@@ -1,23 +1,57 @@
 package src.main;
 
-import src.entities.Sim;
+import java.awt.Color;
+
+import src.assets.ImageLoader;
+import src.entities.sim.Sim;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
 import src.main.ui.UserInterface;
 import src.world.World;
 
 public class GameLoader {
-    public static void newGame(GamePanel gp) {
-        gp.gameState = "Starting a new game";
+    public static String simName = CreateSimPanel.simName;
+    public static String roomName = CreateSimPanel.roomName;
+    public static int selectedColor = CreateSimPanel.selectedColor;
+
+    public static void startNewGame() {
+        GameTime.init(1, Consts.ONE_MINUTE * 12);
+        World world = GamePanel.world = new World();
+        String simName = CreateSimPanel.simName;
+        int selectedColor = CreateSimPanel.selectedColor;
         
-        // Create game time
-        gp.time = new GameTime(1, 720, 720);
+        // Create the new sim
+        Color shirtColor = ImageLoader.setColor(selectedColor);
+        Sim newSim = new Sim(simName, shirtColor);
+        
+        // Add the new sim to the world
+        world.addSim(newSim);
+        world.changeIsAddingState();
+        
+        // Actually start the game by changing the state into adding a house
+        UserInterface ui = GamePanel.ui = new UserInterface(GamePanel.world);
+        ui.changeIsViewingWorldState();
+    }
 
-        // Create sim
-        gp.sim = new Sim("Justin", Consts.CENTER_X + 80, Consts.CENTER_Y);
+    public static void addSim() {
+        UserInterface ui = GamePanel.ui;
+        World world = GamePanel.world;
+        String simName = CreateSimPanel.textFields[0];
+        int selectedColor = CreateSimPanel.selectedColor;
+        
+        // Create the sim
+        Color shirtColor = ImageLoader.setColor(selectedColor);
+        Sim newSim = new Sim(simName, shirtColor);
+        
+        // Add the sim to the world and change the state of game into adding a house
+        world.addSim(newSim);
+        world.changeIsAddingState();
+        ui.changeIsViewingWorldState();
+    }
 
-        // create a new world
-        gp.world = new World(gp.sim, gp, gp.time);
+    public static void loadGame() {
 
-        // // Create user interface
-        gp.ui = new UserInterface(gp.world, gp.sim, gp.time);
+        // LOAD GAME HERE
+        
     }
 }
