@@ -96,7 +96,7 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (isCurrentState("Starting a new game") || isCurrentState("Creating a new sim")) {
+        if (isCurrentState("Starting a new game") || isCurrentState("Creating a new sim") || isCurrentState("Paused")) {
             return;
         }
 
