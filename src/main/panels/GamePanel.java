@@ -91,15 +91,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        if (isCurrentState("Main menu")) {
-            return;
-        }
-
-        if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
-            return;
-        }
-
         try {
+            if (isCurrentState("Main menu")) {
+                return;
+            }
+    
+            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
+                return;
+            }
+
             if (isCurrentState("Viewing active actions")) {
                 ActiveActionsUserInterface.update();
                 return;
@@ -117,7 +117,14 @@ public class GamePanel extends JPanel implements Runnable {
             }
             UserInterface.update();
         }
-        catch (NullPointerException e) {System.out.println("Loading . . .");}
+        catch (NullPointerException e) {
+            try {
+                // to give time to load
+                System.out.println("Loading . . .");
+                Thread.sleep(Consts.THREAD_ONE_SECOND);
+            }
+            catch (InterruptedException ie) {}
+        }
     }
     
     @Override
@@ -126,15 +133,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        if (isCurrentState("Main menu")) {
-            return;
-        }
-
-        if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
-            return;
-        }
-
         try {
+            if (isCurrentState("Main menu")) {
+                return;
+            }
+    
+            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
+                return;
+            }
+            
             if (isCurrentState("Viewing active actions")) {
                 ActiveActionsUserInterface.draw(g2);
                 return;
@@ -151,7 +158,14 @@ public class GamePanel extends JPanel implements Runnable {
     
             UserInterface.draw(g2);
         }
-        catch (NullPointerException e) {System.out.println("Loading . . .");}
+        catch (NullPointerException e) {
+            try {
+                // to give time to load
+                System.out.println("Loading . . .");
+                Thread.sleep(Consts.THREAD_ONE_SECOND);
+            }
+            catch (InterruptedException ie) {}
+        }
         
         // To free resources
         g2.dispose();

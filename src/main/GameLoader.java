@@ -14,6 +14,22 @@ public class GameLoader {
     public static String roomName = CreateSimPanel.roomName;
     public static int selectedColor = CreateSimPanel.selectedColor;
 
+    // ONLY FOE DEBUGGING
+    public static void startNewGameDebug() {
+        GameTime.init(1, Consts.ONE_MINUTE * 12);
+        World world = GamePanel.world = new World();
+        GamePanel.gameState = "Playing";
+        
+        // Create the new sim
+        Sim newSim = new Sim("Justin", Color.RED);
+        
+        // Add the new sim to the world
+        world.addSim(newSim);
+        
+        // Actually start the game by changing the state into adding a house
+        UserInterface.initDebug(world);
+    }
+
     public static void startNewGame() {
         GameTime.init(1, Consts.ONE_MINUTE * 12);
         World world = GamePanel.world = new World();

@@ -7,8 +7,11 @@ import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GameTime;
+import src.world.House;
+import src.world.Room;
 import src.world.World;
 import src.assets.ImageLoader;
+import src.entities.interactables.Door;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
@@ -31,10 +34,27 @@ public class UserInterface {
 
     //ONLY FOR DEBUGGING
     private static boolean debug = false;
-    private static BufferedImage mockup;
+    private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout default", 1, 1, false);
 
     // CONSTRUCTOR
     public UserInterface() {
+    }
+
+    // ONLY FOR DEBUGGING
+    public static void initDebug(World world) {
+        UserInterface.world = world;
+        Room newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null));
+
+        House newHouse = new House(16, 16, world, world.getListOfSim().get(0), newRoom);
+        newRoom.setHouseInsideOf(newHouse);
+        world.getListOfHouse().add(newHouse);
+
+        UserInterface.currentSim = world.getListOfSim().get(0);
+        UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
+        UserInterface.currentSim.setCurrentHouse(world.getListOfHouse().get(0));
+        UserInterface.currentSim.setCurrentRoom(newRoom);
+        viewingWorld = false;
     }
 
     public static void init(World world) {

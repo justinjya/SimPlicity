@@ -63,7 +63,6 @@ public class ImageLoader {
         images[8] = readImage("menus/main_menu", "about_highlight", 1, 1, false);
         images[9] = readImage("menus/main_menu", "exit_highlight", 1, 1, false);
     
-
         return images;
     }
 
@@ -84,7 +83,7 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage[]loadPause(){
+    public static BufferedImage[] loadPause(){
         BufferedImage[] images = new BufferedImage[4];
 
         images[0] = readImage("menus/pause", "background", 1, 1, false);
@@ -115,6 +114,12 @@ public class ImageLoader {
         for (int i = 0; i < images.length; i++) {
             images[i] = changeSimColor(images[i], sim);
         }
+
+        return images;
+    }
+
+    public static BufferedImage[] loadGameMenu() {
+        BufferedImage[] images = new BufferedImage[10];
 
         return images;
     }
