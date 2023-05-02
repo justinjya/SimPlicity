@@ -2,10 +2,7 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
-import src.entities.handlers.KeyHandler;
-
 import src.assets.ImageLoader;
-import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
@@ -24,10 +21,10 @@ public class Television extends Interactables{
         100
     };
 
-    BufferedImage[] images = new BufferedImage[2];
+    private BufferedImage icon;
+    private BufferedImage[] images;
 
-    private int price;
-    private int duration;
+    private int duration = 0; // TO BE DETERMINED
 
     public Television(int x, int y, int imageIndex) {
         super (
@@ -40,16 +37,15 @@ public class Television extends Interactables{
             height[imageIndex]
         );
 
-        this.price = prices[imageIndex];
+        setPrice(prices[imageIndex]);
+        setDuration(duration);
+
         this.images = ImageLoader.loadTelevision();
-    }
-    public int getPrice() {
-        return price;
     }
 
     @Override
     public BufferedImage getIcon() {
-        return images[getImageIndex()];
+        return icon;
     }
 
     @Override
@@ -64,7 +60,7 @@ public class Television extends Interactables{
             public void run(){
                 try {
                     sim.setStatus("watching");
-                    GameTime.startDecrementTimeRemaining(duration);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                     
                     Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
                     sim.resetStatus();
