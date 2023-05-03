@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import src.main.Consts;
 import src.main.GameTime;
+import src.main.KeyHandler;
 import src.world.World;
 import src.assets.ImageLoader;
 import src.entities.interactables.Interactables;
@@ -88,7 +89,9 @@ public class UserInterface {
     }
 
     public void pause() {
-        this.pause = !this.pause;
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)){
+            this.pause = !this.pause;
+        }
     }
 
     public void debug() {
@@ -115,6 +118,9 @@ public class UserInterface {
         if (currentSimInventory.isOpen()) {
             currentSimInventory.update(this);
         }
+        if (pause){
+            PauseUserInterface.update(this);
+        }
     }
     
     public void draw(Graphics2D g) {
@@ -135,9 +141,7 @@ public class UserInterface {
     public void drawPause(Graphics2D g){
         if(pause){
             currentSim.changeIsBusyState();
-        }
-        else{
-            draw(g);
+            PauseUserInterface.draw(g, this);
         }
     }
 
