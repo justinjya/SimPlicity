@@ -2,23 +2,23 @@ package src.entities.sim;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.awt.image.BufferedImage;
+import java.util.ConcurrentModificationException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.Color;
 import java.awt.Font;
 
+import src.main.KeyHandler;
 import src.assets.ImageLoader;
+import src.main.UserInterface;
 import src.entities.interactables.*;
 import src.entities.interactables.Interactables;
-import src.items.Item;
-import src.items.foods.Food;
 import src.items.foods.RawFood;
-import src.main.KeyHandler;
-import src.main.UserInterface;
+import src.items.foods.Food;
 import src.world.House;
 import src.world.Room;
+import src.items.Item;
 
 public class Inventory {
     // attributes
@@ -37,7 +37,13 @@ public class Inventory {
     private int slotX = 621;
     private int slotY = 208;
 
+    // images for the inventory
     private BufferedImage[] images = ImageLoader.loadInventory();
+    private BufferedImage inventoryTitle = images[0];
+    private BufferedImage inventoryBox = images[1];
+    private BufferedImage inventoryCatalogueBox = images[2];
+    private BufferedImage categoryBox = images[3];
+    private BufferedImage selector = images[4];
 
     // constructor
     public Inventory() {
@@ -67,6 +73,19 @@ public class Inventory {
         addItem(new RawFood(1));
         addItem(new RawFood(2));
         addItem(new RawFood(2));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
+        addItem(new RawFood(0));
 
         getItemsToShow();
     }
@@ -226,74 +245,114 @@ public class Inventory {
     public void draw(Graphics2D g)
     {
         if (isOpen) {
-            g.drawImage(images[1], 605, 174, null); // inventory box
-            g.drawImage(images[2], 614, 201, null); // inventory catalogue box
-            g.drawImage(images[3], 615, 404, null); // interactables box
-            g.drawImage(images[3], 700, 404, null); // foods box
-
-            g.setColor(Color.WHITE);
-            if (isObject) {
-                g.drawImage(images[3], 614, 403, images[3].getWidth() + 4, images[3].getHeight() + 3, null); // if interactables
-                g.setFont(new Font("Inter", Font.BOLD, 9));
-                g.drawString("Interactables", 627, 419);
-                g.setFont(new Font("Inter", Font.BOLD, 8));
-                g.drawString("Foods", 729, 419);
-            }
-            else {
-                g.drawImage(images[3], 699, 403, images[3].getWidth() + 4, images[3].getHeight() + 3, null); // if food
-                g.setFont(new Font("Inter", Font.BOLD, 8));
-                g.drawString("Interactables", 628, 419);
-                g.setFont(new Font("Inter", Font.BOLD, 9));
-                g.drawString("Foods", 728, 419);
-            }
-
-            g.drawImage(images[5], slotX + (slotSize * slotCol) + (slotCol * 7), slotY + (slotSize * slotRow), null); // selector
+            drawFrame(g);
             
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Inter", Font.BOLD, 8));
-            String itemName = "";
-            try {
-                itemName = itemNames.get(slotSelected);
-                g.drawString(itemName, 669, 193);
-            }
-            catch (IndexOutOfBoundsException iobe) {}
+            drawTexts(g);
+
+            drawSelector(g);
+            
             drawItems(g);
         }
+        drawTitle(g);
+    }
+
+    private void drawFrame(Graphics2D g) {
+        g.drawImage(inventoryBox, 605, 174, null); // inventory box
+        g.drawImage(inventoryCatalogueBox, 614, 201, null); // inventory catalogue box
+        g.drawImage(categoryBox, 615, 404, null); // interactables box
+        g.drawImage(categoryBox, 700, 404, null); // foods box
+    }
+
+    private void drawTexts(Graphics2D g) {
+        int categoryHighlightedWidth = categoryBox.getWidth() + 4;
+        int categoryHighlightedHeight = categoryBox.getHeight() + 3;
+        Font font;
         
-        g.drawImage(images[0], 599, 146, null); // inventory title
+        g.setColor(Color.WHITE);
+        if (isObject) {
+            g.drawImage(categoryBox, 614, 403, categoryHighlightedWidth, categoryHighlightedHeight, null); // if interactables
+            
+            font = new Font("Inter", Font.BOLD, 9);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 616, 419, "Interactables", font);
+
+            font = new Font("Inter", Font.BOLD, 8);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 700, 418, "Foods", font);
+        }
+        else {
+            g.drawImage(categoryBox, 699, 403, categoryHighlightedWidth, categoryHighlightedHeight, null); // if food
+
+            font = new Font("Inter", Font.BOLD, 8);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 616, 418, "Interactables", font);
+
+            font = new Font("Inter", Font.BOLD, 9);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 702, 419, "Foods", font);
+        }
+
+        g.setColor(Color.WHITE);
+        font = new Font("Inter", Font.BOLD, 9);
+        g.setFont(font);
+
+        String itemName = "";
+        try {
+            itemName = itemNames.get(slotSelected);
+            UserInterface.drawCenteredText(g, inventoryBox, 605, 193, itemName, font);
+        }
+        catch (IndexOutOfBoundsException iobe) {}
+    }
+
+    private void drawSelector(Graphics2D g) {
+        g.drawImage(selector, slotX + (slotSize * slotCol) + (slotCol * 7), slotY + (slotSize * slotRow), null); // selector
     }
 
     private void drawItems(Graphics2D g)
     {
         try {
             int x = slotX + 2, y = slotY + 2; // Starting coordinates
-            int cols = 3;
-            int i = 0;
+            int cols = 3; int rows = 4;
+            int i = 0; int j = 0;
     
             for (Item item : itemsToShow.keySet()) {
+                if ((i % cols == cols - 1) && (j == rows - 1)) return;
+
                 BufferedImage itemIcon = item.getIcon(); // Get the item image
     
                 g.drawImage(itemIcon, x, y, null); // Draw the image
     
-                if (mapOfItems.get(item) > 1) {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(x + 31, y + 31, 14, 14);
-    
-                    g.setColor(Color.BLACK);
-                    Font font = new Font("Inter", Font.BOLD, 10);
+                g.setColor(Color.WHITE);
+                Font font = new Font("Inter", Font.BOLD, 11);
+
+                if (mapOfItems.get(item) > 1 && mapOfItems.get(item) < 10) {
                     g.setFont(font);
                     g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
+                }
+
+                if (mapOfItems.get(item) > 10) {
+                    g.setFont(font);
+                    g.drawString(Integer.toString(mapOfItems.get(item)), x + 30, y + 41);
                 }
     
                 x += slotSize + 7; // Move to the next column
                 if (i % cols == cols - 1) { // If we've filled up a row
                     x = slotX; // Reset to the first column
                     y += slotSize; // Move to the next row
+                    j++;
                 }
                 i++;
             }
         }
         catch (NullPointerException npe) {}
         catch (ConcurrentModificationException cme) {}
+    }
+
+    private void drawTitle(Graphics2D g) {
+        Font font = new Font("Inter", Font.BOLD, 14);
+        g.setColor(Color.WHITE);
+        g.setFont(font);
+        g.drawImage(inventoryTitle, 599, 146, null); // inventory title
+        UserInterface.drawCenteredText(g, inventoryTitle, 599, 167, "Inventory", font);
     }
 }

@@ -146,14 +146,13 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadInventory() {
-        BufferedImage[] images = new BufferedImage[6];
+        BufferedImage[] images = new BufferedImage[5];
 
         images[0] = readImage("menus/game_menu/inventory", "inventory_title", 1, 1, false);
         images[1] = readImage("menus/game_menu/inventory", "inventory_box", 1, 1, false);
         images[2] = readImage("menus/game_menu/inventory", "inventory_catalogue_box", 1, 1, false);
         images[3] = readImage("menus/game_menu/inventory", "category_box", 1, 1, false);
-        images[4] = readImage("menus/game_menu/inventory", "foods_box", 1, 1, false);
-        images[5] = readImage("menus/game_menu/inventory", "selector", 1, 1, false);
+        images[4] = readImage("menus/game_menu/inventory", "selector", 1, 1, false);
 
         return images;
     }

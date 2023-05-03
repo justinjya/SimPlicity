@@ -74,21 +74,21 @@ public class GameMenu {
         
         g.setColor(Color.WHITE);
         g.setFont(font);
-        UserInterface.centerText(g, doubleInfoBox, 7, 70, currentSim.getName(), font);
-        UserInterface.centerText(g, dayBox, 603, 69, "Day " + GameTime.day, font);
-        UserInterface.centerText(g, doubleInfoBox, 599, 108, currentHouse.getName(), font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 7, 70, currentSim.getName(), font);
+        UserInterface.drawCenteredText(g, dayBox, 603, 69, "Day " + GameTime.day, font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 599, 108, currentHouse.getName(), font);
         
         font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
-        UserInterface.centerText(g, moneyBox, 7, 125, "$ " + currentSim.getMoney(), font);
+        UserInterface.drawCenteredText(g, moneyBox, 7, 125, "$ " + currentSim.getMoney(), font);
         g.drawString("Health", 49, 170);
         g.drawString("Hunger", 49, 206);
         g.drawString("Mood", 49, 242);
         
         g.setColor(new Color(61, 30, 45)); 
         g.setFont(new Font("Inter", Font.BOLD, 10));
-        UserInterface.centerText(g, doubleInfoBox, 7, 93, currentSim.getStatus(), font);
-        UserInterface.centerText(g, doubleInfoBox, 603, 130, currentRoom.getName(), font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 7, 93, currentSim.getStatus(), font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 603, 130, currentRoom.getName(), font);
 
         g.setColor(Color.WHITE);
         font = new Font("Inter", Font.PLAIN, 8);

@@ -166,7 +166,7 @@ public class UserInterface {
         TabMenu.draw(g);
     }
 
-    public static void centerText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {
+    public static void drawCenteredText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {
         String text = str;
         Font font = f;
         FontMetrics metrics = g.getFontMetrics(font);
@@ -175,18 +175,6 @@ public class UserInterface {
 
         g.drawString(str, x + centerX, y);
     }
-
-    public static void addCenteredText(BufferedImage image, String text) {
-        Graphics2D g2d = image.createGraphics();
-        FontMetrics fm = g2d.getFontMetrics();
-    
-        int x = (image.getWidth() - fm.stringWidth(text)) / 2;
-        int y = (image.getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-    
-        g2d.drawString(text, x, y);
-        g2d.dispose();
-    }
-    
 
     public void drawPause(Graphics2D g){
         if(pause){
