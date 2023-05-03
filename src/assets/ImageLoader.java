@@ -133,6 +133,24 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadWorkingTab() {
+        BufferedImage[] images = new BufferedImage[2];
+
+        images[0] = readImage("menus/game_menu/working_tab", "working_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/working_tab", "icon_work", 1, 1, false);
+        
+        return images;
+    }
+
+    public static BufferedImage[] loadExercisingTab() {
+        BufferedImage[] images = new BufferedImage[2];
+
+        images[0] = readImage("menus/game_menu/exercising_tab", "exercising_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/exercising_tab", "icon_exercise", 1, 1, false);
+        
+        return images;
+    }
+
     public static BufferedImage[] loadTabMenu() {
         BufferedImage[] images = new BufferedImage[5];
 
@@ -157,8 +175,8 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage loadWood() {
-        BufferedImage image = readImage("tiles", "wood", 1, 1, true);
+    public static BufferedImage loadTile(String tile) {
+        BufferedImage image = readImage("tiles", tile, 1, 1, true);
         
         return image;
     }

@@ -11,7 +11,7 @@ import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.GamePanel;
 
-public class ActiveActionsUserInterface {
+public class ActiveActionsMenu {
     // Selection Box Attributes
     private static int selectedBox = 0; // Boxes starting from 0 to 3
     private static int selectedBoxX = 283;

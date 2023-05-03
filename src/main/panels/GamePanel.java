@@ -9,7 +9,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
-import src.main.menus.ActiveActionsUserInterface;
+import src.main.menus.ActiveActionsMenu;
 import src.world.Room;
 import src.world.World;
 
@@ -101,7 +101,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if (isCurrentState("Viewing active actions")) {
-                ActiveActionsUserInterface.update();
+                ActiveActionsMenu.update();
                 return;
             }
     
@@ -144,7 +144,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             if (isCurrentState("Viewing active actions")) {
-                ActiveActionsUserInterface.draw(g2);
+                ActiveActionsMenu.draw(g2);
                 return;
             }
     

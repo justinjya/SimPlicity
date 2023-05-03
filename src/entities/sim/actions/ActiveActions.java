@@ -8,12 +8,15 @@ import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 
 public class ActiveActions {
+    public static int workDuration = 120 * Consts.ONE_SECOND;
+    public static int exerciseDuration = 20 * Consts.ONE_SECOND;
+
     public static void work (Sim sim, int duration){ // TO DO LIST: durasi validasi di dalam work atau diluar (main program)
         Thread working = new Thread() {
             @Override
             public void run() {
                 int initialDurationWorked = sim.getDurationWorked();
-                Thread t = GameTime.startDecrementTimeRemaining(duration * Consts.ONE_SECOND);
+                Thread t = GameTime.startDecrementTimeRemaining(workDuration * Consts.ONE_SECOND);
                 
                 sim.setStatus("Working");
                 while (t.isAlive()) {
@@ -21,7 +24,7 @@ public class ActiveActions {
                         int durationWorked = sim.getDurationWorked();
                         Thread.sleep(Consts.THREAD_ONE_SECOND);
                         
-                        if (durationWorked <  initialDurationWorked + duration) {
+                        if (durationWorked <  initialDurationWorked + workDuration) {
                             sim.setDurationWorked(sim.getDurationWorked() + 1);
                         }
 

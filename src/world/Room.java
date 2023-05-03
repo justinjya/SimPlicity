@@ -42,7 +42,7 @@ public class Room {
         this.isEditingRoom = false;
 
         // Load the image of the room
-        this.image = ImageLoader.loadWood();
+        this.image = ImageLoader.loadTile("wood");
     }
 
     // GETTERS

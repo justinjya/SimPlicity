@@ -35,7 +35,7 @@ public class UserInterface {
 
     //ONLY FOR DEBUGGING
     private static boolean debug = false;
-    private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout inventory", 1, 1, false);
+    private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout working", 1, 1, false);
 
     // CONSTRUCTOR
     public UserInterface() {
