@@ -16,6 +16,7 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.main.menus.GameMenu;
 import src.main.menus.TabMenu;
+import src.main.panels.PauseMenu;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
@@ -28,7 +29,7 @@ public class UserInterface {
     // User Interface States
     private static boolean viewingWorld = false;
     private static boolean tabbed = false;
-    private boolean pause = false;
+    private static boolean pause = false;
 
     // User Interface Images
     private static BufferedImage[] images = ImageLoader.loadGameMenu();
@@ -87,7 +88,7 @@ public class UserInterface {
         return tabbed;
     }
 
-    public boolean isPause(){
+    public static boolean isPaused(){
         return pause;
     }
 
@@ -116,8 +117,10 @@ public class UserInterface {
         }
     }
 
-    public void pause() {
-        this.pause = !this.pause;
+    public static void pause() {
+        pause = !pause;
+
+        currentSim.changeIsBusyState();
     }
 
 
@@ -143,6 +146,10 @@ public class UserInterface {
         if (currentSimInventory.isOpen()) {
             currentSimInventory.update();
         }
+
+        if (pause) {
+            PauseMenu.update();
+        }
     }
     
     public static void draw(Graphics2D g) {
@@ -161,9 +168,13 @@ public class UserInterface {
 
         GameMenu.draw(g);
 
+        TabMenu.draw(g);
+
         currentSimInventory.draw(g);
 
-        TabMenu.draw(g);
+        if (pause) {
+            PauseMenu.draw(g);
+        }
     }
 
     public static void drawCenteredText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {
@@ -185,67 +196,11 @@ public class UserInterface {
         }
     }
 
-    private static void drawUI(Graphics2D g) {
-        // ONLY FOR DEBUGGING
-        if (debug) {
-            currentSim.drawCollisionBox(g);
-            currentSim.drawInteractionRange(g);
-            currentSim.getCurrentRoom().drawCollisionBox(g);
-        }
-
-        // ONLY FOR DEBUGGING
-        // g.setColor(new Color(0, 0, 0, 128)); // Transparent black color
-            
-        // Draw main ui boxes
-        g.setColor(Color.WHITE);
-        g.fillRect(11, 51, 182, 24); // currentSim name
-        g.fillRect(607, 51, 182, 24); // Day number
-
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(11, 81, 182, 16); // currentSim status
-        g.fillRect(11, 266, 182, 28); // Time remaining title
-        g.fillRect(607, 119, 182, 16); // Room name
-        
-        g.setColor(Color.GRAY);
-        g.fillRect(11, 103, 182, 30); // currentSim money
-        g.fillRect(11, 294, 182, 58); // Time remaining
-        g.fillRect(607, 88, 182, 31); // House name
-
-        g.fillRect(607, 147, 182, 26); // Inventory
-
-        drawText(g);
-        drawAttributes(g);
-        
-        // Draw currentSim's inventory
-        if (currentSimInventory.isOpen()) {
-            currentSimInventory.draw(g);
-        }  
-
-        // Draw tab boxes
-       TabMenu.draw(g);
-    }
-
     private static void drawText(Graphics2D g) {
         Font font;
         g.setColor(Color.BLACK);
 
         font = new Font("Inter", Font.BOLD, 13);
-
-        g.setFont(font);
-        g.drawString(currentSim.getName(), 83, 68);
-        
-        g.drawString("Day " + GameTime.day, 675, 68);
-        g.drawString("Time Remaining", 53, 285);
-
-        g.setColor(Color.WHITE);
-        g.drawString(currentSim.getCurrentHouse().getName(), 650, 108);
-        g.drawString("Inventory", 668, 165);
-
-        drawAttributes(g);
-
-        font = new Font("Inter", Font.PLAIN, 12);
-        g.setFont(font);
-
         try {
             if (!tabbed && currentSim.getInteractionHandler().isObjectInRange() && currentSim.isStatusCurrently("Idle")) {
                 Interactables object = currentSim.getInteractionHandler().getInteractableObject();
@@ -271,49 +226,6 @@ public class UserInterface {
             g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
             g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
             g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
-        }
-    }
-
-    private static void drawAttributes(Graphics2D g) {
-        Font font = new Font("Inter", Font.PLAIN, 10);
-
-        g.setColor(Color.BLACK);
-        g.setFont(font);
-        g.drawString("" + currentSim.getStatus(), 90, 93);
-        g.drawString("" + currentSim.getCurrentRoom().getName(), 670, 130);
-
-        font = new Font("Inter", Font.PLAIN, 12);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
-
-        g.drawString("Health", 48, 159);
-        g.drawString("Hunger", 48, 196);
-        g.drawString("Mood", 48, 233);
-        g.drawString("$ " + currentSim.getMoney(), 87, 122);
-        
-        g.drawString("Time", 48, 320);
-        
-        drawValue(g, currentSim.getHealth(), 174, 0);
-        drawValue(g, currentSim.getHunger(), 174, 1);
-        drawValue(g, currentSim.getMood(), 174, 2);
-        drawTime(g, GameTime.timeRemaining, 174, 0);
-    }
-
-    private static void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
-        if (value < 100) {
-            g.drawString("" + value, offsetX, 188 + (36 * offsetY));
-        }
-        else {
-            g.drawString("" + value, offsetX - 5, 188 + (36 * offsetY));
-        }
-    }
-
-    private static void drawTime(Graphics2D g, int value, int offsetX, int offsetY) {
-        if (value < 100) {
-            g.drawString("" + value, offsetX, 340 + (37 * offsetY));
-        }
-        else {
-            g.drawString("" + value, offsetX - 5, 340 + (37 * offsetY));
         }
     }
 

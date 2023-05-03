@@ -50,19 +50,19 @@ public class Shower extends Interactables {
         Thread showering = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Taking a shower");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() + 10); // increase sim's health
-                    sim.setMood(sim.getMood() + 15); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                changeOccupiedState();
+                sim.setStatus("Taking a shower");
+                // count the time
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
+                
+                while (t.isAlive()) {
+                    continue;
                 }
+
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setHealth(sim.getHealth() + 10); // increase sim's health
+                sim.setMood(sim.getMood() + 15); // increase sim's mood
             }
         };
         showering.start();

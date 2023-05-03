@@ -76,18 +76,18 @@ public class Toilet extends Interactables{
         Thread takingALeak = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
-                    sim.setStatus("Taking a Leak");
-                    Thread.sleep(getDuration() * Consts.THREAD_ONE_SECOND);
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHunger(sim.getHunger() - 20);
-                    sim.setMood(sim.getMood() + 10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                changeOccupiedState();
+                Thread t = GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
+                sim.setStatus("Taking a Leak");
+                
+                while (t.isAlive()) {
+                    continue;
                 }
+
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setHunger(sim.getHunger() - 20);
+                sim.setMood(sim.getMood() + 10);
             }
         };
         takingALeak.start();

@@ -31,7 +31,7 @@ public class Bed extends Interactables{
     };
 
     // Attributes
-    private int duration = Consts.ONE_MINUTE / 4; // CHANGE TO * 4 ONCE PROJECT IS DONE
+    private int duration = Consts.ONE_MINUTE / 10; // CHANGE TO * 4 ONCE PROJECT IS DONE
 
     // Image of the beds
     private BufferedImage[] icons;
@@ -124,26 +124,23 @@ public class Bed extends Interactables{
         Thread interacting = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    BufferedImage initialImage = images[getImageIndex()];
-                    images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
-                    
-                    sim.setStatus("Sleeping");
-                    GameTime.startDecrementTimeRemaining(duration);
+                changeOccupiedState();
+                BufferedImage initialImage = images[getImageIndex()];
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                sim.setStatus("Sleeping");
+                Thread t = GameTime.startDecrementTimeRemaining(duration);
 
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+                while (t.isAlive()) {
+                    continue;
+                }
 
-                    images[getImageIndex()] = initialImage;
-                    
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() + 30);
-                    sim.setMood(sim.getMood() + 20);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                images[getImageIndex()] = initialImage;
+                
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setHealth(sim.getHealth() + 30);
+                sim.setMood(sim.getMood() + 20);
             }
         };
         interacting.start();

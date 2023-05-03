@@ -27,8 +27,10 @@ public class GameTime implements Runnable {
                     e.printStackTrace();
                 }
 
-                decrementTimeRemaining();
-                decrements--;
+                if (!UserInterface.isPaused()) {
+                    decrementTimeRemaining();
+                    decrements--;
+                }
             }
         }
     }

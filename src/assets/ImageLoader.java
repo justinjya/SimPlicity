@@ -82,18 +82,6 @@ public class ImageLoader {
 
         return images;
     }
-
-    public static BufferedImage[] loadPause(){
-        BufferedImage[] images = new BufferedImage[4];
-
-        images[0] = readImage("menus/pause", "background", 1, 1, false);
-        images[1] = readImage("menus/pause", "help", 1, 1, false);
-        images[2] = readImage("menus/pause", "exit", 1, 1, false);
-        images[3] = readImage("menus/pause", "help_highlight", 1, 1, false);
-        images[4] = readImage("menus/pause", "exit_highlight", 1, 1, false);
-
-        return images;
-    }
     
     public static BufferedImage[] loadSim(Sim sim) {
         BufferedImage[] images = new BufferedImage[12];
@@ -171,6 +159,18 @@ public class ImageLoader {
         images[2] = readImage("menus/game_menu/inventory", "inventory_catalogue_box", 1, 1, false);
         images[3] = readImage("menus/game_menu/inventory", "category_box", 1, 1, false);
         images[4] = readImage("menus/game_menu/inventory", "selector", 1, 1, false);
+
+        return images;
+    }
+
+    public static BufferedImage[] loadPause(){
+        BufferedImage[] images = new BufferedImage[5];
+
+        images[0] = readImage("menus/pause_menu", "background", 1, 1, false);
+        images[1] = readImage("menus/pause_menu", "help", 1, 1, false);
+        images[2] = readImage("menus/pause_menu", "save_and_exit", 1, 1, false);
+        images[3] = readImage("menus/pause_menu", "help_highlight", 1, 1, false);
+        images[4] = readImage("menus/pause_menu", "save_and_exit_highlight", 1, 1, false);
 
         return images;
     }

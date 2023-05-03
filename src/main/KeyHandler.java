@@ -6,6 +6,7 @@ import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
+import src.main.panels.GamePanel;
 import src.world.Room;
 import src.world.World;
 
@@ -56,6 +57,10 @@ public class KeyHandler {
         World world = UserInterface.getWorld();
         Sim currentSim = UserInterface.getCurrentSim();
         Inventory currentSimInventory = currentSim.getInventory();
+
+        if (GamePanel.isCurrentState("Playing") && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+            UserInterface.pause();
+        }
         if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             UserInterface.tab();
         }

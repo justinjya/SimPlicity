@@ -45,18 +45,18 @@ public class Aquarium extends Interactables {
         Thread feedingfish = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Feeding the fish");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setMood(sim.getMood() + 5); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                changeOccupiedState();
+                sim.setStatus("Feeding the fish");
+                // count the time
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
+                
+                while (t.isAlive()) {
+                    continue;
                 }
+                
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setMood(sim.getMood() + 5); // increase sim's mood
             }
         };
         feedingfish.start();

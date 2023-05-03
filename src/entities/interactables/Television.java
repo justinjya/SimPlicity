@@ -48,21 +48,19 @@ public class Television extends Interactables{
         Thread watch = new Thread(){
             @Override
             public void run(){
-                try {
-                    sim.setStatus("watching");
-                    changeOccupiedState();
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
-                    
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setMood(sim.getMood() + 10);
-                    sim.setHealth(sim.getHealth() - 10);
-                    sim.setHunger(sim.getHunger() - 5);
+                sim.setStatus("Watching the TV");
+                changeOccupiedState();
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
+                
+                while (t.isAlive()) {
+                    continue;
                 }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-            }
+
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setMood(sim.getMood() + 10);
+                sim.setHealth(sim.getHealth() - 10);
+                sim.setHunger(sim.getHunger() - 5);
         }
     };
     watch.start();

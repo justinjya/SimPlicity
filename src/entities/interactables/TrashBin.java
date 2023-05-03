@@ -76,22 +76,20 @@ public class TrashBin extends Interactables {
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Kicking The Bin");
+                changeOccupiedState();
+                sim.setStatus("Kicking The Bin");
 
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
-
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() - 2); // decrease sim's health
-                    sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
-                    sim.setMood(sim.getMood() + 5); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                // count the time
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
+                while (t.isAlive()) {
+                    continue;
                 }
+
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setHealth(sim.getHealth() - 2); // decrease sim's health
+                sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
+                sim.setMood(sim.getMood() + 5); // increase sim's mood
             }
         };
         kickthebin.start();
@@ -101,20 +99,19 @@ public class TrashBin extends Interactables {
         Thread cleaningTheBin = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Cleaning The Bin");
+                changeOccupiedState();
+                sim.setStatus("Cleaning The Bin");
 
-                    GameTime.startDecrementTimeRemaining(cleaningDuration * Consts.ONE_SECOND);
-                    Thread.sleep(cleaningDuration * Consts.THREAD_ONE_SECOND);
-                    
-                    changeOccupiedState();
-                    sim.setMood(sim.getMood() + 10);
-                    sim.setHealth(sim.getHealth() + 10);
-                    sim.setHunger(sim.getHunger() - 10);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Thread t =GameTime.startDecrementTimeRemaining(cleaningDuration * Consts.ONE_SECOND);
+                
+                while (t.isAlive()) {
+                    continue;
                 }
+                
+                changeOccupiedState();
+                sim.setMood(sim.getMood() + 10);
+                sim.setHealth(sim.getHealth() + 10);
+                sim.setHunger(sim.getHunger() - 10);
             }
         };
         cleaningTheBin.start();

@@ -26,6 +26,7 @@ public class UpgradeActions {
                         }
                     }
                 }
+
                 newRoom.getListOfObjects().add(new Door(newDoor, thisRoom));
             }
         };

@@ -4,6 +4,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.UserInterface;
 import src.world.Room;
+
 import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 
@@ -21,6 +22,9 @@ public class ActiveActions {
                 sim.setStatus("Working");
                 while (t.isAlive()) {
                     try {
+                        // skip the whole block if game is currently paused
+                        if (UserInterface.isPaused()) continue;
+
                         int durationWorked = sim.getDurationWorked();
                         Thread.sleep(Consts.THREAD_ONE_SECOND);
                         
@@ -62,6 +66,9 @@ public class ActiveActions {
                 Thread t = GameTime.startDecrementTimeRemaining(duration*Consts.ONE_SECOND);
                 int timeExercised = 0;
                 while (t.isAlive()) {
+                    // skip the whole block if game is currently paused
+                    if (UserInterface.isPaused()) continue;
+
                     try {
                         Thread.sleep(Consts.THREAD_ONE_SECOND);
 
