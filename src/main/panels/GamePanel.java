@@ -9,7 +9,6 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
-import src.main.menus.ActiveActionsMenu;
 import src.world.Room;
 import src.world.World;
 
@@ -100,11 +99,6 @@ public class GamePanel extends JPanel implements Runnable {
                 return;
             }
 
-            if (isCurrentState("Viewing active actions")) {
-                ActiveActionsMenu.update();
-                return;
-            }
-    
             if (UserInterface.isViewingWorld()) {
                 world.update();
             }
@@ -114,17 +108,10 @@ public class GamePanel extends JPanel implements Runnable {
                 
                 currentSim.update();
                 currentRoom.update();
+                UserInterface.update();
             }
-            UserInterface.update();
         }
-        catch (NullPointerException e) {
-            try {
-                // to give time to load
-                System.out.println("Loading . . .");
-                Thread.sleep(Consts.THREAD_ONE_SECOND);
-            }
-            catch (InterruptedException ie) {}
-        }
+        catch (NullPointerException e) {System.out.println("Loading . . .");}
     }
     
     @Override
@@ -134,17 +121,11 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         try {
-            // UserInterface.drawMockup(g2);
             if (isCurrentState("Main menu")) {
                 return;
             }
     
             if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
-                return;
-            }
-            
-            if (isCurrentState("Viewing active actions")) {
-                ActiveActionsMenu.draw(g2);
                 return;
             }
     
@@ -157,18 +138,10 @@ public class GamePanel extends JPanel implements Runnable {
 
                 drawPlayAreaBorder(g2);
                 currentRoom.draw(g2);
+                UserInterface.draw(g2);
             }
-    
-            UserInterface.draw(g2);
         }
-        catch (NullPointerException e) {
-            try {
-                // to give time to load
-                System.out.println("Loading . . .");
-                Thread.sleep(Consts.THREAD_ONE_SECOND);
-            }
-            catch (InterruptedException ie) {}
-        }
+        catch (NullPointerException e) {System.out.println("Loading . . .");}
         
         // To free resources
         g2.dispose();
