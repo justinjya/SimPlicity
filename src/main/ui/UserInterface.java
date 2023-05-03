@@ -89,9 +89,8 @@ public class UserInterface {
     }
 
     public void pause() {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)){
-            this.pause = !this.pause;
-        }
+        this.pause = !this.pause;
+        currentSim.changeIsBusyState();
     }
 
     public void debug() {

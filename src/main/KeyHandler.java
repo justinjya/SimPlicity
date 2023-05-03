@@ -70,6 +70,9 @@ public class KeyHandler {
         if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
             NonActiveActions.showInventory(ui);
         }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            ui.pause();
+        }
 
         // testing adding and switching sim
         try {
