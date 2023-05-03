@@ -166,11 +166,14 @@ public class UserInterface {
         TabMenu.draw(g);
     }
 
-    public static void centerText(Graphics2D g, BufferedImage image, int x, int y, String text) {
-        int stringLength = text.length();
-        int centerX = (image.getWidth() - stringLength) / 2;
+    public static void centerText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {
+        String text = str;
+        Font font = f;
+        FontMetrics metrics = g.getFontMetrics(font);
+        int textWidth = metrics.stringWidth(text);
+        int centerX = (image.getWidth() - textWidth) / 2;
 
-        g.drawString(text, x + centerX, y);
+        g.drawString(str, x + centerX, y);
     }
 
     public static void addCenteredText(BufferedImage image, String text) {
