@@ -61,8 +61,8 @@ public class Inventory {
         addItem(new Bed(1)); // queen
         addItem(new Bed(2)); // king
         addItem(new RawFood(0)); // nasi
-        addItem(new RawFood(0)); // ayam
-        addItem(new RawFood(0)); // ayam
+        addItem(new RawFood(2)); // ayam
+        addItem(new RawFood(2)); // ayam
     }
 
     // getter

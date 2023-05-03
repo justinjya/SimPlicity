@@ -8,7 +8,7 @@ import src.items.Item;
 import src.main.ui.UserInterface;
 import src.entities.interactables.*;
 
-import src.entities.handlers.KeyHandler;
+import src.main.KeyHandler;
 
 public class Store {
     private ArrayList<String> listOfItem;

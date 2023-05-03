@@ -33,10 +33,10 @@ public class BakedFood extends Food implements Item{
     private String[] ingredient;
 
     // Images of the raw foods
-    private BufferedImage[] icons = new BufferedImage[5];
+    // private BufferedImage[] icons = new BufferedImage[5];
 
     // ONLY FOR DEBUGGING
-    // private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
+    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
 
     // Constructor
     public BakedFood (int imageIndex) {
@@ -59,6 +59,6 @@ public class BakedFood extends Food implements Item{
         return icons[getImageIndex()];
         
         // ONLY FOR DEBUGGING
-        // return placeholder;
+        return placeholder;
     }
 }
