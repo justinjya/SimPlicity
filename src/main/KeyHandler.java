@@ -29,8 +29,11 @@ public class KeyHandler {
     public static final int KEY_SPACE = KeyEvent.VK_SPACE;
     public static final int KEY_ENTER = KeyEvent.VK_ENTER;
     public static final int KEY_TAB = KeyEvent.VK_TAB;
+    public static final int KEY_MINUS = KeyEvent.VK_MINUS;
     public static final int KEY_EQUALS = KeyEvent.VK_EQUALS;
     public static final int KEY_ESCAPE = KeyEvent.VK_ESCAPE;
+    public static final int KEY_BACK_SLASH = KeyEvent.VK_BACK_SLASH;
+    public static final int KEY_SLASH = KeyEvent.VK_SLASH;
     private static boolean[] keys = new boolean[256];
     private static boolean[] prevKeys = new boolean[256];
     
@@ -64,7 +67,7 @@ public class KeyHandler {
         if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             UserInterface.tab();
         }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
             UserInterface.debug();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {

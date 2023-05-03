@@ -175,6 +175,23 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadActiveActionsMenu() {
+        BufferedImage[] images = new BufferedImage[11];
+
+        images[0] = readImage("menus/active_actions_menu", "icon_change_profession", 1, 1, false);
+        images[1] = readImage("menus/active_actions_menu", "icon_go_to_work", 1, 1, false);
+        images[2] = readImage("menus/active_actions_menu", "icon_go_exercise", 1, 1, false);
+        images[3] = readImage("menus/active_actions_menu", "icon_visit_another_sim", 1, 1, false);
+        images[4] = readImage("menus/active_actions_menu", "button", 1, 1, false);
+        images[5] = readImage("menus/active_actions_menu", "counter_box", 1, 1, false);
+        images[6] = readImage("menus/active_actions_menu", "decrease", 1, 1, false);
+        images[7] = readImage("menus/active_actions_menu", "increase", 1, 1, false);
+        images[8] = readImage("menus/active_actions_menu", "background", 1, 1, false);
+
+        return images;
+    }
+
+
     public static BufferedImage loadTile(String tile) {
         BufferedImage image = readImage("tiles", tile, 1, 1, true);
         
@@ -462,4 +479,14 @@ public class ImageLoader {
         }
         return simImage;
     }
+
+    public static BufferedImage[] loadStore() {
+        BufferedImage[] images = new BufferedImage[2];
+
+        images[0] = readImage("menus/store", "layout", 1, 1, false);
+        images[1] = readImage("menus/store", "layout-2", 1, 1, false);
+
+        return images;
+    }
+
 }

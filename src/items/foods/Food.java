@@ -9,11 +9,13 @@ import src.main.GameTime;
 public abstract class Food {
     private String name;
     private int hungerPoint;
+    private int price;
     private int imageIndex;
 
-    public Food(String name, int hungerPoint, int imageIndex) {
+    public Food(String name, int hungerPoint, int price, int imageIndex) {
         this.name = name;
         this.hungerPoint = hungerPoint;
+        this.price = price;
         this.imageIndex = imageIndex;
     }
 
@@ -23,6 +25,10 @@ public abstract class Food {
 
     public int getHungerPoint() {
         return hungerPoint;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     public int getImageIndex() {

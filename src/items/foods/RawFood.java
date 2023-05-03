@@ -49,9 +49,9 @@ public class RawFood extends Food implements Item{
         super (
             names[imageIndex],
             hungerPoints[imageIndex],
+            prices[imageIndex],
             imageIndex
         );
-        this.price = prices[imageIndex];
         
         // load the icons
         this.icons = ImageLoader.loadRawFood();

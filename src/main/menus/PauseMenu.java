@@ -1,4 +1,4 @@
-package src.main.panels;
+package src.main.menus;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

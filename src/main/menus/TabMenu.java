@@ -98,7 +98,6 @@ public class TabMenu {
         g.drawImage(images[3], 444, 488, null);
         g.drawImage(images[4], 524, 488, null);
         
-        
         // Draw selected box
         if (UserInterface.isTabbed()) {
             g.drawImage(images[selectedBox], 199 + (selectedBox * 80), 484, Consts.SCALED_TILE + 15, Consts.SCALED_TILE + 14, null);

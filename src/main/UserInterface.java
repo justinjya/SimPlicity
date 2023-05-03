@@ -14,9 +14,11 @@ import src.entities.interactables.Door;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
+import src.entities.sim.Store;
+import src.main.menus.ActiveActionsMenu;
 import src.main.menus.GameMenu;
+import src.main.menus.PauseMenu;
 import src.main.menus.TabMenu;
-import src.main.panels.PauseMenu;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
@@ -30,11 +32,13 @@ public class UserInterface {
     private static boolean viewingWorld = false;
     private static boolean tabbed = false;
     private static boolean pause = false;
+    private static boolean viewingActiveActions = false;
 
     // User Interface Images
     private static BufferedImage[] images = ImageLoader.loadGameMenu();
 
     //ONLY FOR DEBUGGING
+    private static Store store = new Store();
     private static boolean debug = false;
     private static BufferedImage mockup = ImageLoader.readImage("menus/game_menu", "layout working", 1, 1, false);
 
@@ -92,6 +96,10 @@ public class UserInterface {
         return pause;
     }
 
+    public static boolean isViewingActiveActions() {
+        return viewingActiveActions;
+    }
+
     // SETTERS
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
@@ -111,10 +119,13 @@ public class UserInterface {
     }
 
     public static void tab() {
-        if (!currentSimInventory.isOpen()) {
-            UserInterface.tabbed = !UserInterface.tabbed;
-            currentSim.changeIsBusyState();
-        }
+        if (pause) return;
+        if (viewingActiveActions) return;
+        if (viewingWorld) return;
+        if (currentSimInventory.isOpen()) return;
+
+        UserInterface.tabbed = !UserInterface.tabbed;
+        currentSim.changeIsBusyState();
     }
 
     public static void pause() {
@@ -137,18 +148,32 @@ public class UserInterface {
         debug = !debug;
     }
 
+    public static void viewActiveActions() {
+        viewingActiveActions = !viewingActiveActions;
+
+        currentSim.changeIsBusyState();
+    }
+
     // OTHERS
     public static void update() {
-        if (tabbed && !currentSimInventory.isOpen()) {
-            TabMenu.update();
-        }
+        // if (tabbed && !currentSimInventory.isOpen()) {
+        //     TabMenu.update();
+        // }
 
-        if (currentSimInventory.isOpen()) {
-            currentSimInventory.update();
-        }
+        // if (currentSimInventory.isOpen()) {
+        //     currentSimInventory.update();
+        // }
 
-        if (pause) {
-            PauseMenu.update();
+        // if (pause) {
+        //     PauseMenu.update();
+        // }
+
+        // if (viewingActiveActions) {
+        //     ActiveActionsMenu.update();
+        // }
+
+        if (store.getIsOpen()) {
+            store.update();
         }
     }
     
@@ -166,14 +191,22 @@ public class UserInterface {
         //     drawUI(g);
         // }
 
-        GameMenu.draw(g);
+        // GameMenu.draw(g);
 
-        TabMenu.draw(g);
+        // TabMenu.draw(g);
 
-        currentSimInventory.draw(g);
+        // currentSimInventory.draw(g);
 
-        if (pause) {
-            PauseMenu.draw(g);
+        // if (pause) {
+        //     PauseMenu.draw(g);
+        // }
+
+        // if (viewingActiveActions) {
+        //     ActiveActionsMenu.draw(g);
+        // }
+
+        if (store.getIsOpen()) {
+            store.draw(g);
         }
     }
 
