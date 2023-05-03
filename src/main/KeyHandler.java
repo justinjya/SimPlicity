@@ -57,17 +57,19 @@ public class KeyHandler {
     }
 
     public static void keyBinds() {
+        if (!GamePanel.isCurrentState("Playing")) return;
+        
         World world = UserInterface.getWorld();
         Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
         Inventory currentSimInventory = currentSim.getInventory();
 
-        if (GamePanel.isCurrentState("Playing") && !UserInterface.isViewingActiveActions() && 
-            !UserInterface.isViewingProfessions() && !currentRoom.isEditingRoom() &&
-            KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+        if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
+            !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
             UserInterface.pause();
         }
-        if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+        if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
+            KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             UserInterface.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {

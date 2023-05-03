@@ -130,6 +130,9 @@ public class Inventory {
     }
 
     public void interact() {
+        Sim currentSim = UserInterface.getCurrentSim();
+
+        if (!currentSim.isStatusCurrently("Idle")) return;
         if (slotSelected > itemNames.size()) return;
 
         try {
@@ -330,7 +333,7 @@ public class Inventory {
                     g.drawString(Integer.toString(mapOfItems.get(item)), x + 35, y + 41);
                 }
 
-                if (mapOfItems.get(item) > 10) {
+                if (mapOfItems.get(item) >= 10) {
                     g.setFont(font);
                     g.drawString(Integer.toString(mapOfItems.get(item)), x + 30, y + 41);
                 }

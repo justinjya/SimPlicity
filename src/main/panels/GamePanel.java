@@ -41,7 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
         addKeyListener(keyAdapter);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-        requestFocusInWindow();
 
         new Thread(this).start();
     }
@@ -111,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
                 UserInterface.update();
             }
         }
-        catch (NullPointerException e) {System.out.println("Loading . . .");}
+        catch (NullPointerException e) {}
     }
     
     @Override
@@ -141,7 +140,7 @@ public class GamePanel extends JPanel implements Runnable {
                 UserInterface.draw(g2);
             }
         }
-        catch (NullPointerException e) {System.out.println("Loading . . .");}
+        catch (NullPointerException e) {}
         
         // To free resources
         g2.dispose();

@@ -66,6 +66,15 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadAboutMenu() {
+        BufferedImage[] images = new BufferedImage[2];
+
+        images[0] = readImage("menus/about", "page_1", 1, 1, false);
+        images[1] = readImage("menus/about", "page_2", 1, 1, false);
+
+        return images;
+    }
+
     public static BufferedImage[] loadCreateSimMenu() {
         BufferedImage[] images = new BufferedImage[10];
 
@@ -167,9 +176,9 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[5];
 
         images[0] = readImage("menus/pause_menu", "background", 1, 1, false);
-        images[1] = readImage("menus/pause_menu", "help", 1, 1, false);
+        images[1] = readImage("menus/pause_menu", "about", 1, 1, false);
         images[2] = readImage("menus/pause_menu", "save_and_exit", 1, 1, false);
-        images[3] = readImage("menus/pause_menu", "help_highlight", 1, 1, false);
+        images[3] = readImage("menus/pause_menu", "about_highlight", 1, 1, false);
         images[4] = readImage("menus/pause_menu", "save_and_exit_highlight", 1, 1, false);
 
         return images;

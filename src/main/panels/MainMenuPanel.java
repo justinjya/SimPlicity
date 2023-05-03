@@ -44,9 +44,8 @@ public class MainMenuPanel extends JPanel {
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), GamePanel.getInstance());
                     }
                     if (selectedBox == 2) {
-
-                        // ABOUT GAME HERE
-
+                        GamePanel.gameState = "Main Menu: About";
+                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), AboutPanel.getInstance());
                     }
                     if (selectedBox == 3) {
                         System.exit(0);

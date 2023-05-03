@@ -60,11 +60,16 @@ public class UserInterface {
     }
 
     public static void init(World world) {
+        viewingWorld = true;
+        tabbed = false;
+        pause = false;
+        viewingActiveActions = false;
+        viewingProfessions = false;
+
         UserInterface.world = world;
         UserInterface.currentSim = world.getListOfSim().get(0);
         UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
         UserInterface.world.changeIsAddingState();
-        viewingWorld = true;
     }
 
     // GETTERS

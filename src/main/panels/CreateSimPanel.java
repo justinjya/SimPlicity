@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import src.assets.ImageLoader;
 import src.main.GameLoader;
 import src.main.KeyHandler;
-import src.main.UserInterface;
 
 public class CreateSimPanel extends JPanel {
     public static CreateSimPanel csp = new CreateSimPanel();
