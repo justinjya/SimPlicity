@@ -148,7 +148,7 @@ public class Cursor {
             roomToVisit = houseToVisit.getRoomWhenEntered();
 
             if (currentHouse == houseToVisit) {
-                UserInterface.changeIsViewingWorldState();
+                UserInterface.viewWorld();
                 System.out.println("You cannot enter a house you're already in!");
                 return;
             }
@@ -174,7 +174,7 @@ public class Cursor {
 
                 currentSim.setCurrentHouse(houseToVisit);
                 currentSim.setCurrentRoom(roomToVisit);
-                UserInterface.changeIsViewingWorldState();
+                UserInterface.viewWorld();
             }
 
             if (GamePanel.isCurrentState("Placing a new house") || 

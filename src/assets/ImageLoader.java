@@ -116,7 +116,7 @@ public class ImageLoader {
         images[4] = readImage("menus/game_menu/sim_info", "icon_health", 1, 1, false);
         images[5] = readImage("menus/game_menu/sim_info", "icon_hunger", 1, 1, false);
         images[6] = readImage("menus/game_menu/sim_info", "icon_mood", 1, 1, false);
-        images[7] = readImage("menus/game_menu", "help_box", 1, 1, false);
+        images[7] = readImage("menus/game_menu/game_info", "help_box", 1, 1, false);
 
         return images;
     }
@@ -142,7 +142,7 @@ public class ImageLoader {
     public static BufferedImage[] loadTabMenu() {
         BufferedImage[] images = new BufferedImage[5];
 
-        images[0] = readImage("menus/game_menu/tab_menu", "icon_add_room", 1, 1, false);
+        images[0] = readImage("menus/game_menu/tab_menu", "icon_edit_room", 1, 1, false);
         images[1] = readImage("menus/game_menu/tab_menu", "icon_upgrade_house", 1, 1, false);
         images[2] = readImage("menus/game_menu/tab_menu", "icon_store", 1, 1, false);
         images[3] = readImage("menus/game_menu/tab_menu", "icon_view_sims", 1, 1, false);
@@ -186,7 +186,31 @@ public class ImageLoader {
         images[5] = readImage("menus/active_actions_menu", "counter_box", 1, 1, false);
         images[6] = readImage("menus/active_actions_menu", "decrease", 1, 1, false);
         images[7] = readImage("menus/active_actions_menu", "increase", 1, 1, false);
-        images[8] = readImage("menus/active_actions_menu", "background", 1, 1, false);
+        images[8] = readImage("menus/active_actions_menu", "decrease_highlight", 1, 1, false);
+        images[9] = readImage("menus/active_actions_menu", "increase_highlight", 1, 1, false);
+        images[10] = readImage("menus/active_actions_menu", "background", 1, 1, false);
+
+        return images;
+    }
+
+    public static BufferedImage[] loadChangeProfessionMenu() {
+        BufferedImage[] images = new BufferedImage[15];
+
+        images[0] = readImage("menus/change_profession_menu", "title_box", 1, 1, false);
+        images[1] = readImage("menus/change_profession_menu", "main_box", 1, 1, false);
+        images[2] = readImage("menus/change_profession_menu", "barista", 1, 1, false);
+        images[3] = readImage("menus/change_profession_menu", "chef", 1, 1, false);
+        images[4] = readImage("menus/change_profession_menu", "clown", 1, 1, false);
+        images[5] = readImage("menus/change_profession_menu", "dentist", 1, 1, false);
+        images[6] = readImage("menus/change_profession_menu", "doctor", 1, 1, false);
+        images[7] = readImage("menus/change_profession_menu", "model", 1, 1, false);
+        images[8] = readImage("menus/change_profession_menu", "police", 1, 1, false);
+        images[9] = readImage("menus/change_profession_menu", "programmer", 1, 1, false);
+        images[10] = readImage("menus/change_profession_menu", "security", 1, 1, false);
+        images[11] = readImage("menus/change_profession_menu", "highlight", 1, 1, false);
+        images[12] = readImage("menus/change_profession_menu", "not_able_to_change", 1, 1, false);
+        images[13] = readImage("menus/change_profession_menu", "sim_name_box", 1, 1, false);
+        images[14] = readImage("menus/change_profession_menu", "sim_profession_box", 1, 1, false);
 
         return images;
     }

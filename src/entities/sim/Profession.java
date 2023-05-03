@@ -2,30 +2,30 @@ package src.entities.sim;
 
 public class Profession 
 {
-    private static String[] names =
+    public static String[] names =
     {
-        "Clown",
+        "Barista",
         "Chef",
+        "Clown",
+        "Dentist",
+        "Doctor",
+        "Model",
         "Police",
         "Programmer",
-        "Doctor",
-        "Barista",
-        "Model",
-        "Dentist",
         "Security"
     };
 
-    private static int[] salaries =
+    public static int[] salaries =
     {
-        15,
-        30,
-        35,
-        45,
-        50,
-        20,
-        45,
-        40,
-        15
+        20, // barista
+        30, // chef
+        15, // clown
+        40, // dentist
+        50, // doctor
+        45, // model
+        35, // police
+        45, // programmer
+        15 // security
     };
 
     private String name;

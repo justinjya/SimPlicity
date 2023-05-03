@@ -107,6 +107,7 @@ public class World {
 
         Room newRoom = new Room(roomName);
         newRoom.getListOfObjects().add(new Door(null));
+        newRoom.getListOfObjects().get(0).setInteraction("view active actions");
 
         House newHouse = new House(x, y, this, newSim, newRoom);
         newRoom.setHouseInsideOf(newHouse);
@@ -142,7 +143,7 @@ public class World {
                 PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
                 changeIsAddingState();
             }
-            UserInterface.changeIsViewingWorldState();
+            UserInterface.viewWorld();
         }
     }
 

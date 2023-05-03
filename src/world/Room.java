@@ -250,8 +250,8 @@ public class Room {
                 Sim sim = houseInsideOf.getOwner();
                 
                 if (!(moveableObject instanceof Door)) {
-                    moveableObject.setX(0);
-                    moveableObject.setY(3);
+                    moveableObject.setPlayAreaX(0);
+                    moveableObject.setPlayAreaY(3);
                     sim.getInventory().addItem(moveableObject);
                 }
                 moveableObject = null;

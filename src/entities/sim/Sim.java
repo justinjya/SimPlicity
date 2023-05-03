@@ -103,18 +103,6 @@ public class Sim extends Entity{
         return inventory;
     }
 
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public House getCurrentHouse() {
-        return currentHouse;
-    }
-
-    public boolean isStatusCurrently(String status) {
-        return this.status.equals(status);
-    }
-
     public boolean isBusy() {
         return isBusy;
     }
@@ -131,16 +119,28 @@ public class Sim extends Entity{
         return timeNotTakenLeak;
     }
 
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public House getCurrentHouse() {
+        return currentHouse;
+    }
+
+    public boolean isStatusCurrently(String status) {
+        return this.status.equals(status);
+    }
+
+    public Color getShirtColor() {
+        return shirtColor;
+    }
+
     public InteractionHandler getInteractionHandler() {
         return interactionHandler;
     }
 
     public CollisionHandler getCollisionHandler() {
         return collisionHandler;
-    }
-
-    public Color getShirtColor() {
-        return shirtColor;
     }
 
     // SETTERS
@@ -171,19 +171,8 @@ public class Sim extends Entity{
         setStatus("Idle");
     }
 
-    public void setCurrentHouse(House house) {
-        this.currentHouse = house;
-    }
-
-    public void setCurrentRoom(Room room) {
-        if (currentRoom != null) {
-            this.currentRoom.removeSim(this);
-        }
-        
-        this.currentRoom = room;
-        this.currentRoom.addSim(this);
-        collisionHandler = new CollisionHandler(this, room);
-        interactionHandler = new InteractionHandler(this, room);
+    public void setProfession(Profession profession) {
+        this.profession = profession;
     }
 
     public void changeIsBusyState() {
@@ -200,6 +189,21 @@ public class Sim extends Entity{
 
     public void setTimeNotTakenLeak(int timeNotTakenLeak) {
         this.timeNotTakenLeak = timeNotTakenLeak;
+    }
+
+    public void setCurrentHouse(House house) {
+        this.currentHouse = house;
+    }
+
+    public void setCurrentRoom(Room room) {
+        if (currentRoom != null) {
+            this.currentRoom.removeSim(this);
+        }
+        
+        this.currentRoom = room;
+        this.currentRoom.addSim(this);
+        collisionHandler = new CollisionHandler(this, room);
+        interactionHandler = new InteractionHandler(this, room);
     }
 
     // OTHERS

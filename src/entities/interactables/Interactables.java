@@ -65,6 +65,10 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     // SETTERS
+    public void setInteraction(String interaction) {
+        this.interaction = interaction;
+    }
+
     public void setPrice(int price) {
         this.price = price;
     }

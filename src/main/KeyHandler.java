@@ -59,9 +59,12 @@ public class KeyHandler {
     public static void keyBinds() {
         World world = UserInterface.getWorld();
         Sim currentSim = UserInterface.getCurrentSim();
+        Room currentRoom = currentSim.getCurrentRoom();
         Inventory currentSimInventory = currentSim.getInventory();
 
-        if (GamePanel.isCurrentState("Playing") && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+        if (GamePanel.isCurrentState("Playing") && !UserInterface.isViewingActiveActions() && 
+            !UserInterface.isViewingProfessions() && !currentRoom.isEditingRoom() &&
+            KeyHandler.isKeyPressed(KEY_ESCAPE)) {
             UserInterface.pause();
         }
         if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
@@ -79,7 +82,6 @@ public class KeyHandler {
 
         // testing adding and switching sim
         try {
-            Room currentRoom = currentSim.getCurrentRoom();
             boolean simControllable = !UserInterface.isViewingWorld() && !UserInterface.isTabbed() && !currentRoom.isEditingRoom();
             if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
                 if (UserInterface.getCurrentSim() == world.getSim(1)) {

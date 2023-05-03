@@ -101,31 +101,35 @@ public class TabMenu {
         // Draw selected box
         if (UserInterface.isTabbed()) {
             g.drawImage(images[selectedBox], 199 + (selectedBox * 80), 484, Consts.SCALED_TILE + 15, Consts.SCALED_TILE + 14, null);
+            drawSelectedBoxText(g);
         }
     }
 
     private static void drawSelectedBoxText(Graphics2D g) {
         Font font = new Font("Inter", Font.PLAIN, 12);
 
+        BufferedImage windowArea = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+
         g.setFont(font);
+        g.setColor(Color.BLACK);
         switch (selectedBox) {
             case 0:
-                g.drawString("Edit Room", Consts.CENTER_X - 18, Consts.CENTER_Y + 172);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "edit you room", font);
                 break;
             case 1:
-                g.drawString("Upgrade House", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "upgrade your house", font);
                 break;
             case 2:
-                g.drawString("Buy Items", Consts.CENTER_X - 22, Consts.CENTER_Y + 172);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "look at the store", font);
                 break;
             case 3:
-                g.drawString("Add Sims", Consts.CENTER_X - 20, Consts.CENTER_Y + 172);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "view list of sims", font);
                 break;
             case 4:
-                g.drawString("Visit Another Sim", Consts.CENTER_X - 38, Consts.CENTER_Y + 172);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "visit another sim", font);
                 break;
             default:
-                g.drawString("Lorem Ipsum", Consts.CENTER_X - 28, Consts.CENTER_Y + 172);
+                g.drawString("lorem ipsum", Consts.CENTER_X - 28, 468);
                 break;
         }
     }

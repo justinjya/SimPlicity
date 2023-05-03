@@ -8,13 +8,15 @@ import java.awt.image.BufferedImage;
 import src.main.GameTime;
 import src.assets.ImageLoader;
 import src.main.UserInterface;
+import src.entities.handlers.InteractionHandler;
+import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
 import src.world.House;
 import src.world.Room;
 
 public class GameMenu {
+    // Load the images for the menu
     private static BufferedImage[] images = ImageLoader.loadGameMenu();
-
     private static BufferedImage doubleInfoBox = images[0];
     private static BufferedImage moneyBox = images[1];
     private static BufferedImage simInfoBox = images[2];
@@ -24,8 +26,14 @@ public class GameMenu {
     private static BufferedImage moodIcon = images[6];
     private static BufferedImage helpBox = images[7];
 
+    // Attributes to make showing it easier
+    public static int workDuration = 0;
+    public static int exerciseDration = 0;
+
     public static void draw(Graphics2D g) {
         Sim currentSim = UserInterface.getCurrentSim();
+        InteractionHandler simInteract = currentSim.getInteractionHandler();
+        boolean objectInRange = simInteract.isObjectInRange();
 
         // boxes
         drawBoxes(g);
@@ -41,7 +49,13 @@ public class GameMenu {
         pressQuestionMarkForHelp(g);
 
         // press esc to pause the game
-        pressEscapeToPause(g);
+        if (!UserInterface.isTabbed() && !objectInRange) {
+            pressEscapeToPause(g);
+        }
+
+        if (!UserInterface.isTabbed() && objectInRange) {
+            drawObjectToInteract(g);
+        }
 
         // working and exercising tab
         if (currentSim.isStatusCurrently("Working")) {
@@ -85,7 +99,7 @@ public class GameMenu {
         
         g.setColor(Color.WHITE);
         g.setFont(font);
-        UserInterface.drawCenteredText(g, doubleInfoBox, 7, 70, currentSim.getName(), font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 6, 70, currentSim.getName(), font);
         UserInterface.drawCenteredText(g, dayBox, 603, 69, "Day " + GameTime.day, font);
         UserInterface.drawCenteredText(g, doubleInfoBox, 599, 108, currentHouse.getName(), font);
         
@@ -107,6 +121,20 @@ public class GameMenu {
         drawValue(g, currentSim.getHealth(), 175, 0);
         drawValue(g, currentSim.getHunger(), 175, 1);
         drawValue(g, currentSim.getMood(), 175, 2);
+    }
+
+    private static void drawObjectToInteract(Graphics2D g) {
+        BufferedImage windowArea = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Sim currentSim = UserInterface.getCurrentSim();
+        InteractionHandler simInteract = currentSim.getInteractionHandler();
+
+        if (simInteract.isObjectInRange()) {
+            Interactables object = simInteract.getInteractableObject();
+            Font font = new Font("Inter", Font.PLAIN, 12);
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            UserInterface.drawCenteredText(g, windowArea, 0, 468, "press f to " + object.getInteraction(), font);
+        }
     }
 
     private static void drawBarValue(Graphics2D g, int x, int y, int barWidth, int value, int maxValue) {
@@ -170,9 +198,10 @@ public class GameMenu {
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
+        int timeRemaining = GameTime.getDecrements();
         g.drawString("Working", 51, 335);
-        drawBarValue(g, 51, 339, 135, 100, 300);
-        drawTimeRemaining(g, 100, 175, 0); // TO - DO!!! : ACTUALLY ADD DURATION VALUE
+        drawBarValue(g, 51, 339, 135, timeRemaining, workDuration);
+        drawTimeRemaining(g, timeRemaining, 175, 0);
     }
 
     private static void drawExercisingTab(Graphics2D g) {
@@ -187,8 +216,9 @@ public class GameMenu {
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
+        int timeRemaining = GameTime.getDecrements();
         g.drawString("Exercising", 51, 335);
-        drawBarValue(g, 51, 339, 135, 100, 300);
-        drawTimeRemaining(g, 100, 175, 0); // TO - DO!!! : ACTUALLY ADD DURATION VALUE
+        drawBarValue(g, 51, 339, 135, timeRemaining, exerciseDration);
+        drawTimeRemaining(g, timeRemaining, 175, 0);
     }
 }

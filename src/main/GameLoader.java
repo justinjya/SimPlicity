@@ -21,6 +21,7 @@ public class GameLoader {
         
         // Create the new sim
         Sim newSim = new Sim("Justin", Color.RED);
+        newSim.setDurationWorked(720);
         
         // Add the new sim to the world
         world.addSim(newSim);
@@ -59,7 +60,7 @@ public class GameLoader {
         // Add the sim to the world and change the state of game into adding a house
         world.addSim(newSim);
         world.changeIsAddingState();
-        UserInterface.changeIsViewingWorldState();
+        UserInterface.viewWorld();
     }
 
     public static void loadGame() {

@@ -35,7 +35,7 @@ public class ActiveActions {
                         if (durationWorked == 0) continue;
                         
                         // decrease sim mood and hunger every 30 seconds
-                        if (durationWorked % (Consts.ONE_SECOND * 3) == 0) { // TO - DO !!! : Change to specs
+                        if (durationWorked % (Consts.ONE_SECOND * 30) == 0) {
                             int simHunger = sim.getHunger();
                             int simMood = sim.getMood();
                             sim.setHunger(simHunger - 10);
@@ -43,7 +43,7 @@ public class ActiveActions {
                         }
 
                         // increase sim salary every 4 minutes of work done
-                        if (durationWorked == (Consts.ONE_SECOND * 5)) { // TO - DO !!! : Change to spec
+                        if (durationWorked == (Consts.ONE_MINUTE * 4)) {
                             int simMoney = sim.getMoney();
                             int salary = sim.getProfession().getSalary();
                             sim.setMoney(simMoney + salary);
@@ -145,6 +145,6 @@ public class ActiveActions {
     }
 
     public static void visitAnotherSim() {
-        UserInterface.changeIsViewingWorldState();
+        UserInterface.viewWorld();
     }
 }

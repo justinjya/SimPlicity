@@ -11,7 +11,6 @@ import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
 import src.main.KeyHandler;
 import src.main.UserInterface;
-import src.main.panels.GamePanel;
 
 public class ActiveActionsMenu {
     // Selection Box Attributes
@@ -29,20 +28,30 @@ public class ActiveActionsMenu {
     private static BufferedImage counterBox = images[5];
     private static BufferedImage decrease = images[6];
     private static BufferedImage increase = images[7];
-    private static BufferedImage background = images[8];
+    private static BufferedImage decreaseHighlight = images[8];
+    private static BufferedImage increaseHighlight = images[9];
+    private static BufferedImage background = images[10];
     
-    // TO - DO !!! : Integrate with Store
+    // Methods
     private static void boxEntered() {
         Sim sim = UserInterface.getCurrentSim();
         switch (selectedBox) {
             case 0:
-                ActiveActions.work(sim, workDuration);
+                UserInterface.viewProfessions();
                 break;
             case 1:
-                ActiveActions.exercise(sim, exerciseDuration);
+                ActiveActions.work(sim, workDuration);
+                GameMenu.workDuration = workDuration;
+                UserInterface.viewActiveActions();
                 break;
             case 2:
+                ActiveActions.exercise(sim, exerciseDuration);
+                GameMenu.exerciseDration = exerciseDuration;
+                UserInterface.viewActiveActions();
+                break;
+            case 3:
                 ActiveActions.visitAnotherSim();
+                UserInterface.viewActiveActions();
                 break;
             default:
                 break;
@@ -83,6 +92,9 @@ public class ActiveActionsMenu {
     }
     
     public static void update() {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            UserInterface.viewActiveActions();
+        }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             boxEntered();
         }
@@ -143,7 +155,14 @@ public class ActiveActionsMenu {
         if (selectedBox == 1 || selectedBox == 2) {
             g.drawImage(counterBox, 366, 208, null);
             g.drawImage(decrease, 323, 206, null);
-            g.drawImage(increase, 437, 206, null);            
+            g.drawImage(increase, 437, 206, null);      
+
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_MINUS)) {
+                g.drawImage(decreaseHighlight, 322, 205, null);
+            }
+            if (KeyHandler.isKeyDown(KeyHandler.KEY_EQUALS)) {
+                g.drawImage(increaseHighlight, 436, 205, null);
+            }
         }
     }
 
@@ -152,11 +171,6 @@ public class ActiveActionsMenu {
 
         g.setColor(Color.BLACK);
         g.setFont(font);
-        if (selectedBox == 1 || selectedBox == 2) {
-            g.drawImage(counterBox, 366, 208, null);
-            g.drawImage(decrease, 323, 206, null);
-            g.drawImage(increase, 437, 206, null);
-        }
 
         if (selectedBox == 0) {
             g.setColor(Color.WHITE);
@@ -180,9 +194,5 @@ public class ActiveActionsMenu {
             g.setColor(Color.WHITE);
             UserInterface.drawCenteredText(g, button, 242, 378, "visit another sim", font);
         }
-    }
-
-    public static void showActiveActions() {
-        GamePanel.gameState = "Viewing active actions";
     }
 }

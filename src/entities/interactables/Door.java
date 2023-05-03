@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.menus.ActiveActionsMenu;
+import src.main.UserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {
@@ -130,7 +130,7 @@ public class Door extends Interactables {
     @Override
     public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
-            ActiveActionsMenu.showActiveActions();
+            UserInterface.viewActiveActions();
             return;
         }
 
