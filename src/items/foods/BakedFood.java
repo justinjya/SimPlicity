@@ -31,7 +31,6 @@ public class BakedFood extends Food implements Item{
 
     // Attributes
     private String[] ingredient;
-    private int imageIndex;
 
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[5];
@@ -47,7 +46,6 @@ public class BakedFood extends Food implements Item{
             imageIndex
         );
         this.ingredient = ingredients[imageIndex];
-        this.imageIndex = imageIndex;
         // load the images here
         this.icons = ImageLoader.loadBakedFood();
     }
@@ -58,7 +56,7 @@ public class BakedFood extends Food implements Item{
     }
 
     public BufferedImage getIcon() {
-        return icons[imageIndex];
+        return icons[getImageIndex()];
         
         // ONLY FOR DEBUGGING
         // return placeholder;

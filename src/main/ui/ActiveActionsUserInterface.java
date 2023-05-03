@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import src.entities.handlers.KeyHandler;
 import src.entities.sim.Sim;
 import src.entities.sim.actions.ActiveActions;
 import src.main.Consts;
-import src.main.GamePanel;
+import src.main.KeyHandler;
+import src.main.panels.GamePanel;
 
 public class ActiveActionsUserInterface {
     // Selection Box Attributes
@@ -47,7 +47,8 @@ public class ActiveActionsUserInterface {
     }
 
     // TO - DO !!! : Integrate with Store
-    private static void boxEntered(Sim sim, UserInterface ui) {
+    private static void boxEntered(UserInterface ui) {
+        Sim sim = ui.getCurrentSim();
         switch (selectedBox) {
             case 0:
                 ActiveActions.work(sim, 9);
@@ -64,7 +65,7 @@ public class ActiveActionsUserInterface {
         GamePanel.gameState = "Playing";
     }
     
-    public static void update(Sim sim, UserInterface ui) {
+    public static void update(UserInterface ui) {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             moveSelectedBox("left");
         }
@@ -72,11 +73,11 @@ public class ActiveActionsUserInterface {
             moveSelectedBox("right");
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            boxEntered(sim, ui);
+            boxEntered(ui);
         }
     }
 
-    public static void draw(GamePanel gp, Graphics2D g) {
+    public static void draw(Graphics2D g) {
         g.fillRect(283, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);
         g.fillRect(364, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);
         g.fillRect(445, 283, Consts.SCALED_TILE, Consts.SCALED_TILE);

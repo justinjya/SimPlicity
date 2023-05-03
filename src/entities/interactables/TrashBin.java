@@ -7,10 +7,13 @@ import src.main.Consts;
 import src.main.GameTime;
 
 public class TrashBin extends Interactables {
-    private int duration = Consts.ONE_SECOND * 2;
+    // Attributes
+    private int price = 0; // TO BE DETERMINED
+    private int duration = 10;
 
-    // Images of the trashbin
-    private BufferedImage image;
+    // Images of the trash bin
+    private BufferedImage[] images;
+    private BufferedImage[] icons;
 
     // CONSTRUCTOR
     public TrashBin(int x, int y) {
@@ -23,19 +26,22 @@ public class TrashBin extends Interactables {
             1,
             1
         );
+        
+        setPrice(price);
+        setDuration(duration);
 
-        // Load the image of the shower
-        image = ImageLoader.readImage("tiles", "grass", 1, 1, true);
+        // Load the images and icons of the shower
+        // CODE HERE
     }
 
     @Override
     public BufferedImage getIcon() {
-        return image;
+        return icons[getImageIndex()];
     }
 
     @Override
     public BufferedImage getImage() {
-        return image;
+        return images[getImageIndex()];
     }
 
     // TO - DO!!! : Change interact depending on image index
@@ -48,8 +54,8 @@ public class TrashBin extends Interactables {
                     changeOccupiedState();
                     sim.setStatus("Kicking The Bin");
                     // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
+                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
+                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
                     changeOccupiedState();
                     sim.resetStatus();
                     sim.setHealth(sim.getHealth() - 2); // decrease sim's health

@@ -1,7 +1,8 @@
 package src.entities.sim.actions;
 
-import src.entities.sim.Sim;
-import src.main.ui.UserInterface;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
 import src.world.World;
 
 public class AddSimAction {
@@ -9,11 +10,9 @@ public class AddSimAction {
         
     }
 
-    public static void addSim(UserInterface ui, World world) {
-        Sim newSim = new Sim("nitsuJ", 3, 3);
-
-        ui.changeIsViewingWorldState();
-        world.addSim(newSim);
-        world.changeIsAddingState();
+    public static void addSim() {
+        GamePanel.gameState = "Creating a new sim";
+        
+        PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
     }
 }
