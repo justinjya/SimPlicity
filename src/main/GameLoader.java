@@ -21,14 +21,17 @@ public class GameLoader {
         
         // Create the new sim
         Sim newSim = new Sim("Justin", Color.BLUE);
+        Sim newSim2 = new Sim("nitsuj", Color.MAGENTA);
+        Sim newSim3 = new Sim("Abi", Color.ORANGE);
         newSim.setDurationWorked(720);
         
         // Add the new sim to the world
         world.addSim(newSim);
+        world.addSim(newSim2);
+        world.addSim(newSim3);
         
         // Actually start the game by changing the state into adding a house
         UserInterface.initDebug(world);
-        UserInterface.viewWorld();
     }
 
     public static void startNewGame() {

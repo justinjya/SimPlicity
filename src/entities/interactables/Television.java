@@ -61,8 +61,8 @@ public class Television extends Interactables{
                 sim.setMood(sim.getMood() + 10);
                 sim.setHealth(sim.getHealth() - 10);
                 sim.setHunger(sim.getHunger() - 5);
-        }
-    };
-    watch.start();
+            }
+        };
+        watch.start();
     }
 }

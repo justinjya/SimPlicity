@@ -15,6 +15,7 @@ import src.entities.sim.Store;
 import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
 import src.main.menus.GameMenu;
+import src.main.menus.ListOfSimsMenu;
 import src.main.menus.PauseMenu;
 import src.main.menus.TabMenu;
 
@@ -27,11 +28,12 @@ public class UserInterface {
     private static Inventory currentSimInventory;
     
     // User Interface States
-    private static boolean viewingWorld = false;
     private static boolean tabbed = false;
     private static boolean pause = false;
+    private static boolean viewingWorld = false;
     private static boolean viewingActiveActions = false;
     private static boolean viewingProfessions = false;
+    private static boolean viewingListOfSims = true;
 
     //ONLY FOR DEBUGGING
     private static Store store = new Store();
@@ -103,6 +105,10 @@ public class UserInterface {
 
     public static boolean isViewingProfessions() {
         return viewingProfessions;
+    }
+
+    public static boolean isViewingListOfSims() {
+        return viewingListOfSims;
     }
 
     // SETTERS
@@ -178,6 +184,10 @@ public class UserInterface {
         currentSim.changeIsBusyState();
     }
 
+    public static void viewListOfSims() {
+        viewingListOfSims = !viewingListOfSims;
+    }
+
     // OTHERS
     public static void update() {
         if (tabbed && !currentSimInventory.isOpen()) {
@@ -198,6 +208,10 @@ public class UserInterface {
 
         if (viewingProfessions) {
             ChangeProfessionMenu.update();
+        }
+
+        if (viewingListOfSims) {
+            ListOfSimsMenu.update();
         }
 
         // if (store.getIsOpen()) {
@@ -222,6 +236,10 @@ public class UserInterface {
 
         if (viewingProfessions) {
             ChangeProfessionMenu.draw(g);
+        }
+
+        if (viewingListOfSims) {
+            ListOfSimsMenu.draw(g);
         }
 
         // if (store.getIsOpen()) {

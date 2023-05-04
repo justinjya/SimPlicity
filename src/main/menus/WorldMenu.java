@@ -17,7 +17,6 @@ public class WorldMenu {
     private static BufferedImage simPreviewBox = images[0];
     private static BufferedImage houseInfoBox = images[1];
     private static BufferedImage helpBox = images[2];
-    private static BufferedImage mockup = images[3];
 
     public static void draw(Graphics2D g, World world) {
         drawInfoBoxes(g);

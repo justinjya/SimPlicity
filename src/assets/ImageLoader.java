@@ -116,12 +116,11 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadWorldMenu() {
-        BufferedImage[] images = new BufferedImage[4];
+        BufferedImage[] images = new BufferedImage[3];
 
         images[0] = readImage("menus/world_menu", "sim_preview_box", 1, 1, false);
         images[1] = readImage("menus/world_menu", "house_info_box", 1, 1, false);
         images[2] = readImage("menus/world_menu", "help_box", 1, 1, false);
-        images[3] = readImage("menus/world_menu", "world mockup", 1, 1, false);
 
         return images;
     }
@@ -231,6 +230,23 @@ public class ImageLoader {
         images[12] = readImage("menus/change_profession_menu", "not_able_to_change", 1, 1, false);
         images[13] = readImage("menus/change_profession_menu", "sim_name_box", 1, 1, false);
         images[14] = readImage("menus/change_profession_menu", "sim_profession_box", 1, 1, false);
+
+        return images;
+    }
+
+    public static BufferedImage[] loadListOfSimsMenu() {
+        BufferedImage[] images = new BufferedImage[10];
+
+        images[0] = readImage("menus/list_of_sims_menu", "choose_sim_box", 1, 1, false);
+        images[1] = readImage("menus/list_of_sims_menu", "sim_box", 1, 1, false);
+        images[2] = readImage("menus/list_of_sims_menu", "current_sim_box", 1, 1, false);
+        images[3] = readImage("menus/list_of_sims_menu", "create_new_sim", 1, 1, false);
+        images[4] = readImage("menus/list_of_sims_menu", "sim_box_highlight", 1, 1, false);
+        images[5] = readImage("menus/list_of_sims_menu", "create_new_sim_highlight", 1, 1, false);
+        images[6] = readImage("menus/list_of_sims_menu", "icon_health", 1, 1, false);
+        images[7] = readImage("menus/list_of_sims_menu", "icon_hunger", 1, 1, false);
+        images[8] = readImage("menus/list_of_sims_menu", "icon_mood", 1, 1, false);
+        images[9] = readImage("menus/list_of_sims_menu", "view sim", 1, 1, false);
 
         return images;
     }

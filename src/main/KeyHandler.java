@@ -69,7 +69,7 @@ public class KeyHandler {
             UserInterface.pause();
         }
         if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
-            KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+            !UserInterface.isViewingListOfSims() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             UserInterface.tab();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {

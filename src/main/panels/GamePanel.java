@@ -130,7 +130,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
     
             if (UserInterface.isViewingWorld()) {
-                // world.draw(g2);
                 WorldMenu.draw(g2, world);
             }
             else {
