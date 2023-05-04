@@ -9,6 +9,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
+import src.main.menus.WorldMenu;
 import src.world.Room;
 import src.world.World;
 
@@ -129,7 +130,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
     
             if (UserInterface.isViewingWorld()) {
-                world.draw(g2);
+                // world.draw(g2);
+                WorldMenu.draw(g2, world);
             }
             else {
                 Sim currentSim = UserInterface.getCurrentSim();

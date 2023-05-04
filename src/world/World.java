@@ -31,8 +31,8 @@ public class World {
     
     // Viewable world inside of the window (32 x 32 grid)
     private int viewableGrid = Consts.TILE_SIZE * 32;
-    private int centerX = (Consts.WIDTH / 2) - (viewableGrid / 2);
-    private int centerY = (Consts.HEIGHT / 2) - (viewableGrid / 2);
+    private int topLeftX = 26;
+    private int topLeftY = 26;
 
     // Bounds for each quarter
     private int lowerBoundsX, upperBoundsX;
@@ -206,8 +206,8 @@ public class World {
 
         for (int y = lowerBoundsY; y < upperBoundsY; y++) {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
+                int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
                 g.drawImage(images[0], tileX, tileY, null);
             }
         }
@@ -223,8 +223,8 @@ public class World {
 
         for (int y = lowerBoundsY; y < upperBoundsY; y++) {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
+                int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
 
                 if (getMap(x, y) == 1) {
                     g.drawImage(images[1], tileX, tileY, null);
@@ -248,12 +248,12 @@ public class World {
             return;
         }
 
-        int tileX = centerX + (cursor.getX() % viewableGrid);
-        int tileY = centerY + (cursor.getY() % viewableGrid);
+        int tileX = topLeftX + (cursor.getX() % viewableGrid);
+        int tileY = topLeftY + (cursor.getY() % viewableGrid);
 
         if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
-            tileX = centerX + (cursor.getX() % (viewableGrid - 14));
-            tileY = centerY + (cursor.getY() % (viewableGrid - 14));
+            tileX = topLeftX + (cursor.getX() % (viewableGrid - 14));
+            tileY = topLeftY + (cursor.getY() % (viewableGrid - 14));
         }
 
         if (isAdding) {
@@ -267,20 +267,20 @@ public class World {
     private void drawArrows(Graphics2D g) {
         // Arrows
         if (getCursorInQuarter() == 1){
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
-            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[8], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + (30 * Consts.TILE_SIZE), null);
+            g.drawImage(images[9], topLeftX + (30 * Consts.TILE_SIZE), topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
         if (getCursorInQuarter() == 2){
-            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
+            g.drawImage(images[7], topLeftX + Consts.TILE_SIZE, topLeftY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[8], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + (30 * Consts.TILE_SIZE), null);
         }
         if (getCursorInQuarter() == 3){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
-            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[6], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + Consts.TILE_SIZE, null);
+            g.drawImage(images[7], topLeftX + Consts.TILE_SIZE, topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
         if (getCursorInQuarter() == 4){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
-            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[6], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + Consts.TILE_SIZE, null);
+            g.drawImage(images[9], topLeftX + (30 * Consts.TILE_SIZE), topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
     }
 }

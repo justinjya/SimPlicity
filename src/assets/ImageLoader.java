@@ -115,6 +115,17 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadWorldMenu() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("menus/world_menu", "sim_preview_box", 1, 1, false);
+        images[1] = readImage("menus/world_menu", "house_info_box", 1, 1, false);
+        images[2] = readImage("menus/world_menu", "help_box", 1, 1, false);
+        images[3] = readImage("menus/world_menu", "world mockup", 1, 1, false);
+
+        return images;
+    }
+
     public static BufferedImage[] loadGameMenu() {
         BufferedImage[] images = new BufferedImage[8];
 
@@ -513,11 +524,19 @@ public class ImageLoader {
         return simImage;
     }
 
+    public static BufferedImage showSimPreview(Sim sim) {
+        BufferedImage newImage = readImage("entities/sim", "sim_down", 1, 1, false);
+
+        newImage = changeSimColor(newImage, sim);
+
+        return newImage;
+    }
+
     public static BufferedImage[] loadStore() {
         BufferedImage[] images = new BufferedImage[2];
 
-        images[0] = readImage("menus/store", "layout", 1, 1, false);
-        images[1] = readImage("menus/store", "layout-2", 1, 1, false);
+        images[0] = readImage("menus/store_menu", "layout", 1, 1, false);
+        images[1] = readImage("menus/store_menu", "layout-2", 1, 1, false);
 
         return images;
     }

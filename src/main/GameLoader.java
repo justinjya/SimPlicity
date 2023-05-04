@@ -20,7 +20,7 @@ public class GameLoader {
         GamePanel.gameState = "Playing";
         
         // Create the new sim
-        Sim newSim = new Sim("Justin", Color.RED);
+        Sim newSim = new Sim("Justin", Color.BLUE);
         newSim.setDurationWorked(720);
         
         // Add the new sim to the world
@@ -28,6 +28,7 @@ public class GameLoader {
         
         // Actually start the game by changing the state into adding a house
         UserInterface.initDebug(world);
+        UserInterface.viewWorld();
     }
 
     public static void startNewGame() {
