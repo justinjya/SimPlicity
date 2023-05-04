@@ -134,6 +134,7 @@ public class UserInterface {
     }
 
     public static void pause() {
+        if (tabbed) tab();
         pause = !pause;
 
         currentSim.changeIsBusyState();

@@ -6,8 +6,9 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.main.KeyHandler;
-import src.main.panels.AboutPanel;
+import src.main.UserInterface;
 import src.main.panels.GamePanel;
+import src.main.panels.AboutPanel;
 import src.main.panels.MainMenuPanel;
 import src.main.panels.PanelHandler;
 
