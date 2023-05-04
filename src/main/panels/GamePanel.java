@@ -18,9 +18,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static String gameState;
     public static GameTime time;
+    public static Sound s;
 
     public static World world;
     public static UserInterface ui;
+    Sound sound = new Sound();
 
     private GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
@@ -44,7 +46,6 @@ public class GamePanel extends JPanel implements Runnable {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         requestFocusInWindow();
-
         new Thread(this).start();
     }
 
@@ -121,6 +122,16 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ui.update();
+    }
+
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic(int i){
+        sound.stop();
     }
     
     @Override
