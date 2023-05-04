@@ -186,8 +186,7 @@ public class ChangeProfessionMenu {
             int durationLeft = 720 - currentSim.getDurationWorked();
 
             g.setFont(new Font("Inter", Font.PLAIN, 9));
-            UserInterface.drawCenteredText(g, mainBox, 111, 482, "you are not yet able to change your profession", font);
-            UserInterface.drawCenteredText(g, mainBox, 111, 492, "you still need to work for " + durationLeft + " more seconds", font);
+            UserInterface.drawCenteredText(g, mainBox, 135, 489, "you still need to work for " + durationLeft + " more seconds to change your profession", font);
         }
     }
 
