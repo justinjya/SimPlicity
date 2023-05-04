@@ -55,12 +55,10 @@ public class UserInterface {
         House newHouse = new House(16, 16, world, world.getListOfSim().get(0), newRoom);
         world.getListOfHouse().add(newHouse);
 
-        UserInterface.currentSim = world.getListOfSim().get(0);
+        UserInterface.setCurrentSim(world.getListOfSim().get(0));
         UserInterface.currentSim.setMoney(10000);
-        UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
-        viewingWorld = false;
     }
 
     public static void init(World world) {
@@ -121,14 +119,12 @@ public class UserInterface {
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
         currentSimInventory = currentSim.getInventory();
+        
+        // for (Sim s : world.getListOfSim()) {
+        //     if (s == currentSim) continue;
 
-        if (currentSim.isBusy()) currentSim.changeIsBusyState();
-
-        for (Sim s : world.getListOfSim()) {
-            if (s == currentSim) continue;
-
-            if (!s.isBusy()) s.changeIsBusyState();
-        }
+        //     if (!s.isBusy()) s.changeIsBusyState();
+        // }
     }
 
     public static void viewWorld() {
@@ -158,6 +154,9 @@ public class UserInterface {
         if (pause) return;
         if (viewingWorld) return;
         if (viewingActiveActions) return;
+        if (viewingListOfSims) return;
+        if (viewingProfessions) return;
+        if (upgradingHouse) return;
         
         if (tabbed) {
             tab();
@@ -189,7 +188,6 @@ public class UserInterface {
 
     public static void viewListOfSims() {
         ListOfSimsMenu.reset();
-        ListOfSimsMenu.getListOfSelectableSims();
         viewingListOfSims = !viewingListOfSims;
 
         currentSim.changeIsBusyState();

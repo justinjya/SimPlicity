@@ -52,16 +52,16 @@ public class ImageLoader {
     public static BufferedImage[] loadMainMenu() {
         BufferedImage[] images = new BufferedImage[10];
 
-        images[0] = readImage("menus/main_menu_panel", "background", 1, 1, false);
-        images[1] = readImage("menus/main_menu_panel", "game_title", 1, 1, false);
-        images[2] = readImage("menus/main_menu_panel", "start_button", 1, 1, false);
-        images[3] = readImage("menus/main_menu_panel", "load_button", 1, 1, false);
-        images[4] = readImage("menus/main_menu_panel", "about_button", 1, 1, false);
-        images[5] = readImage("menus/main_menu_panel", "exit_button", 1, 1, false);
-        images[6] = readImage("menus/main_menu_panel", "start_highlight", 1, 1, false);
-        images[7] = readImage("menus/main_menu_panel", "load_highlight", 1, 1, false);
-        images[8] = readImage("menus/main_menu_panel", "about_highlight", 1, 1, false);
-        images[9] = readImage("menus/main_menu_panel", "exit_highlight", 1, 1, false);
+        images[0] = readImage("panels/main_menu_panel", "background", 1, 1, false);
+        images[1] = readImage("panels/main_menu_panel", "game_title", 1, 1, false);
+        images[2] = readImage("panels/main_menu_panel", "start_button", 1, 1, false);
+        images[3] = readImage("panels/main_menu_panel", "load_button", 1, 1, false);
+        images[4] = readImage("panels/main_menu_panel", "about_button", 1, 1, false);
+        images[5] = readImage("panels/main_menu_panel", "exit_button", 1, 1, false);
+        images[6] = readImage("panels/main_menu_panel", "start_highlight", 1, 1, false);
+        images[7] = readImage("panels/main_menu_panel", "load_highlight", 1, 1, false);
+        images[8] = readImage("panels/main_menu_panel", "about_highlight", 1, 1, false);
+        images[9] = readImage("panels/main_menu_panel", "exit_highlight", 1, 1, false);
     
         return images;
     }
@@ -69,8 +69,8 @@ public class ImageLoader {
     public static BufferedImage[] loadAboutMenu() {
         BufferedImage[] images = new BufferedImage[2];
 
-        images[0] = readImage("menus/about_panel", "page_1", 1, 1, false);
-        images[1] = readImage("menus/about_panel", "page_2", 1, 1, false);
+        images[0] = readImage("panels/about_panel", "page_1", 1, 1, false);
+        images[1] = readImage("panels/about_panel", "page_2", 1, 1, false);
 
         return images;
     }
@@ -78,17 +78,17 @@ public class ImageLoader {
     public static BufferedImage[] loadCreateSimMenu() {
         BufferedImage[] images = new BufferedImage[11];
 
-        images[0] = readImage("menus/create_sim_panel", "create_sim_box", 1, 1, false);
-        images[1] = readImage("menus/create_sim_panel", "title_box", 1, 1, false);
-        images[2] = readImage("menus/create_sim_panel", "sim_preview_box", 1, 1, false);
-        images[3] = readImage("menus/create_sim_panel", "input_box", 1, 1, false);
-        images[4] = readImage("menus/create_sim_panel", "color_slider", 1, 1, false);
-        images[5] = readImage("menus/create_sim_panel", "cursor", 1, 1, false);
-        images[6] = readImage("menus/create_sim_panel", "button_done", 1, 1, false);
-        images[7] = readImage("menus/create_sim_panel", "input_box_highlight", 1, 1, false);
-        images[8] = readImage("menus/create_sim_panel", "color_slider_highlight", 1, 1, false);
-        images[9] = readImage("menus/create_sim_panel", "button_done_highlight", 1, 1, false);
-        images[10] = readImage("menus/create_sim_panel", "button_done_red_highlight", 1, 1, false);
+        images[0] = readImage("panels/create_sim_panel", "create_sim_box", 1, 1, false);
+        images[1] = readImage("panels/create_sim_panel", "title_box", 1, 1, false);
+        images[2] = readImage("panels/create_sim_panel", "sim_preview_box", 1, 1, false);
+        images[3] = readImage("panels/create_sim_panel", "input_box", 1, 1, false);
+        images[4] = readImage("panels/create_sim_panel", "color_slider", 1, 1, false);
+        images[5] = readImage("panels/create_sim_panel", "cursor", 1, 1, false);
+        images[6] = readImage("panels/create_sim_panel", "button_done", 1, 1, false);
+        images[7] = readImage("panels/create_sim_panel", "input_box_highlight", 1, 1, false);
+        images[8] = readImage("panels/create_sim_panel", "color_slider_highlight", 1, 1, false);
+        images[9] = readImage("panels/create_sim_panel", "button_done_highlight", 1, 1, false);
+        images[10] = readImage("panels/create_sim_panel", "button_done_red_highlight", 1, 1, false);
 
         return images;
     }

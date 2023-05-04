@@ -31,7 +31,7 @@ public class PauseMenu {
         if(selectedBox == 1){
             // SAVE HERE
             PanelHandler.switchPanel(GamePanel.getInstance(), MainMenuPanel.getInstance());
-            GamePanel.gameState = "Main Menu";
+            GamePanel.gameState = "Main menu";
         }
     }
 

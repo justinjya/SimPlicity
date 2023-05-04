@@ -30,26 +30,28 @@ public class ListOfSimsMenu {
 
     private static World world = UserInterface.getWorld();
     private static ArrayList<Sim> listOfSims = world.getListOfSim();
-    private static ArrayList<Sim> listOfSelectableSims;
+    private static ArrayList<Sim> listOfSelectableSims = getListOfSelectableSims();
     private static int slotSelected = 0;
     private static boolean createSimSlot = false;
 
     public static void reset() {
         slotSelected = 0;
         createSimSlot = false;
+        listOfSelectableSims = getListOfSelectableSims();
 
         if (listOfSelectableSims.isEmpty()) {
             createSimSlot = true;
         }
     }
 
-    public static void getListOfSelectableSims() {
-        listOfSelectableSims = new ArrayList<>();
+    private static ArrayList<Sim> getListOfSelectableSims() {
+        ArrayList<Sim> listOfSelectableSims = new ArrayList<>();
         for (Sim sim : listOfSims) {
             if (sim == UserInterface.getCurrentSim()) continue;
 
             listOfSelectableSims.add(sim);
         }
+        return listOfSelectableSims;
     }
 
     public static void update() {
