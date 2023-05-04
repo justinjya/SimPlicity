@@ -94,8 +94,10 @@ public class KeyHandler {
             (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) || 
             (keyCode == KeyEvent.VK_SPACE)) {
             // Append the character to the input string
-            char c = e.getKeyChar();
-            input += c;
+            if (input.length() < 12) {
+                char c = e.getKeyChar();
+                input += c;
+            }
         }
         // Check if the key is the backspace key
         else if (keyCode == KeyEvent.VK_BACK_SPACE) {
