@@ -34,6 +34,27 @@ public class Stove extends Interactables{
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Stove(int imageIndex) {
+        super (
+            names[imageIndex],
+            "cook",
+            imageIndex,
+            2,
+            2,
+            width[imageIndex],
+            height[imageIndex]
+        );
+        if (imageIndex == 1) {
+            setPlayAreaX(2);
+        }
+
+        setPrice(prices[imageIndex]);
+
+        // Load the icons and images of the stoves
+        this.icons = ImageLoader.loadStovesIcons(); 
+        this.images = ImageLoader.loadStoves();
+    }
+
     public Stove(int x, int y, int imageIndex) {
         super (
             names[imageIndex],

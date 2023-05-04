@@ -16,6 +16,25 @@ public class Shower extends Interactables {
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Shower() {
+        super (
+            "Shower",
+            "take a shower",
+            0,
+            3,
+            1,
+            1,
+            2
+        );
+
+        setPrice(price);
+        setDuration(duration);
+
+        // Load the icon and image of the shower
+        icon = ImageLoader.loadShowerIcon();
+        images = ImageLoader.loadShower();
+    }
+
     public Shower(int x, int y) {
         super (
             "Shower",

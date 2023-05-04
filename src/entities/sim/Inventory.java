@@ -49,16 +49,18 @@ public class Inventory {
     public Inventory() {
         // ONLY FOR DEBUGGING
         // objects
-        addItem(new Shower(0, 0));
-        addItem(new Stove(0, 1, 0));
-        addItem(new Stove(0, 1, 1));
-        addItem(new Television(0, 2));
-        addItem(new Toilet(0, 0));
-        addItem(new TrashBin(0, 4));
+        addItem(new Shower());
+        addItem(new Stove(0));
+        addItem(new Stove(0));
+        addItem(new Stove(1));
+        addItem(new Television());
+        addItem(new Toilet());
+        addItem(new TrashBin());
         addItem(new Bed(0));
         addItem(new Bed(1));
         addItem(new Bed(1));
         addItem(new Bed(2));
+        addItem(new TableAndChair());
         
         // foods
         addItem(new RawFood(0));

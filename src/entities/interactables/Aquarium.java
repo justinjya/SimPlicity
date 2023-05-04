@@ -14,6 +14,22 @@ public class Aquarium extends Interactables {
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Aquarium () {
+        super (
+            "Aquarium",
+            "feed the fish",
+            0,
+            2,
+            3,
+            2,
+            1
+        );
+
+        // Load the icon and image of the aquarium
+        icon = ImageLoader.loadAquariumIcon();
+        images = ImageLoader.loadAquarium();
+    }
+
     public Aquarium (int x, int y) {
         super (
             "Aquarium",

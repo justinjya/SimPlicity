@@ -178,7 +178,6 @@ public class UserInterface {
     }
 
     public static void viewInteractions() {
-        InteractMenu.reset();
         viewingInteractions = !viewingInteractions;
 
         currentSim.changeIsBusyState();

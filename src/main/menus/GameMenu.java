@@ -118,7 +118,7 @@ public class GameMenu {
 
         g.setColor(new Color(61, 30, 45)); 
         g.setFont(new Font("Inter", Font.BOLD, 10));
-        UserInterface.drawCenteredText(g, doubleInfoBox, 7, 93, currentSim.getStatus(), font);
+        UserInterface.drawCenteredText(g, doubleInfoBox, 6, 93, currentSim.getStatus(), font);
         UserInterface.drawCenteredText(g, doubleInfoBox, 603, 130, currentRoom.getName(), font);
 
         g.setColor(Color.WHITE);
@@ -134,7 +134,8 @@ public class GameMenu {
         Sim currentSim = UserInterface.getCurrentSim();
         InteractionHandler simInteract = currentSim.getInteractionHandler();
 
-        if (simInteract.isObjectInRange()) {
+        if (currentSim.isStatusCurrently("Idle") && simInteract.isObjectInRange() &&
+            !UserInterface.isTabbed() && !UserInterface.isViewingInteractions()) {
             Interactables object = simInteract.getInteractableObject();
             Font font = new Font("Inter", Font.PLAIN, 12);
             g.setFont(font);

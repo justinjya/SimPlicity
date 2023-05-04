@@ -16,6 +16,28 @@ public class TrashBin extends Interactables {
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public TrashBin() {
+        super (
+            "Trash Bin",
+            "kick the trash bin",
+            0,
+            2,
+            2,
+            1,
+            1
+        );
+        
+        setPrice(price);
+
+        // Since the toilet has a smaller image than normal objects
+        getBounds().setSize(16, 16);
+        updateBounds();
+
+        // Load the icon and images of the trash bin
+        icon = ImageLoader.loadTrashBinIcon();
+        images = ImageLoader.loadTrashBin();
+    }
+
     public TrashBin(int x, int y) {
         super (
             "Trash Bin",

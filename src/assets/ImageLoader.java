@@ -280,7 +280,7 @@ public class ImageLoader {
     public static BufferedImage[] loadDoor() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("items/interactables/door", "door", 1, 1, true);
+        images[0] = readImage("entities/interactables/door", "door", 1, 1, true);
         images[1] = rotate90Clockwise(images[0]);
         images[2] = rotate90Clockwise(images[1]);
         images[3] = rotate90Clockwise(images[2]);
@@ -308,16 +308,16 @@ public class ImageLoader {
     public static BufferedImage[] loadAquarium() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("items/interactables/aquarium", "aquarium_1", 1, 1, true);
-        images[1] = readImage("items/interactables/aquarium", "aquarium_2", 1, 1, true);
-        images[2] = readImage("items/interactables/aquarium", "aquarium_1_occupied", 2, 1, true);
-        images[3] = readImage("items/interactables/aquarium", "aquarium_2_occupied", 2, 1, true);
+        images[0] = readImage("entities/interactables/aquarium", "aquarium_1", 1, 1, true);
+        images[1] = readImage("entities/interactables/aquarium", "aquarium_2", 1, 1, true);
+        images[2] = readImage("entities/interactables/aquarium", "aquarium_1_occupied", 2, 1, true);
+        images[3] = readImage("entities/interactables/aquarium", "aquarium_2_occupied", 2, 1, true);
     
         return images;
     }
 
     public static BufferedImage loadAquariumIcon() {
-        BufferedImage icon = readImage("items/icons", "aquarium", 1, 1, false);
+        BufferedImage icon = readImage("item_icons/interactables/", "aquarium", 1, 1, false);
     
         return icon;
     }
@@ -325,12 +325,12 @@ public class ImageLoader {
     public static BufferedImage[] loadBeds() {
         BufferedImage[] images = new BufferedImage[6];
 
-        images[0] = readImage("items/interactables/beds", "bed_single_idle", 4, 1, true);
-        images[1] = readImage("items/interactables/beds", "bed_queen_idle", 4, 2, true);
-        images[2] = readImage("items/interactables/beds", "bed_king_idle", 5, 2, true);
-        images[3] = readImage("items/interactables/beds", "bed_single_occupied", 4, 1, true);
-        images[4] = readImage("items/interactables/beds", "bed_queen_occupied", 4, 2, true);
-        images[5] = readImage("items/interactables/beds", "bed_king_occupied", 5, 2, true);
+        images[0] = readImage("entities/interactables/beds", "bed_single_idle", 4, 1, true);
+        images[1] = readImage("entities/interactables/beds", "bed_queen_idle", 4, 2, true);
+        images[2] = readImage("entities/interactables/beds", "bed_king_idle", 5, 2, true);
+        images[3] = readImage("entities/interactables/beds", "bed_single_occupied", 4, 1, true);
+        images[4] = readImage("entities/interactables/beds", "bed_queen_occupied", 4, 2, true);
+        images[5] = readImage("entities/interactables/beds", "bed_king_occupied", 5, 2, true);
 
         return images;
     }
@@ -338,9 +338,9 @@ public class ImageLoader {
     public static BufferedImage[] loadBedsIcons() {
         BufferedImage[] icons = new BufferedImage[3];
 
-        icons[0] = readImage("items/icons/interactables", "bed_single", 1, 1, false);
-        icons[1] = readImage("items/icons/interactables", "bed_queen", 1, 1, false);
-        icons[2] = readImage("items/icons/interactables", "bed_king", 1, 1, false);
+        icons[0] = readImage("item_icons/interactables", "bed_single", 1, 1, false);
+        icons[1] = readImage("item_icons/interactables", "bed_queen", 1, 1, false);
+        icons[2] = readImage("item_icons/interactables", "bed_king", 1, 1, false);
 
         return icons;
     }
@@ -348,14 +348,14 @@ public class ImageLoader {
     public static BufferedImage[] loadShower() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("items/interactables/shower", "shower_idle", 1, 2, true);
-        images[1] = readImage("items/interactables/shower", "shower_occupied", 1, 2, true);
+        images[0] = readImage("entities/interactables/shower", "shower_idle", 1, 2, true);
+        images[1] = readImage("entities/interactables/shower", "shower_occupied", 1, 2, true);
     
         return images;
     }
 
     public static BufferedImage loadShowerIcon() {
-        BufferedImage icon = readImage("items/icons/interactables", "shower", 1, 1, false);
+        BufferedImage icon = readImage("item_icons/interactables", "shower", 1, 1, false);
     
         return icon;
     }
@@ -363,10 +363,10 @@ public class ImageLoader {
     public static BufferedImage[] loadStoves() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("items/interactables/stoves", "gas_stove_idle", 2, 1, true);
-        images[1] = readImage("items/interactables/stoves", "electric_stove_idle", 1, 1, true);
-        images[2] = readImage("items/interactables/stoves", "gas_stove_occupied", 2, 1, true);
-        images[3] = readImage("items/interactables/stoves", "electric_stove_occupied", 1, 1, true);
+        images[0] = readImage("entities/interactables/stoves", "gas_stove_idle", 2, 1, true);
+        images[1] = readImage("entities/interactables/stoves", "electric_stove_idle", 1, 1, true);
+        images[2] = readImage("entities/interactables/stoves", "gas_stove_occupied", 2, 1, true);
+        images[3] = readImage("entities/interactables/stoves", "electric_stove_occupied", 1, 1, true);
     
         return images;
     }
@@ -374,8 +374,8 @@ public class ImageLoader {
     public static BufferedImage[] loadStovesIcons() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("items/icons/interactables", "gas_stove", 1, 1, false);
-        images[1] = readImage("items/icons/interactables", "electric_stove", 1, 1, false);
+        images[0] = readImage("item_icons/interactables", "gas_stove", 1, 1, false);
+        images[1] = readImage("item_icons/interactables", "electric_stove", 1, 1, false);
     
         return images;
     }
@@ -383,14 +383,14 @@ public class ImageLoader {
     public static BufferedImage[] loadTableAndChair() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("items/interactables/table_and_chair", "table_and_chair", 3, 3, true);
-        images[1] = readImage("items/interactables/table_and_chair", "table_and_chair_occupied", 4, 3, true);
+        images[0] = readImage("entities/interactables/table_and_chair", "table_and_chair_idle", 3, 3, true);
+        images[1] = readImage("entities/interactables/table_and_chair", "table_and_chair_occupied", 3, 3, true);
 
         return images;
     }
 
     public static BufferedImage loadTableAndChairIcon() {
-        BufferedImage icon = readImage("items/icons/interactables", "table_and_chair", 3, 3, false);
+        BufferedImage icon = readImage("item_icons/interactables", "table_and_chair", 3, 3, false);
     
         return icon;
     }
@@ -398,14 +398,14 @@ public class ImageLoader {
     public static BufferedImage[] loadTelevision() {
         BufferedImage[] images = new BufferedImage[2];
         
-        images[0] = readImage("items/interactables/television", "television_off", 2, 1, true);
-        images[1] = readImage("items/interactables/television", "television_occupied", 2, 2, true);
+        images[0] = readImage("entities/interactables/television", "television_off", 2, 1, true);
+        images[1] = readImage("entities/interactables/television", "television_occupied", 2, 2, true);
     
         return images;
     }
 
     public static BufferedImage loadTelevisionIcon() {
-        BufferedImage icon = readImage("items/icons/interactables", "television", 2, 1, false);
+        BufferedImage icon = readImage("item_icons/interactables", "television", 2, 1, false);
     
         return icon;
     }
@@ -413,15 +413,15 @@ public class ImageLoader {
     public static BufferedImage[] loadToilet() {
         BufferedImage[] images = new BufferedImage[3];
         
-        images[0] = readImage("items/interactables/toilet", "toilet_idle", 1, 1, true);
-        images[1] = readImage("items/interactables/toilet", "toilet_occupied", 1, 1, true);
+        images[0] = readImage("entities/interactables/toilet", "toilet_idle", 1, 1, true);
+        images[1] = readImage("entities/interactables/toilet", "toilet_occupied", 1, 1, true);
         images[2] = readImage("tiles", "polished_quartz", 1, 1, true);
 
         return images;
     }
 
     public static BufferedImage loadToiletIcon() {
-        BufferedImage icon = readImage("items/icons/interactables", "toilet", 1, 1, false);
+        BufferedImage icon = readImage("item_icons/interactables", "toilet", 1, 1, false);
     
         return icon;
     }
@@ -429,16 +429,16 @@ public class ImageLoader {
     public static BufferedImage[] loadTrashBin() {
         BufferedImage[] images = new BufferedImage[4];
 
-        images[0] = readImage("items/interactables/trash_bin", "trash_bin_empty", 1, 1, true);
-        images[1] = readImage("items/interactables/trash_bin", "trash_bin_filled", 1, 1, true);
-        images[2] = readImage("items/interactables/trash_bin", "trash_bin_empty_on_floor", 1, 1, true);
-        images[3] = readImage("items/interactables/trash_bin", "trash_bin_filled_on_floor", 1, 1, true);
+        images[0] = readImage("entities/interactables/trash_bin", "trash_bin_empty", 1, 1, true);
+        images[1] = readImage("entities/interactables/trash_bin", "trash_bin_filled", 1, 1, true);
+        images[2] = readImage("entities/interactables/trash_bin", "trash_bin_empty_on_floor", 1, 1, true);
+        images[3] = readImage("entities/interactables/trash_bin", "trash_bin_filled_on_floor", 1, 1, true);
     
         return images;
     }
 
     public static BufferedImage loadTrashBinIcon() {
-        BufferedImage icon = readImage("items/icons/interactables", "trash_bin", 1, 1, false);
+        BufferedImage icon = readImage("item_icons/interactables", "trash_bin", 1, 1, false);
     
         return icon;
     }
@@ -446,14 +446,14 @@ public class ImageLoader {
     public static BufferedImage[] loadRawFood() {
         BufferedImage[] images = new BufferedImage[8];
         
-        images[0] = readImage("items/icons/raw_food", "carrot", 1, 1, false);
-        images[1] = readImage("items/icons/raw_food", "chicken", 1, 1, false);
-        images[2] = readImage("items/icons/raw_food", "milk", 1, 1, false);
-        images[3] = readImage("items/icons/raw_food", "meat", 1, 1, false);
-        images[4] = readImage("items/icons/raw_food", "peanut", 1, 1, false);
-        images[5] = readImage("items/icons/raw_food", "potato", 1, 1, false);
-        images[6] = readImage("items/icons/raw_food", "rice", 1, 1, false);
-        images[7] = readImage("items/icons/raw_food", "spinach", 1, 1, false);
+        images[0] = readImage("item_icons/raw_food", "carrot", 1, 1, false);
+        images[1] = readImage("item_icons/raw_food", "chicken", 1, 1, false);
+        images[2] = readImage("item_icons/raw_food", "milk", 1, 1, false);
+        images[3] = readImage("item_icons/raw_food", "meat", 1, 1, false);
+        images[4] = readImage("item_icons/raw_food", "peanut", 1, 1, false);
+        images[5] = readImage("item_icons/raw_food", "potato", 1, 1, false);
+        images[6] = readImage("item_icons/raw_food", "rice", 1, 1, false);
+        images[7] = readImage("item_icons/raw_food", "spinach", 1, 1, false);
     
         return images;
     }
@@ -461,11 +461,11 @@ public class ImageLoader {
     public static BufferedImage[] loadBakedFood() {
         BufferedImage[] images = new BufferedImage[5];
         
-        images[0] = readImage("items/icons/baked_food", "almond_milk", 1, 1, false);
-        images[1] = readImage("items/icons/baked_food", "rice_chicken", 1, 1, false);
-        images[2] = readImage("items/icons/baked_food", "rice_curry", 1, 1, false);
-        images[3] = readImage("items/icons/baked_food", "cut_vegetables", 1, 1, false);
-        images[4] = readImage("items/icons/baked_food", "steak", 1, 1, false);
+        images[0] = readImage("item_icons/baked_food", "almond_milk", 1, 1, false);
+        images[1] = readImage("item_icons/baked_food", "rice_chicken", 1, 1, false);
+        images[2] = readImage("item_icons/baked_food", "rice_curry", 1, 1, false);
+        images[3] = readImage("item_icons/baked_food", "cut_vegetables", 1, 1, false);
+        images[4] = readImage("item_icons/baked_food", "steak", 1, 1, false);
     
         return images;
     }

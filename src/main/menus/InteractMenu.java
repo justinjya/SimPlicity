@@ -10,6 +10,7 @@ import src.assets.ImageLoader;
 import src.main.UserInterface;
 import src.entities.handlers.InteractionHandler;
 import src.entities.interactables.Interactables;
+import src.entities.interactables.TableAndChair;
 import src.entities.interactables.Television;
 import src.entities.sim.Sim;
 
@@ -19,10 +20,6 @@ public class InteractMenu {
     private static BufferedImage highlight = images[1];
 
     public static int slotSelected = -1;
-
-    public static void reset() {
-        slotSelected = 0;
-    }
 
     public static void update() {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
@@ -36,8 +33,8 @@ public class InteractMenu {
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
             slotSelected++;
         }
-        if (slotSelected < 0) slotSelected = 1;
-        else if (slotSelected > 1) slotSelected = 0;
+        if (slotSelected < 0) slotSelected = 0;
+        else if (slotSelected > 1) slotSelected = 1;
     }
 
     public static void draw(Graphics2D g) {
@@ -57,9 +54,9 @@ public class InteractMenu {
             UserInterface.drawCenteredText(g, interactBox, 208, 470, "Karaoke", font);
             UserInterface.drawCenteredText(g, interactBox, 404, 470, "Watch TV", font);
         }
-        // if (interactedObject instanceof TableAndChair) {
-        //     UserInterface.drawCenteredText(g, interactBox, 208, 470, "Eat", font);
-        //     UserInterface.drawCenteredText(g, interactBox, 404, 470, "Read a Book", font);
-        // }
+        if (interactedObject instanceof TableAndChair) {
+            UserInterface.drawCenteredText(g, interactBox, 208, 470, "Eat", font);
+            UserInterface.drawCenteredText(g, interactBox, 404, 470, "Read a Book", font);
+        }
     }
 }

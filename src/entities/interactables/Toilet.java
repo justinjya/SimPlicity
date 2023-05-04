@@ -18,6 +18,25 @@ public class Toilet extends Interactables{
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Toilet() {
+        super (
+            "Toilet",
+            "take a leak",
+            0,
+            2,
+            2,
+            1,
+            1
+        );
+
+        setPrice(price);
+        setDuration(duration);
+
+        // Load the icons and image of the toilet
+        this.icon = ImageLoader.loadToiletIcon();
+        this.images = ImageLoader.loadToilet();
+    }
+
     public Toilet(int x, int y) {
         super (
             "Toilet",

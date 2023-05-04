@@ -39,18 +39,13 @@ public abstract class Food {
         Thread eating = new Thread() {
             @Override
             public void run() {
-                try {
-                    sim.setStatus("Eating");
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
+                sim.setStatus("Eating");
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
 
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * 5);
-                    
-                    sim.resetStatus();
-                    sim.setHunger(sim.getHunger() + hungerPoint);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                while (t.isAlive()) continue;
+                
+                sim.resetStatus();
+                sim.setHunger(sim.getHunger() + hungerPoint);
             }
         };
         eating.start();

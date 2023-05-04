@@ -125,6 +125,10 @@ public class Room {
         
         // Draw selected object
         drawSelectedObject(g);
+
+        if (UserInterface.isDebug()) {
+            drawCollisionBox(g);
+        }
     }
             
     private Interactables findNearestObject(String direction) {
@@ -247,8 +251,8 @@ public class Room {
                 if (!(moveableObject instanceof Door)) {
                     Sim currentSim = UserInterface.getCurrentSim();
                     
-                    moveableObject.setPlayAreaX(0);
-                    moveableObject.setPlayAreaY(3);
+                    // moveableObject.setPlayAreaX(1);
+                    // moveableObject.setPlayAreaY(3);
                     currentSim.getInventory().addItem(moveableObject);
                 }
                 moveableObject = null;

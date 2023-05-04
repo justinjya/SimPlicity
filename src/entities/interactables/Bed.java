@@ -38,6 +38,32 @@ public class Bed extends Interactables{
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Bed(int imageIndex) {
+        super (
+            names[imageIndex],
+            "sleep",
+            imageIndex,
+            1,
+            2,
+            width[imageIndex],
+            height[imageIndex]
+        );
+        if (imageIndex == 1) {
+            setPlayAreaY(1);
+        }
+        else if (imageIndex == 2) {
+            setPlayAreaX(0);
+            setPlayAreaY(2);
+        }
+
+        setPrice(prices[imageIndex]);
+        setDuration(duration);
+
+        // Load the image of the beds
+        icons = ImageLoader.loadBedsIcons();
+        images = ImageLoader.loadBeds();
+    }
+
     public Bed(int x, int y, int imageIndex) {
         super (
             names[imageIndex],
@@ -52,45 +78,6 @@ public class Bed extends Interactables{
         setPrice(prices[imageIndex]);
         setDuration(duration);
 
-        // Load the image of the beds
-        icons = ImageLoader.loadBedsIcons();
-        images = ImageLoader.loadBeds();
-    }
-
-    public Bed(int imageIndex) {
-        super (
-            names[imageIndex],
-            "sleep",
-            imageIndex,
-            0,
-            3,
-            width[imageIndex],
-            height[imageIndex]
-        );
-
-        setPrice(prices[imageIndex]);
-        setDuration(duration);
-
-        // Load the image of the beds
-        icons = ImageLoader.loadBedsIcons();
-        images = ImageLoader.loadBeds();
-    }
-
-    // ONLY FOR DEBUGGING
-    public Bed() {
-        super (
-            names[1],
-            "sleep",
-            1,
-            0,
-            3,
-            width[1],
-            height[1]
-        );
-
-        setPrice(prices[1]);
-        setDuration(duration);
-        
         // Load the image of the beds
         icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();

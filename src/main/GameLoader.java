@@ -23,8 +23,8 @@ public class GameLoader {
         Sim newSim2 = new Sim("nitsuj", Color.MAGENTA);
         Sim newSim3 = new Sim("Abi", Color.ORANGE);
         newSim.setDurationWorked(720);
-        // newSim2.changeIsBusyState();
-        // newSim3.changeIsBusyState();
+        newSim2.changeIsBusyState();
+        newSim3.changeIsBusyState();
         
         // Add the new sim to the world
         world.addSim(newSim);
