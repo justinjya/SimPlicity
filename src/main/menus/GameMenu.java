@@ -57,12 +57,18 @@ public class GameMenu {
             drawObjectToInteract(g);
         }
 
-        // working and exercising tab
-        if (currentSim.isStatusCurrently("Working")) {
-            drawWorkingTab(g);
+        // ONLY FOR DEBUGGING
+        if (UserInterface.isDebug()) {
+            drawDebug(g);
         }
-        if (currentSim.isStatusCurrently("Exercising")) {
-            drawExercisingTab(g);
+        else {
+            // working and exercising tab
+            if (currentSim.isStatusCurrently("Working")) {
+                drawWorkingTab(g);
+            }
+            if (currentSim.isStatusCurrently("Exercising")) {
+                drawExercisingTab(g);
+            }
         }
     }
 
@@ -220,5 +226,25 @@ public class GameMenu {
         g.drawString("Exercising", 51, 335);
         drawBarValue(g, 51, 339, 135, timeRemaining, exerciseDration);
         drawTimeRemaining(g, timeRemaining, 175, 0);
+    }
+
+    public static void drawDebug(Graphics2D g) {
+        Sim currentSim = UserInterface.getCurrentSim();
+
+        g.setColor(Color.BLACK);
+        Font font = new Font("Inter", Font.PLAIN, 10);
+        g.setFont(font);
+
+        g.drawString("timeRemaining: " + GameTime.timeRemaining, 33, 364);
+        g.drawString("x: " + currentSim.getX(), 33, 374);
+        g.drawString("y: " + currentSim.getY(), 33, 384);
+        g.drawString("InRange: " + currentSim.getInteractionHandler().isObjectInRange(), 73, 374);
+        g.drawString("isWalking: " + currentSim.isMoving(), 73, 384);
+        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
+        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
+        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
+        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
+        g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
+        g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
     }
 }

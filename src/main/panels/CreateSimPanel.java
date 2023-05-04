@@ -11,12 +11,14 @@ import java.awt.event.KeyAdapter;
 import javax.swing.JPanel;
 
 import src.assets.ImageLoader;
+import src.entities.sim.Sim;
 import src.main.GameLoader;
 import src.main.KeyHandler;
 
 public class CreateSimPanel extends JPanel {
     public static CreateSimPanel csp = new CreateSimPanel();
 
+    public static Sim currentSim;
     public static String[] textFields = { "", "" };
     public static String simName = textFields[0];
     public static String roomName = textFields[1];

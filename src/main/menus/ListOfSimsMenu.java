@@ -10,6 +10,9 @@ import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.KeyHandler;
 import src.main.UserInterface;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
 import src.world.World;
 
 public class ListOfSimsMenu {
@@ -24,14 +27,49 @@ public class ListOfSimsMenu {
     private static BufferedImage healthIcon = images[6];
     private static BufferedImage hungerIcon = images[7];
     private static BufferedImage moodIcon = images[8];
-    private static BufferedImage mockup = images[9];
 
     private static World world = UserInterface.getWorld();
     private static ArrayList<Sim> listOfSims = world.getListOfSim();
+    private static ArrayList<Sim> listOfSelectableSims;
     private static int slotSelected = 0;
-    private static boolean createSimSlot = true;
+    private static boolean createSimSlot = false;
+
+    public static void reset() {
+        slotSelected = 0;
+        createSimSlot = false;
+
+        if (listOfSelectableSims.isEmpty()) {
+            createSimSlot = true;
+        }
+    }
+
+    public static void getListOfSelectableSims() {
+        listOfSelectableSims = new ArrayList<>();
+        for (Sim sim : listOfSims) {
+            if (sim == UserInterface.getCurrentSim()) continue;
+
+            listOfSelectableSims.add(sim);
+        }
+    }
 
     public static void update() {
+        // pressing a button
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            if (createSimSlot) {
+                GamePanel.gameState = "Creating a new sim";
+                PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
+            }
+            else {
+                Sim simSelected = listOfSelectableSims.get(slotSelected);
+                UserInterface.setCurrentSim(simSelected);
+                UserInterface.viewListOfSims();
+            }
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            UserInterface.viewListOfSims();
+        }
+
+        // moving the cursor
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
             slotSelected--;   
         }
@@ -39,11 +77,13 @@ public class ListOfSimsMenu {
             slotSelected++;
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+            if (listOfSelectableSims.isEmpty()) return;
+            
             createSimSlot = !createSimSlot;
         }
 
-        if (slotSelected < 0) slotSelected = listOfSims.size() - 1;
-        if (slotSelected > listOfSims.size() - 1) slotSelected = 0;
+        if (slotSelected < 0) slotSelected = listOfSelectableSims.size() - 1;
+        if (slotSelected > listOfSelectableSims.size() - 1) slotSelected = 0;
     }
 
     public static void draw(Graphics2D g) {
@@ -51,8 +91,6 @@ public class ListOfSimsMenu {
         g.fillRect(0, 0, 800, 600);
 
         drawInfoBoxes(g);
-
-        drawSelector(g);
 
         drawListOfSims(g);
 
@@ -69,7 +107,7 @@ public class ListOfSimsMenu {
 
         g.drawImage(currentSimBox, 103, 70, null);
 
-        g.drawImage(createNewSimHighlight, 106, 408, null);
+        drawSelector(g);
 
         g.drawImage(createNewSim, 109, 411, null);
 
@@ -79,9 +117,11 @@ public class ListOfSimsMenu {
 
     private static void drawSelector(Graphics2D g) {
         if (createSimSlot) {
-            
+            g.drawImage(createNewSimHighlight, 106, 408, null);
+            return;
         }
-        else {
+
+        if (!listOfSelectableSims.isEmpty()) {
             g.drawImage(simBoxHighlight, 364, 110 + (slotSelected * 84), null);
         }
     }
@@ -91,7 +131,7 @@ public class ListOfSimsMenu {
         g.setFont(font);
 
         int i = 0;
-        for (Sim sim : listOfSims) {
+        for (Sim sim : listOfSelectableSims) {
             g.drawImage(simBox, 367, 113 + (84 * i), null);
 
             BufferedImage simPreviewImage = ImageLoader.showSimPreview(sim);

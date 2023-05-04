@@ -21,10 +21,10 @@ public class Main {
 
 
         // ONLY FOR DEBUGGING
-        frame.add(GamePanel.getInstance());
-        GameLoader.startNewGameDebug();
+        // frame.add(GamePanel.getInstance());
+        // GameLoader.startNewGameDebug();
 
-        // frame.add(MainMenuPanel.getInstance());
+        frame.add(MainMenuPanel.getInstance());
 
         frame.pack();
         frame.setLocationRelativeTo(null);

@@ -59,42 +59,31 @@ public class KeyHandler {
     public static void keyBinds() {
         if (!GamePanel.isCurrentState("Playing")) return;
         
-        World world = UserInterface.getWorld();
-        Sim currentSim = UserInterface.getCurrentSim();
-        Room currentRoom = currentSim.getCurrentRoom();
-        Inventory currentSimInventory = currentSim.getInventory();
-
-        if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
-            !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
-            UserInterface.pause();
-        }
-        if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
-            !UserInterface.isViewingListOfSims() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
-            UserInterface.tab();
-        }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
-            UserInterface.debug();
-        }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            ActiveActions.interact();
-        }
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
-            NonActiveActions.showInventory();
-        }
-
-        // testing adding and switching sim
         try {
-            boolean simControllable = !UserInterface.isViewingWorld() && !UserInterface.isTabbed() && !currentRoom.isEditingRoom();
-            if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
-                if (UserInterface.getCurrentSim() == world.getSim(1)) {
-                    UserInterface.setCurrentSim(world.getSim(0));
-                }
-                else {
-                    UserInterface.setCurrentSim(world.getSim(1));
-                }
+            Sim currentSim = UserInterface.getCurrentSim();
+            Room currentRoom = currentSim.getCurrentRoom();
+            Inventory currentSimInventory = currentSim.getInventory();
+
+            if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
+                !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
+                !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                UserInterface.pause();
+            }
+            if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
+                !UserInterface.isViewingListOfSims() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+                UserInterface.tab();
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
+                UserInterface.debug();
+            }
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
+                ActiveActions.interact();
+            }
+            if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+                NonActiveActions.showInventory();
             }
         }
-        catch (Exception e) {System.out.println("No sim found!");}
+        catch (NullPointerException npe) {System.out.println("Loading . . .");}
     }
 
     public static String receiveStringInput(KeyEvent e, String input) {
@@ -102,7 +91,8 @@ public class KeyHandler {
 
         // Check if the key is a letter or a number
         if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) ||
-            (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9)) {
+            (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) || 
+            (keyCode == KeyEvent.VK_SPACE)) {
             // Append the character to the input string
             char c = e.getKeyChar();
             input += c;

@@ -69,8 +69,8 @@ public class ImageLoader {
     public static BufferedImage[] loadAboutMenu() {
         BufferedImage[] images = new BufferedImage[2];
 
-        images[0] = readImage("menus/about", "page_1", 1, 1, false);
-        images[1] = readImage("menus/about", "page_2", 1, 1, false);
+        images[0] = readImage("menus/about_panel", "page_1", 1, 1, false);
+        images[1] = readImage("menus/about_panel", "page_2", 1, 1, false);
 
         return images;
     }
@@ -235,7 +235,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadListOfSimsMenu() {
-        BufferedImage[] images = new BufferedImage[10];
+        BufferedImage[] images = new BufferedImage[9];
 
         images[0] = readImage("menus/list_of_sims_menu", "choose_sim_box", 1, 1, false);
         images[1] = readImage("menus/list_of_sims_menu", "sim_box", 1, 1, false);
@@ -246,7 +246,6 @@ public class ImageLoader {
         images[6] = readImage("menus/list_of_sims_menu", "icon_health", 1, 1, false);
         images[7] = readImage("menus/list_of_sims_menu", "icon_hunger", 1, 1, false);
         images[8] = readImage("menus/list_of_sims_menu", "icon_mood", 1, 1, false);
-        images[9] = readImage("menus/list_of_sims_menu", "view sim", 1, 1, false);
 
         return images;
     }

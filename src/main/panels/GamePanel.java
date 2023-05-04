@@ -130,7 +130,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
     
             if (UserInterface.isViewingWorld()) {
-                WorldMenu.draw(g2, world);
+                WorldMenu.draw(g2);
             }
             else {
                 Sim currentSim = UserInterface.getCurrentSim();

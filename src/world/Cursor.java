@@ -64,7 +64,7 @@ public class Cursor {
         return false;
     }
 
-    public void move(){
+    public void update(){
         int upperX = (Consts.TILE_SIZE * 64) - 14;
         int upperY = (Consts.TILE_SIZE * 64) - 14;
         int newX = x;
@@ -131,7 +131,8 @@ public class Cursor {
                 CreateSimPanel.reset();
             }
         }
-        enterHouse();
+
+        if (isAboveHouse()) enterHouse();
     }
 
     private void enterHouse() {
@@ -147,11 +148,7 @@ public class Cursor {
             houseToVisit = world.getHouse(x, y);
             roomToVisit = houseToVisit.getRoomWhenEntered();
 
-            if (currentHouse == houseToVisit) {
-                UserInterface.viewWorld();
-                System.out.println("You cannot enter a house you're already in!");
-                return;
-            }
+            if (currentHouse == houseToVisit) return;
     
             if (isAboveHouse()) {
                 if (world.isAdding()) {

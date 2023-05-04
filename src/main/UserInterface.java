@@ -33,7 +33,7 @@ public class UserInterface {
     private static boolean viewingWorld = false;
     private static boolean viewingActiveActions = false;
     private static boolean viewingProfessions = false;
-    private static boolean viewingListOfSims = true;
+    private static boolean viewingListOfSims = false;
 
     //ONLY FOR DEBUGGING
     private static Store store = new Store();
@@ -56,7 +56,7 @@ public class UserInterface {
 
         UserInterface.currentSim = world.getListOfSim().get(0);
         UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
-        UserInterface.currentSim.setCurrentHouse(world.getListOfHouse().get(0));
+        UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
         viewingWorld = false;
     }
@@ -109,6 +109,11 @@ public class UserInterface {
 
     public static boolean isViewingListOfSims() {
         return viewingListOfSims;
+    }
+
+    // ONLY FOR DEBUGGING
+    public static boolean isDebug() {
+        return debug;
     }
 
     // SETTERS
@@ -185,17 +190,19 @@ public class UserInterface {
     }
 
     public static void viewListOfSims() {
+        ListOfSimsMenu.getListOfSelectableSims();
+        ListOfSimsMenu.reset();
         viewingListOfSims = !viewingListOfSims;
     }
 
     // OTHERS
     public static void update() {
-        if (tabbed && !currentSimInventory.isOpen()) {
-            TabMenu.update();
-        }
-
         if (currentSimInventory.isOpen()) {
             currentSimInventory.update();
+        }
+
+        if (tabbed && !currentSimInventory.isOpen()) {
+            TabMenu.update();
         }
 
         if (pause) {
@@ -265,25 +272,5 @@ public class UserInterface {
         int centerX = (image.getWidth() - textWidth) / 2;
 
         g.drawString(str, x + centerX + offset, y);
-    }
-
-    private static void drawText(Graphics2D g) {
-        Font font;
-        // ONLY FOR DEBUGGING
-        if (debug) {
-            font = new Font("Inter", Font.PLAIN, 10);
-            g.setFont(font);
-
-            g.drawString("x: " + currentSim.getX(), 33, 374);
-            g.drawString("y: " + currentSim.getY(), 33, 384);
-            g.drawString("InRange: " + currentSim.getInteractionHandler().isObjectInRange(), 73, 374);
-            g.drawString("isWalking: " + currentSim.isMoving(), 73, 384);
-            g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
-            g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-            g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
-            g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-            g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
-            g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
-        }
     }
 }

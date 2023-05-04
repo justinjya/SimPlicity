@@ -122,7 +122,7 @@ public class World {
     // Others
     public void update() {
         if (UserInterface.isViewingWorld()) {
-            cursor.move();
+            cursor.update();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             cursor.enterPressed();
@@ -136,6 +136,7 @@ public class World {
 
                 int newSimIndex = listOfSim.size() - 1;
                 listOfSim.remove(newSimIndex);
+                UserInterface.setCurrentSim(CreateSimPanel.currentSim);
             }
 
             if (!GamePanel.isCurrentState("Playing")) {
@@ -154,6 +155,8 @@ public class World {
         drawHouses(g);
 
         drawCursor(g);
+        
+        drawOwnerNames(g);
 
         drawArrows(g);
     }
@@ -214,13 +217,6 @@ public class World {
     }
 
     private void drawHouses(Graphics2D g) {
-        Font font;
-        g.setColor(Color.WHITE);
-
-        font = new Font("Inter", Font.PLAIN, 9);
-
-        g.setFont(font);
-
         for (int y = lowerBoundsY; y < upperBoundsY; y++) {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
                 int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
@@ -234,13 +230,57 @@ public class World {
                     if (isAdding) {
                         g.drawImage(images[5], tileX, tileY, null);
                     }
-                    else {        
-                        g.drawImage(images[4], tileX, tileY, null);
-                        g.drawString(getHouse(x, y).getName(), tileX - 5, tileY + 26);
+                    else {
+                        Sim currentSim = UserInterface.getCurrentSim();
+                        House currentHouse = currentSim.getCurrentHouse();
+                        boolean isAboveCurrentHouse = (cursor.getGridX() == currentHouse.getX())
+                            && (cursor.getGridY() == currentHouse.getY());
+
+                        if (isAboveCurrentHouse) {
+                            g.drawImage(images[5], tileX, tileY, null);
+                        }
+                        else {
+                            g.drawImage(images[4], tileX, tileY, null);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private void drawOwnerNames(Graphics2D g) {
+        try {
+            Font font;
+            font = new Font("Inter", Font.PLAIN, 9);
+            g.setColor(Color.WHITE);
+            g.setFont(font);
+    
+            int gridX = cursor.getGridX();
+            int gridY = cursor.getGridY();
+    
+            House houseSelected = getHouse(gridX, gridY);
+            Sim houseOwner = houseSelected.getOwner();
+            Sim currentSim = UserInterface.getCurrentSim();
+            House currentHouse = currentSim.getCurrentHouse();
+            boolean isAboveCurrentHouse = (cursor.getGridX() == currentHouse.getX())
+                && (cursor.getGridY() == currentHouse.getY());
+    
+            for (int y = lowerBoundsY; y < upperBoundsY; y++) {
+                for (int x = lowerBoundsX; x < upperBoundsX; x++) {
+                    int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                    int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
+    
+                    if (cursor.isAboveHouse() && x == cursor.getGridX() && y == cursor.getGridY()) {
+                        if (isAboveCurrentHouse) return;
+                        if (isAdding) return;
+
+                        g.drawString(houseOwner.getName() + "'s", tileX - 5, tileY + 26);
+                        g.drawString("House", tileX - 5, tileY + 36);
+                    }
+                }
+            }
+        }
+        catch (NullPointerException npe) {}
     }
 
     private void drawCursor(Graphics2D g) {

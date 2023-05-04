@@ -3,9 +3,12 @@ package src.main;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
+import src.world.House;
+import src.world.Room;
 import src.world.World;
 
 public class GameLoader {
@@ -27,9 +30,31 @@ public class GameLoader {
         
         // Add the new sim to the world
         world.addSim(newSim);
+
         world.addSim(newSim2);
-        world.addSim(newSim3);
+        Room newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null));
+        newRoom.getListOfObjects().get(0).setInteraction("view active actions");
+
+        House newHouse = new House(18, 16, world, world.getListOfSim().get(1), newRoom);
         
+        newRoom.setHouseInsideOf(newHouse);
+        world.getListOfHouse().add(newHouse);
+        newSim2.setCurrentHouse(newHouse);
+        newSim2.setCurrentRoom(newRoom);
+        
+        world.addSim(newSim3);
+        newRoom = new Room("First Room");
+        newRoom.getListOfObjects().add(new Door(null));
+        newRoom.getListOfObjects().get(0).setInteraction("view active actions");
+
+        newHouse = new House(20, 16, world, world.getListOfSim().get(2), newRoom);
+        
+        newRoom.setHouseInsideOf(newHouse);
+        world.getListOfHouse().add(newHouse);
+        newSim3.setCurrentHouse(newHouse);
+        newSim3.setCurrentRoom(newRoom);
+
         // Actually start the game by changing the state into adding a house
         UserInterface.initDebug(world);
     }
@@ -60,11 +85,14 @@ public class GameLoader {
         // Create the sim
         Color shirtColor = ImageLoader.setColor(selectedColor);
         Sim newSim = new Sim(simName, shirtColor);
+        CreateSimPanel.currentSim = UserInterface.getCurrentSim();
+        UserInterface.setCurrentSim(newSim);
         
         // Add the sim to the world and change the state of game into adding a house
         world.addSim(newSim);
         world.changeIsAddingState();
         UserInterface.viewWorld();
+        UserInterface.viewListOfSims();
     }
 
     public static void loadGame() {

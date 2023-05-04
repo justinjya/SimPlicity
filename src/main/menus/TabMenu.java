@@ -66,7 +66,7 @@ public class TabMenu {
                 // ITEM STORE HERE
                 break;
             case 3:
-                AddSimAction.addSim();
+                UserInterface.viewListOfSims();
                 break;
             case 4:
                 ActiveActions.visitAnotherSim();

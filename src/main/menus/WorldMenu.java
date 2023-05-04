@@ -18,7 +18,13 @@ public class WorldMenu {
     private static BufferedImage houseInfoBox = images[1];
     private static BufferedImage helpBox = images[2];
 
-    public static void draw(Graphics2D g, World world) {
+    private static World world;
+    private static Sim currentSim;
+    private static House currentHouse ;
+
+    public static void draw(Graphics2D g) {
+        world = UserInterface.getWorld();
+
         drawInfoBoxes(g);
 
         drawTexts(g);
@@ -27,7 +33,8 @@ public class WorldMenu {
     }
 
     private static void drawInfoBoxes(Graphics2D g) {
-        Sim currentSim = UserInterface.getCurrentSim();
+        currentSim = UserInterface.getCurrentSim();
+        currentHouse = currentSim.getCurrentHouse();
 
         // world border
         g.setColor(new Color(61, 30, 45));
@@ -38,14 +45,16 @@ public class WorldMenu {
         BufferedImage simPreviewImage = ImageLoader.showSimPreview(currentSim);
         g.drawImage(simPreviewImage, 654, 33, 56, 56, null);
 
-        g.drawImage(houseInfoBox, 588, 136, null);
+        if (currentHouse != null) {
+            g.drawImage(houseInfoBox, 588, 136, null);
+        }
 
-        g.drawImage(helpBox, 588, 546, null);
+        g.drawImage(helpBox, 584, 546, null);
     }
 
     private static void drawTexts(Graphics2D g) {
-        Sim currentSim = UserInterface.getCurrentSim();
-        House currentHouse = currentSim.getCurrentHouse();
+        currentSim = UserInterface.getCurrentSim();
+        currentHouse = currentSim.getCurrentHouse();
 
         // sim preview and name box
         Font font = new Font("Inter", Font.BOLD, 14);
@@ -54,14 +63,23 @@ public class WorldMenu {
         UserInterface.drawCenteredText(g, simPreviewBox, 588, 110, currentSim.getName(), font);
         
         // house name box
-        font = new Font("Inter", Font.BOLD, 11);
-        g.setFont(font);
-        UserInterface.drawCenteredText(g, houseInfoBox, 588, 159, 12, currentHouse.getName(), font);
+        if (currentHouse != null) {
+            font = new Font("Inter", Font.BOLD, 11);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, houseInfoBox, 588, 159, 12, currentHouse.getName(), font);
 
-        // press escape to return
-        font = new Font("Inter", Font.PLAIN, 10);
-        g.setFont(font);
-        g.setColor(Color.BLACK);
-        g.drawString("press esc to return to current house", 596, 200);
+            // press escape to return
+            font = new Font("Inter", Font.PLAIN, 10);
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            g.drawString("press esc to return to current house", 596, 200);
+        }
+        else {
+            // press escape to return
+            font = new Font("Inter", Font.PLAIN, 10);
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+            g.drawString("press esc to cancel", 637, 140);
+        }
     }
 }
