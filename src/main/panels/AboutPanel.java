@@ -34,9 +34,9 @@ public class AboutPanel extends JPanel {
                 }
 
                 if (keyCode == KeyEvent.VK_ESCAPE) {
-                    if (GamePanel.isCurrentState("Main Menu: About")) {
+                    if (GamePanel.isCurrentState("Main menu: About")) {
                         PanelHandler.switchPanel(AboutPanel.getInstance(), MainMenuPanel.getInstance());
-                        GamePanel.gameState = "Main Menu";
+                        GamePanel.gameState = "Main menu";
                     }
                     if (GamePanel.isCurrentState("Playing: About")) {
                         PanelHandler.switchPanel(AboutPanel.getInstance(), GamePanel.getInstance());

@@ -18,6 +18,7 @@ import src.main.menus.GameMenu;
 import src.main.menus.ListOfSimsMenu;
 import src.main.menus.PauseMenu;
 import src.main.menus.TabMenu;
+import src.main.menus.UpgradeHouseMenu;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
@@ -34,6 +35,7 @@ public class UserInterface {
     private static boolean viewingActiveActions = false;
     private static boolean viewingProfessions = false;
     private static boolean viewingListOfSims = false;
+    private static boolean upgradingHouse = false;
 
     //ONLY FOR DEBUGGING
     private static Store store = new Store();
@@ -54,6 +56,7 @@ public class UserInterface {
         world.getListOfHouse().add(newHouse);
 
         UserInterface.currentSim = world.getListOfSim().get(0);
+        UserInterface.currentSim.setMoney(10000);
         UserInterface.currentSimInventory = UserInterface.currentSim.getInventory();
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
@@ -110,9 +113,8 @@ public class UserInterface {
         return viewingListOfSims;
     }
 
-    // ONLY FOR DEBUGGING
-    public static boolean isDebug() {
-        return debug;
+    public static boolean isUpgradingHouse() {
+        return upgradingHouse;
     }
 
     // SETTERS
@@ -145,6 +147,7 @@ public class UserInterface {
 
     public static void pause() {
         if (tabbed) tab();
+        
         pause = !pause;
 
         currentSim.changeIsBusyState();
@@ -162,10 +165,6 @@ public class UserInterface {
 
         currentSimInventory.changeIsOpen();
         currentSim.changeIsBusyState();
-    }
-
-    public static void debug() {
-        debug = !debug;
     }
 
     public static void viewActiveActions() {
@@ -189,9 +188,27 @@ public class UserInterface {
     }
 
     public static void viewListOfSims() {
-        ListOfSimsMenu.getListOfSelectableSims();
         ListOfSimsMenu.reset();
+        ListOfSimsMenu.getListOfSelectableSims();
         viewingListOfSims = !viewingListOfSims;
+
+        currentSim.changeIsBusyState();
+    }
+
+    public static void upgradeHouse() {
+        UpgradeHouseMenu.reset();
+        upgradingHouse = !upgradingHouse;
+
+        currentSim.changeIsBusyState();
+    }
+
+    // ONLY FOR DEBUGGING
+    public static boolean isDebug() {
+        return debug;
+    }
+
+    public static void debug() {
+        debug = !debug;
     }
 
     // OTHERS
@@ -246,6 +263,10 @@ public class UserInterface {
 
         if (viewingListOfSims) {
             ListOfSimsMenu.draw(g);
+        }
+
+        if (upgradingHouse) {
+            UpgradeHouseMenu.draw(g);
         }
 
         // if (store.getIsOpen()) {

@@ -19,7 +19,6 @@ public class Main {
         // Set the icon of the JFrame
         frame.setIconImage(icon.getImage());
 
-
         // ONLY FOR DEBUGGING
         frame.add(GamePanel.getInstance());
         GameLoader.startNewGameDebug();

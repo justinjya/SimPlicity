@@ -216,11 +216,16 @@ public class Room {
             moveableObject.move(collisionHandler);
             moveableObject.updateBounds();
 
+            // To check if a wall is already connected to a room
+            if (moveableObject instanceof Door) {
+                Door door = (Door) moveableObject;
+                isWallOccupied = collisionHandler.isWallOccupied(door);
+            }
+
             // To rotate the door
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
                 if (moveableObject instanceof Door) {
                     Door door = (Door) moveableObject;
-                    isWallOccupied = collisionHandler.isWallOccupied(door);
                     door.rotate(door.getX(), door.getY());
                 }
                 

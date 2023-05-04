@@ -4,6 +4,7 @@ import src.entities.interactables.Door;
 import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
 import src.items.foods.RawFood;
+import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
@@ -11,34 +12,38 @@ import src.world.House;
 import src.world.Room;
 
 public class UpgradeActions {
-    public static void addRoom(Room room, String name) {
+    public static void addRoom(String name) {
         Sim currentSim = UserInterface.getCurrentSim();
+        Room currentRoom = currentSim.getCurrentRoom();
         House currentHouse = currentSim.getCurrentHouse();
         Sim currentHouseOwner = currentHouse.getOwner();
 
         if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
-        
-        Room thisRoom = room;
-        
+
         Thread addNewRoomThread = new Thread() {
             @Override
             public void run() {
                 Room newRoom = new Room(name);
-                Door newDoor = new Door(newRoom);
+                Door newDoor = new Door(currentRoom);
                 
-                room.addObject(newDoor);
+                currentRoom.addObject(newDoor);
                 while (true) {
-                    synchronized (thisRoom) {
-                        if (!thisRoom.isEditingRoom()) {
+                    synchronized (currentRoom) {
+                        if (!currentRoom.isEditingRoom()) {
                             break;
                         }
                     }
                 }
+                currentSim.setMoney(currentSim.getMoney() - newDoor.getPrice());
 
-                newRoom.getListOfObjects().add(new Door(newDoor, thisRoom));
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_MINUTE * 18);
+
+                while (t.isAlive()) continue;
+
+                newDoor.setLeadsIntoRoom(newRoom);
+                newRoom.getListOfObjects().add(new Door(newDoor, currentRoom));
             }
         };
-
         addNewRoomThread.start();
     }
 

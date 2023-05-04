@@ -9,6 +9,7 @@ import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
+import src.main.menus.UpgradeHouseMenu;
 import src.main.menus.WorldMenu;
 import src.world.Room;
 import src.world.World;
@@ -32,6 +33,10 @@ public class GamePanel extends JPanel implements Runnable {
                 KeyHandler.keyPressed(e.getKeyCode());
                 
                 KeyHandler.keyBinds();
+
+                if (UserInterface.isUpgradingHouse()) {
+                    UpgradeHouseMenu.update(e);
+                }
             }
             
             @Override
@@ -91,13 +96,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         try {
-            if (isCurrentState("Main menu")) {
-                return;
-            }
+            if (isCurrentState("Main Menu")) return;
+
+            if (isCurrentState("Main Menu: About") || isCurrentState("Playing: About")) return;
     
-            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
-                return;
-            }
+            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) return;
 
             if (UserInterface.isViewingWorld()) {
                 world.update();
@@ -121,13 +124,11 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         try {
-            if (isCurrentState("Main menu")) {
-                return;
-            }
+            if (isCurrentState("Main menu")) return;
+
+            if (isCurrentState("Main menu: About") || isCurrentState("Playing: About")) return;
     
-            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) {
-                return;
-            }
+            if (isCurrentState("Starting a new game: Creating a new sim") || isCurrentState("Creating a new sim")) return;
     
             if (UserInterface.isViewingWorld()) {
                 WorldMenu.draw(g2);

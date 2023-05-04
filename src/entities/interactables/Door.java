@@ -92,6 +92,10 @@ public class Door extends Interactables {
         }
     }
 
+    public void setLeadsIntoRoom(Room room) {
+        leadsIntoRoom = room;
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public void updateBounds() {
@@ -131,6 +135,9 @@ public class Door extends Interactables {
     public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
             UserInterface.viewActiveActions();
+            return;
+        }
+        if (leadsIntoRoom == sim.getCurrentRoom()) {
             return;
         }
 

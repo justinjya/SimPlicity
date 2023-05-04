@@ -171,6 +171,17 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadUpgradeHouse() {
+        BufferedImage[] images = new BufferedImage[4];
+
+        images[0] = readImage("menus/game_menu/upgrade_house_menu", "room_name_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/upgrade_house_menu", "price_box", 1, 1, false);
+        images[2] = readImage("menus/game_menu/upgrade_house_menu", "add_box", 1, 1, false);
+        images[3] = readImage("menus/game_menu/upgrade_house_menu", "price_box_not_sufficient", 1, 1, false);
+
+        return images;
+    }
+
     public static BufferedImage[] loadInventory() {
         BufferedImage[] images = new BufferedImage[5];
 

@@ -53,7 +53,7 @@ public class TabMenu {
                 NonActiveActions.editRoom(currentRoom);
                 break;
             case 1:
-                UpgradeActions.addRoom(currentRoom, "Second Room");
+                UserInterface.upgradeHouse();
                 break;
             case 2:
                 // ITEM STORE HERE

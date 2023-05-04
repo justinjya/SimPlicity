@@ -66,7 +66,8 @@ public class KeyHandler {
 
             if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
-                !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
+                KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
