@@ -51,7 +51,6 @@ public class UserInterface {
         newRoom.getListOfObjects().get(0).setInteraction("view active actions");
 
         House newHouse = new House(16, 16, world, world.getListOfSim().get(0), newRoom);
-        newRoom.setHouseInsideOf(newHouse);
         world.getListOfHouse().add(newHouse);
 
         UserInterface.currentSim = world.getListOfSim().get(0);
@@ -197,7 +196,7 @@ public class UserInterface {
 
     // OTHERS
     public static void update() {
-        if (currentSimInventory.isOpen()) {
+        if (currentSimInventory.isOpen() && !pause) {
             currentSimInventory.update();
         }
 

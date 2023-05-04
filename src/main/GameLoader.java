@@ -12,10 +12,6 @@ import src.world.Room;
 import src.world.World;
 
 public class GameLoader {
-    public static String simName = CreateSimPanel.simName;
-    public static String roomName = CreateSimPanel.roomName;
-    public static int selectedColor = CreateSimPanel.selectedColor;
-
     // ONLY FOE DEBUGGING
     public static void startNewGameDebug() {
         GameTime.init(1, Consts.ONE_MINUTE * 12);
@@ -38,7 +34,6 @@ public class GameLoader {
 
         House newHouse = new House(18, 16, world, world.getListOfSim().get(1), newRoom);
         
-        newRoom.setHouseInsideOf(newHouse);
         world.getListOfHouse().add(newHouse);
         newSim2.setCurrentHouse(newHouse);
         newSim2.setCurrentRoom(newRoom);
@@ -50,7 +45,6 @@ public class GameLoader {
 
         newHouse = new House(20, 16, world, world.getListOfSim().get(2), newRoom);
         
-        newRoom.setHouseInsideOf(newHouse);
         world.getListOfHouse().add(newHouse);
         newSim3.setCurrentHouse(newHouse);
         newSim3.setCurrentRoom(newRoom);
@@ -79,7 +73,8 @@ public class GameLoader {
 
     public static void addSim() {
         World world = GamePanel.world;
-        String simName = CreateSimPanel.textFields[0];
+
+        String simName = CreateSimPanel.simName;
         int selectedColor = CreateSimPanel.selectedColor;
         
         // Create the sim

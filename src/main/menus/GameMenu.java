@@ -99,7 +99,7 @@ public class GameMenu {
     private static void drawTexts(Graphics2D g) {
         Sim currentSim = UserInterface.getCurrentSim();
         House currentHouse = currentSim.getCurrentHouse();
-        Room  currentRoom = currentSim.getCurrentRoom();
+        Room currentRoom = currentSim.getCurrentRoom();
 
         Font font = new Font("Inter", Font.BOLD, 14);
         

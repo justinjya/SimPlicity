@@ -17,13 +17,14 @@ import src.main.KeyHandler;
 
 public class CreateSimPanel extends JPanel {
     public static CreateSimPanel csp = new CreateSimPanel();
-
-    public static Sim currentSim;
+    
     public static String[] textFields = { "", "" };
-    public static String simName = textFields[0];
-    public static String roomName = textFields[1];
+    public static String simName;
+    public static String roomName;
     public static int selectedColor = 2;
     private static int selectedField = 0; // 0 to 3
+
+    public static Sim currentSim;
 
     private BufferedImage[] images = ImageLoader.loadCreateSimMenu();
 
@@ -35,6 +36,9 @@ public class CreateSimPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
+
+                simName = textFields[0];
+                roomName = textFields[1];
 
                 // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {

@@ -6,10 +6,18 @@ import src.entities.sim.Sim;
 import src.items.foods.RawFood;
 import src.main.GameTime;
 import src.main.KeyHandler;
+import src.main.UserInterface;
+import src.world.House;
 import src.world.Room;
 
 public class UpgradeActions {
     public static void addRoom(Room room, String name) {
+        Sim currentSim = UserInterface.getCurrentSim();
+        House currentHouse = currentSim.getCurrentHouse();
+        Sim currentHouseOwner = currentHouse.getOwner();
+
+        if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
+        
         Room thisRoom = room;
         
         Thread addNewRoomThread = new Thread() {

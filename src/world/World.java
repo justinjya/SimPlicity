@@ -110,7 +110,6 @@ public class World {
         newRoom.getListOfObjects().get(0).setInteraction("view active actions");
 
         House newHouse = new House(x, y, this, newSim, newRoom);
-        newRoom.setHouseInsideOf(newHouse);
 
         listOfHouse.add(newHouse);
     }

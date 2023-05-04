@@ -11,7 +11,6 @@ import src.assets.ImageLoader;
 import src.main.UserInterface;
 import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
-import src.world.House;
 import src.world.Room;
 
 public class TabMenu {
@@ -46,22 +45,16 @@ public class TabMenu {
         
         Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
-        House currentHouse = currentRoom.getHouseInsideOf();
-        Sim currentHouseOwner = currentHouse.getOwner();
 
         if (currentSim.isBusy()) return;
 
         switch (selectedBox) {
             case 0:
-                if (currentSim.getName().equals(currentHouseOwner.getName())) {
-                    NonActiveActions.editRoom(currentRoom);
-                    break;
-                }
+                NonActiveActions.editRoom(currentRoom);
+                break;
             case 1:
-                if (currentSim.getName().equals(currentHouseOwner.getName())) {
-                    UpgradeActions.addRoom(currentRoom, "Second Room");
-                    break;
-                }
+                UpgradeActions.addRoom(currentRoom, "Second Room");
+                break;
             case 2:
                 // ITEM STORE HERE
                 break;
@@ -114,7 +107,7 @@ public class TabMenu {
         g.setColor(Color.BLACK);
         switch (selectedBox) {
             case 0:
-                UserInterface.drawCenteredText(g, windowArea, 0, 468, "edit you room", font);
+                UserInterface.drawCenteredText(g, windowArea, 0, 468, "edit your room", font);
                 break;
             case 1:
                 UserInterface.drawCenteredText(g, windowArea, 0, 468, "upgrade your house", font);

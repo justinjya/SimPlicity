@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.UserInterface;
 import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.*;
@@ -20,7 +21,6 @@ public class Room {
     private ArrayList<Sim> listOfSims;
     
     // For adding, editing, and removing objects
-    private House houseInsideOf;
     private boolean isEditingRoom;
     private CollisionHandler collisionHandler;
     private Interactables moveableObject = null;
@@ -61,10 +61,6 @@ public class Room {
     public ArrayList<Sim> getListOfSims() {
         return listOfSims;
     }
-
-    public House getHouseInsideOf() {
-        return houseInsideOf;
-    }
     
     // SETTERS
     public void addSim(Sim sim) {
@@ -77,10 +73,6 @@ public class Room {
 
     public void changeisEditingRoomState() {
         this.isEditingRoom = !this.isEditingRoom;
-    }
-
-    public void setHouseInsideOf(House house) {
-        this.houseInsideOf = house;
     }
 
     public void addObject(Interactables object) {
@@ -247,12 +239,12 @@ public class Room {
 
             // Cancel adding or moving an object if escape is pressed and add object into sim inventory
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                Sim sim = houseInsideOf.getOwner();
-                
                 if (!(moveableObject instanceof Door)) {
+                    Sim currentSim = UserInterface.getCurrentSim();
+                    
                     moveableObject.setPlayAreaX(0);
                     moveableObject.setPlayAreaY(3);
-                    sim.getInventory().addItem(moveableObject);
+                    currentSim.getInventory().addItem(moveableObject);
                 }
                 moveableObject = null;
                 changeisEditingRoomState();
