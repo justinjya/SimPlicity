@@ -3,9 +3,12 @@ package src.entities.interactables;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
-import src.entities.sim.Sim;
-import src.main.Consts;
+import src.main.KeyHandler;
 import src.main.GameTime;
+import src.main.Consts;
+import src.entities.sim.Sim;
+import src.main.UserInterface;
+import src.main.menus.InteractMenu;
 
 public class Television extends Interactables{
     // Attributes
@@ -18,7 +21,7 @@ public class Television extends Interactables{
     public Television(int x, int y) {
         super (
             "Television",
-            "watch the television",
+            "watch or start to karaoke",
             0,
             x,
             y,
@@ -45,6 +48,27 @@ public class Television extends Interactables{
 
     @Override
     public void interact(Sim sim){
+        Thread choosingInteractionThread = new Thread() {
+            @Override
+            public void run() {
+                UserInterface.viewInteractions();
+
+                while (UserInterface.isViewingInteractions()) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        UserInterface.viewInteractions();
+                        break;
+                    }
+                }
+
+                if (InteractMenu.slotSelected == -1) return;
+                else if (InteractMenu.slotSelected == 0) karaoke(sim);
+                else if (InteractMenu.slotSelected == 1) watch(sim);
+            }
+        };
+        choosingInteractionThread.start();
+    }
+
+    private void watch(Sim sim) {
         Thread watch = new Thread(){
             @Override
             public void run(){
@@ -52,9 +76,7 @@ public class Television extends Interactables{
                 changeOccupiedState();
                 Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                 
-                while (t.isAlive()) {
-                    continue;
-                }
+                while (t.isAlive()) continue;
 
                 changeOccupiedState();
                 sim.resetStatus();
@@ -64,5 +86,24 @@ public class Television extends Interactables{
             }
         };
         watch.start();
+    }
+
+    private void karaoke(Sim sim) {
+        Thread karaoke = new Thread() {
+            @Override
+            public void run() {
+                sim.setStatus("Karaoke");
+                changeOccupiedState();
+                Thread t = GameTime.startDecrementTimeRemaining(10 * Consts.ONE_SECOND);
+                
+                while (t.isAlive()) continue;
+
+                changeOccupiedState();
+                sim.setMood(sim.getMood() + 10);
+                sim.setHunger(sim.getHunger() - 10);
+                sim.resetStatus();
+            }
+        };
+        karaoke.start();  
     }
 }

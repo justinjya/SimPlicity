@@ -105,25 +105,6 @@ public class ActiveActions {
         readingABook.start();
     }
 
-    public void karaoke(Sim sim) {
-        Thread karaoke = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sim.setStatus("Karaoke");
-                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
-                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
-                    sim.setMood(sim.getMood() + 10);
-                    sim.setHunger(sim.getHunger() - 10);
-                }
-                catch (InterruptedException e) {}
-                sim.resetStatus();
-            }
-        };
-        karaoke.start();
-        
-    }
-
     public static void interact() {
         Sim sim = UserInterface.getCurrentSim();
         Room currentRoom = sim.getCurrentRoom();

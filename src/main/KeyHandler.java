@@ -66,18 +66,19 @@ public class KeyHandler {
 
             if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
-                !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
-                KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
+                !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
-                !UserInterface.isViewingListOfSims() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+                !UserInterface.isViewingListOfSims() && !UserInterface.isViewingInteractions() &&
+                KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
                 UserInterface.tab();
             }
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
                 UserInterface.debug();
             }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
+            if (!currentSim.isBusy() && KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
                 ActiveActions.interact();
             }
             if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {

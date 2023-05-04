@@ -15,6 +15,7 @@ import src.entities.sim.Store;
 import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
 import src.main.menus.GameMenu;
+import src.main.menus.InteractMenu;
 import src.main.menus.ListOfSimsMenu;
 import src.main.menus.PauseMenu;
 import src.main.menus.TabMenu;
@@ -36,6 +37,7 @@ public class UserInterface {
     private static boolean viewingProfessions = false;
     private static boolean viewingListOfSims = false;
     private static boolean upgradingHouse = false;
+    private static boolean viewingInteractions = false;
 
     //ONLY FOR DEBUGGING
     private static Store store = new Store();
@@ -115,16 +117,14 @@ public class UserInterface {
         return upgradingHouse;
     }
 
+    public static boolean isViewingInteractions() {
+        return viewingInteractions;
+    }
+
     // SETTERS
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
         currentSimInventory = currentSim.getInventory();
-        
-        // for (Sim s : world.getListOfSim()) {
-        //     if (s == currentSim) continue;
-
-        //     if (!s.isBusy()) s.changeIsBusyState();
-        // }
     }
 
     public static void viewWorld() {
@@ -132,18 +132,12 @@ public class UserInterface {
     }
 
     public static void tab() {
-        if (pause) return;
-        if (viewingActiveActions) return;
-        if (viewingWorld) return;
-        if (currentSimInventory.isOpen()) return;
-
         tabbed = !tabbed;
         currentSim.changeIsBusyState();
     }
 
     public static void pause() {
         if (tabbed) tab();
-        
         pause = !pause;
 
         currentSim.changeIsBusyState();
@@ -151,36 +145,19 @@ public class UserInterface {
 
 
     public static void inventory() {
-        if (pause) return;
-        if (viewingWorld) return;
-        if (viewingActiveActions) return;
-        if (viewingListOfSims) return;
-        if (viewingProfessions) return;
-        if (upgradingHouse) return;
-        
-        if (tabbed) {
-            tab();
-        }
+        if (tabbed) tab();
 
         currentSimInventory.changeIsOpen();
         currentSim.changeIsBusyState();
     }
 
     public static void viewActiveActions() {
-        if (tabbed) tab();
-        if (currentSimInventory.isOpen()) inventory();
-        if (viewingProfessions) viewProfessions();
-
         viewingActiveActions = !viewingActiveActions;
 
         currentSim.changeIsBusyState();
     }
 
     public static void viewProfessions() {
-        if (viewingActiveActions) viewActiveActions();
-        if (tabbed) tab();
-        if (currentSimInventory.isOpen()) inventory();
-
         viewingProfessions = !viewingProfessions;
 
         currentSim.changeIsBusyState();
@@ -196,6 +173,13 @@ public class UserInterface {
     public static void upgradeHouse() {
         UpgradeHouseMenu.reset();
         upgradingHouse = !upgradingHouse;
+
+        currentSim.changeIsBusyState();
+    }
+
+    public static void viewInteractions() {
+        InteractMenu.reset();
+        viewingInteractions = !viewingInteractions;
 
         currentSim.changeIsBusyState();
     }
@@ -235,6 +219,10 @@ public class UserInterface {
             ListOfSimsMenu.update();
         }
 
+        if (viewingInteractions) {
+            InteractMenu.update();
+        }
+
         // if (store.getIsOpen()) {
         //     store.update();
         // }
@@ -265,6 +253,10 @@ public class UserInterface {
 
         if (upgradingHouse) {
             UpgradeHouseMenu.draw(g);
+        }
+
+        if (viewingInteractions) {
+            InteractMenu.draw(g);
         }
 
         // if (store.getIsOpen()) {

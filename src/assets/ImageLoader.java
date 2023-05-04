@@ -262,6 +262,14 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadInteractMenu() {
+        BufferedImage[] images = new BufferedImage[2];
+
+        images[0] = readImage("menus/game_menu/interact_menu", "interact_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/interact_menu", "highlight", 1, 1, false);
+        
+        return images;
+    }
 
     public static BufferedImage loadTile(String tile) {
         BufferedImage image = readImage("tiles", tile, 1, 1, true);
