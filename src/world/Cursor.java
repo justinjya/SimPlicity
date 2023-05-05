@@ -168,6 +168,13 @@ public class Cursor {
                     int duration = (int) Math.sqrt(deltaXsquared + deltaYsquared);
 
                     GameTime.decreaseTimeRemaining(duration);
+
+                    for (int i = 1; i <= duration; i++) {
+                        if (i % 30 == 0) {
+                            currentSim.setMood(currentSim.getMood() + 10);
+                            currentSim.setHunger(currentSim.getHunger() - 10);
+                        }
+                    }
                 }
 
                 currentSim.setCurrentHouse(houseToVisit);
