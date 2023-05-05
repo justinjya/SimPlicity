@@ -3,11 +3,9 @@ package src.assets;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
-
 import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.File;
 
 import src.entities.sim.Sim;
 import src.main.Consts;
