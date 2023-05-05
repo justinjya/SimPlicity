@@ -300,15 +300,15 @@ public class Store {
         int y = 178;
         int countItemPlaceHolder = 0;
 
-        while (countItemPlaceHolder < 15) {
-            g.drawImage(storeLayout[8], x, y-offSetY, null);
-            x += 77;
-            if (countItemPlaceHolder == 4 || countItemPlaceHolder == 9) {
-                x = 214;
-                y += 81;
-            }
-            countItemPlaceHolder++;
-        }
+        // while (countItemPlaceHolder < 15) {
+        //     // g.drawImage(storeLayout[8], x, y-offSetY, null);
+        //     x += 77;
+        //     if (countItemPlaceHolder == 4 || countItemPlaceHolder == 9) {
+        //         x = 214;
+        //         y += 81;
+        //     }
+        //     countItemPlaceHolder++;
+        // }
         
         
         

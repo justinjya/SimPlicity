@@ -619,7 +619,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadStore() {
-        BufferedImage[] images = new BufferedImage[9];
+        BufferedImage[] images = new BufferedImage[8];
 
         images[0] = readImage("menus/store_menu", "catalogue_box", 1, 1, false);
         images[1] = readImage("menus/store_menu", "category_box", 1, 1, false);
@@ -629,7 +629,6 @@ public class ImageLoader {
         images[5] = readImage("menus/store_menu", "information_box", 1, 1, false);
         images[6] = readImage("menus/store_menu", "store_box", 1, 1, false);
         images[7] = readImage("menus/store_menu", "title_box", 1, 1, false);
-        images[8] = readImage("menus/store_menu", "item_placeholder", 1, 1, false);
 
         return images;
     }
@@ -647,18 +646,4 @@ public class ImageLoader {
         images[0] = readImage("menus/game_menu/warning_box", "warning_box", 1, 1, false);
         return images;
     }
-
-    public static BufferedImage loadClockIcon() {
-        BufferedImage icon = readImage("item_icons/interactables", "clock", 1, 1, false);
-        
-        return icon;
-    }
-
-    public static BufferedImage[] loadClockImage() {
-        BufferedImage[] images = new BufferedImage[1];
-        images[0] = readImage("item_icons/interactables", "clock", 1, 1, false);
-    
-        return images;
-    }
-
 }

@@ -154,16 +154,31 @@ public class Sim extends Entity{
     public void setHealth(int health) {
         this.health = health;
         if (this.health > 100) this.health = 100;
+        if (this.health < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setHunger(int hunger) {
         this.hunger = hunger;
         if (this.hunger > 100) this.hunger = 100;
+        if (this.hunger < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setMood(int mood) {
         this.mood = mood;
         if (this.mood > 100) this.mood = 100;
+        if (this.mood < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setMoney(int money) {

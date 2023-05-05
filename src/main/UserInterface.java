@@ -1,34 +1,31 @@
 package src.main;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Font;
+import java.awt.Color;
+import java.util.ArrayList;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
+import java.util.ConcurrentModificationException;
 
-import src.world.Room;
-import src.world.World;
-import src.world.House;
-import src.entities.sim.Sim;
-import src.entities.sim.Store;
-import src.entities.sim.Inventory;
-import src.entities.interactables.Door;
 import src.assets.ImageLoader;
-import src.entities.interactables.Door;
-import src.entities.sim.Inventory;
-import src.entities.sim.Sim;
-import src.entities.sim.Store;
-import src.items.foods.BakedFood;
+import src.main.menus.TabMenu;
+import src.main.menus.GameMenu;
+import src.main.menus.PauseMenu;
+import src.main.menus.InteractMenu;
+import src.main.menus.GameOverMenu;
+import src.main.menus.ListOfSimsMenu;
+import src.main.menus.UpgradeHouseMenu;
 import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
-import src.main.menus.UpgradeHouseMenu;
-import src.main.menus.ListOfSimsMenu;
-import src.main.menus.InteractMenu;
-import src.main.menus.PauseMenu;
-import src.main.menus.GameMenu;
-import src.main.menus.GameOverMenu;
-import src.main.menus.TabMenu;
+import src.entities.interactables.Door;
+import src.entities.sim.Inventory;
+import src.items.foods.BakedFood;
+import src.entities.sim.Store;
+import src.entities.sim.Sim;
+import src.world.World;
+import src.world.House;
+import src.world.Room;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();
@@ -48,6 +45,7 @@ public class UserInterface {
     private static boolean viewingListOfSims = false;
     private static boolean upgradingHouse = false;
     private static boolean viewingInteractions = false;
+    private static boolean showingGameOver = false;
 
     //ONLY FOR DEBUGGING
     private static Store store = new Store();
@@ -71,6 +69,12 @@ public class UserInterface {
         UserInterface.currentSim.setMoney(10000);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
+
+        // testing game over
+        // UserInterface.currentSim.setHealth(1);
+        // UserInterface.currentSim.setHunger(1);
+        // UserInterface.currentSim.setMood(1);
+        GameTime.incrementDay();
 
         viewingTime = false;
     }
@@ -137,6 +141,10 @@ public class UserInterface {
         return viewingInteractions;
     }
 
+    public static boolean isShowingGameOver() {
+        return showingGameOver;
+    }
+
     // SETTERS
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
@@ -144,8 +152,9 @@ public class UserInterface {
     }
 
     public static void tab() {
+        if (pause) return;
         if (upgradingHouse) return;
-        
+
         tabbed = !tabbed;
         if (currentSim.isStatusCurrently("Idle")) {
             currentSim.changeIsBusyState();
@@ -205,6 +214,12 @@ public class UserInterface {
 
     public static void viewInteractions() {
         viewingInteractions = !viewingInteractions;
+
+        currentSim.changeIsBusyState();
+    }
+
+    public static void showGameOver() {
+        showingGameOver = !showingGameOver;
 
         currentSim.changeIsBusyState();
     }
@@ -343,6 +358,12 @@ public class UserInterface {
 
     // OTHERS
     public static void update() {
+        updateListOfSims();
+
+        if (showingGameOver) {
+            GameOverMenu.update();
+        }
+
         if (currentSimInventory.isOpen() && !pause) {
             currentSimInventory.update();
         }
@@ -407,10 +428,10 @@ public class UserInterface {
             InteractMenu.draw(g);
         }
 
-        // GameOverMenu.draw(g);
-        // if (store.getIsOpen()) {
-        //     store.draw(g);
-        // }
+        if (showingGameOver) {
+            GameOverMenu.draw(g);
+        }
+
         if (isViewingRecipes) {
             UserInterface.drawCookUI(g);
         }
@@ -422,6 +443,28 @@ public class UserInterface {
         if (store.getIsOpen()) {
             store.draw(g);
         }
+    }
+
+    private static void updateListOfSims() {
+        World world = UserInterface.getWorld();
+        ArrayList<Sim> listOfSims = world.getListOfSim();
+        try {
+            for (Sim sim : listOfSims) {
+                if (sim.getHealth() > 0 && sim.getHunger() > 0 && sim.getMood() > 0) continue;
+    
+                if (sim.getHealth() <= 0) GameOverMenu.setDeathMessage(sim.getName() + " passed away due to being very ill");
+                if (sim.getHunger() <= 0) GameOverMenu.setDeathMessage(sim.getName() + " starved to death");
+                if (sim.getMood() <= 0) GameOverMenu.setDeathMessage(sim.getName() + " died of depression");
+
+                sim.setHealth(0);
+                sim.setHunger(0);
+                sim.setMood(0);
+
+                listOfSims.remove(sim);
+                if (!UserInterface.isShowingGameOver()) UserInterface.showGameOver();
+            }
+        }
+        catch (ConcurrentModificationException cme) {}
     }
 
     public static void drawCenteredText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {

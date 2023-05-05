@@ -67,9 +67,9 @@ public class KeyHandler {
             if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
                 !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
-                !currentSimInventory.isChoosingFood() && !currentRoom.isEditingRoom() &&
+                !UserInterface.isShowingGameOver() && !currentRoom.isEditingRoom() &&
                 !currentRoom.isEditingRoom() && !Store.getIsOpen() && 
-                KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                !currentSimInventory.isChoosingFood() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&

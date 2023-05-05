@@ -255,29 +255,30 @@ public class Inventory {
             switchCategory();
         }
 
+        int newSlotSelected = slotSelected;
+        int newSlotCol = slotCol;
+        int newSlotRow = slotRow;
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-            if (slotCol > 0) {
-                slotSelected--;
-                slotCol--;
-            }
+            newSlotSelected--;
+            newSlotCol--;
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
-            if (slotRow < 3) {
-                slotSelected += 3;
-                slotRow++;
-            } 
+            newSlotSelected += 3;
+            newSlotRow++;
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-            if (slotCol < 2) {
-                slotSelected++;
-                slotCol++;
-            }
+            newSlotSelected++;
+            newSlotCol++;
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
-            if (slotRow > 0) {
-                slotSelected -= 3;
-                slotRow--;
-            }
+            newSlotSelected -= 3;
+            newSlotRow--;
+        }
+
+        if (newSlotSelected < itemNames.size() && (newSlotCol >= 0 && newSlotCol < 3) && (newSlotRow >= 0 && newSlotRow < 4)) {
+            slotSelected = newSlotSelected;
+            slotCol = newSlotCol;
+            slotRow = newSlotRow;
         }
         
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
@@ -362,7 +363,7 @@ public class Inventory {
             int i = 0; int j = 0;
     
             for (Item item : itemsToShow.keySet()) {
-                if ((i % cols == cols - 1) && (j == rows - 1)) return;
+                if ((i % cols == cols) && (j == rows)) return;
 
                 BufferedImage itemIcon = item.getIcon(); // Get the item image
     

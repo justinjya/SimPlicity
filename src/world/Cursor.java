@@ -155,7 +155,8 @@ public class Cursor {
                     int newSim = world.getListOfSim().size() - 1;
         
                     currentSim = world.getSim(newSim);
-                    currentSim.changeIsBusyState();
+                    if (currentSim.isBusy()) currentSim.changeIsBusyState();
+                    
                     UserInterface.setCurrentSim(currentSim);
                     world.changeIsAddingState();
                 }
