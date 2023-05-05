@@ -22,7 +22,7 @@ public class TrashBin extends Interactables {
     public TrashBin() {
         super (
             "Trash Bin",
-            "kick the trash bin",
+            "kick or clean the trash bin",
             0,
             2,
             2,

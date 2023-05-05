@@ -107,12 +107,20 @@ public class Inventory {
     // setter
     public void changeIsOpen()
     {
+        slotSelected = 0;
+        slotRow = 0;
+        slotCol = 0;
+
         isOpen = !isOpen;
     }
 
     public void switchCategory()
     {
         if (isChoosingFood) return;
+        
+        slotSelected = 0;
+        slotRow = 0;
+        slotCol = 0;
 
         isObject = !isObject;
     }
@@ -201,9 +209,6 @@ public class Inventory {
                     else {
                         return;
                     }
-                }
-                else {
-                    return;
                 }
                 
                 removeItem(item);

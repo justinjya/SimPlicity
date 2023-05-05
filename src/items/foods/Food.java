@@ -1,13 +1,16 @@
 package src.items.foods;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import src.entities.handlers.InteractionHandler;
 import src.entities.interactables.Interactables;
 import src.entities.interactables.TableAndChair;
+import src.entities.interactables.TrashBin;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
+import src.world.Room;
 
 public abstract class Food {
     private String name;
@@ -59,10 +62,26 @@ public abstract class Food {
                 sim.setHunger(sim.getHunger() + hungerPoint);
                 tableAndChair.changeOccupiedState(sim);
                 tableAndChair.resetImages();
+
+                fillTrashBin(sim);
             }
         };
         eating.start();
     }
 
     public abstract BufferedImage getIcon();
+
+    private void fillTrashBin(Sim sim) {
+        Room currentRoom = sim.getCurrentRoom();
+        ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects();
+
+        for (Interactables object : listOfObjects) {
+            if (!(object instanceof TrashBin)) continue;
+
+            TrashBin trashBin = (TrashBin) object;
+            if (trashBin.getImageIndex() == 0 || trashBin.getImageIndex() == 2) {
+                trashBin.setImageIndex(1);
+            }
+        }
+    }
 }
