@@ -36,12 +36,16 @@ public class GameTime implements Runnable {
     }
 
     // GETTERS
-    public static int getDecrements() {
-        return decrements;
+    public static int getDay() {
+        return day;
     }
 
-    public static int getInitialTimeRemaining() {
-        return initialTimeRemaining;
+    public static int getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public static int getDecrements() {
+        return decrements;
     }
 
     public static Thread getThread() {
@@ -62,7 +66,7 @@ public class GameTime implements Runnable {
         }
     }
 
-    private static void incrementDay() {
+    public static void incrementDay() {
         day++;
     }
 

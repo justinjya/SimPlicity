@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
+import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
@@ -104,6 +105,7 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
+        newSim.setDayLastAddedSim(GameTime.getDay());
 
         Room newRoom = new Room(roomName);
         newRoom.getListOfObjects().add(new Door(null));
@@ -136,6 +138,9 @@ public class World {
                 int newSimIndex = listOfSim.size() - 1;
                 listOfSim.remove(newSimIndex);
                 UserInterface.setCurrentSim(CreateSimPanel.currentSim);
+
+                Sim currentSim = UserInterface.getCurrentSim();
+                if (currentSim.isBusy()) currentSim.changeIsBusyState();
             }
 
             if (!GamePanel.isCurrentState("Playing")) {

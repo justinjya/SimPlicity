@@ -247,7 +247,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadListOfSimsMenu() {
-        BufferedImage[] images = new BufferedImage[9];
+        BufferedImage[] images = new BufferedImage[10];
 
         images[0] = readImage("menus/list_of_sims_menu", "choose_sim_box", 1, 1, false);
         images[1] = readImage("menus/list_of_sims_menu", "sim_box", 1, 1, false);
@@ -255,9 +255,10 @@ public class ImageLoader {
         images[3] = readImage("menus/list_of_sims_menu", "create_new_sim", 1, 1, false);
         images[4] = readImage("menus/list_of_sims_menu", "sim_box_highlight", 1, 1, false);
         images[5] = readImage("menus/list_of_sims_menu", "create_new_sim_highlight", 1, 1, false);
-        images[6] = readImage("menus/list_of_sims_menu", "icon_health", 1, 1, false);
-        images[7] = readImage("menus/list_of_sims_menu", "icon_hunger", 1, 1, false);
-        images[8] = readImage("menus/list_of_sims_menu", "icon_mood", 1, 1, false);
+        images[6] = readImage("menus/list_of_sims_menu", "create_new_sim_highlight_red", 1, 1, false);
+        images[7] = readImage("menus/list_of_sims_menu", "icon_health", 1, 1, false);
+        images[8] = readImage("menus/list_of_sims_menu", "icon_hunger", 1, 1, false);
+        images[9] = readImage("menus/list_of_sims_menu", "icon_mood", 1, 1, false);
 
         return images;
     }

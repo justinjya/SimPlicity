@@ -61,6 +61,9 @@ public class UserInterface {
         UserInterface.currentSim.setMoney(10000);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
+
+        GameTime.incrementDay();
+        GameTime.incrementDay();
     }
 
     public static void init(World world) {

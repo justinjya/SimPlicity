@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
+import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
@@ -24,9 +25,10 @@ public class ListOfSimsMenu {
     private static BufferedImage createNewSim = images[3];
     private static BufferedImage simBoxHighlight = images[4];
     private static BufferedImage createNewSimHighlight = images[5];
-    private static BufferedImage healthIcon = images[6];
-    private static BufferedImage hungerIcon = images[7];
-    private static BufferedImage moodIcon = images[8];
+    private static BufferedImage createNewSimHighlightRed = images[6];
+    private static BufferedImage healthIcon = images[7];
+    private static BufferedImage hungerIcon = images[8];
+    private static BufferedImage moodIcon = images[9];
 
     private static World world = UserInterface.getWorld();
     private static ArrayList<Sim> listOfSims = world.getListOfSim();
@@ -58,7 +60,14 @@ public class ListOfSimsMenu {
         // pressing a button
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (createSimSlot) {
+                Sim currentSim = UserInterface.getCurrentSim();
+                int dayLastAddedSim = currentSim.getDayLastAddedSim();
+                int currentDay = GameTime.getDay();
+
+                if (dayLastAddedSim == currentDay) return;
+
                 GamePanel.gameState = "Creating a new sim";
+                CreateSimPanel.init();
                 PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
             }
             else {
@@ -119,7 +128,16 @@ public class ListOfSimsMenu {
 
     private static void drawSelector(Graphics2D g) {
         if (createSimSlot) {
-            g.drawImage(createNewSimHighlight, 106, 408, null);
+            Sim currentSim = UserInterface.getCurrentSim();
+            int dayLastAddedSim = currentSim.getDayLastAddedSim();
+            int currentDay = GameTime.getDay();
+
+            if (dayLastAddedSim == currentDay) {
+                g.drawImage(createNewSimHighlightRed, 106, 408, null);
+            }
+            else {
+                g.drawImage(createNewSimHighlight, 106, 408, null);
+            }
             return;
         }
 
@@ -188,6 +206,14 @@ public class ListOfSimsMenu {
         drawValue(g, currentSim.getHealth(), 289, 0);
         drawValue(g, currentSim.getHunger(), 289, 1);
         drawValue(g, currentSim.getMood(), 289, 2);
+
+        int dayLastAddedSim = currentSim.getDayLastAddedSim();
+        int currentDay = GameTime.getDay();
+
+        if (createSimSlot && dayLastAddedSim == currentDay) {
+            UserInterface.drawCenteredText(g, currentSimBox, 103, 460, "you have to wait for tomorrow", font);
+            UserInterface.drawCenteredText(g, currentSimBox, 103, 470, "to create a new sim", font);
+        }
     }
 
     private static void drawIcons(Graphics2D g) {

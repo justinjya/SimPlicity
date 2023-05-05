@@ -24,11 +24,14 @@ public class Sim extends Entity{
 
     // Supporting Attributes
     private boolean isBusy;
-    private Room currentRoom;
-    private House currentHouse;
     private int durationWorked;
     private int timeNotSlept;
     private int timeNotTakenLeak;
+    private static int dayLastAddedSim = 1;
+
+    // Attributes to indentify room and house easier
+    private Room currentRoom;
+    private House currentHouse;
     
     // Image of the sim
     private Color shirtColor;
@@ -119,6 +122,10 @@ public class Sim extends Entity{
         return timeNotTakenLeak;
     }
 
+    public int getDayLastAddedSim() {
+        return dayLastAddedSim;
+    }
+
     public Room getCurrentRoom() {
         return currentRoom;
     }
@@ -189,6 +196,10 @@ public class Sim extends Entity{
 
     public void setTimeNotTakenLeak(int timeNotTakenLeak) {
         this.timeNotTakenLeak = timeNotTakenLeak;
+    }
+
+    public void setDayLastAddedSim(int day) {
+        dayLastAddedSim = day;
     }
 
     public void setCurrentHouse(House house) {
