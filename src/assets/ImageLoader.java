@@ -454,12 +454,17 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadTrashBin() {
-        BufferedImage[] images = new BufferedImage[4];
+        BufferedImage[] images = new BufferedImage[10];
 
         images[0] = readImage("entities/interactables/trash_bin", "trash_bin_empty", 1, 1, true);
         images[1] = readImage("entities/interactables/trash_bin", "trash_bin_filled", 1, 1, true);
         images[2] = readImage("entities/interactables/trash_bin", "trash_bin_empty_on_floor", 1, 1, true);
-        images[3] = readImage("entities/interactables/trash_bin", "trash_bin_filled_on_floor", 1, 1, true);
+        images[3] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_1", 2, 1, true);
+        images[4] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_2", 2, 1, true);
+        images[5] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_3", 2, 1, true);
+        images[6] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_1", 2, 1, true);
+        images[7] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_2", 2, 1, true);
+        images[8] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_3", 2, 1, true);
     
         return images;
     }

@@ -11,6 +11,7 @@ public class TrashBin extends Interactables {
     // Attributes
     private int price = 10;
     private int cleaningDuration = 15;
+    private Thread animateInteractThread;
 
     // Images of the trash bin
     private BufferedImage icon;
@@ -61,6 +62,29 @@ public class TrashBin extends Interactables {
         images = ImageLoader.loadTrashBin();
     }
 
+    private void animateInteract(Sim sim) {
+        animateInteractThread = new Thread() {
+            @Override
+            public void run() {
+                sim.setStatus("Kicking the bin");
+                if (getImageIndex() == 0) { // empty standing
+                    try {
+                        // setImageIndex(3);
+                        // Thread.sleep(333);
+                        setImageIndex(4);
+                        Thread.sleep(333);
+                        // setImageIndex(5);
+                        // Thread.sleep(333);
+                        sim.resetStatus();
+                        setImageIndex(2); // empty on floor
+                    }
+                    catch (InterruptedException ie) {}
+                } 
+            }
+        };
+        animateInteractThread.start();
+    }
+
     @Override
     public void changeOccupiedState() {
         this.occupied = !this.occupied;
@@ -84,13 +108,7 @@ public class TrashBin extends Interactables {
     // TO - DO!!! : Change interact depending on image index
     @Override
     public void interact (Sim sim){
-        if (getImageIndex() == 0) {
-            setImageIndex(2);
-            kickTheBin(sim);
-        }
-        else if (getImageIndex() == 2) {
-            setImageIndex(0);
-        }
+        animateInteract(sim);
 
         // ADD CLEAN THE BIN HERE
     }
