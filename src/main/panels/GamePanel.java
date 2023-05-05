@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFocusTraversalKeysEnabled(false);
         requestFocusInWindow();
         new Thread(this).start();
+        playMusic(0);
     }
 
     @Override
