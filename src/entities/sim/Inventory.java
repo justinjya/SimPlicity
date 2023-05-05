@@ -50,6 +50,7 @@ public class Inventory {
     public Inventory() {
         // ONLY FOR DEBUGGING
         // objects
+        addItem(new Aquarium());
         addItem(new Shower());
         addItem(new Stove(0));
         addItem(new Stove(0));

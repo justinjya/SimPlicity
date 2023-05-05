@@ -308,10 +308,10 @@ public class ImageLoader {
     public static BufferedImage[] loadAquarium() {
         BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("entities/interactables/aquarium", "aquarium_1", 1, 1, true);
-        images[1] = readImage("entities/interactables/aquarium", "aquarium_2", 1, 1, true);
-        images[2] = readImage("entities/interactables/aquarium", "aquarium_1_occupied", 2, 1, true);
-        images[3] = readImage("entities/interactables/aquarium", "aquarium_2_occupied", 2, 1, true);
+        images[0] = readImage("entities/interactables/aquarium", "aquarium_idle_1", 1, 1, true);
+        images[1] = readImage("entities/interactables/aquarium", "aquarium_idle_2", 1, 1, true);
+        images[2] = readImage("entities/interactables/aquarium", "aquarium_occupied_1", 2, 1, true);
+        images[3] = readImage("entities/interactables/aquarium", "aquarium_occupied_2", 2, 1, true);
     
         return images;
     }
@@ -384,8 +384,8 @@ public class ImageLoader {
         BufferedImage[] images = new BufferedImage[4];
         
         images[0] = readImage("entities/interactables/table_and_chair", "table_and_chair_idle", 3, 3, true);
-        images[1] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat1", 3, 3, true);
-        images[2] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat2", 3, 3, true);
+        images[1] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat_1", 3, 3, true);
+        images[2] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat_2", 3, 3, true);
         images[3] = readImage("entities/interactables/table_and_chair", "table_and_chair_read", 3, 3, true);
 
         return images;

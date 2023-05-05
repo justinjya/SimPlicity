@@ -11,7 +11,7 @@ import src.main.GameTime;
 public class Toilet extends Interactables{
     // Attributes
     private int price = 50;
-    private int duration = 5;
+    private int duration = 10;
 
     // Images of toilet
     private BufferedImage icon;
@@ -96,12 +96,16 @@ public class Toilet extends Interactables{
             @Override
             public void run() {
                 changeOccupiedState();
-                Thread t = GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
                 sim.setStatus("Taking a Leak");
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                Thread t = GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
                 
                 while (t.isAlive()) {
                     continue;
                 }
+
+                images = ImageLoader.loadToilet();
 
                 changeOccupiedState();
                 sim.resetStatus();

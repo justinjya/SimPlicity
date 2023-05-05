@@ -6,10 +6,11 @@ import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 
+// TO - DO!!! : Add kicking the bin interval
 public class TrashBin extends Interactables {
     // Attributes
-    private int price = 0; // TO BE DETERMINED
-    private int cleaningDuration = 5; // TO BE DETERMINED
+    private int price = 10;
+    private int cleaningDuration = 15;
 
     // Images of the trash bin
     private BufferedImage icon;

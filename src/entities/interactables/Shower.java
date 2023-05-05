@@ -1,15 +1,16 @@
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
+
 import src.assets.ImageLoader;
-import src.entities.sim.Sim;
-import src.main.Consts;
 import src.main.GameTime;
+import src.main.Consts;
+import src.entities.sim.Sim;
 
 public class Shower extends Interactables {
     // Attributes
-    private int price = 0; // TO BE DETERMINED
-    private int duration = 10;
+    private int price = 65;
+    private int duration = Consts.ONE_SECOND * 40;
 
     // Images of the shower
     private BufferedImage icon;
@@ -71,12 +72,15 @@ public class Shower extends Interactables {
             public void run() {
                 changeOccupiedState();
                 sim.setStatus("Taking a shower");
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 // count the time
                 Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
                 
                 while (t.isAlive()) {
                     continue;
                 }
+
+                images = ImageLoader.loadShower();
 
                 changeOccupiedState();
                 sim.resetStatus();

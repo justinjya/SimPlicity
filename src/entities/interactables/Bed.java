@@ -2,9 +2,9 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
+import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.GameTime;
-import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
