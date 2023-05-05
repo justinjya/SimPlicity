@@ -120,13 +120,14 @@ public class Bed extends Interactables{
                 while (t.isAlive()) {
                     continue;
                 }
-
-                images = ImageLoader.loadBeds();
                 
                 changeOccupiedState();
                 sim.resetStatus();
                 sim.setHealth(sim.getHealth() + 30);
                 sim.setMood(sim.getMood() + 20);
+
+                // Reset the images
+                images = ImageLoader.loadBeds();
             }
         };
         interacting.start();

@@ -11,8 +11,8 @@ public class Aquarium extends Interactables {
     // Attributes
     private int price = 50;
     private int duration = Consts.ONE_SECOND * 10;
-    Thread animateNotOccupiedThread;
-    Thread animateOccupiedThread;
+    private Thread animateNotOccupiedThread;
+    private Thread animateOccupiedThread;
 
     // Images of the aquarium
     private BufferedImage icon;
@@ -138,6 +138,7 @@ public class Aquarium extends Interactables {
                 sim.resetStatus();
                 sim.setMood(sim.getMood() + 5); // increase sim's mood
 
+                // reset the images
                 images = ImageLoader.loadAquarium();
             }
         };

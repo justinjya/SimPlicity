@@ -80,12 +80,13 @@ public class Shower extends Interactables {
                     continue;
                 }
 
-                images = ImageLoader.loadShower();
-
                 changeOccupiedState();
                 sim.resetStatus();
                 sim.setHealth(sim.getHealth() + 10); // increase sim's health
                 sim.setMood(sim.getMood() + 15); // increase sim's mood
+
+                // Reset the images
+                images = ImageLoader.loadShower();
             }
         };
         showering.start();

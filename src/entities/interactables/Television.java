@@ -15,6 +15,7 @@ public class Television extends Interactables{
     private int price = 100;
     private int watchDuration = 40;
     private int karaokeDuration = 30;
+    private Thread animateKaraokeThread;
 
     // Images of the television
     private BufferedImage icon;
@@ -56,6 +57,34 @@ public class Television extends Interactables{
         this.images = ImageLoader.loadTelevision();
     }
 
+    private void animateKaraoke(Sim sim) {
+        animateKaraokeThread = new Thread() {
+            @Override
+            public void run() {
+                images[2] = ImageLoader.changeSimColor(images[2], sim);
+                images[3] = ImageLoader.changeSimColor(images[3], sim);
+                while (sim.isStatusCurrently("Karaoke-ing")) {
+                    try {
+                        setImageIndex(2);
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                        setImageIndex(3);
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                    }
+                    catch (InterruptedException ie) {}
+                }
+                setImageIndex(0);
+            }
+        };
+        animateKaraokeThread.start();
+    }
+
+    public void changeOccupiedState(Sim sim) {
+        if (isOccupied()) setImageIndex(0);
+        if (!isOccupied() && !sim.isStatusCurrently("Karaoke-ing")) setImageIndex(1);
+        
+        this.occupied = !this.occupied;
+    }
+
     @Override
     public BufferedImage getIcon() {
         return icon;
@@ -95,18 +124,19 @@ public class Television extends Interactables{
             public void run() {
                 sim.setStatus("Karaoke-ing");
                 changeOccupiedState();
-                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                animateKaraoke(sim);
                 
                 Thread t = GameTime.startDecrementTimeRemaining(karaokeDuration * Consts.ONE_SECOND);
                 
                 while (t.isAlive()) continue;
 
-                images = ImageLoader.loadTelevision();
-
                 changeOccupiedState();
                 sim.setMood(sim.getMood() + 10);
                 sim.setHunger(sim.getHunger() - 10);
                 sim.resetStatus();
+
+                // Reset the images
+                images = ImageLoader.loadTelevision();
             }
         };
         karaoke.start();  
@@ -124,13 +154,14 @@ public class Television extends Interactables{
                 
                 while (t.isAlive()) continue;
 
-                images = ImageLoader.loadTelevision();
-
                 changeOccupiedState();
                 sim.resetStatus();
                 sim.setMood(sim.getMood() + 10);
                 sim.setHealth(sim.getHealth() - 10);
                 sim.setHunger(sim.getHunger() - 5);
+
+                // Reset the images
+                images = ImageLoader.loadTelevision();
             }
         };
         watch.start();

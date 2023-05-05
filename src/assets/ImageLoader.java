@@ -398,10 +398,12 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadTelevision() {
-        BufferedImage[] images = new BufferedImage[2];
+        BufferedImage[] images = new BufferedImage[4];
         
-        images[0] = readImage("entities/interactables/television", "television_off", 2, 1, true);
-        images[1] = readImage("entities/interactables/television", "television_occupied", 2, 2, true);
+        images[0] = readImage("entities/interactables/television", "television_idle", 2, 1, true);
+        images[1] = readImage("entities/interactables/television", "television_watch", 2, 2, true);
+        images[2] = readImage("entities/interactables/television", "television_karaoke_1", 2, 2, true);
+        images[3] = readImage("entities/interactables/television", "television_karaoke_2", 2, 2, true);
     
         return images;
     }

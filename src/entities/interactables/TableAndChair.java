@@ -180,12 +180,13 @@ public class TableAndChair extends Interactables {
                 
                 while (t.isAlive()) continue;
 
-                images = ImageLoader.loadTableAndChair();
-
                 sim.resetStatus();
                 changeOccupiedState(sim);
                 sim.setMood(sim.getMood() + 10);
                 sim.setHunger(sim.getHunger() - 10);
+
+                // Reset the images
+                images = ImageLoader.loadTableAndChair();
             }
         };
         readingABook.start();

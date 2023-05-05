@@ -105,12 +105,13 @@ public class Toilet extends Interactables{
                     continue;
                 }
 
-                images = ImageLoader.loadToilet();
-
                 changeOccupiedState();
                 sim.resetStatus();
                 sim.setHunger(sim.getHunger() - 20);
                 sim.setMood(sim.getMood() + 10);
+
+                // Reset the images
+                images = ImageLoader.loadToilet();
             }
         };
         takingALeak.start();
