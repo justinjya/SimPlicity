@@ -637,17 +637,15 @@ public class ImageLoader {
         return images;
     }
 
-    public static BufferedImage[] loadMenuBook() {
-        BufferedImage[] images = new BufferedImage[3];
-        images[0] = readImage("menus/game_menu/menu_book", "menu_book_box", 1, 1, false);
-        images[1] = readImage("menus/game_menu/menu_book", "menu_book_title", 1, 1, false);
-        images[2] = readImage("menus/game_menu/menu_book", "menu_catalogue_box", 1, 1, false);
-        return images;
-    }
+    public static BufferedImage[] loadRecipeBook() {
+        BufferedImage[] images = new BufferedImage[5];
 
-    public static BufferedImage[] loadWarningBox() {
-        BufferedImage[] images = new BufferedImage[1];
-        images[0] = readImage("menus/game_menu/warning_box", "warning_box", 1, 1, false);
+        images[0] = readImage("menus/game_menu/recipe_book", "recipe_book_title", 1, 1, false);
+        images[1] = readImage("menus/game_menu/recipe_book", "recipe_book_box", 1, 1, false);
+        images[2] = readImage("menus/game_menu/recipe_book", "recipe_book_catalogue_box", 1, 1, false);
+        images[3] = readImage("menus/game_menu/recipe_book", "warning_box", 1, 1, false);
+        images[4] = readImage("menus/game_menu/recipe_book", "selector", 1, 1, false);
+
         return images;
     }
 }

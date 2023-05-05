@@ -135,7 +135,6 @@ public class TableAndChair extends Interactables {
         choosingInteractionThread.start();
     }
 
-    // TO - DO!!! : Add eat from inventory
     private void eat(Sim sim) {
         Inventory simInventory = sim.getInventory();
 

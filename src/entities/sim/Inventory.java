@@ -84,13 +84,6 @@ public class Inventory {
         addItem(new RawFood(0));
         addItem(new RawFood(0));
         addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
-        addItem(new RawFood(0));
 
         getItemsToShow();
     }

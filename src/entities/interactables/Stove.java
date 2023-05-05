@@ -1,15 +1,18 @@
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
+import java.util.ConcurrentModificationException;
 
 import src.assets.ImageLoader;
-import src.entities.sim.Sim;
-import src.main.Consts;
-import src.main.GameTime;
-import src.main.KeyHandler;
-import src.items.foods.BakedFood;
-import src.items.Item;
 import src.main.UserInterface;
+import src.main.KeyHandler;
+import src.main.GameTime;
+import src.items.Item;
+import src.entities.sim.Sim;
+import src.items.foods.BakedFood;
+import src.entities.sim.Inventory;
+import src.main.menus.RecipeBookMenu;
+import src.entities.handlers.InteractionHandler;
 
 public class Stove extends Interactables{
     // Types of stove
@@ -29,6 +32,9 @@ public class Stove extends Interactables{
         100,
         200
     };
+
+    // Attributes
+    BakedFood foodToCook = null;
     
     // Images of stove
     private BufferedImage[] icons;
@@ -74,7 +80,23 @@ public class Stove extends Interactables{
         this.images = ImageLoader.loadStoves();
     }
 
+    public void setFoodToCook(BakedFood food) {
+        this.foodToCook = food;
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
+    @Override
+    public void changeOccupiedState() {
+        if (!isOccupied()) {
+            setImageIndex(getImageIndex() + 2);
+        }
+        else {
+            setImageIndex(getImageIndex() - 2);
+        }
+
+        this.occupied = !this.occupied;
+    }
+
     @Override
     public BufferedImage getIcon() {
         return icons[getImageIndex() % 2];
@@ -87,125 +109,66 @@ public class Stove extends Interactables{
 
     @Override
     public void interact(Sim sim) {
-        // call ActiveAction.cook, but dont know how to insert the parameter required by cook since interact can only accept sim
-        // my view: 
-        // changeOccupied(sim);
-        // ActiveAction.cook(bakedfood, null, sim, getTime()); but again how to insert bakedfood :v
-        // changeOccupied(sim);
         Thread cooking = new Thread() {
             @Override
             public void run() {
+                UserInterface.viewRecipes();
+                foodToCook = null;
+
+                while (true) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        if (!RecipeBookMenu.isAllIngredientAvailable()) {
+                            RecipeBookMenu.ableToCook();
+                            return;
+                        }
+
+                        Sim currentSim = UserInterface.getCurrentSim();
+                        InteractionHandler currentSimInteract = currentSim.getInteractionHandler();
+
+                        Stove stove = (Stove) currentSimInteract.getInteractableObject();
+                        BakedFood foodToCook = RecipeBookMenu.listOfBakedFoods.get(RecipeBookMenu.slotSelected);
+        
+                        stove.setFoodToCook(foodToCook);
+                        UserInterface.viewRecipes();
+                        break;
+                    }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewRecipes();
+                        break;
+                    }
+                }
+
+                if (foodToCook == null) return;
+                
+                double cookDuration = foodToCook.getHungerPoint() * 1.5;
+                changeOccupiedState();
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                sim.setStatus("Cooking");
+                Thread t = GameTime.startDecrementTimeRemaining((int) cookDuration);
+
+                while (t.isAlive()) continue;
+                
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setMood(sim.getMood() + 10);
+
+                Inventory simInventory = sim.getInventory();
+
                 try {
-                    UserInterface.changeIsViewingRecipes();
-                    sim.changeIsBusyState();
-                    int slotColumn = 0;
-                    int slotRow = 0;
-                    // choose the food to be cooked
-                    BakedFood bakedFood = null;
-                    while (bakedFood == null) {
-                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
-                            if (slotColumn > 0) {
-                                slotColumn--;
-                                UserInterface.setSlotColumn(slotColumn);
-                            }
-                        }
-                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
-                            if (slotRow < 1) {
-                                if (slotColumn < 2) {
-                                    slotRow++;
-                                    UserInterface.setSlotRow(slotRow);
-                                }
-                                
-                            }
-                        }
-                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
-                            if (slotColumn < 2) {
-                                if (!(slotRow == 1 && slotColumn == 1)) {
-                                    slotColumn++;
-                                    UserInterface.setSlotColumn(slotColumn);
-                                }
-                            }
-                        }
-                        if (KeyHandler.isKeyPressed(KeyHandler.KEY_W)) {
-                            if (slotRow > 0 && slotRow < 2) {
-                                slotRow--;
-                                UserInterface.setSlotRow(slotRow);
-                            }
-                        }
-                        if(KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                            if (slotRow == 0 && slotColumn == 0) {
-                                bakedFood = new BakedFood(0);
-                            }
-                            else if (slotRow == 0 && slotColumn == 1) {
-                                bakedFood = new BakedFood(1);
-                            }
-                            else if (slotRow == 0 && slotColumn == 2) {
-                                bakedFood = new BakedFood(2);
-                            }
-                            else if (slotRow == 1 && slotColumn == 0) {
-                                bakedFood = new BakedFood(3);
-                            }
-                            else if (slotRow == 1 && slotColumn == 1) {
-                                bakedFood = new BakedFood(4);
-                            }
-                        }
-                    }
-                    UserInterface.changeIsViewingRecipes();
-                    
+                    simInventory.addItem(foodToCook);
+                    for (String ingredient : foodToCook.getIngredients()) {
+                        for (Item rawFood : simInventory.getMapOfItems().keySet()) {
+                            if (!ingredient.equals(rawFood.getName())) continue;
 
-                    // check available ingredients first
-                    boolean isAllIngredientAvailable = true;
-                    for (String ingredient : bakedFood.getIngredients()) {
-                        boolean isIngredientAvailable = false;
-                        for (Item rawfood : sim.getInventory().getMapOfItems().keySet()) {
-                            if (ingredient.equals(rawfood.getName())) {
-                                isIngredientAvailable = true;
-                                break;
-                            }
-                        }  
-                        if (!isIngredientAvailable) {
-                            isAllIngredientAvailable = false;
-                            break;
+                            simInventory.removeItem(rawFood);
                         }
                     }
-                    if (isAllIngredientAvailable) {
-                        changeOccupiedState();
-                        
-                        double cookDuration = bakedFood.getHungerPoint() * 1.5;
-                        GameTime.startDecrementTimeRemaining((int) cookDuration);
-                        sim.setStatus("Cooking");
+                }
+                catch (ConcurrentModificationException cme) {}
 
-                        Thread.sleep((int) cookDuration*Consts.THREAD_ONE_SECOND);
-                        
-                        changeOccupiedState();
-                        sim.resetStatus();
-                        sim.setMood(sim.getMood() + 10);
-                        // must add code to add to inventory
-                        sim.getInventory().addItem(bakedFood);
-                        for (String ingredient : bakedFood.getIngredients()) {
-                            for (Item rawFood : sim.getInventory().getMapOfItems().keySet()) {
-                                if (ingredient.equals(rawFood.getName())) {
-                                    sim.getInventory().removeItem(rawFood);
-                                }
-                            }
-                        }
-                        sim.changeIsBusyState();
-                    }
-                    else {
-                        UserInterface.changeIsAbleToCook();
-                        while (UserInterface.getIsAbleToCook() == false){
-                            if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                                UserInterface.changeIsAbleToCook();
-                                sim.changeIsBusyState();
-                            }
-                        }
-                    }
-                    
-                    
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                // reset the images
+                images = ImageLoader.loadStoves();
             }
         };
         cooking.start();

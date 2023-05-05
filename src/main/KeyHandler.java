@@ -67,13 +67,14 @@ public class KeyHandler {
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
                 !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
                 !UserInterface.isShowingGameOver() && !UserInterface.isViewingStore() &&
-                !currentRoom.isEditingRoom() && !currentSimInventory.isChoosingFood() && 
+                !UserInterface.isViewingRecipes() && !UserInterface.isViewingTime() && 
+                !currentRoom.isEditingRoom() && !currentSimInventory.isChoosingFood() &&
                 KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
                 !UserInterface.isViewingListOfSims() && !UserInterface.isViewingInteractions() && 
-                !UserInterface.getIsViewingRecipes() && !UserInterface.isViewingStore() && 
+                !UserInterface.isViewingRecipes() && !UserInterface.isViewingStore() && 
                 KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
                 UserInterface.tab();
             }
@@ -83,7 +84,9 @@ public class KeyHandler {
             if (!currentSim.isBusy() && KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
                 ActiveActions.interact();
             }
-            if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+            if (!UserInterface.isViewingRecipes() && !UserInterface.isViewingTime() &&
+                !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
+                KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
                 NonActiveActions.showInventory();
             }
         }
