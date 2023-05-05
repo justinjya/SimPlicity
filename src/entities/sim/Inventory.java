@@ -63,6 +63,7 @@ public class Inventory {
         addItem(new Bed(1));
         addItem(new Bed(2));
         addItem(new TableAndChair());
+        addItem(new Clock());
         
         // foods
         addItem(new RawFood(0));
@@ -146,6 +147,26 @@ public class Inventory {
         catch (ConcurrentModificationException cme) {}
     }
 
+    public void removeItem(Item item)
+    {
+        try {
+            for (Item i : mapOfItems.keySet())
+            {
+                if (i.getName().equals(item.getName()))
+                {
+                    int count = mapOfItems.get(item);
+                    if (count > 1) {
+                        mapOfItems.put(item, count - 1);
+                    }
+                    else {
+                        mapOfItems.remove(item);
+                    }
+                }
+            }
+        }
+        catch (ConcurrentModificationException cme) {}
+    }
+
     public void interact() {
         Sim currentSim = UserInterface.getCurrentSim();
 
@@ -189,13 +210,7 @@ public class Inventory {
                     }
                 }
                 
-                int count = mapOfItems.get(item);
-                if (count > 1) {
-                    mapOfItems.put(item, count - 1);
-                }
-                else {
-                    mapOfItems.remove(item);
-                }
+                removeItem(item);
                 return;
             }
         }
@@ -363,10 +378,10 @@ public class Inventory {
                     g.drawString(Integer.toString(mapOfItems.get(item)), x + 30, y + 41);
                 }
     
-                x += slotSize + 7; // Move to the next column
+                x += slotSize + 8; // Move to the next column
                 if (i % cols == cols - 1) { // If we've filled up a row
-                    x = slotX; // Reset to the first column
-                    y += slotSize; // Move to the next row
+                    x = slotX + 2; // Reset to the first column
+                    y += slotSize + 1; // Move to the next row
                     j++;
                 }
                 i++;

@@ -1,7 +1,7 @@
 package src.main;
 
 public class GameTime implements Runnable {
-    private static int initialTimeRemaining = Consts.ONE_MINUTE * 12;
+    public static int initialTimeRemaining = Consts.ONE_MINUTE * 12;
     public static int timeRemaining;
     public static int day;
     private static int decrements;

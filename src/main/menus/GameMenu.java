@@ -53,25 +53,30 @@ public class GameMenu {
             pressEscapeToPause(g);
         }
 
+        // press f to interact
         if (!UserInterface.isTabbed() && objectInRange) {
             drawObjectToInteract(g);
+        }
+
+        // working and exercising tab
+        if (currentSim.isStatusCurrently("Working")) {
+            drawWorkingTab(g);
+        }
+        if (currentSim.isStatusCurrently("Exercising")) {
+            drawExercisingTab(g);
+        }
+
+        if (UserInterface.isViewingTime()) {
+            drawTimeRemainingTab(g);
         }
 
         // ONLY FOR DEBUGGING
         if (UserInterface.isDebug()) {
             drawDebug(g);
         }
-        else {
-            // working and exercising tab
-            if (currentSim.isStatusCurrently("Working")) {
-                drawWorkingTab(g);
-            }
-            if (currentSim.isStatusCurrently("Exercising")) {
-                drawExercisingTab(g);
-            }
-        }
     }
 
+    // MAIN GAME MENU
     private static void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
         if (value < 100) {
             g.drawString("" + value, offsetX, 188 + (36 * offsetY));
@@ -180,19 +185,29 @@ public class GameMenu {
         g.drawString("esc", 352, 468);
     }
 
-    private static void drawTimeRemaining(Graphics2D g, int value, int offsetX, int offsetY) {
+    // private static void pressEscapeTo(Graphics2D g) {
+    //     g.setColor(Color.BLACK);
+    //     g.setFont(new Font("Inter", Font.PLAIN, 12));
+    //     g.drawString("press", 317, 468);
+    //     g.drawString("to pause the game", 376, 468);
+    //     g.setFont(new Font("Inter", Font.BOLD, 12));
+    //     g.drawString("esc", 352, 468);
+    // }
+
+    private static void drawTimeRemainingValue(Graphics2D g, int value, int offsetX, int offsetY) {
         g.setColor(Color.WHITE);
         Font font = new Font("Inter", Font.PLAIN, 8);
         g.setFont(font);
 
         if (value < 100) {
-            g.drawString("" + value, offsetX, 354 + (36 * offsetY));
+            g.drawString("" + value, offsetX, 354 + (39 * offsetY));
         }
         else {
-            g.drawString("" + value, offsetX - 5, 354 + (36 * offsetY));
+            g.drawString("" + value, offsetX - 5, 354 + (39 * offsetY));
         }
     }
 
+    // TABS
     private static void drawWorkingTab(Graphics2D g) {
         BufferedImage[] images = ImageLoader.loadWorkingTab();
         BufferedImage workingBox = images[0];
@@ -205,10 +220,12 @@ public class GameMenu {
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
+        UserInterface.drawCenteredText(g, workingBox, 4, 298, "Working", font);
+
         int timeRemaining = GameTime.getDecrements();
         g.drawString("Working", 51, 335);
         drawBarValue(g, 51, 339, 135, timeRemaining, workDuration);
-        drawTimeRemaining(g, timeRemaining, 175, 0);
+        drawTimeRemainingValue(g, timeRemaining, 175, 0);
     }
 
     private static void drawExercisingTab(Graphics2D g) {
@@ -223,10 +240,41 @@ public class GameMenu {
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
+        UserInterface.drawCenteredText(g, exercisingBox, 4, 298, "Exercising", font);
+
         int timeRemaining = GameTime.getDecrements();
         g.drawString("Exercising", 51, 335);
         drawBarValue(g, 51, 339, 135, timeRemaining, exerciseDration);
-        drawTimeRemaining(g, timeRemaining, 175, 0);
+        drawTimeRemainingValue(g, timeRemaining, 175, 0);
+    }
+
+    private static void drawTimeRemainingTab(Graphics2D g) {
+        BufferedImage[] images = ImageLoader.loadTimeRemainingTab();
+        BufferedImage timeRemainingBox = images[0];
+        BufferedImage iconTime = images[1];
+        BufferedImage iconBuild = images[2];
+
+        int i = 1;
+
+        g.drawImage(timeRemainingBox, 7, 278, null);
+        g.drawImage(iconTime, 17, 317, null);
+        g.drawImage(iconBuild, 17, 317 + (i * 39), null);
+
+        g.setColor(Color.WHITE);
+        Font font = new Font("Inter", Font.BOLD, 12);
+        g.setFont(font);
+
+        UserInterface.drawCenteredText(g, timeRemainingBox, 7, 298, "Time Remaining", font);
+
+        int timeRemaining = GameTime.getTimeRemaining();
+        g.drawString("Time", 51, 334);
+        g.drawString("Build Room", 51, 334 + (i * 39));
+
+        drawBarValue(g, 51, 338, 135, timeRemaining, GameTime.initialTimeRemaining);
+        drawBarValue(g, 51, 338 + (i * 39), 135, timeRemaining, GameTime.initialTimeRemaining);
+        drawTimeRemainingValue(g, timeRemaining, 175, 0);
+
+        drawTimeRemainingValue(g, timeRemaining, 175, 1);
     }
 
     public static void drawDebug(Graphics2D g) {

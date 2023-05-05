@@ -33,6 +33,7 @@ public class UserInterface {
     private static boolean tabbed = false;
     private static boolean pause = false;
     private static boolean viewingWorld = false;
+    private static boolean viewingTime = false;
     private static boolean viewingActiveActions = false;
     private static boolean viewingProfessions = false;
     private static boolean viewingListOfSims = false;
@@ -61,6 +62,8 @@ public class UserInterface {
         UserInterface.currentSim.setMoney(10000);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
+
+        viewingTime = false;
     }
 
     public static void init(World world) {
@@ -89,16 +92,20 @@ public class UserInterface {
         return currentSim;
     }
 
-    public static boolean isViewingWorld() {
-        return viewingWorld;
-    }
-
     public static boolean isTabbed() {
         return tabbed;
     }
 
     public static boolean isPaused(){
         return pause;
+    }
+
+    public static boolean isViewingWorld() {
+        return viewingWorld;
+    }
+
+    public static boolean isViewingTime() {
+        return viewingTime;
     }
 
     public static boolean isViewingActiveActions() {
@@ -127,10 +134,6 @@ public class UserInterface {
         currentSimInventory = currentSim.getInventory();
     }
 
-    public static void viewWorld() {
-        viewingWorld = !viewingWorld;
-    }
-
     public static void tab() {
         tabbed = !tabbed;
         if (currentSim.isStatusCurrently("Idle")) {
@@ -145,6 +148,14 @@ public class UserInterface {
         if (currentSim.isStatusCurrently("Idle")) {
             currentSim.changeIsBusyState();
         }
+    }
+
+    public static void viewWorld() {
+        viewingWorld = !viewingWorld;
+    }
+
+    public static void viewTime() {
+        viewingTime = !viewingTime;
     }
 
     public static void inventory() {

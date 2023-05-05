@@ -159,6 +159,16 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadTimeRemainingTab() {
+        BufferedImage[] images = new BufferedImage[3];
+
+        images[0] = readImage("menus/game_menu/time_remaining_tab", "time_remaining_box", 1, 1, false);
+        images[1] = readImage("menus/game_menu/time_remaining_tab", "icon_time", 1, 1, false);
+        images[2] = readImage("menus/game_menu/time_remaining_tab", "icon_build_room", 1, 1, false);
+
+        return images;
+    }
+
     public static BufferedImage[] loadTabMenu() {
         BufferedImage[] images = new BufferedImage[5];
 
@@ -344,6 +354,18 @@ public class ImageLoader {
         icons[2] = readImage("item_icons/interactables", "bed_king", 1, 1, false);
 
         return icons;
+    }
+
+    public static BufferedImage loadClock() {
+        BufferedImage image = readImage("entities/interactables/clock", "clock", 1, 1, true);
+        
+        return image;
+    }
+
+    public static BufferedImage loadClockIcon() {
+        BufferedImage icon = readImage("item_icons/interactables", "clock", 1, 1, false);
+
+        return icon;
     }
 
     public static BufferedImage[] loadShower() {
