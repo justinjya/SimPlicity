@@ -1,24 +1,21 @@
 package src.entities.sim.actions;
 
-import src.entities.interactables.Door;
-import src.entities.sim.Inventory;
+import java.util.ArrayList;
+
+import src.main.UserInterface;
+import src.main.KeyHandler;
+import src.main.GameTime;
+import src.main.Consts;
+import src.world.Room;
 import src.entities.sim.Sim;
 import src.items.foods.RawFood;
-import src.main.Consts;
-import src.main.GameTime;
-import src.main.KeyHandler;
-import src.main.UserInterface;
-import src.world.House;
-import src.world.Room;
+import src.entities.interactables.Door;
+import src.entities.interactables.Interactables;
 
 public class UpgradeActions {
     public static void addRoom(String name) {
         Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
-        House currentHouse = currentSim.getCurrentHouse();
-        Sim currentHouseOwner = currentHouse.getOwner();
-
-        if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
 
         Thread addNewRoomThread = new Thread() {
             @Override
@@ -34,9 +31,13 @@ public class UpgradeActions {
                         }
                     }
                 }
-                currentSim.setMoney(currentSim.getMoney() - newDoor.getPrice());
 
                 Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_MINUTE * 18);
+
+                ArrayList<Interactables> listOfObjects = currentRoom.getListOfObjects();
+                if (listOfObjects.contains(newDoor)) {
+                    currentSim.setMoney(currentSim.getMoney() - newDoor.getPrice());
+                }
 
                 while (t.isAlive()) continue;
 

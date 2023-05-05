@@ -19,6 +19,7 @@ import src.main.menus.ListOfSimsMenu;
 import src.main.menus.InteractMenu;
 import src.main.menus.PauseMenu;
 import src.main.menus.GameMenu;
+import src.main.menus.GameOverMenu;
 import src.main.menus.TabMenu;
 
 public class UserInterface {
@@ -135,6 +136,8 @@ public class UserInterface {
     }
 
     public static void tab() {
+        if (upgradingHouse) return;
+        
         tabbed = !tabbed;
         if (currentSim.isStatusCurrently("Idle")) {
             currentSim.changeIsBusyState();
@@ -273,6 +276,7 @@ public class UserInterface {
             InteractMenu.draw(g);
         }
 
+        // GameOverMenu.draw(g);
         // if (store.getIsOpen()) {
         //     store.draw(g);
         // }

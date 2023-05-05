@@ -1,8 +1,6 @@
 package src.entities.sim.actions;
 
-import src.entities.sim.Sim;
 import src.main.UserInterface;
-import src.world.House;
 import src.world.Room;
 
 public class NonActiveActions {
@@ -11,10 +9,6 @@ public class NonActiveActions {
     }
 
     public static void editRoom(Room room) {
-        Sim currentSim = UserInterface.getCurrentSim();
-        House currentHouse = currentSim.getCurrentHouse();
-        Sim currentHouseOwner = currentHouse.getOwner();
-
-        if (currentSim.getName().equals(currentHouseOwner.getName())) room.selectObject();
+        room.selectObject();
     }
 }

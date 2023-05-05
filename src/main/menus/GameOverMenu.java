@@ -16,6 +16,9 @@ public class GameOverMenu {
 
         g.drawImage(mockup, 0, 0, null);
 
-        g.drawImage(gameOverBox, 76, 108, null);
+        g.drawImage(gameOverBox, 71, 104, null);
+        g.drawImage(escBox, 309, 546, null);
+
+        g.drawImage(continueableTitleBox, 237, 104, null);
     }
 }

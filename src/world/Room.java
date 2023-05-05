@@ -251,8 +251,6 @@ public class Room {
                 if (!(moveableObject instanceof Door)) {
                     Sim currentSim = UserInterface.getCurrentSim();
                     
-                    // moveableObject.setPlayAreaX(1);
-                    // moveableObject.setPlayAreaY(3);
                     currentSim.getInventory().addItem(moveableObject);
                 }
                 moveableObject = null;

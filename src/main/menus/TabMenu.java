@@ -11,6 +11,7 @@ import src.assets.ImageLoader;
 import src.main.UserInterface;
 import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
+import src.world.House;
 import src.world.Room;
 
 public class TabMenu {
@@ -45,15 +46,19 @@ public class TabMenu {
         
         Sim currentSim = UserInterface.getCurrentSim();
         Room currentRoom = currentSim.getCurrentRoom();
+        House currentHouse = currentSim.getCurrentHouse();
+        Sim currentHouseOwner = currentHouse.getOwner();
 
         if (currentSim.isBusy()) return;
         if (!currentSim.isStatusCurrently("Idle")) return;
 
         switch (selectedBox) {
             case 0:
+                if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
                 NonActiveActions.editRoom(currentRoom);
                 break;
             case 1:
+                if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
                 UserInterface.upgradeHouse();
                 break;
             case 2:
