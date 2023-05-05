@@ -5,21 +5,21 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import src.world.House;
 import src.world.Room;
 import src.world.World;
-import src.entities.interactables.Door;
-import src.entities.sim.Inventory;
+import src.world.House;
 import src.entities.sim.Sim;
 import src.entities.sim.Store;
+import src.entities.sim.Inventory;
+import src.entities.interactables.Door;
 import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
-import src.main.menus.GameMenu;
-import src.main.menus.InteractMenu;
-import src.main.menus.ListOfSimsMenu;
-import src.main.menus.PauseMenu;
-import src.main.menus.TabMenu;
 import src.main.menus.UpgradeHouseMenu;
+import src.main.menus.ListOfSimsMenu;
+import src.main.menus.InteractMenu;
+import src.main.menus.PauseMenu;
+import src.main.menus.GameMenu;
+import src.main.menus.TabMenu;
 
 public class UserInterface {
     public static UserInterface ui = new UserInterface();

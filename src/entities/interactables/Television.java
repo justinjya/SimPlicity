@@ -15,7 +15,6 @@ public class Television extends Interactables{
     private int price = 100;
     private int watchDuration = 40;
     private int karaokeDuration = 30;
-    private Thread animateKaraokeThread;
 
     // Images of the television
     private BufferedImage icon;
@@ -57,31 +56,8 @@ public class Television extends Interactables{
         this.images = ImageLoader.loadTelevision();
     }
 
-    private void animateKaraoke(Sim sim) {
-        animateKaraokeThread = new Thread() {
-            @Override
-            public void run() {
-                images[2] = ImageLoader.changeSimColor(images[2], sim);
-                images[3] = ImageLoader.changeSimColor(images[3], sim);
-                while (sim.isStatusCurrently("Karaoke-ing")) {
-                    try {
-                        setImageIndex(2);
-                        Thread.sleep(Consts.THREAD_ONE_SECOND);
-                        setImageIndex(3);
-                        Thread.sleep(Consts.THREAD_ONE_SECOND);
-                    }
-                    catch (InterruptedException ie) {}
-                }
-                setImageIndex(0);
-            }
-        };
-        animateKaraokeThread.start();
-    }
-
-    public void changeOccupiedState(Sim sim) {
-        if (isOccupied()) setImageIndex(0);
-        if (!isOccupied() && !sim.isStatusCurrently("Karaoke-ing")) setImageIndex(1);
-        
+    @Override
+    public void changeOccupiedState() {
         this.occupied = !this.occupied;
     }
 
@@ -122,13 +98,24 @@ public class Television extends Interactables{
         Thread karaoke = new Thread() {
             @Override
             public void run() {
+                images[2] = ImageLoader.changeSimColor(images[2], sim);
+                images[3] = ImageLoader.changeSimColor(images[3], sim);
+
                 sim.setStatus("Karaoke-ing");
                 changeOccupiedState();
-                animateKaraoke(sim);
                 
                 Thread t = GameTime.startDecrementTimeRemaining(karaokeDuration * Consts.ONE_SECOND);
                 
-                while (t.isAlive()) continue;
+                while (t.isAlive()) {
+                    try {
+                        setImageIndex(2);
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                        setImageIndex(3);
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                    }
+                    catch (InterruptedException ie) {}
+                }
+                setImageIndex(0);
 
                 changeOccupiedState();
                 sim.setMood(sim.getMood() + 10);
@@ -146,14 +133,16 @@ public class Television extends Interactables{
         Thread watch = new Thread(){
             @Override
             public void run(){
-                sim.setStatus("Watching the TV");
+                sim.setStatus("Watching The TV");
                 changeOccupiedState();
+                setImageIndex(1);
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
 
                 Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * watchDuration);
                 
                 while (t.isAlive()) continue;
 
+                setImageIndex(0);
                 changeOccupiedState();
                 sim.resetStatus();
                 sim.setMood(sim.getMood() + 10);

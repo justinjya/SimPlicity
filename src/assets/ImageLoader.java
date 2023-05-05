@@ -291,6 +291,16 @@ public class ImageLoader {
         return images;
     }
 
+    public static BufferedImage[] loadGameOverMenu() {
+        BufferedImage[] images = new BufferedImage[3];
+
+        images[0] = readImage("menus/game_over_menu", "game_over", 1, 1, false);
+        images[1] = readImage("menus/game_over_menu", "esc_box", 1, 1, false);
+        images[2] = readImage("menus/game_over_menu", "title_box_continueable", 1, 1, false);
+
+        return images;
+    }
+
     public static BufferedImage loadTile(String tile) {
         BufferedImage image = readImage("tiles", tile, 1, 1, true);
         
