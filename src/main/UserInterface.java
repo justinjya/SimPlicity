@@ -12,6 +12,7 @@ import src.assets.ImageLoader;
 import src.main.menus.TabMenu;
 import src.main.menus.GameMenu;
 import src.main.menus.PauseMenu;
+import src.main.menus.Store;
 import src.main.menus.InteractMenu;
 import src.main.menus.GameOverMenu;
 import src.main.menus.ListOfSimsMenu;
@@ -21,7 +22,6 @@ import src.main.menus.ChangeProfessionMenu;
 import src.entities.interactables.Door;
 import src.entities.sim.Inventory;
 import src.items.foods.BakedFood;
-import src.entities.sim.Store;
 import src.entities.sim.Sim;
 import src.world.World;
 import src.world.House;
@@ -43,12 +43,12 @@ public class UserInterface {
     private static boolean viewingActiveActions = false;
     private static boolean viewingProfessions = false;
     private static boolean viewingListOfSims = false;
-    private static boolean upgradingHouse = false;
     private static boolean viewingInteractions = false;
+    private static boolean viewingStore = false;
+    private static boolean upgradingHouse = false;
     private static boolean showingGameOver = false;
 
     //ONLY FOR DEBUGGING
-    private static Store store = new Store();
     private static boolean debug = false;
 
     // CONSTRUCTOR
@@ -66,7 +66,7 @@ public class UserInterface {
         world.getListOfHouse().add(newHouse);
 
         UserInterface.setCurrentSim(world.getListOfSim().get(0));
-        UserInterface.currentSim.setMoney(10000);
+        UserInterface.currentSim.setMoney(500);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
 
@@ -133,12 +133,16 @@ public class UserInterface {
         return viewingListOfSims;
     }
 
-    public static boolean isUpgradingHouse() {
-        return upgradingHouse;
-    }
-
     public static boolean isViewingInteractions() {
         return viewingInteractions;
+    }
+
+    public static boolean isViewingStore() {
+        return viewingStore;
+    }
+
+    public static boolean isUpgradingHouse() {
+        return upgradingHouse;
     }
 
     public static boolean isShowingGameOver() {
@@ -205,15 +209,21 @@ public class UserInterface {
         currentSim.changeIsBusyState();
     }
 
-    public static void upgradeHouse() {
-        UpgradeHouseMenu.reset();
-        upgradingHouse = !upgradingHouse;
+    public static void viewInteractions() {
+        viewingInteractions = !viewingInteractions;
 
         currentSim.changeIsBusyState();
     }
 
-    public static void viewInteractions() {
-        viewingInteractions = !viewingInteractions;
+    public static void viewStore() {
+        viewingStore = !viewingStore;
+
+        currentSim.changeIsBusyState();
+    }
+
+    public static void upgradeHouse() {
+        UpgradeHouseMenu.reset();
+        upgradingHouse = !upgradingHouse;
 
         currentSim.changeIsBusyState();
     }
@@ -392,8 +402,8 @@ public class UserInterface {
             InteractMenu.update();
         }
 
-        if (store.getIsOpen()) {
-            store.update();
+        if (viewingStore) {
+            Store.update();
         }
     }
     
@@ -440,8 +450,8 @@ public class UserInterface {
             UserInterface.drawCantCookUI(g);
         }
 
-        if (store.getIsOpen()) {
-            store.draw(g);
+        if (viewingStore) {
+            Store.draw(g);
         }
     }
 

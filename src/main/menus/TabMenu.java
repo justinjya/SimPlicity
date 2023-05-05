@@ -12,7 +12,6 @@ import src.main.UserInterface;
 import src.entities.sim.actions.*;
 import src.entities.sim.Sim;
 import src.world.House;
-import src.entities.sim.Store;
 import src.world.Room;
 
 public class TabMenu {
@@ -63,7 +62,7 @@ public class TabMenu {
                 UserInterface.upgradeHouse();
                 break;
             case 2:
-                Store.changeIsOpen();
+                UserInterface.viewStore();
                 break;
             case 3:
                 UserInterface.viewListOfSims();
