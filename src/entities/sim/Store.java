@@ -1,9 +1,12 @@
 package src.entities.sim;
 
 import java.util.ArrayList;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.time.OffsetDateTime;
 
 import src.items.Item;
 import src.items.foods.RawFood;
@@ -12,26 +15,29 @@ import src.assets.ImageLoader;
 import src.entities.interactables.*;
 import src.main.GameTime;
 import src.main.KeyHandler;
+import src.entities.interactables.Clock;
+import src.entities.interactables.TrashBin;
 
 public class Store {
-    private ArrayList<String> listOfItem;
+    private ArrayList<Item> listOfItem;
     private BufferedImage[] storeLayout = ImageLoader.loadStore();
-    private BufferedImage[] objectImages = new BufferedImage[12];
-    private BufferedImage[] foodImages = new BufferedImage[8];
-    private boolean isOpen = true;
+    // private BufferedImage[] objectImages = new BufferedImage[12];
+    // private BufferedImage[] foodImages = new BufferedImage[8];
+    private static boolean isOpen = false;
     private boolean isObject = true;
     private int slotCol = 1;
     private int slotRow = 1;
+    private int slotSelected = 0;
     public boolean isChoosing = true;
     public boolean isSelecting = false;
     public boolean isBuySuccess = true;
-    private int simNameX = 282;
+    private int simNameX = 307;
     private int simNameY = 532;
-    private int simMoneyX = 448;
+    private int simMoneyX = 468;
     private int simMoneyY = 534;
     private int itemQuantity = 1;
-    private int itemQuantityX = 240;
-    private int itemQuantityY = 400;
+    private int itemQuantityX = 393;
+    private int itemQuantityY = 462;
     private int slotSize = 64;
     private int cursorX = 214;
     private int cursorY = 178;
@@ -39,30 +45,38 @@ public class Store {
     // CONSTRUCTOR
     public Store() {
         listOfItem = new ArrayList<>();
-        listOfItem.add("Aquarium");
-        listOfItem.add("Single Bed");
-        listOfItem.add("Queen Size Bed");
-        listOfItem.add("King Size Bed");
-        listOfItem.add("Door");
-        listOfItem.add("Shower");
-        listOfItem.add("Gas Stove");
-        listOfItem.add("Electric Stove");
-        listOfItem.add("Toilet");
-        listOfItem.add("Trash Bin");
+        listOfItem.add(new Bed(0,0,0));
+        listOfItem.add(new Bed(0,0,1));
+        listOfItem.add(new Bed(0,0,2));
+        listOfItem.add(new Toilet(0, 0));
+        listOfItem.add(new Stove(0,0,0));
+        listOfItem.add(new Stove(0, 0, 1));
+        listOfItem.add(new TableAndChair(0, 0));
+        listOfItem.add(new Clock(0,0));
+        listOfItem.add(new Shower(0, 0));
+        listOfItem.add(new Aquarium(0, 0));
+        listOfItem.add(new Television(0, 0));
+        listOfItem.add(new TrashBin(0, 0,0));
+        listOfItem.add(new RawFood(0));
+        listOfItem.add(new RawFood(1));
+        listOfItem.add(new RawFood(2));
+        listOfItem.add(new RawFood(3));
+        listOfItem.add(new RawFood(4));
+        listOfItem.add(new RawFood(5));
+        listOfItem.add(new RawFood(6));
+        listOfItem.add(new RawFood(7));
     }
-
     
-    public boolean getIsOpen() {
+    public static boolean getIsOpen() {
         return isOpen;
     }
-    public void changeIsOpen() {
+    public static void changeIsOpen() {
         isOpen = !isOpen;
         UserInterface.getCurrentSim().changeIsBusyState();
     }
     public void changeIsObject() {
         isObject = !isObject;
     }
-
     
     // update the state of the store
     public void update() {
@@ -71,36 +85,38 @@ public class Store {
                 if (isObject) {
                     if (slotRow == 3 || slotRow == 2) {
                         slotRow--;
+                        slotSelected-=5;
                     }
                 }
                 else {
                     if (slotRow == 2) {
                         slotRow--;
+                        slotSelected-=5;
                     }
                 }
-                
-            }
-            
-            
+                System.out.println("slotSelected:" + slotSelected);  
+            } 
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
             if (isChoosing) {
                 if (slotCol > 1) {
                     slotCol--;
+                    slotSelected--;
                 }
+                System.out.println("slotSelected:" + slotSelected);
             }
-            
-            
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_S)) {
             if (isChoosing) {
                 if (isObject) {
                     if (slotRow == 1) {
                         slotRow++;
+                        slotSelected+=5;
                     }
                     else if (slotRow == 2) {
                         if (slotCol <= 2) {
                             slotRow++;
+                            slotSelected+=5;
                         }
                     }
                 }
@@ -108,12 +124,12 @@ public class Store {
                     if (slotRow == 1) {
                         if (slotCol <= 3) {
                             slotRow++;
+                            slotSelected+=5;
                         }
                     }
-                }               
-            }
-        
-            
+                } 
+                System.out.println("slotSelected:" + slotSelected);              
+            } 
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
             if (isChoosing) {
@@ -122,11 +138,13 @@ public class Store {
                         if (slotRow == 3) {
                             if (slotCol == 1) {
                                 slotCol++;
+                                slotSelected++;
                             }
                         }
                         else{
                             if (slotCol < 5) {
                                 slotCol++;
+                                slotSelected++;
                             }
                         }
                     }
@@ -135,241 +153,228 @@ public class Store {
                     if (slotRow == 1) {
                         if (slotCol < 5) {
                             slotCol++;
+                            slotSelected++;
                         }
                     }
                     else if (slotRow == 2) {
                         if (slotCol < 3) {
                             slotCol++;
+                            slotSelected++;
                         }
                     }
                 }
+                System.out.println("slotSelected:" + slotSelected);
             }
-            
-            
         }
-        else if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (isChoosing) {
                 isChoosing = false;
                 isSelecting = true;
+                System.out.println("MASUK ");
+                return;
             }
-            else if (isSelecting) {
+            if (isSelecting) {
+                isChoosing = false;
+                isSelecting = false;
+                System.out.println("berhasil interact");
                 interact();
-            }
-            
+            }  
         }
-        else if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+            System.out.println("MASUK");
             if (isChoosing) {
                 changeIsObject();
                 slotRow = 1;
                 slotCol = 1;
+                slotSelected = 12;
+                System.out.println("MASUKTAB");
             }
         }
-        else if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
             if (isSelecting) {
                 itemQuantity++;
-            }
-            
+            } 
         }
-        else if (KeyHandler.isKeyPressed(KeyHandler.KEY_MINUS)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_MINUS)) {
             if (isSelecting) {
                 if (itemQuantity > 1) {
                     itemQuantity--;
                 }
-                
             }
         }
-        else if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
             // Restore the initial state for the next purchase
-            isChoosing = true;
-            isSelecting = false;
-            isBuySuccess = true;
-            isOpen = false; // to do : pas tab jadi true
-            isObject = true;
-            slotCol = 1;
-            slotRow = 1;
-            itemQuantity = 1;
-        }
-        
-        
+
+            if (isChoosing) {
+                changeIsOpen(); // to do : pas tab jadi true
+                isChoosing = true;
+                isSelecting = false;
+                isBuySuccess = true;
+                isObject = true;
+                slotCol = 1;
+                slotRow = 1;
+                slotSelected = 0;
+                itemQuantity = 1;
+            }
+
+            if (isSelecting) {
+                isChoosing = true;
+                isSelecting = false;
+                itemQuantity = 1;
+                System.out.println("msuk");
+            }
+            
+            if (!isBuySuccess) {
+                isSelecting = true;
+                isBuySuccess = true;
+            }
+            
+        } 
     }
 
     // draw the ui
     public void draw(Graphics2D g) {
         if (isOpen) {
             drawFrame(g);
-            // drawItem(g);
+            drawItem(g);
             drawSimInfo(g);
             drawQuantity(g);
             drawCursor(g);
         }
     }
 
-    
-    // interact
-    // jangan lupa reset state juga di sini kalau berhasil, selain esc
-    BufferedImage[] bedImages = ImageLoader.loadBeds();
-    BufferedImage[] toiletImage = ImageLoader.loadToilet();
-    BufferedImage[] stoveIcon = ImageLoader.loadStovesIcons();
-    BufferedImage[] tableAndChairIcon = ImageLoader.loadStovesIcons();
-    BufferedImage[] clockIcon = ImageLoader.loadStovesIcons();
-    BufferedImage binIcon = ImageLoader.loadTrashBinIcon();
-    BufferedImage[] doorIcon = ImageLoader.loadDoor();
-    BufferedImage[] showerIcon = ImageLoader.loadStovesIcons();
-    BufferedImage[] aquariumIcon = ImageLoader.loadStovesIcons();
-
-
     public void interact() {
-        int itemPrice;
-        int timeUpperBound = 30;
-        int timeLowerBound = 1;
-        Item item=null;
-        int deliveryTime = (int) Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound;
-        if (isObject) {
-            if (slotRow == 1) {
-                if (slotCol == 1) {
-                    item = new Bed(0,0,0);
-                }
-                else if(slotCol == 2) {
-                    item = new Bed(0,0,1);
-                }
-                else if (slotCol == 3) {
-                    item = new Bed(0,0,2);
-                }
-                else if (slotCol == 4) {
-                    item = new Toilet(0, 0);
-                }
-                else if (slotCol == 5) {
-                    item = new Stove(0,0,0);
-                }
-            }
-            else if (slotRow == 2) {
-                if (slotCol == 1) {
-                    item = new Stove(0,0,1);
-                }
-                else if(slotCol == 2) {
-                    item = new Stove(0,0,0);
-                }
-                else if (slotCol == 3) {
-                    item = new Stove(0,0,0);
-                }
-                else if (slotCol == 4) {
-                    item = new Aquarium(0, 0);
-                }
-                else if (slotCol == 5) {
-                    item = new Door(null);
-                }
-            }
-            else if (slotRow == 3) {
-                if (slotCol == 1) {
-                    item = new Shower(0, 0);
-                }
-                else if (slotCol == 2) {
-                    item = new TrashBin();
-                }
-            }
-        }
-        else {
-            if (slotRow == 1) {
-                if (slotCol == 1) {
-                    item = new RawFood(0);
-                }
-                else if(slotCol == 2) {
-                    item = new RawFood(1);
-                }
-                else if (slotCol == 3) {
-                    item = new RawFood(2);
-                }
-                else if (slotCol == 4) {
-                    item = new RawFood(3);
-                }
-                else if (slotCol == 5) {
-                    item = new RawFood(4);
-                }
-            }
-            else if (slotRow == 2) {
-                if (slotCol == 1) {
-                    item = new RawFood(5);
-                }
-                else if(slotCol == 2) {
-                    item = new RawFood(6);
-                }
-                else if (slotCol == 3) {
-                    item = new RawFood(7);
-                }
-            }
-        }
-        GameTime.startDecrementTimeRemaining(deliveryTime);
-        if(UserInterface.getCurrentSim().getMoney() >= item.getPrice()){
-            // must put the code to add to inventory
-            UserInterface.getCurrentSim().getInventory().addItem(item);
-            UserInterface.getCurrentSim().setMoney(UserInterface.getCurrentSim().getMoney() - item.getPrice());
-        }
+        Thread buying = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // if(UserInterface.getCurrentSim().getMoney() >= listOfItem.get(slotSelected).getPrice()){
+                if(UserInterface.getCurrentSim().getMoney() >= 11000){
+                      
+                    changeIsOpen();
+                    isChoosing = true;
+                    isSelecting = false;
+                    isBuySuccess = true;
+                    isObject = true;
+                    slotCol = 1;
+                    slotRow = 1;
+                    
+                    itemQuantity = 1;
+                    int timeUpperBound = 150;
+                    int timeLowerBound = 30;
+                    int deliveryTime = (int) Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound;
+                    
+                    System.out.println("item:"+listOfItem.get(slotSelected).getName());
+                    UserInterface.getCurrentSim().setMoney(UserInterface.getCurrentSim().getMoney() - listOfItem.get(slotSelected).getPrice());
+                    Thread t = GameTime.startDecrementTimeRemaining(deliveryTime);
+                    
+                    System.out.println("deliveryTimeee:"+deliveryTime);
 
+                    while (t.isAlive()) continue;
+
+                    UserInterface.getCurrentSim().getInventory().addItem(listOfItem.get(slotSelected));
+                    System.out.println("Berhasil masak");   
+                    slotSelected = 0;    
+                }
+                else {
+                    isBuySuccess = false;
+                }
+            }
+        });
+        buying.start(); 
     }
-
-    
-
+    int offSetY = 20;
     public void drawFrame(Graphics2D g) {
+        
+        g.setFont(new Font("Inter", Font.PLAIN, 10));
+        g.setColor(Color.decode("#6EC4D5"));
+        g.fillRect(0, 0, 800, 600);
+        g.drawImage(storeLayout[6], 150, 72-offSetY, null);
+        g.drawImage(storeLayout[7], 294, 47-offSetY, null);
+        g.drawImage(storeLayout[1], 188, 112-offSetY, null);
+        g.drawImage(storeLayout[1], 407, 112-offSetY, null);
+        g.drawImage(storeLayout[0], 187, 156-offSetY, null);
+        g.drawImage(storeLayout[5], 261, 529-offSetY, null);
+        g.setColor(Color.BLACK);
+        g.drawString("press esc to return", 364, 575-offSetY);
+        int x = 214;
+        int y = 178;
+        int countItemPlaceHolder = 0;
+
+        while (countItemPlaceHolder < 15) {
+            g.drawImage(storeLayout[8], x, y-offSetY, null);
+            x += 77;
+            if (countItemPlaceHolder == 4 || countItemPlaceHolder == 9) {
+                x = 214;
+                y += 81;
+            }
+            countItemPlaceHolder++;
+        }
+        
+        
+        
+        
+        
         if (isChoosing) {
-            g.drawImage(storeLayout[0], 0, 0, null);
+            //g.drawImage(storeLayout[0], 0, 0, null);
+            g.drawString("choose item to buy", 366, 463-offSetY);
         }
         if (isSelecting) {
-            g.drawImage(storeLayout[2], 0, 0, null);
+            // g.drawImage(storeLayout[2], 0, 0, null);
+            g.drawImage(storeLayout[3], 331, 462-offSetY, null);
+            g.drawImage(storeLayout[4], 445, 464-offSetY, null);
+            g.drawImage(storeLayout[2], 369, 462-offSetY, null);
+            
         }
-        // if (!isBuySuccess) {
-        //     g.drawImage(storeLayout[1], 0, 0, null);
-        // }
+        if (!isBuySuccess) {
+            // g.drawImage(storeLayout[1], 0, 0, null);
+            g.drawString("you don't have enough money", 346, 453-offSetY);
+            g.drawImage(storeLayout[3], 331, 462-offSetY, null);
+            g.drawImage(storeLayout[4], 445, 464-offSetY, null);
+            g.drawImage(storeLayout[2], 369, 462-offSetY, null);
+        }
+
+        g.setFont(new Font("Inter", Font.BOLD, 14));
+        g.setColor(Color.WHITE);
+        g.drawString("Objects", 272, 133-offSetY);
+        g.drawString("Foods", 491, 133-offSetY);
+        g.setFont(new Font("Inter", Font.BOLD, 20));
+        g.drawString("Store", 380, 74-offSetY);
     }
 
     public void drawItem(Graphics2D g) {
-        objectImages[0] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[1] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[2] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[3] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[4] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[5] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[6] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[7] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[8] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[9] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[10] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        objectImages[11] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        
-
-        foodImages[0] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[1] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[2] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[3] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[4] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[5] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[6] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        foodImages[7] = ImageLoader.readImage("tiles", "grass", 1, 1, false);
-        
         int imageX = 214;
         int imageY = 178;
         int i = 0;
         int upper_i = 0;
         if (isObject) {
-            upper_i = 7;
+            upper_i = 12;
         }
         else {
-            upper_i = 8;
+            upper_i = 20;
+            i = 12;
         }
         while (i < upper_i){
-            g.drawImage(objectImages[i], imageX, imageY, null);
+            g.drawImage(listOfItem.get(i).getIcon(), imageX, imageY-offSetY, null);
             imageX = imageX + slotSize + 13;
-            if(i == 4) {
-                imageX = 214;
-                imageY = imageY + slotSize + 17;
+            if (isObject) {
+                if(i % 5 == 4) {
+                    imageX = 214;
+                    imageY = imageY + slotSize + 17;
+                }
+            }
+            else {
+                if (i == 16) {
+                    imageX = 214;
+                    imageY = imageY + slotSize + 17;
+                }
             }
             i++;
         }
     }
 
-    
-
     public void drawSimInfo(Graphics2D g) {
         g.drawString(UserInterface.getCurrentSim().getName(), simNameX, simNameY);
+        g.setColor(Color.BLACK);
         g.drawString(Integer.toString(UserInterface.getCurrentSim().getMoney()), simMoneyX, simMoneyY);
     }
     
@@ -380,12 +385,11 @@ public class Store {
         }
     }
 
-    
     public void drawCursor(Graphics2D g) {
         if (isChoosing) {
-            g.setColor(Color.BLUE);
-            g.fillRect(cursorX + (slotSize * (slotCol - 1)) + (13 * (slotCol - 1)), cursorY + (slotSize * (slotRow - 1)) + (17 * (slotRow - 1)), slotSize, slotSize);
+            g.setStroke(new BasicStroke(6f));
+            g.setColor(Color.WHITE);
+            g.drawRect(cursorX + (slotSize * (slotCol - 1)) + (13 * (slotCol - 1)), cursorY + (slotSize * (slotRow - 1)) + (17 * (slotRow - 1)) - offSetY, slotSize, slotSize);
         }
     }
-    
 }   

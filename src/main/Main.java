@@ -16,7 +16,7 @@ public class Main {
         // Load your image file and create an ImageIcon object
         ImageIcon icon = new ImageIcon("src/assets/icon.png");
 
-        // Set the icon of the JFrame
+        // Set the icon of the JFrameaaawaa
         frame.setIconImage(icon.getImage());
 
         // ONLY FOR DEBUGGING

@@ -44,6 +44,7 @@ public class BakedFood extends Food implements Item{
             imageIndex
         );
 
+        this.ingredient = ingredients[imageIndex];
         // load the icons
         this.icons = ImageLoader.loadBakedFood();
     }

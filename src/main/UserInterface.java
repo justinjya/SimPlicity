@@ -1,9 +1,11 @@
 package src.main;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 
 import src.world.Room;
 import src.world.World;
@@ -12,6 +14,12 @@ import src.entities.sim.Sim;
 import src.entities.sim.Store;
 import src.entities.sim.Inventory;
 import src.entities.interactables.Door;
+import src.assets.ImageLoader;
+import src.entities.interactables.Door;
+import src.entities.sim.Inventory;
+import src.entities.sim.Sim;
+import src.entities.sim.Store;
+import src.items.foods.BakedFood;
 import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
 import src.main.menus.UpgradeHouseMenu;
@@ -201,6 +209,129 @@ public class UserInterface {
         currentSim.changeIsBusyState();
     }
 
+    public static void drawCantCookUI(Graphics2D g) {
+        BufferedImage[] images = ImageLoader.loadWarningBox();
+        g.drawImage(images[0], 275, 180, null);
+        // g.setColor(Color.WHITE);
+        // g.fillRect(350, 250, 100, 100);
+        // g.setColor(Color.BLACK);
+        g.drawString("INGREDIENTS NOT AVAILABLE", 295, 230);
+        g.drawString("PRESS ESC TO CONTINUE", 295, 260);
+
+    }
+    private static boolean isViewingRecipes = false;
+    private static boolean isAbleToCook = true;
+    private static int slotRow = 0;
+    private static int slotColumn = 0;
+    private static int slotSize = 45;
+    private static int cursorX = 630 + (slotSize * slotColumn);
+    private static int cursorY = 250 + (slotSize * slotRow);
+    public static void changeIsViewingRecipes() {
+        isViewingRecipes = !isViewingRecipes;
+    }
+    public static void changeIsAbleToCook() {
+        isAbleToCook = !isAbleToCook;
+    }
+    public static boolean getIsAbleToCook() {
+        return isAbleToCook;
+    }
+    public static boolean getIsViewingRecipes() {
+        return isViewingRecipes;
+    }
+    public static int getslotRow() {
+        return slotRow;
+    }
+    public static int getslotColumn() {
+        return slotColumn;
+    }
+    public static int getslotSize() {
+        return slotSize;
+    }
+    public static void setSlotRow(int slotRow) {
+        UserInterface.slotRow = slotRow;
+    }
+    public static void setSlotColumn(int slotColumn) {
+        UserInterface.slotColumn = slotColumn;
+    }
+    private static void drawCookUI(Graphics2D g) { 
+        // set the position and dimensions
+        int frameX = 607;
+        int frameY = 214;
+        int frameWidth = 182;
+        int frameHeight = 262;
+
+        int boxWidth = (slotSize * 3) + 20;
+        int boxHeight = (slotSize * 4) + 20;
+        int boxX = frameX + ((frameWidth - boxWidth) / 2);
+        int boxY = frameY + ((frameHeight - boxHeight) / 2);
+
+        int slotXstart = boxX + ((boxWidth - (slotSize * 3)) / 2);
+        int slotYstart = boxY + ((boxHeight - (slotSize * 4)) / 2);
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        // initialize available baked food
+        BakedFood almondMilk = new BakedFood(0);
+        BakedFood chickenAndRice = new BakedFood(1);
+        BakedFood curryAndRice = new BakedFood(2);
+        BakedFood cutVegetables = new BakedFood(3);
+        BakedFood steak = new BakedFood(4);
+
+        BufferedImage[] images = ImageLoader.loadMenuBook();
+        // draw the title "Cook" box
+        g.drawImage(images[1], 600, 187, null);
+        // g.fillRect(607, 183, 182, 26);
+        // g.drawString("Cook", 668, 201);
+
+        
+        // draw the frame
+        g.drawImage(images[0], frameX, frameY, null);
+        // g.setColor(Color.GRAY);
+        // g.fillRect(frameX, frameY, frameWidth, frameHeight);
+
+        // draw the box
+        g.drawImage(images[2], boxX, boxY, null);
+        // g.setColor(Color.DARK_GRAY);
+        // g.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+        // draw image of available baked food
+        g.drawImage(almondMilk.getIcon(), slotX, slotY, null);
+        g.drawImage(chickenAndRice.getIcon(), slotX+slotSize, slotY, null);
+        g.drawImage(curryAndRice.getIcon(), slotX+2*slotSize, slotY, null);
+        g.drawImage(cutVegetables.getIcon(), slotX, slotY+slotSize, null);
+        g.drawImage(steak.getIcon(), slotX+slotSize, slotY+slotSize, null);
+
+        // cursor
+        int cursorWidth = slotSize;
+        int cursorHeight = slotSize;
+        cursorX = slotXstart + (slotSize * slotColumn);
+        cursorY = slotYstart + (slotSize * slotRow);
+
+        g.setColor(Color.WHITE);
+        g.drawRect(cursorX, cursorY, cursorWidth, cursorHeight);
+
+        g.setColor(Color.BLACK);
+        Font font = new Font("Inter", Font.BOLD, 10);
+        g.setFont(font);
+
+        if (slotRow == 0 && slotColumn == 0) {
+            g.drawString("Almond Milk", frameX + 65, frameY + 20);
+        }
+        else if (slotRow == 0 && slotColumn == 1) {
+            g.drawString("Chicken and Rice", frameX + 50, frameY + 20);
+        }
+        else if (slotRow == 0 && slotColumn == 2) {
+            g.drawString("Curry and Rice", frameX + 55, frameY + 20);
+        }
+        else if (slotRow == 1 && slotColumn == 0) {
+            g.drawString("Cut Vegetables", frameX + 55, frameY + 20);
+        }
+        else if (slotRow == 1 && slotColumn == 1) {
+            g.drawString("Steak", frameX + 78, frameY + 20);
+        }
+
+    }
+
     // ONLY FOR DEBUGGING
     public static boolean isDebug() {
         return debug;
@@ -240,9 +371,9 @@ public class UserInterface {
             InteractMenu.update();
         }
 
-        // if (store.getIsOpen()) {
-        //     store.update();
-        // }
+        if (store.getIsOpen()) {
+            store.update();
+        }
     }
     
     public static void draw(Graphics2D g) {
@@ -280,6 +411,17 @@ public class UserInterface {
         // if (store.getIsOpen()) {
         //     store.draw(g);
         // }
+        if (isViewingRecipes) {
+            UserInterface.drawCookUI(g);
+        }
+
+        if (!isAbleToCook) {
+            UserInterface.drawCantCookUI(g);
+        }
+
+        if (store.getIsOpen()) {
+            store.draw(g);
+        }
     }
 
     public static void drawCenteredText(Graphics2D g, BufferedImage image, int x, int y, String str, Font f) {

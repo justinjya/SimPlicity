@@ -43,6 +43,9 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadTile("wood");
+
+        // ONLY FOR DEBUG
+        listOfObjects.add(new Stove(1,1,0));
     }
 
     // GETTERS

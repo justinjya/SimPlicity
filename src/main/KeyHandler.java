@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import src.entities.sim.Sim;
 import src.entities.sim.Inventory;
+import src.entities.sim.Store;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
 import src.main.panels.GamePanel;
@@ -67,11 +68,13 @@ public class KeyHandler {
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
                 !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
                 !currentSimInventory.isChoosingFood() && !currentRoom.isEditingRoom() &&
+                !currentRoom.isEditingRoom() && !Store.getIsOpen() && 
                 KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
-                !UserInterface.isViewingListOfSims() && !UserInterface.isViewingInteractions() &&
+                !UserInterface.isViewingListOfSims() && !UserInterface.isViewingInteractions() && 
+                !UserInterface.getIsViewingRecipes() && !Store.getIsOpen() && 
                 KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
                 UserInterface.tab();
             }

@@ -52,9 +52,9 @@ public class Inventory {
         // objects
         addItem(new Aquarium());
         addItem(new Shower());
-        addItem(new Stove(0));
-        addItem(new Stove(0));
-        addItem(new Stove(1));
+        addItem(new Stove(0,0,0));
+        addItem(new Stove(0,0,0));
+        addItem(new Stove(0,0,1));
         addItem(new Television());
         addItem(new Toilet());
         addItem(new TrashBin());
@@ -208,6 +208,9 @@ public class Inventory {
                     else {
                         return;
                     }
+                }
+                else {
+                    return;
                 }
                 
                 removeItem(item);
