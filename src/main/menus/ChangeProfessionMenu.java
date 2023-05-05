@@ -30,6 +30,7 @@ public class ChangeProfessionMenu {
     private static BufferedImage notAbleToChange = images[12];
     private static BufferedImage simNameBox = images[13];
     private static BufferedImage simProfessionBox = images[14];
+    private static BufferedImage help = images[15];
 
     // To select a profession and position them inside of the window
     private static int slotSelected = 0;
@@ -89,6 +90,10 @@ public class ChangeProfessionMenu {
     public static void draw(Graphics2D g) {
         g.setColor(new Color(110, 196, 213));
         g.fillRect(0, 0, 800, 600);
+
+        if (UserInterface.isHelped()) {
+            g.drawImage(help, 0, 0, 800, 570, null);
+        }
 
         g.drawImage(mainBox, 41, 113, null);
 

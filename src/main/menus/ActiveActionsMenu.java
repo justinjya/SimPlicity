@@ -31,6 +31,7 @@ public class ActiveActionsMenu {
     private static BufferedImage decreaseHighlight = images[8];
     private static BufferedImage increaseHighlight = images[9];
     private static BufferedImage background = images[10];
+    private static BufferedImage help = images[11];
     
     // Methods
     private static void boxEntered() {
@@ -136,6 +137,10 @@ public class ActiveActionsMenu {
 
     public static void draw(Graphics2D g) {
         g.drawImage(background, 0, 0, null);
+
+        if (UserInterface.isHelped()) {
+            g.drawImage(help, 0, 0, 800, 600, null);
+        }
 
         drawIconsAndButtons(g);
 

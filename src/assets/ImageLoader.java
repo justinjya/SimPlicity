@@ -85,7 +85,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadCreateSimMenu() {
-        BufferedImage[] images = new BufferedImage[11];
+        BufferedImage[] images = new BufferedImage[12];
 
         images[0] = readImage("panels/create_sim_panel", "create_sim_box", 1, 1, false);
         images[1] = readImage("panels/create_sim_panel", "title_box", 1, 1, false);
@@ -98,6 +98,7 @@ public class ImageLoader {
         images[8] = readImage("panels/create_sim_panel", "color_slider_highlight", 1, 1, false);
         images[9] = readImage("panels/create_sim_panel", "button_done_highlight", 1, 1, false);
         images[10] = readImage("panels/create_sim_panel", "button_done_red_highlight", 1, 1, false);
+        images[11] = readImage("panels/create_sim_panel", "create_new_sim_help", 1, 1, false);
 
         return images;
     }
@@ -126,17 +127,18 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadWorldMenu() {
-        BufferedImage[] images = new BufferedImage[3];
+        BufferedImage[] images = new BufferedImage[4];
 
         images[0] = readImage("menus/world_menu", "sim_preview_box", 1, 1, false);
         images[1] = readImage("menus/world_menu", "house_info_box", 1, 1, false);
         images[2] = readImage("menus/world_menu", "help_box", 1, 1, false);
+        images[3] = readImage("menus/world_menu", "world_help", 1, 1, false);
 
         return images;
     }
 
     public static BufferedImage[] loadGameMenu() {
-        BufferedImage[] images = new BufferedImage[8];
+        BufferedImage[] images = new BufferedImage[9];
 
         images[0] = readImage("menus/game_menu/game_info", "double_info_box", 1, 1, false);
         images[1] = readImage("menus/game_menu/sim_info", "money_box", 1, 1, false);
@@ -146,6 +148,7 @@ public class ImageLoader {
         images[5] = readImage("menus/game_menu/sim_info", "icon_hunger", 1, 1, false);
         images[6] = readImage("menus/game_menu/sim_info", "icon_mood", 1, 1, false);
         images[7] = readImage("menus/game_menu/game_info", "help_box", 1, 1, false);
+        images[8] = readImage("menus/game_menu/game_info", "game_info_help", 1, 1, false);
 
         return images;
     }
@@ -226,7 +229,7 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadActiveActionsMenu() {
-        BufferedImage[] images = new BufferedImage[11];
+        BufferedImage[] images = new BufferedImage[12];
 
         images[0] = readImage("menus/active_actions_menu", "icon_change_profession", 1, 1, false);
         images[1] = readImage("menus/active_actions_menu", "icon_go_to_work", 1, 1, false);
@@ -239,12 +242,13 @@ public class ImageLoader {
         images[8] = readImage("menus/active_actions_menu", "decrease_highlight", 1, 1, false);
         images[9] = readImage("menus/active_actions_menu", "increase_highlight", 1, 1, false);
         images[10] = readImage("menus/active_actions_menu", "background", 1, 1, false);
+        images[11] = readImage("menus/active_actions_menu", "active_actions_help", 1, 1, false);
 
         return images;
     }
 
     public static BufferedImage[] loadChangeProfessionMenu() {
-        BufferedImage[] images = new BufferedImage[15];
+        BufferedImage[] images = new BufferedImage[16];
 
         images[0] = readImage("menus/change_profession_menu", "title_box", 1, 1, false);
         images[1] = readImage("menus/change_profession_menu", "main_box", 1, 1, false);
@@ -261,12 +265,13 @@ public class ImageLoader {
         images[12] = readImage("menus/change_profession_menu", "not_able_to_change", 1, 1, false);
         images[13] = readImage("menus/change_profession_menu", "sim_name_box", 1, 1, false);
         images[14] = readImage("menus/change_profession_menu", "sim_profession_box", 1, 1, false);
+        images[15] = readImage("menus/change_profession_menu", "change_profession_help", 1, 1, false);
 
         return images;
     }
 
     public static BufferedImage[] loadListOfSimsMenu() {
-        BufferedImage[] images = new BufferedImage[10];
+        BufferedImage[] images = new BufferedImage[11];
 
         images[0] = readImage("menus/list_of_sims_menu", "choose_sim_box", 1, 1, false);
         images[1] = readImage("menus/list_of_sims_menu", "sim_box", 1, 1, false);
@@ -278,6 +283,7 @@ public class ImageLoader {
         images[7] = readImage("menus/list_of_sims_menu", "icon_health", 1, 1, false);
         images[8] = readImage("menus/list_of_sims_menu", "icon_hunger", 1, 1, false);
         images[9] = readImage("menus/list_of_sims_menu", "icon_mood", 1, 1, false);
+        images[10] = readImage("menus/list_of_sims_menu", "view_sims_help", 1, 1, false);
 
         return images;
     }
@@ -288,6 +294,37 @@ public class ImageLoader {
         images[0] = readImage("menus/game_menu/interact_menu", "interact_box", 1, 1, false);
         images[1] = readImage("menus/game_menu/interact_menu", "highlight", 1, 1, false);
         
+        return images;
+    }
+
+    public static BufferedImage[] loadStore() {
+        BufferedImage[] images = new BufferedImage[12];
+
+        images[0] = readImage("menus/store_menu", "catalogue_box", 1, 1, false);
+        images[1] = readImage("menus/store_menu", "category_box", 1, 1, false);
+        images[2] = readImage("menus/store_menu", "counter_box", 1, 1, false);
+        images[3] = readImage("menus/store_menu", "decrease_button", 1, 1, false);
+        images[4] = readImage("menus/store_menu", "increase_button", 1, 1, false);
+        images[5] = readImage("menus/store_menu", "sim_name_box", 1, 1, false);
+        images[6] = readImage("menus/store_menu", "sim_money_box", 1, 1, false);
+        images[7] = readImage("menus/store_menu", "store_box", 1, 1, false);
+        images[8] = readImage("menus/store_menu", "title_box", 1, 1, false);
+        images[9] = readImage("menus/store_menu", "decrease_highlight", 1, 1, false);
+        images[10] = readImage("menus/store_menu", "increase_highlight", 1, 1, false);
+        images[11] = readImage("menus/store_menu", "selector", 1, 1, false);
+        
+        return images;
+    }
+
+    public static BufferedImage[] loadRecipeBook() {
+        BufferedImage[] images = new BufferedImage[5];
+
+        images[0] = readImage("menus/game_menu/recipe_book", "recipe_book_title", 1, 1, false);
+        images[1] = readImage("menus/game_menu/recipe_book", "recipe_book_box", 1, 1, false);
+        images[2] = readImage("menus/game_menu/recipe_book", "recipe_book_catalogue_box", 1, 1, false);
+        images[3] = readImage("menus/game_menu/recipe_book", "warning_box", 1, 1, false);
+        images[4] = readImage("menus/game_menu/recipe_book", "selector", 1, 1, false);
+
         return images;
     }
 
@@ -616,36 +653,5 @@ public class ImageLoader {
         newImage = changeSimColor(newImage, sim);
 
         return newImage;
-    }
-
-    public static BufferedImage[] loadStore() {
-        BufferedImage[] images = new BufferedImage[12];
-
-        images[0] = readImage("menus/store_menu", "catalogue_box", 1, 1, false);
-        images[1] = readImage("menus/store_menu", "category_box", 1, 1, false);
-        images[2] = readImage("menus/store_menu", "counter_box", 1, 1, false);
-        images[3] = readImage("menus/store_menu", "decrease_button", 1, 1, false);
-        images[4] = readImage("menus/store_menu", "increase_button", 1, 1, false);
-        images[5] = readImage("menus/store_menu", "sim_name_box", 1, 1, false);
-        images[6] = readImage("menus/store_menu", "sim_money_box", 1, 1, false);
-        images[7] = readImage("menus/store_menu", "store_box", 1, 1, false);
-        images[8] = readImage("menus/store_menu", "title_box", 1, 1, false);
-        images[9] = readImage("menus/store_menu", "decrease_highlight", 1, 1, false);
-        images[10] = readImage("menus/store_menu", "increase_highlight", 1, 1, false);
-        images[11] = readImage("menus/store_menu", "selector", 1, 1, false);
-        
-        return images;
-    }
-
-    public static BufferedImage[] loadRecipeBook() {
-        BufferedImage[] images = new BufferedImage[5];
-
-        images[0] = readImage("menus/game_menu/recipe_book", "recipe_book_title", 1, 1, false);
-        images[1] = readImage("menus/game_menu/recipe_book", "recipe_book_box", 1, 1, false);
-        images[2] = readImage("menus/game_menu/recipe_book", "recipe_book_catalogue_box", 1, 1, false);
-        images[3] = readImage("menus/game_menu/recipe_book", "warning_box", 1, 1, false);
-        images[4] = readImage("menus/game_menu/recipe_book", "selector", 1, 1, false);
-
-        return images;
     }
 }

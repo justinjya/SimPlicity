@@ -56,6 +56,10 @@ public class KeyHandler {
     }
 
     public static void keyBinds() {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
+            UserInterface.help();
+        }
+        
         if (!GamePanel.isCurrentState("Playing")) return;
         
         try {
@@ -78,9 +82,6 @@ public class KeyHandler {
                 KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
                 UserInterface.tab();
             }
-            if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
-                UserInterface.debug();
-            }
             if (!currentSim.isBusy() && KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
                 ActiveActions.interact();
             }
@@ -88,6 +89,11 @@ public class KeyHandler {
                 !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
                 KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
                 NonActiveActions.showInventory();
+            }
+            
+            // ONLY FOR DEBUGGING
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_BACK_SLASH)) {
+                UserInterface.debug();
             }
         }
         catch (NullPointerException npe) {System.out.println("Loading . . .");}

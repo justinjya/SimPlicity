@@ -17,6 +17,7 @@ public class WorldMenu {
     private static BufferedImage simPreviewBox = images[0];
     private static BufferedImage houseInfoBox = images[1];
     private static BufferedImage helpBox = images[2];
+    private static BufferedImage help = images[3];
 
     private static World world;
     private static Sim currentSim;
@@ -24,6 +25,10 @@ public class WorldMenu {
 
     public static void draw(Graphics2D g) {
         world = UserInterface.getWorld();
+
+        if (UserInterface.isHelped()) {
+            g.drawImage(help, 0, 0, 800, 570, null);
+        }
 
         drawInfoBoxes(g);
 

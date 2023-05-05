@@ -29,6 +29,7 @@ public class ListOfSimsMenu {
     private static BufferedImage healthIcon = images[7];
     private static BufferedImage hungerIcon = images[8];
     private static BufferedImage moodIcon = images[9];
+    private static BufferedImage help = images[10];
 
     private static World world = UserInterface.getWorld();
     private static ArrayList<Sim> listOfSims = world.getListOfSim();
@@ -100,6 +101,10 @@ public class ListOfSimsMenu {
     public static void draw(Graphics2D g) {
         g.setColor(new Color(110, 196, 213));
         g.fillRect(0, 0, 800, 600);
+
+        if (UserInterface.isHelped()) {
+            g.drawImage(help, 0, 0, 800, 570, null);
+        }
 
         drawInfoBoxes(g);
 

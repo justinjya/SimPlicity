@@ -18,6 +18,7 @@ public class UpgradeHouseMenu {
     private static BufferedImage priceBox = images[1];
     private static BufferedImage addBox = images[2];
     private static BufferedImage priceBoxNotSufficient = images[3];
+    private static BufferedImage help = images[4];
 
     private static String roomName = "";
 
@@ -43,6 +44,10 @@ public class UpgradeHouseMenu {
     }
 
     public static void draw(Graphics2D g) {
+        if (UserInterface.isHelped()) {
+            g.drawImage(help, 0, 0, 800, 570, null);
+        }
+        
         drawBoxes(g);
 
         drawTexts(g);

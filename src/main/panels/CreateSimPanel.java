@@ -23,6 +23,7 @@ public class CreateSimPanel extends JPanel {
     public static String roomName;
     public static int selectedColor = 2;
     private static int selectedField = 0; // 0 to 3
+    private static boolean help = false;
 
     public static Sim currentSim;
 
@@ -42,7 +43,7 @@ public class CreateSimPanel extends JPanel {
 
                 // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
-                    if (textFields[0] == "" || textFields[1] == "") return;
+                    if (textFields[0].equals("")|| textFields[1].equals("")) return;
                     
                     if (GamePanel.isCurrentState("Starting a new game: Creating a new sim")) {
                         GamePanel.gameState = "Starting a new game: Placing a new house";
@@ -65,6 +66,10 @@ public class CreateSimPanel extends JPanel {
                         GamePanel.gameState = "Playing";
                         PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
                     } 
+                }
+
+                if (keyCode == KeyEvent.VK_SLASH) {
+                    help = !help;
                 }
                 
                 // names text feild
@@ -122,6 +127,10 @@ public class CreateSimPanel extends JPanel {
         g.setColor(new Color(110, 196, 213));
         g.fillRect(0, 0, 800, 600);
 
+        if (help) {
+            g.drawImage(images[11], 0, 0, null);
+        }
+
         drawBoxes(g2);
 
         drawSelector(g2);
@@ -150,7 +159,7 @@ public class CreateSimPanel extends JPanel {
         if (selectedField == 1) g.drawImage(images[7], 267, 328, null); // room name
         if (selectedField == 2) g.drawImage(images[8], 315, 388, null); // color selector
         if (selectedField == 3) {
-            if (textFields[0] == "" || textFields[1] == "") {
+            if (textFields[0].equals("") || textFields[1].equals("")) {
                 g.drawImage(images[10], 337, 435, null); // done button
             }
             else {

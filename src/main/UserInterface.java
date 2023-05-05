@@ -37,6 +37,7 @@ public class UserInterface {
     private static Inventory currentSimInventory;
     
     // User Interface States
+    private static boolean help = false;
     private static boolean tabbed = false;
     private static boolean pause = false;
     private static boolean viewingWorld = false;
@@ -105,6 +106,10 @@ public class UserInterface {
         return currentSim;
     }
 
+    public static boolean isHelped() {
+        return help;
+    }
+
     public static boolean isTabbed() {
         return tabbed;
     }
@@ -157,6 +162,10 @@ public class UserInterface {
     public static void setCurrentSim(Sim sim) {
         currentSim = sim;
         currentSimInventory = currentSim.getInventory();
+    }
+
+    public static void help() {
+        help = !help;
     }
 
     public static void tab() {

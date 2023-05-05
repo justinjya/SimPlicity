@@ -25,6 +25,7 @@ public class GameMenu {
     private static BufferedImage hungerIcon = images[5];
     private static BufferedImage moodIcon = images[6];
     private static BufferedImage helpBox = images[7];
+    private static BufferedImage help = images[8];
 
     // Attributes to make showing it easier
     public static int workDuration = 0;
@@ -34,6 +35,11 @@ public class GameMenu {
         Sim currentSim = UserInterface.getCurrentSim();
         InteractionHandler simInteract = currentSim.getInteractionHandler();
         boolean objectInRange = simInteract.isObjectInRange();
+
+        if (UserInterface.isHelped() && !UserInterface.isTabbed() &&
+            !UserInterface.isUpgradingHouse()) {
+            g.drawImage(help, 0, 0, 800, 580, null);
+        }
 
         // boxes
         drawBoxes(g);
@@ -49,7 +55,7 @@ public class GameMenu {
         pressQuestionMarkForHelp(g);
 
         // press esc to pause the game
-        if (!UserInterface.isTabbed() && !objectInRange) {
+        if (!UserInterface.isTabbed() && !objectInRange && !UserInterface.isHelped()) {
             pressEscapeToPause(g);
         }
 
