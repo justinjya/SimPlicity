@@ -76,7 +76,7 @@ public class Stove extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icons[getImageIndex() % 2];
     }
 
     @Override

@@ -2,13 +2,12 @@ package src.main;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
+import src.entities.sim.Inventory;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
 import src.main.panels.GamePanel;
 import src.world.Room;
-import src.world.World;
 
 public class KeyHandler {
     public static final int KEY_A = KeyEvent.VK_A;
@@ -67,7 +66,8 @@ public class KeyHandler {
             if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
                 !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
                 !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
-                !currentRoom.isEditingRoom() && KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                !currentSimInventory.isChoosingFood() && !currentRoom.isEditingRoom() &&
+                KeyHandler.isKeyPressed(KEY_ESCAPE)) {
                 UserInterface.pause();
             }
             if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&

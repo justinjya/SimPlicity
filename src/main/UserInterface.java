@@ -133,22 +133,27 @@ public class UserInterface {
 
     public static void tab() {
         tabbed = !tabbed;
-        currentSim.changeIsBusyState();
+        if (currentSim.isStatusCurrently("Idle")) {
+            currentSim.changeIsBusyState();
+        }
     }
 
     public static void pause() {
         if (tabbed) tab();
         pause = !pause;
 
-        currentSim.changeIsBusyState();
+        if (currentSim.isStatusCurrently("Idle")) {
+            currentSim.changeIsBusyState();
+        }
     }
-
 
     public static void inventory() {
         if (tabbed) tab();
 
         currentSimInventory.changeIsOpen();
-        currentSim.changeIsBusyState();
+        if (currentSim.isStatusCurrently("Idle")) {
+            currentSim.changeIsBusyState();
+        }
     }
 
     public static void viewActiveActions() {

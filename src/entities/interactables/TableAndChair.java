@@ -3,12 +3,12 @@ package src.entities.interactables;
 import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
-import src.entities.sim.Inventory;
-import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
 import src.main.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.UserInterface;
+import src.entities.sim.Inventory;
 import src.main.menus.InteractMenu;
 
 public class TableAndChair extends Interactables {
@@ -16,7 +16,7 @@ public class TableAndChair extends Interactables {
     private BufferedImage[] images = ImageLoader.loadTableAndChair();
 
     private int price = 50;
-    private int duration = 10; // TO BE DETERMINED
+    private int readDuration = 30;
 
     public TableAndChair() {
         super (
@@ -57,6 +57,51 @@ public class TableAndChair extends Interactables {
         getBounds().setLocation(getX() + 8, getY() + 12);
     }
 
+    public void resetImages() {
+        images = ImageLoader.loadTableAndChair();
+    }
+
+    public void changeOccupiedState(Sim sim) {
+        if (sim.isStatusCurrently("Idle")) {
+            setImageIndex(0);
+        }
+        if (sim.isStatusCurrently("Eating")) {
+            images[1] = ImageLoader.changeSimColor(images[1], sim);
+            images[2] = ImageLoader.changeSimColor(images[2], sim);
+
+            Thread eatingAnimation = new Thread() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            setImageIndex(1);
+                            Thread.sleep(Consts.THREAD_ONE_SECOND / 2);
+                            setImageIndex(2);
+                            Thread.sleep(Consts.THREAD_ONE_SECOND / 2);
+
+                            if (sim.isStatusCurrently("Idle")) break;
+                        }
+                        catch (InterruptedException ie) {}
+                    }
+                }
+            };
+            eatingAnimation.start();
+        }
+        if (sim.isStatusCurrently("Reading a Book")) {
+            setImageIndex(3);
+        }
+
+        this.occupied = !this.occupied;
+    }
+
+    public void setImages(BufferedImage[] images) {
+        this.images = images;
+    }
+
+    public void setImageAtIndex(int index, BufferedImage image) {
+        images[index] = image;
+    }
+
     @Override
     public BufferedImage getIcon() {
         return icon;
@@ -82,7 +127,7 @@ public class TableAndChair extends Interactables {
                 }
 
                 if (InteractMenu.slotSelected == -1) return;
-                else if (InteractMenu.slotSelected == 0) chooseFood(sim);
+                else if (InteractMenu.slotSelected == 0) eat(sim);
                 else if (InteractMenu.slotSelected == 1) readABook(sim);
                 InteractMenu.slotSelected = 0;
             }
@@ -91,11 +136,36 @@ public class TableAndChair extends Interactables {
     }
 
     // TO - DO!!! : Add eat from inventory
-    private void chooseFood(Sim sim) {
+    private void eat(Sim sim) {
         Inventory simInventory = sim.getInventory();
 
+        sim.changeIsBusyState();
         simInventory.changeIsOpen();
-        simInventory.switchCategory();
+        simInventory.chooseFood();
+
+        Thread chooseFood = new Thread() {
+            @Override
+            public void run() {
+                boolean running = true;
+                while (running) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        sim.changeIsBusyState();
+                        simInventory.changeIsOpen();
+                        simInventory.chooseFood();
+                        running = false;;
+                    }
+
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        sim.changeIsBusyState();
+                        simInventory.interact();
+                        simInventory.changeIsOpen();
+                        simInventory.chooseFood();
+                        running = false;
+                    }
+                }
+            }
+        };
+        chooseFood.start();
     }
     
     private void readABook(Sim sim) {
@@ -103,13 +173,17 @@ public class TableAndChair extends Interactables {
             @Override
             public void run() {
                 sim.setStatus("Reading a Book");
-                changeOccupiedState();
-                Thread t = GameTime.startDecrementTimeRemaining(duration*Consts.ONE_SECOND);
+                changeOccupiedState(sim);
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                Thread t = GameTime.startDecrementTimeRemaining(readDuration*Consts.ONE_SECOND);
                 
                 while (t.isAlive()) continue;
 
-                changeOccupiedState();
+                images = ImageLoader.loadTableAndChair();
+
                 sim.resetStatus();
+                changeOccupiedState(sim);
                 sim.setMood(sim.getMood() + 10);
                 sim.setHunger(sim.getHunger() - 10);
             }

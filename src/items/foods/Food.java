@@ -2,6 +2,9 @@ package src.items.foods;
 
 import java.awt.image.BufferedImage;
 
+import src.entities.handlers.InteractionHandler;
+import src.entities.interactables.Interactables;
+import src.entities.interactables.TableAndChair;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameTime;
@@ -36,16 +39,26 @@ public abstract class Food {
     }
 
     public void eat(Sim sim) {
+        InteractionHandler simInteract = sim.getInteractionHandler();
+        Interactables object = simInteract.getInteractableObject();
+
+        if (!(object instanceof TableAndChair)) return;
+
+        TableAndChair tableAndChair = (TableAndChair) object;
+
         Thread eating = new Thread() {
             @Override
             public void run() {
                 sim.setStatus("Eating");
-                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 5);
+                tableAndChair.changeOccupiedState(sim);
+                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 30);
 
                 while (t.isAlive()) continue;
                 
                 sim.resetStatus();
                 sim.setHunger(sim.getHunger() + hungerPoint);
+                tableAndChair.changeOccupiedState(sim);
+                tableAndChair.resetImages();
             }
         };
         eating.start();

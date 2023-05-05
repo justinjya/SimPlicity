@@ -381,10 +381,12 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadTableAndChair() {
-        BufferedImage[] images = new BufferedImage[2];
+        BufferedImage[] images = new BufferedImage[4];
         
         images[0] = readImage("entities/interactables/table_and_chair", "table_and_chair_idle", 3, 3, true);
-        images[1] = readImage("entities/interactables/table_and_chair", "table_and_chair_occupied", 3, 3, true);
+        images[1] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat1", 3, 3, true);
+        images[2] = readImage("entities/interactables/table_and_chair", "table_and_chair_eat2", 3, 3, true);
+        images[3] = readImage("entities/interactables/table_and_chair", "table_and_chair_read", 3, 3, true);
 
         return images;
     }

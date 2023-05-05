@@ -27,6 +27,7 @@ public class Inventory {
     private ArrayList<String> itemNames = new ArrayList<>();
     private boolean isOpen = false; // true if the inventory is open, false if closed
     private boolean isObject = true;
+    private boolean isChoosingFood = false;
 
     private int slotSelected = 0;
     
@@ -103,6 +104,11 @@ public class Inventory {
         return isOpen;
     }
 
+    public boolean isChoosingFood()
+    {
+        return isChoosingFood;
+    }
+
     // setter
     public void changeIsOpen()
     {
@@ -111,7 +117,15 @@ public class Inventory {
 
     public void switchCategory()
     {
+        if (isChoosingFood) return;
+
         isObject = !isObject;
+    }
+
+    public void chooseFood() {
+        if (isObject) switchCategory();
+
+        isChoosingFood = !isChoosingFood;
     }
 
     public void addItem(Item item)
@@ -152,6 +166,8 @@ public class Inventory {
                     if (!sim.getName().equals(currentHouseOwner.getName())){
                         return;
                     }
+
+                    if (!sim.isStatusCurrently("Idle")) return;
     
                     Room currentRoom = sim.getCurrentRoom();
                     Interactables newObject = (Interactables) item;
@@ -162,9 +178,14 @@ public class Inventory {
                 }
     
                 if (item instanceof Food) {
-                    Food food = (Food) item;
-    
-                    food.eat(sim);
+                    if (isChoosingFood) {
+                        Food food = (Food) item;
+                        
+                        food.eat(sim);
+                    }
+                    else {
+                        return;
+                    }
                 }
                 
                 int count = mapOfItems.get(item);
@@ -242,6 +263,7 @@ public class Inventory {
         
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
             if (slotSelected < itemNames.size()) {
+                if (isChoosingFood) return;
                 interact();
             }
         }

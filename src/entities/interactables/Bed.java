@@ -31,7 +31,7 @@ public class Bed extends Interactables{
     };
 
     // Attributes
-    private int duration = Consts.ONE_MINUTE / 10; // CHANGE TO * 4 ONCE PROJECT IS DONE
+    private int duration = Consts.ONE_MINUTE * 4;
 
     // Image of the beds
     private BufferedImage[] icons;
@@ -98,7 +98,7 @@ public class Bed extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icons[getImageIndex() % 3];
     }
 
     @Override
@@ -112,7 +112,6 @@ public class Bed extends Interactables{
             @Override
             public void run() {
                 changeOccupiedState();
-                BufferedImage initialImage = images[getImageIndex()]; // TO-DO!!! : Fix color change
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
                 sim.setStatus("Sleeping");
@@ -122,7 +121,7 @@ public class Bed extends Interactables{
                     continue;
                 }
 
-                images[getImageIndex()] = initialImage;
+                images = ImageLoader.loadBeds();
                 
                 changeOccupiedState();
                 sim.resetStatus();
