@@ -264,7 +264,7 @@ public class Store {
                     item = new Shower(0, 0);
                 }
                 else if (slotCol == 2) {
-                    item = new TrashBin(0, 0);
+                    item = new TrashBin();
                 }
             }
         }

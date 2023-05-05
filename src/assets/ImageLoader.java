@@ -2,6 +2,8 @@ package src.assets;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -47,6 +49,13 @@ public class ImageLoader {
             }
         }
         return rotated;
+    }
+
+    public static BufferedImage flipHorizontally(BufferedImage image) {
+        AffineTransform transform = AffineTransform.getScaleInstance(-1, 1);
+        transform.translate(-image.getWidth(null), 0);
+        AffineTransformOp operation = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        return operation.filter(image, null);
     }
 
     public static BufferedImage[] loadMainMenu() {
@@ -459,12 +468,12 @@ public class ImageLoader {
         images[0] = readImage("entities/interactables/trash_bin", "trash_bin_empty", 1, 1, true);
         images[1] = readImage("entities/interactables/trash_bin", "trash_bin_filled", 1, 1, true);
         images[2] = readImage("entities/interactables/trash_bin", "trash_bin_empty_on_floor", 1, 1, true);
-        images[3] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_1", 2, 1, true);
-        images[4] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_2", 2, 1, true);
-        images[5] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick_3", 2, 1, true);
-        images[6] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_1", 2, 1, true);
-        images[7] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_2", 2, 1, true);
-        images[8] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick_3", 2, 1, true);
+        images[3] = readImage("entities/interactables/trash_bin", "trash_bin_filled_on_floor", 1, 1, true);
+        images[4] = readImage("entities/interactables/trash_bin", "trash_bin_empty_kick", 2, 1, true);
+        images[5] = readImage("entities/interactables/trash_bin", "trash_bin_empty_clean", 2, 1, true);
+        images[6] = readImage("entities/interactables/trash_bin", "trash_bin_filled_kick", 2, 1, true);
+        images[7] = readImage("entities/interactables/trash_bin", "trash_bin_filled_clean_1", 2, 1, true);
+        images[8] = readImage("entities/interactables/trash_bin", "trash_bin_filled_clean_2", 2, 1, true);
     
         return images;
     }

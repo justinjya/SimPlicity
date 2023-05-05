@@ -18,8 +18,9 @@ public class GameTime implements Runnable {
     // IMPLEMENTATION OF INTERFACE
     @Override
     public void run() {
+        int localDecrements = decrements;
         synchronized (this) {
-            while (decrements > 0) {
+            while (localDecrements > 0) {
                 try {
                     Thread.sleep(Consts.THREAD_ONE_SECOND);
                 }
@@ -29,7 +30,7 @@ public class GameTime implements Runnable {
 
                 if (!UserInterface.isPaused()) {
                     decrementTimeRemaining();
-                    decrements--;
+                    localDecrements--;
                 }
             }
         }
