@@ -66,7 +66,7 @@ public class GameTime implements Runnable {
         }
     }
 
-    public static void incrementDay() {
+    private static void incrementDay() {
         day++;
     }
 
