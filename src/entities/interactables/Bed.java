@@ -112,7 +112,7 @@ public class Bed extends Interactables{
             @Override
             public void run() {
                 changeOccupiedState();
-                BufferedImage initialImage = images[getImageIndex()];
+                BufferedImage initialImage = images[getImageIndex()]; // TO-DO!!! : Fix color change
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
                 sim.setStatus("Sleeping");
