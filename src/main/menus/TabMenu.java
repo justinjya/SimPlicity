@@ -47,6 +47,7 @@ public class TabMenu {
         Room currentRoom = currentSim.getCurrentRoom();
 
         if (currentSim.isBusy()) return;
+        if (!currentSim.isStatusCurrently("Idle")) return;
 
         switch (selectedBox) {
             case 0:

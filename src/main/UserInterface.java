@@ -149,11 +149,10 @@ public class UserInterface {
 
     public static void inventory() {
         if (tabbed) tab();
+        if (viewingInteractions) return;
 
         currentSimInventory.changeIsOpen();
-        if (currentSim.isStatusCurrently("Idle")) {
-            currentSim.changeIsBusyState();
-        }
+        currentSim.changeIsBusyState();
     }
 
     public static void viewActiveActions() {
