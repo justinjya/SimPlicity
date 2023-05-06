@@ -114,6 +114,8 @@ public class GamePanel extends JPanel implements Runnable {
                 currentSim.update();
                 currentRoom.update();
                 UserInterface.update();
+
+                stopMusic(0);
             }
         }
         catch (NullPointerException e) {}
