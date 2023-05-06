@@ -3,6 +3,9 @@ package src.entities.interactables;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
+import src.main.KeyHandler;
+import src.main.UserInterface;
+import src.main.menus.InteractMenu;
 import src.assets.ImageLoader;
 import src.main.time.GameTime;
 import src.entities.sim.Sim;
@@ -31,7 +34,7 @@ public class Bed extends Interactables{
     };
 
     // Attributes
-    private int duration = Consts.ONE_MINUTE * 4;
+    private int duration = Consts.ONE_MINUTE * 3;
     private String activityStatus = "Sleeping";
 
     // Image of the beds
@@ -112,6 +115,23 @@ public class Bed extends Interactables{
         Thread interacting = new Thread() {
             @Override
             public void run() {
+                UserInterface.viewInteractions();
+                
+                while (UserInterface.isViewingInteractions()) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        UserInterface.viewInteractions();
+                        duration = InteractMenu.sleepDuration;
+                        break;
+                    }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewInteractions();
+                        InteractMenu.slotSelected = -1;
+                        InteractMenu.sleepDuration = Consts.ONE_MINUTE * 3;
+                        return;
+                    }
+                }
+                InteractMenu.slotSelected = 0;
+
                 changeOccupiedState();
                 sim.setStatus(activityStatus);
                 

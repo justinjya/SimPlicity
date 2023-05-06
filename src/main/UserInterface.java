@@ -73,6 +73,7 @@ public class UserInterface {
 
 
         GameTime.incrementDay();
+        // viewInteractions();
         // testing game over
         // UserInterface.currentSim.setHealth(1);
         // UserInterface.currentSim.setHunger(1);

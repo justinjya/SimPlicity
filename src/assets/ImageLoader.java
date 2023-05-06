@@ -290,10 +290,15 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadInteractMenu() {
-        BufferedImage[] images = new BufferedImage[2];
+        BufferedImage[] images = new BufferedImage[7];
 
         images[0] = readImage("menus/game_menu/interact_menu", "interact_box", 1, 1, false);
         images[1] = readImage("menus/game_menu/interact_menu", "highlight", 1, 1, false);
+        images[2] = readImage("menus/game_menu/interact_menu", "decrease", 1, 1, false);
+        images[3] = readImage("menus/game_menu/interact_menu", "increase", 1, 1, false);
+        images[4] = readImage("menus/game_menu/interact_menu", "decrease_highlight", 1, 1, false);
+        images[5] = readImage("menus/game_menu/interact_menu", "increase_highlight", 1, 1, false);
+        images[6] = readImage("menus/game_menu/interact_menu", "counter_box", 1, 1, false);
         
         return images;
     }

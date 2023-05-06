@@ -84,6 +84,7 @@ public class TableAndChair extends Interactables {
                         }
                         catch (InterruptedException ie) {}
                     }
+                    setImageIndex(0);
                 }
             };
             eatingAnimation.start();
@@ -125,10 +126,14 @@ public class TableAndChair extends Interactables {
                         UserInterface.viewInteractions();
                         break;
                     }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewInteractions();
+                        InteractMenu.slotSelected = -1;
+                        return;
+                    }
                 }
 
-                if (InteractMenu.slotSelected == -1) return;
-                else if (InteractMenu.slotSelected == 0) eat(sim);
+                if (InteractMenu.slotSelected == 0) eat(sim);
                 else if (InteractMenu.slotSelected == 1) readABook(sim);
                 InteractMenu.slotSelected = 0;
             }

@@ -84,10 +84,14 @@ public class Television extends Interactables{
                         UserInterface.viewInteractions();
                         break;
                     }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewInteractions();
+                        InteractMenu.slotSelected = -1;
+                        return;
+                    }
                 }
 
-                if (InteractMenu.slotSelected == -1) return;
-                else if (InteractMenu.slotSelected == 0) karaoke(sim);
+                if (InteractMenu.slotSelected == 0) karaoke(sim);
                 else if (InteractMenu.slotSelected == 1) watch(sim);
                 InteractMenu.slotSelected = 0;
             }
