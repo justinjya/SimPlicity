@@ -222,9 +222,9 @@ public class ImageLoader {
 
         images[0] = readImage("menus/pause_menu", "background", 1, 1, false);
         images[1] = readImage("menus/pause_menu", "about", 1, 1, false);
-        images[2] = readImage("menus/pause_menu", "save_and_exit", 1, 1, false);
+        images[2] = readImage("menus/pause_menu", "exit", 1, 1, false);
         images[3] = readImage("menus/pause_menu", "about_highlight", 1, 1, false);
-        images[4] = readImage("menus/pause_menu", "save_and_exit_highlight", 1, 1, false);
+        images[4] = readImage("menus/pause_menu", "exit_highlight", 1, 1, false);
 
         return images;
     }

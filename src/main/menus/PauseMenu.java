@@ -17,9 +17,9 @@ public class PauseMenu {
     private static BufferedImage[] images = ImageLoader.loadPause();
     private static BufferedImage background = images[0];
     private static BufferedImage about = images[1];
-    private static BufferedImage saveAndExit = images[2];
+    private static BufferedImage exit = images[2];
     private static BufferedImage aboutHighlighted = images[3];
-    private static BufferedImage saveAndExitHighlighted = images[4]; 
+    private static BufferedImage exitHighlighted = images[4]; 
 
     private static void boxPressed(){
         if(selectedBox == 0){
@@ -57,13 +57,13 @@ public class PauseMenu {
         g.drawImage(background, 233, 60, null); // Background
 
         g.drawImage(about, 269, 167, null); // Help button
-        g.drawImage(saveAndExit, 269, 262, null); // Save and Exit button
+        g.drawImage(exit, 269, 262, null); // Save and Exit button
         
         if(selectedBox == 0){
             g.drawImage(aboutHighlighted, 265, 163, null);
         }
         if(selectedBox == 1){
-            g.drawImage(saveAndExitHighlighted, 265, 258, null);
+            g.drawImage(exitHighlighted, 265, 258, null);
         }
     }
 }

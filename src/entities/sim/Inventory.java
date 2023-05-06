@@ -13,7 +13,6 @@ import src.main.KeyHandler;
 import src.assets.ImageLoader;
 import src.main.UserInterface;
 import src.entities.interactables.*;
-import src.items.foods.RawFood;
 import src.items.foods.Food;
 import src.world.House;
 import src.world.Room;
