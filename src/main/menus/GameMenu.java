@@ -126,8 +126,8 @@ public class GameMenu {
         }
 
         // ONLY FOR DEBUGGING
-        if (UserInterface.isDebug()) {
-            drawDebug(g, 125);
+        if (!UserInterface.isHelped() & UserInterface.isDebug()) {
+            drawDebug(g, 100);
         }
     }
 
@@ -384,5 +384,8 @@ public class GameMenu {
         g.drawString("isBusy: " + currentSim.isBusy(), 33, 408 + offset);
         g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418 + offset);
         g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428 + offset);
+        g.drawString("timeNotSlept: " + currentSim.getTimeNotSlept(), 33, 438 + offset);
+        g.drawString("timeNotTakenLeak: " + currentSim.getTimeNotTakenLeak(), 33, 448 + offset);
+        g.drawString("hasAte: " + currentSim.hasAte(), 33, 458 + offset);
     }
 }

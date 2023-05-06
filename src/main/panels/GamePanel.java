@@ -143,6 +143,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         catch (NullPointerException e) {}
+        
         // To free resources
         g2.dispose();
     }

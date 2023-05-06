@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.main.Consts;
 import src.world.Room;
 import src.world.House;
 
@@ -24,6 +25,7 @@ public class Sim extends Entity{
 
     // Supporting Attributes
     private boolean isBusy;
+    private boolean hasAte;
     private int durationWorked;
     private int timeSlept;
     private int timeNotSlept;
@@ -61,6 +63,7 @@ public class Sim extends Entity{
         this.profession = new Profession(); 
         this.inventory = new Inventory();
         this.isBusy = false;
+        this.hasAte = false;
         this.durationWorked = 0;
         this.timeNotSlept = 0;
         this.timeNotTakenLeak = 0;
@@ -109,6 +112,10 @@ public class Sim extends Entity{
 
     public boolean isBusy() {
         return isBusy;
+    }
+
+    public boolean hasAte() {
+        return hasAte;
     }
 
     public int getDurationWorked() {
@@ -206,6 +213,10 @@ public class Sim extends Entity{
         this.isBusy = !this.isBusy;
     }
 
+    public void changeHasAteState() {
+        this.hasAte = !this.hasAte;
+    }
+
     public void setDurationWorked(int durationWorked) {
         this.durationWorked = durationWorked;
     }
@@ -216,10 +227,22 @@ public class Sim extends Entity{
 
     public void setTimeNotSlept(int timeNotSlept) {
         this.timeNotSlept = timeNotSlept;
+
+        if (this.timeNotSlept % Consts.ONE_MINUTE * 10 == 0) {
+            this.health -= 5;
+            this.mood -= 5;
+        }
     }
 
     public void setTimeNotTakenLeak(int timeNotTakenLeak) {
+        if (!this.hasAte) return;
+
         this.timeNotTakenLeak = timeNotTakenLeak;
+
+        if (this.timeNotTakenLeak % Consts.ONE_MINUTE * 4 == 0) {
+            this.health -= 5;
+            this.mood -= 5;
+        }
     }
 
     public void setDayLastAddedSim(int day) {

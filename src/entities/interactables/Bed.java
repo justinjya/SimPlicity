@@ -122,7 +122,9 @@ public class Bed extends Interactables{
                 while (GameTime.isAlive(sim, activityStatus)) continue;
                 
                 changeOccupiedState();
+
                 sim.resetStatus();
+                sim.setTimeNotSlept(0);
                 sim.setHealth(sim.getHealth() + 30);
                 sim.setMood(sim.getMood() + 20);
 

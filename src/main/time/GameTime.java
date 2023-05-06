@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import src.main.Consts;
 import src.entities.sim.Sim;
 import src.main.UserInterface;
+import src.world.World;
 
 public class GameTime implements Runnable {
     private static GameTime gt = new GameTime();
@@ -64,6 +65,7 @@ public class GameTime implements Runnable {
 
             try {
                 Thread.sleep(Consts.THREAD_ONE_SECOND);
+                
                 for (ActivityTimer activityTimer : listOfActiveActivities) {
                     int timeRemaining = activityTimer.getTimeRemaining();
 
@@ -72,6 +74,17 @@ public class GameTime implements Runnable {
                     activityTimer.setTimeRemaining(timeRemaining - 1);
                 }
                 decrementTimeRemaining();
+
+                World world = UserInterface.getWorld();
+                ArrayList<Sim> listOfSim = world.getListOfSim();
+
+                for (Sim sim : listOfSim) {
+                    int timeNotSlept = sim.getTimeNotSlept();
+                    int timeNotTakenLeak = sim.getTimeNotTakenLeak();
+
+                    sim.setTimeNotSlept(timeNotSlept + 1);
+                    sim.setTimeNotTakenLeak(timeNotTakenLeak + 1);
+                }
             }
             catch (InterruptedException ie) {}
             catch (ConcurrentModificationException cme) {}
@@ -123,6 +136,17 @@ public class GameTime implements Runnable {
             int timeRemaining = activityTimer.getTimeRemaining();
             
             activityTimer.setTimeRemaining(timeRemaining - time);
+        }
+
+        World world = UserInterface.getWorld();
+        ArrayList<Sim> listOfSim = world.getListOfSim();
+
+        for (Sim sim : listOfSim) {
+            int timeNotSlept = sim.getTimeNotSlept();
+            int timeNotTakenLeak = sim.getTimeNotTakenLeak();
+
+            sim.setTimeNotSlept(timeNotSlept + time);
+            sim.setTimeNotTakenLeak(timeNotTakenLeak + time);
         }
 
         if (timeRemaining <= 0){

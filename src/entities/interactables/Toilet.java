@@ -105,7 +105,12 @@ public class Toilet extends Interactables{
                 while (GameTime.isAlive(sim, activityStatus)) continue;
 
                 changeOccupiedState();
+
                 sim.resetStatus();
+                
+                sim.setTimeNotTakenLeak(0);
+                if (sim.hasAte()) sim.changeHasAteState();
+
                 sim.setHunger(sim.getHunger() - 20);
                 sim.setMood(sim.getMood() + 10);
 

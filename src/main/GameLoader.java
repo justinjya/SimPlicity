@@ -23,7 +23,6 @@ public class GameLoader {
         Sim newSim = new Sim("Justin", Color.BLUE);
         Sim newSim2 = new Sim("nitsuj", Color.MAGENTA);
         Sim newSim3 = new Sim("Abi", Color.ORANGE);
-        newSim.setDurationWorked(0);
         newSim2.changeIsBusyState();
         newSim3.changeIsBusyState();
         

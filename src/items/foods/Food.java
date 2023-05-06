@@ -61,6 +61,9 @@ public abstract class Food {
                 while (GameTime.isAlive(sim, "Eating")) continue;
                 
                 sim.resetStatus();
+
+                if (!sim.hasAte()) sim.changeHasAteState();
+                
                 sim.setHunger(sim.getHunger() + hungerPoint);
                 tableAndChair.changeOccupiedState(sim);
                 tableAndChair.resetImages();

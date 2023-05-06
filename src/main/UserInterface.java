@@ -61,22 +61,22 @@ public class UserInterface {
         UserInterface.world = world;
         Room newRoom = new Room("First Room");
         newRoom.getListOfObjects().add(new Door(null));
-        newRoom.getListOfObjects().get(0).setInteraction("view active actions");
 
         House newHouse = new House(16, 16, world, world.getListOfSim().get(0), newRoom);
         world.getListOfHouse().add(newHouse);
 
         UserInterface.setCurrentSim(world.getListOfSim().get(0));
+        UserInterface.getCurrentSim().setDurationWorked(720);
         UserInterface.currentSim.setMoney(15500);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
 
+
+        GameTime.incrementDay();
         // testing game over
         // UserInterface.currentSim.setHealth(1);
         // UserInterface.currentSim.setHunger(1);
         // UserInterface.currentSim.setMood(1);
-        GameTime.incrementDay();
-        // viewTime();
         // UserInterface.currentSim.changeIsBusyState();
     }
 

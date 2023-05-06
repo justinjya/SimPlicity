@@ -50,7 +50,7 @@ public class TabMenu {
         Sim currentHouseOwner = currentHouse.getOwner();
 
         if (currentSim.isBusy()) return;
-        // if (!currentSim.isStatusCurrently("Idle")) return;
+        if (!currentSim.isStatusCurrently("Idle")) return;
 
         boolean isSimHouseOwner = currentSim.getName().equals(currentHouseOwner.getName());
 

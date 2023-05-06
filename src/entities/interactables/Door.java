@@ -22,7 +22,7 @@ public class Door extends Interactables {
     public Door(Room room) {
         super (
             "Door",
-            "view active activities",
+            "view active actions",
             2,
             4,
             5,
