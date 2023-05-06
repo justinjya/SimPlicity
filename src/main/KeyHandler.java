@@ -87,7 +87,7 @@ public class KeyHandler {
             }
             if (!UserInterface.isViewingRecipes() && !UserInterface.isViewingTime() &&
                 !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
-                KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+                !UserInterface.isPaused() && KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
                 NonActiveActions.showInventory();
             }
             

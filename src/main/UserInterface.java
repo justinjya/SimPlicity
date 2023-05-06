@@ -183,9 +183,18 @@ public class UserInterface {
         if (tabbed) tab();
         pause = !pause;
 
+        if (currentSimInventory.isOpen()) return;
         if (currentSim.isStatusCurrently("Idle")) {
             currentSim.changeIsBusyState();
         }
+    }
+
+    public static void inventory() {
+        if (tabbed) tab();
+        if (viewingInteractions) return;
+
+        currentSimInventory.changeIsOpen();
+        currentSim.changeIsBusyState();
     }
 
     public static void viewWorld() {
@@ -196,15 +205,7 @@ public class UserInterface {
 
     public static void viewTime() {
         viewingTime = !viewingTime;
-    }
-
-    public static void inventory() {
-        if (tabbed) tab();
-        if (viewingInteractions) return;
-
-        currentSimInventory.changeIsOpen();
-        currentSim.changeIsBusyState();
-    }
+    }    
 
     public static void viewActiveActions() {
         viewingActiveActions = !viewingActiveActions;
