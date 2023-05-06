@@ -39,6 +39,7 @@ public class ActiveActionsMenu {
         switch (selectedBox) {
             case 0:
                 UserInterface.viewProfessions();
+                UserInterface.viewActiveActions();
                 break;
             case 1:
                 ActiveActions.work(sim, workDuration);

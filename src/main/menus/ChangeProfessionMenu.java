@@ -46,17 +46,26 @@ public class ChangeProfessionMenu {
     private static int[] professionSalaries = Profession.salaries;
 
     private static Sim currentSim = UserInterface.getCurrentSim();
-    private static boolean ableToChange = currentSim.getDurationWorked() == Consts.ONE_MINUTE * 12;;
+    private static Profession currentProfession = currentSim.getProfession();
+    private static Profession newProfession = new Profession(slotSelected);
+    private static boolean isTheSameProfession = currentProfession.getName().equals(newProfession.getName());
+    private static boolean ableToChange = currentSim.getDurationWorked() >= Consts.ONE_MINUTE * 12;
+    private static boolean sufficientFunds;
 
     public static void update() {
-        ableToChange = currentSim.getDurationWorked() == Consts.ONE_MINUTE * 12;
+        newProfession = new Profession(slotSelected);
+
+        isTheSameProfession = currentProfession.getName().equals(newProfession.getName());
+        sufficientFunds = currentSim.getMoney() >= (newProfession.getSalary() / 2);
+        ableToChange = currentSim.getDurationWorked() >= Consts.ONE_MINUTE * 12;
 
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
             UserInterface.viewProfessions();
         }
-        if (ableToChange && KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            Profession newProfession = new Profession(slotSelected);
-
+        if (sufficientFunds && ableToChange && !isTheSameProfession && KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            int currentSimMoney = currentSim.getMoney();
+            
+            currentSim.setMoney(currentSimMoney - (newProfession.getSalary() / 2));
             currentSim.setProfession(newProfession);
             currentSim.setDurationWorked(0);
         }
@@ -106,10 +115,12 @@ public class ChangeProfessionMenu {
         drawSimInfo(g);
 
         pressEscapeToCancel(g);
+
+        warning(g);
     }
 
     private static void drawSelector(Graphics2D g) {
-        if (ableToChange) {
+        if (ableToChange && sufficientFunds) {
             g.drawImage(highlight, slotX + (slotWidth * slotCol) + (slotCol * 20), slotY + (slotHeight * slotRow) + (slotRow * 18), null);
         }
         else {
@@ -202,5 +213,12 @@ public class ChangeProfessionMenu {
         g.drawString("esc", 386, 548);
         g.setFont(new Font("Inter", Font.PLAIN, 9));
         g.drawString("to cancel", 405, 548);
+    }
+
+    private static void warning(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        Font font = new Font("Inter", Font.PLAIN, 9);        
+        g.setFont(font);
+        UserInterface.drawCenteredText(g, titleBox, 236, 80, "you have to pay half of your new profession salary to change professions", font);
     }
 }

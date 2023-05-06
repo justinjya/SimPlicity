@@ -144,6 +144,8 @@ public class UserInterface {
         if (pause) return;
         if (upgradingHouse) return;
         if (viewingTime) return;
+        if (viewingActiveActions) return;
+        if (viewingProfessions) return;
 
         tabbed = !tabbed;
         if (currentSim.isStatusCurrently("Idle")) {
