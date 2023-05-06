@@ -2,7 +2,7 @@
 K3 | Kelompok 1
 
 ### Deskripsi Singkat Program:
-SimPlicity merupakan permainan berbasis Command Line Interface yang dimainkan oleh satu orang dan secara offline. Game ini dapat melakukan pembuatan karakter serta dapat mengendalikan karakter tersebut. Pemain akan mengendalikan kehidupan karakter tersebut seperti makan, tidur, bekerja, dan masih banyak lagi. Selain itu, pemain juga dapat memilih warna karakter dan mendekor rumah karakter.
+SimPlicity merupakan permainan yang dimainkan oleh satu orang dan secara _offline_. Game ini dapat melakukan pembuatan karakter serta dapat mengendalikan karakter tersebut. Pemain akan mengendalikan kehidupan karakter tersebut seperti makan, tidur, bekerja, dan masih banyak lagi. Selain itu, pemain juga dapat memilih warna karakter dan mendekor rumah karakter.
 
 ### Anggota Kelompok:
 18221004 Khairunnisa Hurun 'Iin  
