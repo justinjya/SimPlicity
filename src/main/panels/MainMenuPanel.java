@@ -31,22 +31,19 @@ public class MainMenuPanel extends JPanel {
                 // Check if the Enter key was pressed
                 if (keyCode == KeyEvent.VK_ENTER) {
                     if (selectedBox == 0) {
-                        GamePanel.gameState = "Starting a new game";
+                        GamePanel.gameState = "Starting a new game: Creating a new sim";
                         
-                        CreateSimPanel.reset();
+                        CreateSimPanel.init();
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
                     }
                     if (selectedBox == 1) {
-                        GamePanel.gameState = "Playing";
 
-                        // LOAD GAME HERE
+                        // NOTHING SINCE LOAD HASN'T BEEN IMPLEMENTED
                         
-                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), GamePanel.getInstance());
                     }
                     if (selectedBox == 2) {
-
-                        // ABOUT GAME HERE
-
+                        GamePanel.gameState = "Main menu: About";
+                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), AboutPanel.getInstance());
                     }
                     if (selectedBox == 3) {
                         System.exit(0);
@@ -80,6 +77,10 @@ public class MainMenuPanel extends JPanel {
 
     public static MainMenuPanel getInstance() {
         return mmp;
+    }
+
+    public static void init() {
+        mmp = new MainMenuPanel();
     }
 
     @Override

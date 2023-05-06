@@ -9,7 +9,11 @@ import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.KeyHandler;
-import src.main.ui.UserInterface;
+import src.main.UserInterface;
+import src.main.panels.CreateSimPanel;
+import src.main.panels.GamePanel;
+import src.main.panels.PanelHandler;
+import src.main.time.GameTime;
 
 public class World {
     // Attributes
@@ -27,9 +31,9 @@ public class World {
     private Cursor cursor;
     
     // Viewable world inside of the window (32 x 32 grid)
-    private int viewableGrid = Consts.TILE_SIZE * 32;
-    private int centerX = (Consts.WIDTH / 2) - (viewableGrid / 2);
-    private int centerY = (Consts.HEIGHT / 2) - (viewableGrid / 2);
+    private int viewableGrid = (Consts.TILE_SIZE * 32) - 1;
+    private int topLeftX = 26;
+    private int topLeftY = 26;
 
     // Bounds for each quarter
     private int lowerBoundsX, upperBoundsX;
@@ -84,6 +88,7 @@ public class World {
     public boolean isAdding() {
         return isAdding;
     }
+
     public Cursor getCursor() {
         return cursor;
     }
@@ -101,12 +106,13 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
+        newSim.setDayLastAddedSim(GameTime.day);
 
         Room newRoom = new Room(roomName);
         newRoom.getListOfObjects().add(new Door(null));
+        newRoom.getListOfObjects().get(0).setInteraction("view active actions");
 
         House newHouse = new House(x, y, this, newSim, newRoom);
-        newRoom.setHouseInsideOf(newHouse);
 
         listOfHouse.add(newHouse);
     }
@@ -115,16 +121,40 @@ public class World {
         this.isAdding = !this.isAdding;
     }
 
+    public void reset() {
+        cursor.setX(Consts.TILE_SIZE * 16);
+        cursor.setY(Consts.TILE_SIZE * 16);
+    }
+
     // Others
-    public void update(UserInterface ui) {
-        if (ui.isViewingWorld()) {
-            cursor.move(ui);
+    public void update() {
+        if (UserInterface.isViewingWorld()) {
+            cursor.update();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            cursor.enterPressed(ui);
+            cursor.enterPressed();
         }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            ui.changeIsViewingWorldState();
+            if (GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
+                GamePanel.gameState = "Starting a new game: Creating a new sim";
+            }
+            if (GamePanel.isCurrentState("Placing a new house")) {
+                GamePanel.gameState = "Creating a new sim";
+
+                int newSimIndex = listOfSim.size() - 1;
+                listOfSim.remove(newSimIndex);
+                UserInterface.setCurrentSim(CreateSimPanel.currentSim);
+
+                Sim currentSim = UserInterface.getCurrentSim();
+                if (currentSim.isBusy()) currentSim.changeIsBusyState();
+            }
+
+            if (!GamePanel.isCurrentState("Playing")) {
+                CreateSimPanel.init();
+                PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
+                changeIsAddingState();
+            }
+            UserInterface.viewWorld();
         }
     }
 
@@ -135,6 +165,8 @@ public class World {
         drawHouses(g);
 
         drawCursor(g);
+        
+        drawOwnerNames(g);
 
         drawArrows(g);
     }
@@ -149,7 +181,7 @@ public class World {
             return 1;
         }
         if ((cursor.getX() >= middleCoords && cursor.getX() < upperCoords) &&
-            (cursor.getY() >= 0 * lowerCoords && cursor.getY() < middleCoords)) {
+            (cursor.getY() >= lowerCoords && cursor.getY() < middleCoords)) {
             return 2;
         }
         if ((cursor.getX() >= middleCoords && cursor.getX() < upperCoords) &&
@@ -167,18 +199,22 @@ public class World {
         if (getCursorInQuarter() == 1) {
             lowerBoundsX = 0; upperBoundsX = 32;
             lowerBoundsY = 0; upperBoundsY = 32;
+            topLeftX = 26; topLeftY = 26;
         }
         else if (getCursorInQuarter() == 2) {
             lowerBoundsX = 32; upperBoundsX = 64;
             lowerBoundsY = 0; upperBoundsY = 32;
+            topLeftX = 25; topLeftY = 26;
         }
         else if (getCursorInQuarter() == 3) {
             lowerBoundsX = 32; upperBoundsX = 64;
             lowerBoundsY = 32; upperBoundsY = 64;
+            topLeftX = 25; topLeftY = 25;
         }
         else if (getCursorInQuarter() == 4) {
-            lowerBoundsX = 32; upperBoundsX = 64;
-            lowerBoundsY = 0; upperBoundsY = 32;
+            lowerBoundsX = 0; upperBoundsX = 32;
+            lowerBoundsY = 32; upperBoundsY = 64;
+            topLeftX = 26; topLeftY = 25;
         }
     }
 
@@ -187,25 +223,18 @@ public class World {
 
         for (int y = lowerBoundsY; y < upperBoundsY; y++) {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
+                int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
                 g.drawImage(images[0], tileX, tileY, null);
             }
         }
     }
 
     private void drawHouses(Graphics2D g) {
-        Font font;
-        g.setColor(Color.WHITE);
-
-        font = new Font("Inter", Font.PLAIN, 9);
-
-        g.setFont(font);
-
         for (int y = lowerBoundsY; y < upperBoundsY; y++) {
             for (int x = lowerBoundsX; x < upperBoundsX; x++) {
-                int tileX = centerX + (x * Consts.TILE_SIZE) % viewableGrid;
-                int tileY = centerY + (y * Consts.TILE_SIZE) % viewableGrid;
+                int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
 
                 if (getMap(x, y) == 1) {
                     g.drawImage(images[1], tileX, tileY, null);
@@ -215,13 +244,57 @@ public class World {
                     if (isAdding) {
                         g.drawImage(images[5], tileX, tileY, null);
                     }
-                    else {        
-                        g.drawImage(images[4], tileX, tileY, null);
-                        g.drawString(getHouse(x, y).getName(), tileX - 5, tileY + 26);
+                    else {
+                        Sim currentSim = UserInterface.getCurrentSim();
+                        House currentHouse = currentSim.getCurrentHouse();
+                        boolean isAboveCurrentHouse = (cursor.getGridX() == currentHouse.getX())
+                            && (cursor.getGridY() == currentHouse.getY());
+
+                        if (isAboveCurrentHouse) {
+                            g.drawImage(images[5], tileX, tileY, null);
+                        }
+                        else {
+                            g.drawImage(images[4], tileX, tileY, null);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private void drawOwnerNames(Graphics2D g) {
+        try {
+            Font font;
+            font = new Font("Inter", Font.PLAIN, 9);
+            g.setColor(Color.WHITE);
+            g.setFont(font);
+    
+            int gridX = cursor.getGridX();
+            int gridY = cursor.getGridY();
+    
+            House houseSelected = getHouse(gridX, gridY);
+            Sim houseOwner = houseSelected.getOwner();
+            Sim currentSim = UserInterface.getCurrentSim();
+            House currentHouse = currentSim.getCurrentHouse();
+            boolean isAboveCurrentHouse = (cursor.getGridX() == currentHouse.getX())
+                && (cursor.getGridY() == currentHouse.getY());
+    
+            for (int y = lowerBoundsY; y < upperBoundsY; y++) {
+                for (int x = lowerBoundsX; x < upperBoundsX; x++) {
+                    int tileX = topLeftX + (x * Consts.TILE_SIZE) % viewableGrid;
+                    int tileY = topLeftY + (y * Consts.TILE_SIZE) % viewableGrid;
+    
+                    if (cursor.isAboveHouse() && x == cursor.getGridX() && y == cursor.getGridY()) {
+                        if (isAboveCurrentHouse) return;
+                        if (isAdding) return;
+
+                        g.drawString(houseOwner.getName() + "'s", tileX - 5, tileY + 26);
+                        g.drawString("House", tileX - 5, tileY + 36);
+                    }
+                }
+            }
+        }
+        catch (NullPointerException npe) {}
     }
 
     private void drawCursor(Graphics2D g) {
@@ -229,13 +302,13 @@ public class World {
             return;
         }
 
-        int tileX = centerX + (cursor.getX() % viewableGrid);
-        int tileY = centerY + (cursor.getY() % viewableGrid);
+        int tileX = topLeftX + (cursor.getX() % (viewableGrid));
+        int tileY = topLeftY + (cursor.getY() % (viewableGrid));
 
-        if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
-            tileX = centerX + (cursor.getX() % (viewableGrid - 14));
-            tileY = centerY + (cursor.getY() % (viewableGrid - 14));
-        }
+        // if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
+        //     tileX = topLeftX + (cursor.getX() % (viewableGrid - 14));
+        //     tileY = topLeftY + (cursor.getY() % (viewableGrid - 14));
+        // }
 
         if (isAdding) {
             g.drawImage(images[3], tileX, tileY, null);
@@ -248,20 +321,20 @@ public class World {
     private void drawArrows(Graphics2D g) {
         // Arrows
         if (getCursorInQuarter() == 1){
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
-            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[8], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + (30 * Consts.TILE_SIZE), null);
+            g.drawImage(images[9], topLeftX + (30 * Consts.TILE_SIZE), topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
         if (getCursorInQuarter() == 2){
-            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
-            g.drawImage(images[8], centerX + (15 * Consts.TILE_SIZE + 8), centerY + (30 * Consts.TILE_SIZE), null);
+            g.drawImage(images[7], topLeftX + Consts.TILE_SIZE, topLeftY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[8], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + (30 * Consts.TILE_SIZE), null);
         }
         if (getCursorInQuarter() == 3){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
-            g.drawImage(images[7], centerX + Consts.TILE_SIZE, centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[6], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + Consts.TILE_SIZE, null);
+            g.drawImage(images[7], topLeftX + Consts.TILE_SIZE, topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
         if (getCursorInQuarter() == 4){
-            g.drawImage(images[6], centerX + (15 * Consts.TILE_SIZE + 8), centerY + Consts.TILE_SIZE, null);
-            g.drawImage(images[9], centerX + (30 * Consts.TILE_SIZE), centerY + (15 * Consts.TILE_SIZE + 8), null);
+            g.drawImage(images[6], topLeftX + (15 * Consts.TILE_SIZE + 8), topLeftY + Consts.TILE_SIZE, null);
+            g.drawImage(images[9], topLeftX + (30 * Consts.TILE_SIZE), topLeftY + (15 * Consts.TILE_SIZE + 8), null);
         }
     }
 }

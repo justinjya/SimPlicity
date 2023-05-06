@@ -4,39 +4,81 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
 
+// TO - DO!!! : Add kicking the bin interval
 public class TrashBin extends Interactables {
     // Attributes
-    private int price = 0; // TO BE DETERMINED
-    private int duration = 10;
+    private int price = 10;
+    private int kickingDuration = Consts.ONE_SECOND * 0;
+    private int cleaningDuration = Consts.ONE_SECOND * 15;
+    private String activityStatus = "Kicking the bin";
+    private Thread animateInteractThread;
 
     // Images of the trash bin
+    private BufferedImage icon;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
-    public TrashBin(int x, int y) {
+    public TrashBin() {
         super (
             "Trash Bin",
-            "kick the trash bin",
+            "kick or clean the trash bin",
             0,
-            x,
-            y,
-            1,
+            2,
+            2,
+            2,
             1
         );
         
+        setDuration(kickingDuration);
         setPrice(price);
-        setDuration(duration);
 
-        // Load the images and icons of the shower
-        // CODE HERE
+        // Since the trash bin has a smaller image than normal objects
+        getBounds().setSize(16, 16);
+        updateBounds();
+
+        // Load the icon and images of the trash bin
+        icon = ImageLoader.loadTrashBinIcon();
+        images = ImageLoader.loadTrashBin();
+    }
+
+    public TrashBin(int imageIndex, int x, int y) {
+        super (
+            "Trash Bin",
+            "kick the trash bin",
+            imageIndex,
+            x,
+            y,
+            2,
+            1
+        );
+        
+        setDuration(kickingDuration);
+        setPrice(price);
+
+        // Since the trash bin has a smaller image than normal objects
+        getBounds().setSize(16, 16);
+        updateBounds();
+
+        // Load the icon and images of the trash bin
+        icon = ImageLoader.loadTrashBinIcon();
+        images = ImageLoader.loadTrashBin();
+    }
+
+    @Override
+    public void changeOccupiedState() {
+        this.occupied = !this.occupied;
+    }
+
+    @Override
+    public void updateBounds() {
+        getBounds().setLocation(getX() + 36, getY() + 40);
     }
 
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icon;
     }
 
     @Override
@@ -44,47 +86,122 @@ public class TrashBin extends Interactables {
         return images[getImageIndex()];
     }
 
-    // TO - DO!!! : Change interact depending on image index
     @Override
     public void interact (Sim sim){
+        images = ImageLoader.loadTrashBin();
+
+        // change the color of the sim for all the animation images
+        for (int i = 4; i < 9; i++) {
+            images[i] = ImageLoader.changeSimColor(images[i], sim);
+        }
+
+        if (getImageIndex() == 0 || getImageIndex() == 1) {
+            kickTheBin(sim);
+        }
+        if (getImageIndex() == 2 || getImageIndex() == 3) {
+            cleanTheBin(sim);
+        }
+    }
+
+    private void kickTheBin(Sim sim) {
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Kicking The Bin");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() - 2); // decrease sim's health
-                    sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
-                    sim.setMood(sim.getMood() + 5); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                sim.setStatus(activityStatus);
+
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, kickingDuration, kickingDuration);
+
+                animateInteract(sim, activityStatus);
+
+                sim.setHealth(sim.getHealth() - 2); // decrease sim's health
+                sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
+                sim.setMood(sim.getMood() + 5); // increase sim's mood
             }
         };
         kickthebin.start();
+    }
 
+    private void cleanTheBin(Sim sim) {
         Thread cleaningTheBin = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Cleaning The Bin");
-                    GameTime.startDecrementTimeRemaining(10*Consts.ONE_SECOND);
-                    Thread.sleep(10*Consts.THREAD_ONE_SECOND);
-                    changeOccupiedState();
-                    sim.setMood(sim.getMood() + 10);
-                    sim.setHealth(sim.getHealth() + 10);
-                    sim.setHunger(sim.getHunger() - 10);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                activityStatus = "Cleaning The Bin";
+                sim.setStatus(activityStatus);
+
+                if (getImageIndex() == 2) { // empty on floor
+                    cleaningDuration = 0;
+                    sim.setStatus(activityStatus);
+
+                    GameTime.addActivityTimer(sim, activityStatus, cleaningDuration, cleaningDuration);
+                    return;
                 }
+
+                cleaningDuration = 15;
+
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, cleaningDuration, cleaningDuration);
+
+                animateInteract(sim, activityStatus);
+                
+                while (GameTime.isAlive(sim, activityStatus)) continue;
+                
+                sim.setMood(sim.getMood() + 10);
+                sim.setHealth(sim.getHealth() + 10);
+                sim.setHunger(sim.getHunger() - 10);
             }
         };
         cleaningTheBin.start();
+    }
+
+    private void animateInteract(Sim sim, String activityStatus) {
+        animateInteractThread = new Thread() {
+            @Override
+            public void run() {
+                if (getImageIndex() == 0) { // empty standing
+                    try {
+                        setImageIndex(4);
+                        Thread.sleep(333);
+                        sim.resetStatus();
+                        setImageIndex(2); // empty on floor
+                    }
+                    catch (InterruptedException ie) {}
+                }
+                else if (getImageIndex() == 2) { // empty on floor
+                    try {
+                        setImageIndex(5);
+                        Thread.sleep(333);
+                        sim.resetStatus();
+                        setImageIndex(0); // empty standing
+                    }
+                    catch (InterruptedException ie) {}
+                }
+                else if (getImageIndex() == 1) { // filled standing
+                    try {
+                        setImageIndex(6);
+                        Thread.sleep(333);
+                        sim.resetStatus();
+                        setImageIndex(3); // filled on floor
+                    }
+                    catch (InterruptedException ie) {}
+                }
+                else if (getImageIndex() == 3) { // filled on floor
+                    try {
+                        changeOccupiedState();
+                        while (GameTime.isAlive(sim, activityStatus)) {
+                            setImageIndex(7);
+                            Thread.sleep(333);
+                            setImageIndex(8);
+                            Thread.sleep(333);
+                        }
+                        changeOccupiedState();
+                        sim.resetStatus();
+                        setImageIndex(0); // empty standing
+                    }
+                    catch (InterruptedException ie) {}
+                }
+            }
+        };
+        animateInteractThread.start();
     }
 }

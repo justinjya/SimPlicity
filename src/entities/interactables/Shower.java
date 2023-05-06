@@ -1,21 +1,42 @@
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
+
 import src.assets.ImageLoader;
-import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
+import src.entities.sim.Sim;
 
 public class Shower extends Interactables {
     // Attributes
-    private int price = 0; // TO BE DETERMINED
-    private int duration = 10;
+    private int price = 65;
+    private int duration = Consts.ONE_SECOND * 40;
+    private String activityStatus = "Showering";
 
     // Images of the shower
+    private BufferedImage icon;
     private BufferedImage[] images;
-    private BufferedImage[] icons;
 
     // CONSTRUCTOR
+    public Shower() {
+        super (
+            "Shower",
+            "take a shower",
+            0,
+            3,
+            1,
+            1,
+            2
+        );
+
+        setPrice(price);
+        setDuration(duration);
+
+        // Load the icon and image of the shower
+        icon = ImageLoader.loadShowerIcon();
+        images = ImageLoader.loadShower();
+    }
+
     public Shower(int x, int y) {
         super (
             "Shower",
@@ -24,19 +45,20 @@ public class Shower extends Interactables {
             x,
             y,
             1,
-            1
+            2
         );
 
         setPrice(price);
         setDuration(duration);
 
-        // Load the image of the shower
-        // CODE HERE
+        // Load the icon and image of the shower
+        icon = ImageLoader.loadShowerIcon();
+        images = ImageLoader.loadShower();
     }
 
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icon;
     }
 
     @Override
@@ -49,19 +71,22 @@ public class Shower extends Interactables {
         Thread showering = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    sim.setStatus("Taking a shower");
-                    // count the time
-                    GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * getDuration());
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * getDuration());
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() + 10); // increase sim's health
-                    sim.setMood(sim.getMood() + 15); // increase sim's mood
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                changeOccupiedState();
+                sim.setStatus(activityStatus);
+                
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+
+                GameTime.addActivityTimer(sim, activityStatus, duration, duration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
+
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setHealth(sim.getHealth() + 10); // increase sim's health
+                sim.setMood(sim.getMood() + 15); // increase sim's mood
+
+                // Reset the images
+                images = ImageLoader.loadShower();
             }
         };
         showering.start();

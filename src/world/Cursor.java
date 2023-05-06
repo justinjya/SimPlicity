@@ -2,15 +2,13 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameLoader;
-import src.main.GameTime;
 import src.main.KeyHandler;
+import src.entities.sim.Sim;
+import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
-import src.main.panels.PanelHandler;
-import src.main.ui.UserInterface;
+import src.main.time.GameTime;
 
 public class Cursor {
     // Location inside of the world
@@ -43,6 +41,14 @@ public class Cursor {
         return y / Consts.TILE_SIZE;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     // Others
     public boolean isAboveHouse() {
         int x = getGridX();
@@ -65,21 +71,14 @@ public class Cursor {
         return false;
     }
 
-    public void move(UserInterface ui){
+    public void update(){
         int upperX = (Consts.TILE_SIZE * 64) - 14;
         int upperY = (Consts.TILE_SIZE * 64) - 14;
         int newX = x;
         int newY = y;
         int speed = 5;
         int initialSpeed = speed;
-
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            if (GamePanel.isCurrentState("Placing a new house")) {
-                CreateSimPanel.reset();
-                PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
-            }
-        }
-
+        
         if (KeyHandler.isKeyPressed(KeyEvent.VK_SHIFT)) {
             gridMovement = !gridMovement;
         }
@@ -130,19 +129,20 @@ public class Cursor {
         }
     }
 
-    public void enterPressed(UserInterface ui) {
+    public void enterPressed() {
         if (world.isAdding()) {
             if (isAboveHouse()) return;
             
             if (!isAboveHouse()) {
-                world.addHouse(GameLoader.roomName);
-                CreateSimPanel.reset();
+                world.addHouse(CreateSimPanel.roomName);
+                CreateSimPanel.init();
             }
         }
-        enterHouse(ui);
+
+        if (isAboveHouse()) enterHouse();
     }
 
-    private void enterHouse(UserInterface ui) {
+    private void enterHouse() {
         int x = getGridX();
         int y = getGridY();
         Sim currentSim;
@@ -150,24 +150,21 @@ public class Cursor {
         Room roomToVisit;
 
         try {
-            currentSim = ui.getCurrentSim();
+            currentSim = UserInterface.getCurrentSim();
             currentHouse = currentSim.getCurrentHouse();
             houseToVisit = world.getHouse(x, y);
             roomToVisit = houseToVisit.getRoomWhenEntered();
 
-            if (currentHouse == houseToVisit) {
-                ui.changeIsViewingWorldState();
-                System.out.println("You cannot enter a house you're already in!");
-                return;
-            }
+            if (currentHouse == houseToVisit) return;
     
             if (isAboveHouse()) {
                 if (world.isAdding()) {
                     int newSim = world.getListOfSim().size() - 1;
         
                     currentSim = world.getSim(newSim);
-                    currentSim.changeIsBusyState();
-                    ui.setCurrentSim(currentSim);
+                    if (currentSim.isBusy()) currentSim.changeIsBusyState();
+                    
+                    UserInterface.setCurrentSim(currentSim);
                     world.changeIsAddingState();
                 }
                 else {
@@ -178,14 +175,22 @@ public class Cursor {
                     int duration = (int) Math.sqrt(deltaXsquared + deltaYsquared);
 
                     GameTime.decreaseTimeRemaining(duration);
+
+                    for (int i = 1; i <= duration; i++) {
+                        if (i % 30 == 0) {
+                            currentSim.setMood(currentSim.getMood() + 10);
+                            currentSim.setHunger(currentSim.getHunger() - 10);
+                        }
+                    }
                 }
 
                 currentSim.setCurrentHouse(houseToVisit);
                 currentSim.setCurrentRoom(roomToVisit);
-                ui.changeIsViewingWorldState();
+                UserInterface.viewWorld();
             }
 
-            if (GamePanel.isCurrentState("Placing a new house")) {
+            if (GamePanel.isCurrentState("Placing a new house") || 
+                GamePanel.isCurrentState("Starting a new game: Placing a new house")) {
                 GamePanel.gameState = "Playing";
             }
         }

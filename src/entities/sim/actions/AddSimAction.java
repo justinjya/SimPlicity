@@ -13,6 +13,7 @@ public class AddSimAction {
     public static void addSim() {
         GamePanel.gameState = "Creating a new sim";
         
+        CreateSimPanel.init();
         PanelHandler.switchPanel(GamePanel.getInstance(), CreateSimPanel.getInstance());
     }
 }

@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.ui.ActiveActionsUserInterface;
+import src.main.UserInterface;
 import src.world.Room;
 
 public class Door extends Interactables {
@@ -15,14 +15,14 @@ public class Door extends Interactables {
     private Room leadsIntoRoom;
 
     // Images of the door
-    private BufferedImage[] images;
     private BufferedImage icon;
+    private BufferedImage[] images;
 
     // CONSTRUCTOR
     public Door(Room room) {
         super (
             "Door",
-            "visit another room",
+            "view active actions",
             2,
             4,
             5,
@@ -35,6 +35,12 @@ public class Door extends Interactables {
 
         this.leadsIntoRoom = room;
         this.images = ImageLoader.loadDoor();
+
+        if (room != null) {
+            setImageIndex(1);
+            setPlayAreaY(3);
+            setInteraction("visit another room");
+        }
 
         updateBounds();
     }
@@ -61,24 +67,24 @@ public class Door extends Interactables {
             case 0:
                 setImageIndex(2);
                 setX(door.getX());
-                setY(5);
+                setPlayAreaY(5);
                 getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 1:
                 setImageIndex(3);
-                setX(0);
+                setPlayAreaX(0);
                 setY(door.getY());
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
                 setImageIndex(0);
                 setX(door.getX());
-                setY(0);
+                setPlayAreaY(0);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 3:
                 setImageIndex(1);
-                setX(5);
+                setPlayAreaX(5);
                 setY(door.getY());
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
@@ -87,24 +93,28 @@ public class Door extends Interactables {
         }
     }
 
+    public void setLeadsIntoRoom(Room room) {
+        leadsIntoRoom = room;
+    }
+
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public void updateBounds() {
         switch (this.getImageIndex()) {
             case 0:
-                setY(0);
+                setPlayAreaY(0);
                 getBounds().setBounds(getX(), getY(), Consts.SCALED_TILE, 24);
                 break;
             case 1:
-                setX(5);
+                setPlayAreaX(5);
                 getBounds().setBounds(getX() + (Consts.SCALED_TILE - 24), getY(), 24, Consts.SCALED_TILE);
                 break;
             case 2:
-                setY(5);
+                setPlayAreaY(5);
                 getBounds().setBounds(getX(), getY() + (Consts.SCALED_TILE - 24), Consts.SCALED_TILE, 24);
                 break;
             case 3:
-                setX(0);
+                setPlayAreaX(0);
                 getBounds().setBounds(getX(), getY(), 24, Consts.SCALED_TILE);
                 break;
             default:
@@ -125,7 +135,10 @@ public class Door extends Interactables {
     @Override
     public void interact(Sim sim) {
         if (leadsIntoRoom == null) {
-            ActiveActionsUserInterface.showActiveActions();
+            UserInterface.viewActiveActions();
+            return;
+        }
+        if (leadsIntoRoom == sim.getCurrentRoom()) {
             return;
         }
 

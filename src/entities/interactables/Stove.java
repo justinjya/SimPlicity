@@ -1,14 +1,19 @@
 package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
+import java.util.ConcurrentModificationException;
 
 import src.assets.ImageLoader;
-import src.entities.sim.Sim;
+import src.main.UserInterface;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.KeyHandler;
-import src.items.foods.BakedFood;
 import src.items.Item;
+import src.entities.sim.Sim;
+import src.items.foods.BakedFood;
+import src.entities.sim.Inventory;
+import src.main.menus.RecipeBookMenu;
+import src.main.time.GameTime;
+import src.entities.handlers.InteractionHandler;
 
 public class Stove extends Interactables{
     // Types of stove
@@ -28,12 +33,37 @@ public class Stove extends Interactables{
         100,
         200
     };
+
+    // Attributes
+    private BakedFood foodToCook = null;
+    private String activityStatus = "Cooking";
     
     // Images of stove
-    private BufferedImage[] images;
     private BufferedImage[] icons;
+    private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Stove(int imageIndex) {
+        super (
+            names[imageIndex],
+            "cook",
+            imageIndex,
+            2,
+            2,
+            width[imageIndex],
+            height[imageIndex]
+        );
+
+        if (imageIndex == 0) {
+            setPlayAreaX(1);
+        }
+        setPrice(prices[imageIndex]);
+
+        // Load the icons and images of the stoves
+        this.icons = ImageLoader.loadStovesIcons(); 
+        this.images = ImageLoader.loadStoves();
+    }
+
     public Stove(int x, int y, int imageIndex) {
         super (
             names[imageIndex],
@@ -47,15 +77,31 @@ public class Stove extends Interactables{
 
         setPrice(prices[imageIndex]);
 
-        // Load the images and icons of the stoves
-        this.images = ImageLoader.loadStoves();
+        // Load the icons and images of the stoves
         this.icons = ImageLoader.loadStovesIcons(); 
+        this.images = ImageLoader.loadStoves();
+    }
+
+    public void setFoodToCook(BakedFood food) {
+        this.foodToCook = food;
     }
 
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
+    public void changeOccupiedState() {
+        if (!isOccupied()) {
+            setImageIndex(getImageIndex() + 2);
+        }
+        else {
+            setImageIndex(getImageIndex() - 2);
+        }
+
+        this.occupied = !this.occupied;
+    }
+
+    @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icons[getImageIndex() % 2];
     }
 
     @Override
@@ -65,69 +111,66 @@ public class Stove extends Interactables{
 
     @Override
     public void interact(Sim sim) {
-        // call ActiveAction.cook, but dont know how to insert the parameter required by cook since interact can only accept sim
-        // my view: 
-        // changeOccupied(sim);
-        // ActiveAction.cook(bakedfood, null, sim, getTime()); but again how to insert bakedfood :v
-        // changeOccupied(sim);
         Thread cooking = new Thread() {
             @Override
             public void run() {
+                UserInterface.viewRecipes();
+                foodToCook = null;
+
+                while (true) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        if (!RecipeBookMenu.isAllIngredientAvailable()) {
+                            RecipeBookMenu.ableToCook();
+                            return;
+                        }
+
+                        Sim currentSim = UserInterface.getCurrentSim();
+                        InteractionHandler currentSimInteract = currentSim.getInteractionHandler();
+
+                        Stove stove = (Stove) currentSimInteract.getInteractableObject();
+                        BakedFood foodToCook = RecipeBookMenu.listOfBakedFoods.get(RecipeBookMenu.slotSelected);
+        
+                        stove.setFoodToCook(foodToCook);
+                        UserInterface.viewRecipes();
+                        break;
+                    }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewRecipes();
+                        break;
+                    }
+                }
+
+                if (foodToCook == null) return;
+                
+                double cookDuration = (foodToCook.getHungerPoint() * 1.5) * Consts.ONE_SECOND;
+                changeOccupiedState();
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, (int) cookDuration, (int) cookDuration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
+                
+                changeOccupiedState();
+                sim.resetStatus();
+                sim.setMood(sim.getMood() + 10);
+
+                Inventory simInventory = sim.getInventory();
+
                 try {
-                    // choose the food to be cooked
-                    BakedFood bakedFood = null;
-                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_1)) {
-                        bakedFood = new BakedFood(0);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_2)) {
-                        bakedFood = new BakedFood(1);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_3)) {
-                        bakedFood = new BakedFood(2);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_4)) {
-                        bakedFood = new BakedFood(3);
-                    }
-                    else if(KeyHandler.isKeyPressed(KeyHandler.KEY_5)) {
-                        bakedFood = new BakedFood(4);
-                    }
+                    simInventory.addItem(foodToCook);
+                    for (String ingredient : foodToCook.getIngredients()) {
+                        for (Item rawFood : simInventory.getMapOfItems().keySet()) {
+                            if (!ingredient.equals(rawFood.getName())) continue;
 
-                    if(bakedFood != null){
-                        // check available ingredients first
-                        boolean isAllIngredientAvailable = true;
-                        for (String ingredient : bakedFood.getIngredients()) {
-                            boolean isIngredientAvailable = false;
-                            for (Item rawfood : sim.getInventory().getMapOfItems().keySet()) {
-                                if (ingredient.equals(rawfood.getName())) {
-                                    isIngredientAvailable = true;
-                                    break;
-                                }
-                            }  
-                            if (!isIngredientAvailable) {
-                                isAllIngredientAvailable = false;
-                                break;
-                            }
-                        }
-                        if (isAllIngredientAvailable) {
-                            changeOccupiedState();
-                            double cookDuration = bakedFood.getHungerPoint() * 1.5;
-                            GameTime.startDecrementTimeRemaining((int) cookDuration*Consts.THREAD_ONE_SECOND);
-                            sim.setStatus("Cooking");
-
-                            Thread.sleep((int) cookDuration*Consts.THREAD_ONE_SECOND);
-                            
-                            changeOccupiedState();
-                            sim.setMood(sim.getMood() + 10);
-                            // must add code to add to inventory
-                            sim.getInventory().addItem(bakedFood);
+                            simInventory.removeItem(rawFood);
                         }
                     }
-                    
-                    
                 }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                catch (ConcurrentModificationException cme) {}
+
+                // reset the images
+                images = ImageLoader.loadStoves();
             }
         };
         cooking.start();

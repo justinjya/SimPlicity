@@ -8,25 +8,25 @@ import src.items.Item;
 public class BakedFood extends Food implements Item{
     // Types of baked food
     private static String[] names = {
-        "Nasi Ayam",
-        "Nasi Kari",
-        "Susu Kacang",
-        "Tumis Sayur",
-        "Bistik"
+        "Almond Milk",
+        "Chicken and Rice",
+        "Curry and Rice",
+        "Cut Vegetables",
+        "Steak"
     };
     private static int[] hungerPoints = {
+        5,
         16,
         30,
-        5,
         5,
         22
     };
     private static String[][] ingredients = {
-        {"Nasi", "Ayam"},
-        {"Nasi", "Kentang", "Wortel", "Sapi"},
-        {"Susu", "Kacang"},
-        {"Wortel", "Bayam"},
-        {"Kentang", "Sapi"}
+        {"Milk", "Potato"},
+        {"Rice", "Chicken"},
+        {"Rice", "Potato", "Carrot", "Meat"},
+        {"Carrot", "Spinach"},
+        {"Potato", "Meat"}
     };
 
     // Attributes
@@ -35,20 +35,18 @@ public class BakedFood extends Food implements Item{
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[5];
 
-    // ONLY FOR DEBUGGING
-    private BufferedImage placeholder = ImageLoader.readImage("inventory", "gas_stove", 1, 1, false);
-
     // Constructor
     public BakedFood (int imageIndex) {
         super (
             names[imageIndex],
             hungerPoints[imageIndex],
+            0,
             imageIndex
         );
-        this.ingredient = ingredients[imageIndex];
 
-        // load the images
-        // this.icons = ImageLoader.loadBakedFood();
+        this.ingredient = ingredients[imageIndex];
+        // load the icons
+        this.icons = ImageLoader.loadBakedFood();
     }
 
     // Getters
@@ -57,9 +55,6 @@ public class BakedFood extends Food implements Item{
     }
 
     public BufferedImage getIcon() {
-        // return images[imageIndex];
-        
-        // ONLY FOR DEBUGGING
-        return placeholder;
+        return icons[getImageIndex()];
     }
 }

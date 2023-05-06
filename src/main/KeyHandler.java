@@ -2,13 +2,12 @@ package src.main;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.sim.Inventory;
 import src.entities.sim.Sim;
+import src.entities.sim.Inventory;
 import src.entities.sim.actions.ActiveActions;
 import src.entities.sim.actions.NonActiveActions;
-import src.main.ui.UserInterface;
+import src.main.panels.GamePanel;
 import src.world.Room;
-import src.world.World;
 
 public class KeyHandler {
     public static final int KEY_A = KeyEvent.VK_A;
@@ -29,8 +28,11 @@ public class KeyHandler {
     public static final int KEY_SPACE = KeyEvent.VK_SPACE;
     public static final int KEY_ENTER = KeyEvent.VK_ENTER;
     public static final int KEY_TAB = KeyEvent.VK_TAB;
+    public static final int KEY_MINUS = KeyEvent.VK_MINUS;
     public static final int KEY_EQUALS = KeyEvent.VK_EQUALS;
     public static final int KEY_ESCAPE = KeyEvent.VK_ESCAPE;
+    public static final int KEY_BACK_SLASH = KeyEvent.VK_BACK_SLASH;
+    public static final int KEY_SLASH = KeyEvent.VK_SLASH;
     private static boolean[] keys = new boolean[256];
     private static boolean[] prevKeys = new boolean[256];
     
@@ -53,40 +55,48 @@ public class KeyHandler {
         return pressed;
     }
 
-    // public static void keyBinds(Sim sim, UserInterface ui) {
-    public static void keyBinds(UserInterface ui) {
-        World world = ui.getWorld();
-        Sim currentSim = ui.getCurrentSim();
-        Inventory currentSimInventory = currentSim.getInventory();
-        if (!ui.isViewingWorld() && !currentSimInventory.isOpen() && KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
-            ui.tab();
+    public static void keyBinds() {
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_SLASH)) {
+            UserInterface.help();
         }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
-            ui.debug();
-        }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
-            ActiveActions.interact(ui);
-        }
-        if (KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
-            NonActiveActions.showInventory(ui);
-        }
-
-        // testing adding and switching sim
+        
+        if (!GamePanel.isCurrentState("Playing")) return;
+        
         try {
+            Sim currentSim = UserInterface.getCurrentSim();
             Room currentRoom = currentSim.getCurrentRoom();
-            boolean simControllable = !ui.isViewingWorld() && !ui.isTabbed() && !currentRoom.isEditingRoom();
-            if (KeyHandler.isKeyPressed(KeyEvent.VK_M) && simControllable) {
-                if (ui.getCurrentSim() == world.getSim(1)) {
-                    ui.setCurrentSim(world.getSim(0));
-                }
-                else {
-                    ui.setCurrentSim(world.getSim(1));
-                }
+            Inventory currentSimInventory = currentSim.getInventory();
+
+            if (!UserInterface.isViewingActiveActions() && !UserInterface.isViewingProfessions() &&
+                !UserInterface.isViewingWorld() && !UserInterface.isViewingListOfSims() &&
+                !UserInterface.isUpgradingHouse() && !UserInterface.isViewingInteractions() &&
+                !UserInterface.isShowingGameOver() && !UserInterface.isViewingStore() &&
+                !UserInterface.isViewingRecipes() && !UserInterface.isViewingTime() && 
+                !currentRoom.isEditingRoom() && !currentSimInventory.isChoosingFood() &&
+                KeyHandler.isKeyPressed(KEY_ESCAPE)) {
+                UserInterface.pause();
+            }
+            if (!UserInterface.isViewingWorld() && !currentSimInventory.isOpen() &&
+                !UserInterface.isViewingListOfSims() && !UserInterface.isViewingInteractions() && 
+                !UserInterface.isViewingRecipes() && !UserInterface.isViewingStore() && 
+                KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
+                UserInterface.tab();
+            }
+            if (!currentSim.isBusy() && KeyHandler.isKeyPressed(KeyHandler.KEY_F)) {
+                ActiveActions.interact();
+            }
+            if (!UserInterface.isViewingRecipes() && !UserInterface.isViewingTime() &&
+                !UserInterface.isUpgradingHouse() && !currentRoom.isEditingRoom() &&
+                !UserInterface.isPaused() && KeyHandler.isKeyPressed(KeyEvent.VK_I)) {
+                NonActiveActions.showInventory();
+            }
+            
+            // ONLY FOR DEBUGGING
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_BACK_SLASH)) {
+                UserInterface.debug();
             }
         }
-        catch (Exception e) {
-            System.out.println("No sim found!");
-        }
+        catch (NullPointerException npe) {System.out.println("Loading . . .");}
     }
 
     public static String receiveStringInput(KeyEvent e, String input) {
@@ -94,10 +104,13 @@ public class KeyHandler {
 
         // Check if the key is a letter or a number
         if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) ||
-            (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9)) {
+            (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9) || 
+            (keyCode == KeyEvent.VK_SPACE)) {
             // Append the character to the input string
-            char c = e.getKeyChar();
-            input += c;
+            if (input.length() < 12) {
+                char c = e.getKeyChar();
+                input += c;
+            }
         }
         // Check if the key is the backspace key
         else if (keyCode == KeyEvent.VK_BACK_SPACE) {

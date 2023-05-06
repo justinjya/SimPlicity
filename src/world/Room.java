@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import src.assets.ImageLoader;
 import src.main.Consts;
 import src.main.KeyHandler;
+import src.main.UserInterface;
 import src.entities.handlers.*;
 import src.entities.sim.Sim;
 import src.entities.interactables.*;
@@ -20,7 +21,6 @@ public class Room {
     private ArrayList<Sim> listOfSims;
     
     // For adding, editing, and removing objects
-    private House houseInsideOf;
     private boolean isEditingRoom;
     private CollisionHandler collisionHandler;
     private Interactables moveableObject = null;
@@ -42,7 +42,7 @@ public class Room {
         this.isEditingRoom = false;
 
         // Load the image of the room
-        this.image = ImageLoader.loadWood();
+        this.image = ImageLoader.loadTile("wood");
     }
 
     // GETTERS
@@ -61,10 +61,6 @@ public class Room {
     public ArrayList<Sim> getListOfSims() {
         return listOfSims;
     }
-
-    public House getHouseInsideOf() {
-        return houseInsideOf;
-    }
     
     // SETTERS
     public void addSim(Sim sim) {
@@ -77,10 +73,6 @@ public class Room {
 
     public void changeisEditingRoomState() {
         this.isEditingRoom = !this.isEditingRoom;
-    }
-
-    public void setHouseInsideOf(House house) {
-        this.houseInsideOf = house;
     }
 
     public void addObject(Interactables object) {
@@ -102,8 +94,9 @@ public class Room {
                 if (object instanceof Door) continue;
     
                 selectedObject = object;
-                break;
+                return;
             }
+            changeisEditingRoomState();
         }
         catch (ConcurrentModificationException e) {}
     }
@@ -132,6 +125,10 @@ public class Room {
         
         // Draw selected object
         drawSelectedObject(g);
+
+        if (UserInterface.isDebug()) {
+            drawCollisionBox(g);
+        }
     }
             
     private Interactables findNearestObject(String direction) {
@@ -223,16 +220,25 @@ public class Room {
             moveableObject.move(collisionHandler);
             moveableObject.updateBounds();
 
-            // To rotate the door
+            // To check if a wall is already connected to a room
             if (moveableObject instanceof Door) {
                 Door door = (Door) moveableObject;
                 isWallOccupied = collisionHandler.isWallOccupied(door);
-
-                if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
-                    door.rotate(door.getX(), door.getY());
-                }
             }
 
+            // To rotate the door
+            if (KeyHandler.isKeyPressed(KeyHandler.KEY_R)) {
+                if (moveableObject instanceof Door) {
+                    Door door = (Door) moveableObject;
+                    door.rotate(door.getX(), door.getY());
+                }
+                
+                if (moveableObject instanceof Toilet) {
+                    Toilet toilet = (Toilet) moveableObject;
+                    toilet.rotate();
+                }
+            }
+                
             // Add the object if enter is pressed and object is not in collision with another object
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && (!inCollision && !isWallOccupied && !isCollidingWithSim)) {
                 listOfObjects.add(moveableObject);
@@ -242,12 +248,10 @@ public class Room {
 
             // Cancel adding or moving an object if escape is pressed and add object into sim inventory
             if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                Sim sim = houseInsideOf.getOwner();
-                
                 if (!(moveableObject instanceof Door)) {
-                    moveableObject.setX(0);
-                    moveableObject.setY(3);
-                    sim.getInventory().addItem(moveableObject);
+                    Sim currentSim = UserInterface.getCurrentSim();
+                    
+                    currentSim.getInventory().addItem(moveableObject);
                 }
                 moveableObject = null;
                 changeisEditingRoomState();
@@ -284,7 +288,6 @@ public class Room {
     }
 
     // TO - DO !!! : Find a better way to show selecting an object
-    // TO - DO !!! : Fix edit room when room is empty
     private void drawObjectSelector(Graphics2D g) {
         try {
             if (isEditingRoom && moveableObject == null) {

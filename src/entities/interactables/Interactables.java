@@ -65,6 +65,10 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     // SETTERS
+    public void setInteraction(String interaction) {
+        this.interaction = interaction;
+    }
+
     public void setPrice(int price) {
         this.price = price;
     }
@@ -74,6 +78,13 @@ public abstract class Interactables extends Entity implements Item {
     }
     
     public void changeOccupiedState() {
+        if (!isOccupied()) {
+            setImageIndex(getImageIndex() + 1);
+        }
+        else {
+            setImageIndex(getImageIndex() - 1);
+        }
+
         this.occupied = !this.occupied;
     }
     

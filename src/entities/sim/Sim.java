@@ -8,6 +8,7 @@ import src.assets.ImageLoader;
 import src.entities.Entity;
 import src.entities.handlers.CollisionHandler;
 import src.entities.handlers.InteractionHandler;
+import src.main.Consts;
 import src.world.Room;
 import src.world.House;
 
@@ -24,11 +25,16 @@ public class Sim extends Entity{
 
     // Supporting Attributes
     private boolean isBusy;
-    private Room currentRoom;
-    private House currentHouse;
+    private boolean hasAte;
     private int durationWorked;
+    private int timeSlept;
     private int timeNotSlept;
     private int timeNotTakenLeak;
+    private static int dayLastAddedSim = 1;
+
+    // Attributes to indentify room and house easier
+    private Room currentRoom;
+    private House currentHouse;
     
     // Image of the sim
     private Color shirtColor;
@@ -57,6 +63,7 @@ public class Sim extends Entity{
         this.profession = new Profession(); 
         this.inventory = new Inventory();
         this.isBusy = false;
+        this.hasAte = false;
         this.durationWorked = 0;
         this.timeNotSlept = 0;
         this.timeNotTakenLeak = 0;
@@ -103,6 +110,34 @@ public class Sim extends Entity{
         return inventory;
     }
 
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public boolean hasAte() {
+        return hasAte;
+    }
+
+    public int getDurationWorked() {
+        return durationWorked;
+    }
+
+    public int getTimeSlept() {
+        return timeSlept;
+    }
+
+    public int getTimeNotSlept() {
+        return timeNotSlept;
+    }
+
+    public int getTimeNotTakenLeak() {
+        return timeNotTakenLeak;
+    }
+
+    public int getDayLastAddedSim() {
+        return dayLastAddedSim;
+    }
+
     public Room getCurrentRoom() {
         return currentRoom;
     }
@@ -115,20 +150,8 @@ public class Sim extends Entity{
         return this.status.equals(status);
     }
 
-    public boolean isBusy() {
-        return isBusy;
-    }
-
-    public int getDurationWorked() {
-        return durationWorked;
-    }
-
-    public int getTimeNotSlept() {
-        return timeNotSlept;
-    }
-
-    public int getTimeNotTakenLeak() {
-        return timeNotTakenLeak;
+    public Color getShirtColor() {
+        return shirtColor;
     }
 
     public InteractionHandler getInteractionHandler() {
@@ -139,24 +162,35 @@ public class Sim extends Entity{
         return collisionHandler;
     }
 
-    public Color getShirtColor() {
-        return shirtColor;
-    }
-
     // SETTERS
     public void setHealth(int health) {
         this.health = health;
         if (this.health > 100) this.health = 100;
+        if (this.health < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setHunger(int hunger) {
         this.hunger = hunger;
         if (this.hunger > 100) this.hunger = 100;
+        if (this.hunger < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setMood(int mood) {
         this.mood = mood;
         if (this.mood > 100) this.mood = 100;
+        if (this.mood < 0) {
+            this.health = 0;
+            this.hunger = 0;
+            this.mood = 0;
+        }
     }
 
     public void setMoney(int money) {
@@ -169,6 +203,50 @@ public class Sim extends Entity{
 
     public void resetStatus() {
         setStatus("Idle");
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
+
+    public void changeIsBusyState() {
+        this.isBusy = !this.isBusy;
+    }
+
+    public void changeHasAteState() {
+        this.hasAte = !this.hasAte;
+    }
+
+    public void setDurationWorked(int durationWorked) {
+        this.durationWorked = durationWorked;
+    }
+
+    public void setTimeSlept(int timeSlept) {
+        this.timeSlept = timeSlept;
+    }
+
+    public void setTimeNotSlept(int timeNotSlept) {
+        this.timeNotSlept = timeNotSlept;
+
+        if (this.timeNotSlept % Consts.ONE_MINUTE * 10 == 0) {
+            this.health -= 5;
+            this.mood -= 5;
+        }
+    }
+
+    public void setTimeNotTakenLeak(int timeNotTakenLeak) {
+        if (!this.hasAte) return;
+
+        this.timeNotTakenLeak = timeNotTakenLeak;
+
+        if (this.timeNotTakenLeak % Consts.ONE_MINUTE * 4 == 0) {
+            this.health -= 5;
+            this.mood -= 5;
+        }
+    }
+
+    public void setDayLastAddedSim(int day) {
+        dayLastAddedSim = day;
     }
 
     public void setCurrentHouse(House house) {
@@ -184,22 +262,6 @@ public class Sim extends Entity{
         this.currentRoom.addSim(this);
         collisionHandler = new CollisionHandler(this, room);
         interactionHandler = new InteractionHandler(this, room);
-    }
-
-    public void changeIsBusyState() {
-        this.isBusy = !this.isBusy;
-    }
-
-    public void setDurationWorked(int durationWorked) {
-        this.durationWorked = durationWorked;
-    }
-
-    public void setTimeNotSlept(int timeNotSlept) {
-        this.timeNotSlept = timeNotSlept;
-    }
-
-    public void setTimeNotTakenLeak(int timeNotTakenLeak) {
-        this.timeNotTakenLeak = timeNotTakenLeak;
     }
 
     // OTHERS

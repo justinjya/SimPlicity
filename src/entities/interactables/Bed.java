@@ -3,8 +3,11 @@ package src.entities.interactables;
 import java.awt.image.BufferedImage;
 
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.KeyHandler;
+import src.main.UserInterface;
+import src.main.menus.InteractMenu;
 import src.assets.ImageLoader;
+import src.main.time.GameTime;
 import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
@@ -31,13 +34,40 @@ public class Bed extends Interactables{
     };
 
     // Attributes
-    private int duration = Consts.ONE_MINUTE / 4; // CHANGE TO * 4 ONCE PROJECT IS DONE
+    private int duration = Consts.ONE_MINUTE * 3;
+    private String activityStatus = "Sleeping";
 
     // Image of the beds
     private BufferedImage[] icons;
     private BufferedImage[] images;
 
     // CONSTRUCTOR
+    public Bed(int imageIndex) {
+        super (
+            names[imageIndex],
+            "sleep",
+            imageIndex,
+            1,
+            2,
+            width[imageIndex],
+            height[imageIndex]
+        );
+        if (imageIndex == 1) {
+            setPlayAreaY(1);
+        }
+        else if (imageIndex == 2) {
+            setPlayAreaX(0);
+            setPlayAreaY(2);
+        }
+
+        setPrice(prices[imageIndex]);
+        setDuration(duration);
+
+        // Load the image of the beds
+        icons = ImageLoader.loadBedsIcons();
+        images = ImageLoader.loadBeds();
+    }
+
     public Bed(int x, int y, int imageIndex) {
         super (
             names[imageIndex],
@@ -52,45 +82,6 @@ public class Bed extends Interactables{
         setPrice(prices[imageIndex]);
         setDuration(duration);
 
-        // Load the image of the beds
-        icons = ImageLoader.loadBedsIcons();
-        images = ImageLoader.loadBeds();
-    }
-
-    public Bed(int imageIndex) {
-        super (
-            names[imageIndex],
-            "sleep",
-            imageIndex,
-            0,
-            3,
-            width[imageIndex],
-            height[imageIndex]
-        );
-
-        setPrice(prices[imageIndex]);
-        setDuration(duration);
-
-        // Load the image of the beds
-        icons = ImageLoader.loadBedsIcons();
-        images = ImageLoader.loadBeds();
-    }
-
-    // ONLY FOR DEBUGGING
-    public Bed() {
-        super (
-            names[1],
-            "sleep",
-            1,
-            0,
-            3,
-            width[1],
-            height[1]
-        );
-
-        setPrice(prices[1]);
-        setDuration(duration);
-        
         // Load the image of the beds
         icons = ImageLoader.loadBedsIcons();
         images = ImageLoader.loadBeds();
@@ -111,7 +102,7 @@ public class Bed extends Interactables{
     // IMPLEMENTATION OF ABSTRACT METHODS
     @Override
     public BufferedImage getIcon() {
-        return icons[getImageIndex()];
+        return icons[getImageIndex() % 3];
     }
 
     @Override
@@ -124,26 +115,41 @@ public class Bed extends Interactables{
         Thread interacting = new Thread() {
             @Override
             public void run() {
-                try {
-                    changeOccupiedState();
-                    BufferedImage initialImage = images[getImageIndex()];
-                    images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
-                    
-                    sim.setStatus("Sleeping");
-                    GameTime.startDecrementTimeRemaining(duration);
-
-                    Thread.sleep(Consts.THREAD_ONE_SECOND * duration);
-
-                    images[getImageIndex()] = initialImage;
-                    
-                    changeOccupiedState();
-                    sim.resetStatus();
-                    sim.setHealth(sim.getHealth() + 30);
-                    sim.setMood(sim.getMood() + 20);
+                UserInterface.viewInteractions();
+                
+                while (UserInterface.isViewingInteractions()) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+                        UserInterface.viewInteractions();
+                        duration = InteractMenu.sleepDuration;
+                        break;
+                    }
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+                        UserInterface.viewInteractions();
+                        InteractMenu.slotSelected = -1;
+                        InteractMenu.sleepDuration = Consts.ONE_MINUTE * 3;
+                        return;
+                    }
                 }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                InteractMenu.slotSelected = 0;
+
+                changeOccupiedState();
+                sim.setStatus(activityStatus);
+                
+                images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
+                
+                GameTime.addActivityTimer(sim, activityStatus, duration, duration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
+                
+                changeOccupiedState();
+
+                sim.resetStatus();
+                sim.setTimeNotSlept(0);
+                sim.setHealth(sim.getHealth() + 30);
+                sim.setMood(sim.getMood() + 20);
+
+                // Reset the images
+                images = ImageLoader.loadBeds();
             }
         };
         interacting.start();
