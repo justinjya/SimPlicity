@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
-import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
 import src.main.panels.PanelHandler;
+import src.main.time.GameTime;
 import src.world.World;
 
 public class ListOfSimsMenu {
@@ -63,7 +63,7 @@ public class ListOfSimsMenu {
             if (createSimSlot) {
                 Sim currentSim = UserInterface.getCurrentSim();
                 int dayLastAddedSim = currentSim.getDayLastAddedSim();
-                int currentDay = GameTime.getDay();
+                int currentDay = GameTime.day;
 
                 if (dayLastAddedSim == currentDay) return;
 
@@ -135,7 +135,7 @@ public class ListOfSimsMenu {
         if (createSimSlot) {
             Sim currentSim = UserInterface.getCurrentSim();
             int dayLastAddedSim = currentSim.getDayLastAddedSim();
-            int currentDay = GameTime.getDay();
+            int currentDay = GameTime.day;
 
             if (dayLastAddedSim == currentDay) {
                 g.drawImage(createNewSimHighlightRed, 106, 408, null);
@@ -213,7 +213,7 @@ public class ListOfSimsMenu {
         drawValue(g, currentSim.getMood(), 289, 2);
 
         int dayLastAddedSim = currentSim.getDayLastAddedSim();
-        int currentDay = GameTime.getDay();
+        int currentDay = GameTime.day;
 
         if (createSimSlot && dayLastAddedSim == currentDay) {
             UserInterface.drawCenteredText(g, currentSimBox, 103, 460, "you have to wait for tomorrow", font);

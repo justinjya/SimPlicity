@@ -7,6 +7,7 @@ import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
+import src.main.time.GameTime;
 import src.world.House;
 import src.world.Room;
 import src.world.World;
@@ -22,7 +23,7 @@ public class GameLoader {
         Sim newSim = new Sim("Justin", Color.BLUE);
         Sim newSim2 = new Sim("nitsuj", Color.MAGENTA);
         Sim newSim3 = new Sim("Abi", Color.ORANGE);
-        newSim.setDurationWorked(720);
+        newSim.setDurationWorked(0);
         newSim2.changeIsBusyState();
         newSim3.changeIsBusyState();
         

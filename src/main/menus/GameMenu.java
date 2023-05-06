@@ -4,10 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
-import src.main.GameTime;
+import src.main.KeyHandler;
 import src.assets.ImageLoader;
 import src.main.UserInterface;
+import src.main.time.GameTime;
+import src.main.time.ActivityTimer;
 import src.entities.handlers.InteractionHandler;
 import src.entities.interactables.Interactables;
 import src.entities.sim.Sim;
@@ -27,9 +31,49 @@ public class GameMenu {
     private static BufferedImage helpBox = images[7];
     private static BufferedImage help = images[8];
 
-    // Attributes to make showing it easier
+    // Attributes to make showing time easier
     public static int workDuration = 0;
     public static int exerciseDration = 0;
+
+    private static ArrayList<ActivityTimer> listOfActiveActivities;
+    private static ArrayList<ActivityTimer> listOfCurrentSimActiveActivities;
+    private static int numPages = 0;
+    private static int slideSelected = 0;
+
+    private static void updateSimActiveActivities() {
+        try {
+            Sim currentSim = UserInterface.getCurrentSim();
+            listOfActiveActivities = GameTime.getListOfActiveActivities();
+            listOfCurrentSimActiveActivities = new ArrayList<>();
+
+            for (ActivityTimer activityTimer : listOfActiveActivities) {
+                Sim activeSim = activityTimer.getSim();
+
+                boolean simIsActive = currentSim.getName().equals(activeSim.getName());
+                if (simIsActive) {
+                    listOfCurrentSimActiveActivities.add(activityTimer);
+                }
+            }
+
+            numPages = listOfCurrentSimActiveActivities.size() / 3;
+        }
+        catch (ConcurrentModificationException cme) {}
+    }
+
+    public static void updateTimeRemainingTab() {
+        updateSimActiveActivities();
+        int newSlideSelected = slideSelected;
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_A)) {
+            newSlideSelected--;
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_D)) {
+            newSlideSelected++;
+        }
+
+        if (newSlideSelected >= 0 && newSlideSelected <= numPages) {
+            slideSelected = newSlideSelected;
+        }
+    }
 
     public static void draw(Graphics2D g) {
         Sim currentSim = UserInterface.getCurrentSim();
@@ -55,12 +99,17 @@ public class GameMenu {
         pressQuestionMarkForHelp(g);
 
         // press esc to pause the game
-        if (!UserInterface.isTabbed() && !objectInRange && !UserInterface.isHelped()) {
+        if (!UserInterface.isTabbed() && !UserInterface.isViewingTime() &&
+            !UserInterface.isHelped() && !objectInRange) {
             pressEscapeToPause(g);
         }
 
+        if (UserInterface.isViewingTime()) {
+            pressEscapeToReturnPlaying(g);
+        }
+
         // press f to interact
-        if (!UserInterface.isTabbed() && objectInRange) {
+        if (!UserInterface.isTabbed() && !UserInterface.isViewingTime() && objectInRange) {
             drawObjectToInteract(g);
         }
 
@@ -78,33 +127,33 @@ public class GameMenu {
 
         // ONLY FOR DEBUGGING
         if (UserInterface.isDebug()) {
-            drawDebug(g);
+            drawDebug(g, 125);
         }
     }
 
     // MAIN GAME MENU
     private static void drawValue(Graphics2D g, int value, int offsetX, int offsetY) {
         if (value < 100) {
-            g.drawString("" + value, offsetX, 188 + (36 * offsetY));
+            g.drawString("" + value, offsetX, 186 + (36 * offsetY));
         }
         else {
-            g.drawString("" + value, offsetX - 5, 188 + (36 * offsetY));
+            g.drawString("" + value, offsetX - 5, 186 + (36 * offsetY));
         }
     }
 
     private static void drawBoxes(Graphics2D g) {
         g.drawImage(doubleInfoBox, 3, 49, null); // double sim info box
         g.drawImage(moneyBox, 7, 105, null); // money box
-        g.drawImage(simInfoBox, 7, 143, null); // sim info box
+        g.drawImage(simInfoBox, 7, 141, null); // sim info box
         g.drawImage(dayBox, 603, 47, null); // day box
         g.drawImage(doubleInfoBox, 599, 87, null); // double house info box
         g.drawImage(helpBox, 305, 0, null); // help box
     }
 
     private static void drawIcons(Graphics2D g) {
-        g.drawImage(healthIcon, 17, 153, null); // health icon
-        g.drawImage(hungerIcon, 17, 188, null); // hunger icon
-        g.drawImage(moodIcon, 17, 224, null); // mood icon
+        g.drawImage(healthIcon, 17, 151, null); // health icon
+        g.drawImage(hungerIcon, 17, 186, null); // hunger icon
+        g.drawImage(moodIcon, 17, 222, null); // mood icon
     }
 
     private static void drawTexts(Graphics2D g) {
@@ -123,9 +172,9 @@ public class GameMenu {
         font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
         UserInterface.drawCenteredText(g, moneyBox, 7, 125, "$ " + currentSim.getMoney(), font);
-        g.drawString("Health", 51, 169);
-        g.drawString("Hunger", 51, 205);
-        g.drawString("Mood", 51, 241);
+        g.drawString("Health", 51, 167);
+        g.drawString("Hunger", 51, 203);
+        g.drawString("Mood", 51, 239);
 
         g.setColor(new Color(61, 30, 45)); 
         g.setFont(new Font("Inter", Font.BOLD, 10));
@@ -169,9 +218,9 @@ public class GameMenu {
     private static void drawSimInfoBarValues(Graphics2D g) {
         Sim currentSim = UserInterface.getCurrentSim();
 
-        drawBarValue(g, 51, 173, 135, currentSim.getHealth(), 100);
-        drawBarValue(g, 51, 209, 135, currentSim.getHunger(), 100);
-        drawBarValue(g, 51, 245, 135, currentSim.getMood(), 100);
+        drawBarValue(g, 51, 171, 135, currentSim.getHealth(), 100);
+        drawBarValue(g, 51, 207, 135, currentSim.getHunger(), 100);
+        drawBarValue(g, 51, 243, 135, currentSim.getMood(), 100);
     }
 
     private static void pressQuestionMarkForHelp(Graphics2D g) {
@@ -191,25 +240,28 @@ public class GameMenu {
         g.drawString("esc", 352, 468);
     }
 
-    // private static void pressEscapeTo(Graphics2D g) {
-    //     g.setColor(Color.BLACK);
-    //     g.setFont(new Font("Inter", Font.PLAIN, 12));
-    //     g.drawString("press", 317, 468);
-    //     g.drawString("to pause the game", 376, 468);
-    //     g.setFont(new Font("Inter", Font.BOLD, 12));
-    //     g.drawString("esc", 352, 468);
-    // }
+    private static void pressEscapeToReturnPlaying(Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Inter", Font.PLAIN, 12));
+        g.drawString("press", 317, 468);
+        g.drawString("to return playing", 376, 468);
+        g.setFont(new Font("Inter", Font.BOLD, 12));
+        g.drawString("esc", 352, 468);
+    }
 
     private static void drawTimeRemainingValue(Graphics2D g, int value, int offsetX, int offsetY) {
         g.setColor(Color.WHITE);
         Font font = new Font("Inter", Font.PLAIN, 8);
         g.setFont(font);
 
-        if (value < 100) {
-            g.drawString("" + value, offsetX, 354 + (39 * offsetY));
+        if (value > 999) {
+            g.drawString("" + value, offsetX - 10, 349 + (39 * offsetY));
+        }
+        else if (value < 100) {
+            g.drawString("" + value, offsetX, 349 + (39 * offsetY));
         }
         else {
-            g.drawString("" + value, offsetX - 5, 354 + (39 * offsetY));
+            g.drawString("" + value, offsetX - 5, 349 + (39 * offsetY));
         }
     }
 
@@ -219,18 +271,21 @@ public class GameMenu {
         BufferedImage workingBox = images[0];
         BufferedImage iconWork = images[1];
 
-        g.drawImage(workingBox, 3, 278, null);
-        g.drawImage(iconWork, 17, 317, null);
+        g.drawImage(workingBox, 3, 273, null);
+        g.drawImage(iconWork, 17, 312, null);
 
         g.setColor(Color.WHITE);
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
-        UserInterface.drawCenteredText(g, workingBox, 4, 298, "Working", font);
+        UserInterface.drawCenteredText(g, workingBox, 4, 293, "Working", font);
 
-        int timeRemaining = GameTime.getDecrements();
-        g.drawString("Working", 51, 335);
-        drawBarValue(g, 51, 339, 135, timeRemaining, workDuration);
+        Sim currentSim = UserInterface.getCurrentSim();
+        ActivityTimer activityTimer = GameTime.getActivityTimer(currentSim, "Working");
+        int timeRemaining = activityTimer.getTimeRemaining();
+
+        g.drawString("Working", 51, 330);
+        drawBarValue(g, 51, 334, 135, timeRemaining, workDuration);
         drawTimeRemainingValue(g, timeRemaining, 175, 0);
     }
 
@@ -239,18 +294,21 @@ public class GameMenu {
         BufferedImage exercisingBox = images[0];
         BufferedImage iconExercise = images[1];
 
-        g.drawImage(exercisingBox, 3, 278, null);
-        g.drawImage(iconExercise, 17, 317, null);
+        g.drawImage(exercisingBox, 3, 273, null);
+        g.drawImage(iconExercise, 17, 312, null);
 
         g.setColor(Color.WHITE);
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
-        UserInterface.drawCenteredText(g, exercisingBox, 4, 298, "Exercising", font);
+        UserInterface.drawCenteredText(g, exercisingBox, 4, 293, "Exercising", font);
 
-        int timeRemaining = GameTime.getDecrements();
-        g.drawString("Exercising", 51, 335);
-        drawBarValue(g, 51, 339, 135, timeRemaining, exerciseDration);
+        Sim currentSim = UserInterface.getCurrentSim();
+        ActivityTimer activityTimer = GameTime.getActivityTimer(currentSim, "Exercising");
+        int timeRemaining = activityTimer.getTimeRemaining();
+
+        g.drawString("Exercising", 51, 330);
+        drawBarValue(g, 51, 334, 135, timeRemaining, exerciseDration);
         drawTimeRemainingValue(g, timeRemaining, 175, 0);
     }
 
@@ -260,47 +318,71 @@ public class GameMenu {
         BufferedImage timeRemainingBox = images[0];
         BufferedImage iconTime = images[1];
         BufferedImage iconBuild = images[2];
+        BufferedImage iconBuyItem = images[3];
 
-        int i = 1;
-
-        g.drawImage(timeRemainingBox, 7, 278, null);
-        g.drawImage(iconTime, 17, 317, null);
-        g.drawImage(iconBuild, 17, 317 + (i * 39), null);
-
+        g.drawImage(timeRemainingBox, 7, 273, null);
+        
         g.setColor(Color.WHITE);
         Font font = new Font("Inter", Font.BOLD, 12);
         g.setFont(font);
 
-        UserInterface.drawCenteredText(g, timeRemainingBox, 7, 298, "Time Remaining", font);
+        UserInterface.drawCenteredText(g, timeRemainingBox, 7, 292, "Time Remaining", font);
 
-        int timeRemaining = GameTime.getTimeRemaining();
-        g.drawString("Time", 51, 334);
-        g.drawString("Build Room", 51, 334 + (i * 39));
+        if (slideSelected == 0) {
+            int timeRemaining = GameTime.timeRemaining;
 
-        drawBarValue(g, 51, 338, 135, timeRemaining, GameTime.initialTimeRemaining);
-        drawBarValue(g, 51, 338 + (i * 39), 135, timeRemaining, GameTime.initialTimeRemaining);
-        drawTimeRemainingValue(g, timeRemaining, 175, 0);
+            g.drawImage(iconTime, 17, 313, null);
+            g.drawString("Time", 51, 329);
+            drawBarValue(g, 51, 333, 135, timeRemaining, GameTime.initialTimeRemaining);
+            drawTimeRemainingValue(g, timeRemaining, 175, 0);
+        }
 
-        drawTimeRemainingValue(g, timeRemaining, 175, 1);
+        try {
+            int i = 1;
+            for (ActivityTimer activityTimer : listOfCurrentSimActiveActivities) {
+                if (i % 3 == 0) continue;
+
+                String activity = activityTimer.getActivity();
+                int activityTimeRemaining = activityTimer.getTimeRemaining();
+                int activityDuration = activityTimer.getDuration();
+
+                if (activity.equals("Build Room")) {
+                    g.drawImage(iconBuild, 17, 312 + (i * 39), null);
+                }
+                if (activity.equals("Delivering Item(s)")) {
+                    g.drawImage(iconBuyItem, 17, 312 + (i * 39), null);
+                }
+
+                g.setColor(Color.WHITE);
+                font = new Font("Inter", Font.BOLD, 12);
+                g.setFont(font);
+
+                g.drawString(activity, 51, 329 + (i * 39));
+                drawBarValue(g, 51, 333 + (i * 39), 135, activityTimeRemaining, activityDuration);
+                drawTimeRemainingValue(g, activityTimeRemaining, 175, i);
+                i++;
+            }
+        }
+        catch (ConcurrentModificationException cme) {}
     }
 
-    public static void drawDebug(Graphics2D g) {
+    public static void drawDebug(Graphics2D g, int offset) {
         Sim currentSim = UserInterface.getCurrentSim();
 
         g.setColor(Color.BLACK);
         Font font = new Font("Inter", Font.PLAIN, 10);
         g.setFont(font);
 
-        g.drawString("timeRemaining: " + GameTime.timeRemaining, 33, 364);
-        g.drawString("x: " + currentSim.getX(), 33, 374);
-        g.drawString("y: " + currentSim.getY(), 33, 384);
-        g.drawString("InRange: " + currentSim.getInteractionHandler().isObjectInRange(), 73, 374);
-        g.drawString("isWalking: " + currentSim.isMoving(), 73, 384);
-        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
-        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398);
-        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408);
-        g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418);
-        g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428);
+        g.drawString("timeRemaining: " + GameTime.timeRemaining, 33, 364 + offset);
+        g.drawString("x: " + currentSim.getX(), 33, 374 + offset);
+        g.drawString("y: " + currentSim.getY(), 33, 384 + offset);
+        g.drawString("InRange: " + currentSim.getInteractionHandler().isObjectInRange(), 73, 374 + offset);
+        g.drawString("isWalking: " + currentSim.isMoving(), 73, 384 + offset);
+        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398 + offset);
+        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408 + offset);
+        g.drawString("isEditingRoom: " + currentSim.getCurrentRoom().isEditingRoom(), 33, 398 + offset);
+        g.drawString("isBusy: " + currentSim.isBusy(), 33, 408 + offset);
+        g.drawString("Profession: " + currentSim.getProfession().getName(), 33, 418 + offset);
+        g.drawString("durationWorked: " + currentSim.getDurationWorked(), 33, 428 + offset);
     }
 }

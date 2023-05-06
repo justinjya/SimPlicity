@@ -4,19 +4,20 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.KeyHandler;
 import src.entities.sim.Sim;
 import src.main.UserInterface;
 import src.entities.sim.Inventory;
 import src.main.menus.InteractMenu;
+import src.main.time.GameTime;
 
 public class TableAndChair extends Interactables {
     private BufferedImage icon = ImageLoader.loadTableAndChairIcon();
     private BufferedImage[] images = ImageLoader.loadTableAndChair();
 
     private int price = 50;
-    private int readDuration = 30;
+    private int readDuration = Consts.ONE_SECOND * 30;
+    private String activityStatus = "Reading a Book";
 
     public TableAndChair() {
         super (
@@ -171,13 +172,14 @@ public class TableAndChair extends Interactables {
         Thread readingABook = new Thread() {
             @Override
             public void run() {
-                sim.setStatus("Reading a Book");
+                sim.setStatus(activityStatus);
                 changeOccupiedState(sim);
+
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
-                Thread t = GameTime.startDecrementTimeRemaining(readDuration*Consts.ONE_SECOND);
-                
-                while (t.isAlive()) continue;
+                GameTime.addActivityTimer(sim, activityStatus, readDuration, readDuration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
 
                 sim.resetStatus();
                 changeOccupiedState(sim);

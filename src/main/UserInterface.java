@@ -2,13 +2,12 @@ package src.main;
 
 import java.awt.FontMetrics;
 import java.awt.Font;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ConcurrentModificationException;
 
-import src.assets.ImageLoader;
+import src.main.time.GameTime;
 import src.main.menus.TabMenu;
 import src.main.menus.GameMenu;
 import src.main.menus.PauseMenu;
@@ -21,7 +20,6 @@ import src.main.menus.ActiveActionsMenu;
 import src.main.menus.ChangeProfessionMenu;
 import src.entities.interactables.Door;
 import src.entities.sim.Inventory;
-import src.items.foods.BakedFood;
 import src.entities.sim.Sim;
 import src.main.menus.Store;
 import src.world.World;
@@ -69,7 +67,7 @@ public class UserInterface {
         world.getListOfHouse().add(newHouse);
 
         UserInterface.setCurrentSim(world.getListOfSim().get(0));
-        UserInterface.currentSim.setMoney(500);
+        UserInterface.currentSim.setMoney(15500);
         UserInterface.currentSim.setCurrentHouse(newHouse);
         UserInterface.currentSim.setCurrentRoom(newRoom);
 
@@ -78,6 +76,8 @@ public class UserInterface {
         // UserInterface.currentSim.setHunger(1);
         // UserInterface.currentSim.setMood(1);
         GameTime.incrementDay();
+        // viewTime();
+        // UserInterface.currentSim.changeIsBusyState();
     }
 
     public static void init(World world) {
@@ -280,6 +280,10 @@ public class UserInterface {
 
         if (pause) {
             PauseMenu.update();
+        }
+
+        if (viewingTime) {
+            GameMenu.updateTimeRemainingTab();
         }
 
         if (viewingActiveActions) {

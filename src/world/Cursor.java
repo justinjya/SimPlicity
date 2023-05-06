@@ -5,11 +5,11 @@ import java.awt.event.KeyEvent;
 import src.entities.sim.Sim;
 import src.main.Consts;
 import src.main.GameLoader;
-import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
+import src.main.time.GameTime;
 
 public class Cursor {
     // Location inside of the world

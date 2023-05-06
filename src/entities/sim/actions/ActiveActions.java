@@ -1,8 +1,8 @@
 package src.entities.sim.actions;
 
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.UserInterface;
+import src.main.time.GameTime;
 import src.world.Room;
 
 import src.entities.interactables.Interactables;
@@ -17,17 +17,17 @@ public class ActiveActions {
             @Override
             public void run() {
                 int initialDurationWorked = sim.getDurationWorked();
-                Thread t = GameTime.startDecrementTimeRemaining(workDuration * Consts.ONE_SECOND);
-                
                 sim.setStatus("Working");
-                while (t.isAlive()) {
-                    try {
-                        // skip the whole block if game is currently paused
-                        if (UserInterface.isPaused()) continue;
 
-                        int durationWorked = sim.getDurationWorked();
-                        Thread.sleep(Consts.THREAD_ONE_SECOND);
+                GameTime.addActivityTimer(sim, "Working", duration, duration);
+                
+                while (GameTime.isAlive(sim, "Working")) {
+                    try {
+                        if (UserInterface.isPaused()) continue;
                         
+                        int durationWorked = sim.getDurationWorked();
+                        
+                        Thread.sleep(Consts.THREAD_ONE_SECOND);
                         if (durationWorked <  initialDurationWorked + workDuration) {
                             sim.setDurationWorked(sim.getDurationWorked() + 1);
                         }
@@ -61,11 +61,12 @@ public class ActiveActions {
         Thread exercising = new Thread() {
             @Override
             public void run() {
-                sim.setStatus("Exercising");
-                // count the time
-                Thread t = GameTime.startDecrementTimeRemaining(duration*Consts.ONE_SECOND);
                 int timeExercised = 0;
-                while (t.isAlive()) {
+                sim.setStatus("Exercising");
+
+                GameTime.addActivityTimer(sim, "Exercising", duration, duration);
+                
+                while (GameTime.isAlive(sim, "Exercising")) {
                     // skip the whole block if game is currently paused
                     if (UserInterface.isPaused()) continue;
 

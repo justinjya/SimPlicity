@@ -43,9 +43,6 @@ public class Room {
 
         // Load the image of the room
         this.image = ImageLoader.loadTile("wood");
-
-        // ONLY FOR DEBUG
-        listOfObjects.add(new Stove(1,1,0));
     }
 
     // GETTERS
@@ -291,7 +288,6 @@ public class Room {
     }
 
     // TO - DO !!! : Find a better way to show selecting an object
-    // TO - DO !!! : Fix edit room when room is empty
     private void drawObjectSelector(Graphics2D g) {
         try {
             if (isEditingRoom && moveableObject == null) {

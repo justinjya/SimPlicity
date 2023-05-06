@@ -25,6 +25,7 @@ public class Sim extends Entity{
     // Supporting Attributes
     private boolean isBusy;
     private int durationWorked;
+    private int timeSlept;
     private int timeNotSlept;
     private int timeNotTakenLeak;
     private static int dayLastAddedSim = 1;
@@ -112,6 +113,10 @@ public class Sim extends Entity{
 
     public int getDurationWorked() {
         return durationWorked;
+    }
+
+    public int getTimeSlept() {
+        return timeSlept;
     }
 
     public int getTimeNotSlept() {
@@ -203,6 +208,10 @@ public class Sim extends Entity{
 
     public void setDurationWorked(int durationWorked) {
         this.durationWorked = durationWorked;
+    }
+
+    public void setTimeSlept(int timeSlept) {
+        this.timeSlept = timeSlept;
     }
 
     public void setTimeNotSlept(int timeNotSlept) {

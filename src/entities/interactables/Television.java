@@ -4,17 +4,18 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.main.KeyHandler;
-import src.main.GameTime;
 import src.main.Consts;
 import src.entities.sim.Sim;
 import src.main.UserInterface;
 import src.main.menus.InteractMenu;
+import src.main.time.GameTime;
 
 public class Television extends Interactables{
     // Attributes
     private int price = 100;
-    private int watchDuration = 40;
-    private int karaokeDuration = 30;
+    private int watchDuration = Consts.ONE_SECOND * 40;
+    private int karaokeDuration = Consts.ONE_SECOND * 30;
+    private String activityStatus = "Karaoke-ing";
 
     // Images of the television
     private BufferedImage icon;
@@ -101,12 +102,12 @@ public class Television extends Interactables{
                 images[2] = ImageLoader.changeSimColor(images[2], sim);
                 images[3] = ImageLoader.changeSimColor(images[3], sim);
 
-                sim.setStatus("Karaoke-ing");
+                sim.setStatus(activityStatus);
                 changeOccupiedState();
                 
-                Thread t = GameTime.startDecrementTimeRemaining(karaokeDuration * Consts.ONE_SECOND);
-                
-                while (t.isAlive()) {
+                GameTime.addActivityTimer(sim, activityStatus, karaokeDuration, karaokeDuration);
+
+                while (GameTime.isAlive(sim, activityStatus)) {
                     try {
                         setImageIndex(2);
                         Thread.sleep(Consts.THREAD_ONE_SECOND);
@@ -133,14 +134,16 @@ public class Television extends Interactables{
         Thread watch = new Thread(){
             @Override
             public void run(){
-                sim.setStatus("Watching The TV");
+                activityStatus = "Watching The TV";
+
+                sim.setStatus(activityStatus);
                 changeOccupiedState();
                 setImageIndex(1);
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
 
-                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * watchDuration);
-                
-                while (t.isAlive()) continue;
+                GameTime.addActivityTimer(sim, activityStatus, watchDuration, watchDuration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
 
                 setImageIndex(0);
                 changeOccupiedState();

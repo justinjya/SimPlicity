@@ -6,12 +6,13 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
 
 public class Toilet extends Interactables{
     // Attributes
     private int price = 50;
-    private int duration = 10;
+    private int duration = Consts.ONE_SECOND * 10;
+    private String activityStatus = "Taking a Leak";
 
     // Images of toilet
     private BufferedImage icon;
@@ -96,14 +97,12 @@ public class Toilet extends Interactables{
             @Override
             public void run() {
                 changeOccupiedState();
-                sim.setStatus("Taking a Leak");
+                sim.setStatus(activityStatus);
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
-                Thread t = GameTime.startDecrementTimeRemaining(getDuration() * Consts.ONE_SECOND);
-                
-                while (t.isAlive()) {
-                    continue;
-                }
+                GameTime.addActivityTimer(sim, activityStatus, duration, duration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
 
                 changeOccupiedState();
                 sim.resetStatus();

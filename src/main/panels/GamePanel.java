@@ -6,11 +6,11 @@ import javax.swing.*;
 
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.menus.UpgradeHouseMenu;
 import src.main.menus.WorldMenu;
+import src.main.time.GameTime;
 import src.world.Room;
 import src.world.World;
 

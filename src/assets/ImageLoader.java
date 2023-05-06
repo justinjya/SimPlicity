@@ -172,11 +172,12 @@ public class ImageLoader {
     }
 
     public static BufferedImage[] loadTimeRemainingTab() {
-        BufferedImage[] images = new BufferedImage[3];
+        BufferedImage[] images = new BufferedImage[4];
 
         images[0] = readImage("menus/game_menu/time_remaining_tab", "time_remaining_box", 1, 1, false);
         images[1] = readImage("menus/game_menu/time_remaining_tab", "icon_time", 1, 1, false);
         images[2] = readImage("menus/game_menu/time_remaining_tab", "icon_build_room", 1, 1, false);
+        images[3] = readImage("menus/game_menu/time_remaining_tab", "icon_buy_item", 1, 1, false);
 
         return images;
     }

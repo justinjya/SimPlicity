@@ -5,13 +5,14 @@ import java.util.ConcurrentModificationException;
 
 import src.assets.ImageLoader;
 import src.main.UserInterface;
+import src.main.Consts;
 import src.main.KeyHandler;
-import src.main.GameTime;
 import src.items.Item;
 import src.entities.sim.Sim;
 import src.items.foods.BakedFood;
 import src.entities.sim.Inventory;
 import src.main.menus.RecipeBookMenu;
+import src.main.time.GameTime;
 import src.entities.handlers.InteractionHandler;
 
 public class Stove extends Interactables{
@@ -34,7 +35,8 @@ public class Stove extends Interactables{
     };
 
     // Attributes
-    BakedFood foodToCook = null;
+    private BakedFood foodToCook = null;
+    private String activityStatus = "Cooking";
     
     // Images of stove
     private BufferedImage[] icons;
@@ -140,14 +142,14 @@ public class Stove extends Interactables{
 
                 if (foodToCook == null) return;
                 
-                double cookDuration = foodToCook.getHungerPoint() * 1.5;
+                double cookDuration = (foodToCook.getHungerPoint() * 1.5) * Consts.ONE_SECOND;
                 changeOccupiedState();
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
-                sim.setStatus("Cooking");
-                Thread t = GameTime.startDecrementTimeRemaining((int) cookDuration);
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, (int) cookDuration, (int) cookDuration);
 
-                while (t.isAlive()) continue;
+                while (GameTime.isAlive(sim, activityStatus)) continue;
                 
                 changeOccupiedState();
                 sim.resetStatus();

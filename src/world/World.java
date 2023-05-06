@@ -8,12 +8,12 @@ import src.assets.ImageLoader;
 import src.entities.interactables.Door;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
 import src.main.KeyHandler;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
 import src.main.panels.PanelHandler;
+import src.main.time.GameTime;
 
 public class World {
     // Attributes
@@ -105,7 +105,7 @@ public class World {
         int y = cursor.getGridY();
 
         Sim newSim = getSim(listOfSim.size() - 1);
-        newSim.setDayLastAddedSim(GameTime.getDay());
+        newSim.setDayLastAddedSim(GameTime.day);
 
         Room newRoom = new Room(roomName);
         newRoom.getListOfObjects().add(new Door(null));

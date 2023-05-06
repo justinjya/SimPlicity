@@ -9,11 +9,11 @@ import java.util.ConcurrentModificationException;
 
 import src.assets.ImageLoader;
 import src.main.KeyHandler;
-import src.main.GameTime;
 import src.items.Item;
 import src.entities.sim.Sim;
 import src.items.foods.Food;
 import src.main.UserInterface;
+import src.main.time.GameTime;
 import src.items.foods.RawFood;
 import src.entities.interactables.*;
 
@@ -166,9 +166,11 @@ public class Store {
                 int deliveryTime = (int) (Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound);
                 
                 UserInterface.getCurrentSim().setMoney(UserInterface.getCurrentSim().getMoney() - listOfItem.get(slotSelected).getPrice());
-                Thread t = GameTime.startDecrementTimeRemaining(deliveryTime);
 
-                while (t.isAlive()) continue;
+                Sim sim = UserInterface.getCurrentSim();
+                GameTime.addActivityTimer(sim, "Delivering Item(s)", deliveryTime, deliveryTime);
+
+                while (GameTime.isAlive(sim, "Delivering Item(s)")) continue;
 
                 UserInterface.getCurrentSim().getInventory().addItem(listOfItem.get(slotSelected));
                 slotSelected = 0;

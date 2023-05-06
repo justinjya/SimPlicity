@@ -50,19 +50,21 @@ public class TabMenu {
         Sim currentHouseOwner = currentHouse.getOwner();
 
         if (currentSim.isBusy()) return;
-        if (!currentSim.isStatusCurrently("Idle")) return;
+        // if (!currentSim.isStatusCurrently("Idle")) return;
+
+        boolean isSimHouseOwner = currentSim.getName().equals(currentHouseOwner.getName());
 
         switch (selectedBox) {
             case 0:
-                if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
+                if (!isSimHouseOwner) return;
                 NonActiveActions.editRoom(currentRoom);
                 break;
             case 1:
-                if (!currentSim.getName().equals(currentHouseOwner.getName())) return;
+                if (!isSimHouseOwner) return;
                 UserInterface.upgradeHouse();
                 break;
             case 2:
-                UserInterface.viewStore();
+                UpgradeActions.viewStore();
                 break;
             case 3:
                 UserInterface.viewListOfSims();

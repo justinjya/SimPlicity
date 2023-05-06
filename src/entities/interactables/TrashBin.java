@@ -4,14 +4,15 @@ import java.awt.image.BufferedImage;
 import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
 
 // TO - DO!!! : Add kicking the bin interval
 public class TrashBin extends Interactables {
     // Attributes
     private int price = 10;
-    private int kickingDuration = 0;
-    private int cleaningDuration = 15;
+    private int kickingDuration = Consts.ONE_SECOND * 0;
+    private int cleaningDuration = Consts.ONE_SECOND * 15;
+    private String activityStatus = "Kicking the bin";
     private Thread animateInteractThread;
 
     // Images of the trash bin
@@ -106,10 +107,12 @@ public class TrashBin extends Interactables {
         Thread kickthebin = new Thread() {
             @Override
             public void run() {
-                sim.setStatus("Kicking The Bin");
+                sim.setStatus(activityStatus);
 
-                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * kickingDuration);
-                animateInteract(sim, t);
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, kickingDuration, kickingDuration);
+
+                animateInteract(sim, activityStatus);
 
                 sim.setHealth(sim.getHealth() - 2); // decrease sim's health
                 sim.setHunger(sim.getHunger() - 2); // decrease sim's hunger
@@ -123,21 +126,25 @@ public class TrashBin extends Interactables {
         Thread cleaningTheBin = new Thread() {
             @Override
             public void run() {
-                sim.setStatus("Cleaning The Bin");
+                activityStatus = "Cleaning The Bin";
+                sim.setStatus(activityStatus);
 
                 if (getImageIndex() == 2) { // empty on floor
                     cleaningDuration = 0;
-                    Thread t = GameTime.startDecrementTimeRemaining(cleaningDuration * Consts.ONE_SECOND);
-                    animateInteract(sim, t);
+                    sim.setStatus(activityStatus);
+
+                    GameTime.addActivityTimer(sim, activityStatus, cleaningDuration, cleaningDuration);
                     return;
                 }
 
                 cleaningDuration = 15;
 
-                Thread t = GameTime.startDecrementTimeRemaining(cleaningDuration * Consts.ONE_SECOND);
-                animateInteract(sim, t);
+                sim.setStatus(activityStatus);
+                GameTime.addActivityTimer(sim, activityStatus, cleaningDuration, cleaningDuration);
+
+                animateInteract(sim, activityStatus);
                 
-                while (t.isAlive()) continue;
+                while (GameTime.isAlive(sim, activityStatus)) continue;
                 
                 sim.setMood(sim.getMood() + 10);
                 sim.setHealth(sim.getHealth() + 10);
@@ -147,7 +154,7 @@ public class TrashBin extends Interactables {
         cleaningTheBin.start();
     }
 
-    private void animateInteract(Sim sim, Thread t) {
+    private void animateInteract(Sim sim, String activityStatus) {
         animateInteractThread = new Thread() {
             @Override
             public void run() {
@@ -181,7 +188,7 @@ public class TrashBin extends Interactables {
                 else if (getImageIndex() == 3) { // filled on floor
                     try {
                         changeOccupiedState();
-                        while (t.isAlive()) {
+                        while (GameTime.isAlive(sim, activityStatus)) {
                             setImageIndex(7);
                             Thread.sleep(333);
                             setImageIndex(8);

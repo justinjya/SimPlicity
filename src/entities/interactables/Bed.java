@@ -2,9 +2,9 @@ package src.entities.interactables;
 
 import java.awt.image.BufferedImage;
 
-import src.assets.ImageLoader;
 import src.main.Consts;
-import src.main.GameTime;
+import src.assets.ImageLoader;
+import src.main.time.GameTime;
 import src.entities.sim.Sim;
 
 public class Bed extends Interactables{
@@ -32,6 +32,7 @@ public class Bed extends Interactables{
 
     // Attributes
     private int duration = Consts.ONE_MINUTE * 4;
+    private String activityStatus = "Sleeping";
 
     // Image of the beds
     private BufferedImage[] icons;
@@ -112,14 +113,13 @@ public class Bed extends Interactables{
             @Override
             public void run() {
                 changeOccupiedState();
+                sim.setStatus(activityStatus);
+                
                 images[getImageIndex()] = ImageLoader.changeSimColor(images[getImageIndex()], sim);
                 
-                sim.setStatus("Sleeping");
-                Thread t = GameTime.startDecrementTimeRemaining(duration);
+                GameTime.addActivityTimer(sim, activityStatus, duration, duration);
 
-                while (t.isAlive()) {
-                    continue;
-                }
+                while (GameTime.isAlive(sim, activityStatus)) continue;
                 
                 changeOccupiedState();
                 sim.resetStatus();

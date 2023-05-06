@@ -22,7 +22,7 @@ public class Door extends Interactables {
     public Door(Room room) {
         super (
             "Door",
-            "visit another room",
+            "view active activities",
             2,
             4,
             5,
@@ -39,6 +39,7 @@ public class Door extends Interactables {
         if (room != null) {
             setImageIndex(1);
             setPlayAreaY(3);
+            setInteraction("visit another room");
         }
 
         updateBounds();

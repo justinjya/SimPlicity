@@ -9,7 +9,7 @@ import src.entities.interactables.TableAndChair;
 import src.entities.interactables.TrashBin;
 import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
 import src.world.Room;
 
 public abstract class Food {
@@ -52,11 +52,13 @@ public abstract class Food {
         Thread eating = new Thread() {
             @Override
             public void run() {
+                int duration = Consts.ONE_SECOND * 30;
                 sim.setStatus("Eating");
+                
                 tableAndChair.changeOccupiedState(sim);
-                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * 30);
+                GameTime.addActivityTimer(sim, "Eating", duration, duration);
 
-                while (t.isAlive()) continue;
+                while (GameTime.isAlive(sim, "Eating")) continue;
                 
                 sim.resetStatus();
                 sim.setHunger(sim.getHunger() + hungerPoint);

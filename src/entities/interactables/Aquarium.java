@@ -4,13 +4,14 @@ import java.awt.image.BufferedImage;
 
 import src.assets.ImageLoader;
 import src.main.Consts;
-import src.main.GameTime;
+import src.main.time.GameTime;
 import src.entities.sim.Sim;
 
 public class Aquarium extends Interactables {
     // Attributes
     private int price = 50;
     private int duration = Consts.ONE_SECOND * 10;
+    private String activityStatus = "Feeding The Fish";
     private Thread animateNotOccupiedThread;
     private Thread animateOccupiedThread;
 
@@ -122,16 +123,14 @@ public class Aquarium extends Interactables {
             @Override
             public void run() {
                 changeOccupiedState();
+                sim.setStatus(activityStatus);
+
                 animateNotOccupiedThread.interrupt();
                 animateOccupied(sim);
-                sim.setStatus("Feeding the fish");
-
-                // count the time
-                Thread t = GameTime.startDecrementTimeRemaining(Consts.ONE_SECOND * duration);
                 
-                while (t.isAlive()) {
-                    continue;
-                }
+                GameTime.addActivityTimer(sim, activityStatus, duration, duration);
+
+                while (GameTime.isAlive(sim, activityStatus)) continue;
 
                 changeOccupiedState();
                 animateNotOccupied();
