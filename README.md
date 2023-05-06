@@ -9,11 +9,10 @@ K3 | Kelompok 1
 18221029 Muhammad Mumtaz  
 18221032 Eleanora Felicia 
 
-Cara kompilasi program:
-1. clone repo github nya
-2. bikin folder dalem TubesOOP_K3_01 namanya bin (kalo blm ada)
-3. buka folder TubesOOP_K3_01 di terminal
-4. tulis step 5
-5. javac -d bin ./src/main/*.java
-6. kalo udh berhasil kompilasi tulis step 7
-7. java -cp bin src.main.Main
+### Cara Kompilasi Program:
+  1. _Clone repository_ GitHub ini
+  2. Buka _terminal_ Anda
+  3. Ganti _directory_ ke _directory_ tempat dimana Anda meng-_clone repository_ ini 
+  5. Jalani _command_ ini: javac -d bin ./src/main/*.java
+  6. Ketika kompilasi berhasil, jalani _command_ ini: java -cp bin src.main.Main
+  7. Anda masuk ke dalam Game!
