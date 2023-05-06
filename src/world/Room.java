@@ -287,12 +287,14 @@ public class Room {
         catch (ConcurrentModificationException e) {}
     }
 
-    // TO - DO !!! : Find a better way to show selecting an object
     private void drawObjectSelector(Graphics2D g) {
         try {
             if (isEditingRoom && moveableObject == null) {
+                int objectWidth = (int) selectedObject.getBounds().getWidth();
+                int objectHeight = (int) selectedObject.getBounds().getHeight();
+                
                 g.setColor(new Color(255, 0, 0, 64)); // Transparent red color
-                g.fillRect(selectedObject.getX(), selectedObject.getY(), selectedObject.getWidth(), selectedObject.getHeight());
+                g.fillRect(selectedObject.getX(), selectedObject.getY(), objectWidth, objectHeight);
             }
         }
         catch (NullPointerException e) {}

@@ -61,6 +61,73 @@ public class Store {
     public static void update() {
         getItemsToShow();
 
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
+            // Restore the initial state for the next purchase
+
+            if (!isBuySuccess) {
+                isChoosing = true;
+                isSelecting = false;
+                isBuySuccess = true;
+                return;
+            } 
+
+            if (isChoosing) {
+                UserInterface.viewStore();
+                isChoosing = true;
+                isSelecting = false;
+                isBuySuccess = true;
+                isObject = true;
+                slotCol = 0;
+                slotRow = 0;
+                slotSelected = 0;
+                itemQuantity = 1;
+                return;
+            }
+
+            if (isSelecting) {
+                isChoosing = true;
+                isSelecting = false;
+                itemQuantity = 1;
+                return;
+            }
+            
+             
+        } 
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
+            if (!isBuySuccess) {
+                isChoosing = true;
+                isSelecting = false;
+                isBuySuccess = true;
+                return;
+            }  
+            if (isChoosing) {
+                isChoosing = false;
+                isSelecting = true;
+                itemQuantity = 1;
+                return;
+            }
+            if (isSelecting) {
+                isChoosing = false;
+                isSelecting = false;
+                interact();
+            }  
+        }
+
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
+            if (isSelecting) {
+                itemQuantity++;
+            } 
+        }
+        if (KeyHandler.isKeyPressed(KeyHandler.KEY_MINUS)) {
+            if (isSelecting) {
+                if (itemQuantity > 1) {
+                    itemQuantity--;
+                }
+            }
+        }
+
+        if (isSelecting) return;
+
         int newSlotSelected = slotSelected;
         int newSlotCol = slotCol;
         int newSlotRow = slotRow;
@@ -87,18 +154,6 @@ public class Store {
             slotRow = newSlotRow;
         }
 
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-            if (isChoosing) {
-                isChoosing = false;
-                isSelecting = true;
-                return;
-            }
-            if (isSelecting) {
-                isChoosing = false;
-                isSelecting = false;
-                interact();
-            }  
-        }
         if (KeyHandler.isKeyPressed(KeyHandler.KEY_TAB)) {
             if (isChoosing) {
                 changeIsObject();
@@ -107,72 +162,39 @@ public class Store {
                 slotSelected = 0;
             }
         }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_EQUALS)) {
-            if (isSelecting) {
-                itemQuantity++;
-            } 
-        }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_MINUS)) {
-            if (isSelecting) {
-                if (itemQuantity > 1) {
-                    itemQuantity--;
-                }
-            }
-        }
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            // Restore the initial state for the next purchase
-
-            if (isChoosing) {
-                UserInterface.viewStore();
-                isChoosing = true;
-                isSelecting = false;
-                isBuySuccess = true;
-                isObject = true;
-                slotCol = 0;
-                slotRow = 0;
-                slotSelected = 0;
-                itemQuantity = 1;
-            }
-
-            if (isSelecting) {
-                isChoosing = true;
-                isSelecting = false;
-                itemQuantity = 1;
-            }
-            
-            if (!isBuySuccess) {
-                isSelecting = true;
-                isBuySuccess = true;
-            }
-            
-        } 
     }
 
     public static void interact() {
         Thread buying = new Thread(new Runnable() {
             @Override
             public void run() {
-                UserInterface.viewStore();
                 isChoosing = true;
                 isSelecting = false;
                 isBuySuccess = true;
                 isObject = true;
-                slotCol = 0;
-                slotRow = 0;
                 
-                itemQuantity = 1;
                 int timeUpperBound = 150;
                 int timeLowerBound = 30;
                 int deliveryTime = (int) (Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound);
                 
-                UserInterface.getCurrentSim().setMoney(UserInterface.getCurrentSim().getMoney() - listOfItem.get(slotSelected).getPrice());
+                Sim currentSim = UserInterface.getCurrentSim();
+                Item selectedItem = listOfItem.get(slotSelected);
+                
+                if (currentSim.getMoney() < selectedItem.getPrice() * itemQuantity) isBuySuccess = false;
+                if (!isBuySuccess) return;
+
+                currentSim.setMoney(currentSim.getMoney() - selectedItem.getPrice() * itemQuantity);
+                
+                UserInterface.viewStore();
 
                 Sim sim = UserInterface.getCurrentSim();
                 GameTime.addActivityTimer(sim, "Delivering Item(s)", deliveryTime, deliveryTime);
 
                 while (GameTime.isAlive(sim, "Delivering Item(s)")) continue;
 
-                UserInterface.getCurrentSim().getInventory().addItem(listOfItem.get(slotSelected));
+                for (int i = 0; i < itemQuantity; i++) {
+                    currentSim.getInventory().addItem(listOfItem.get(slotSelected));
+                }
                 slotSelected = 0;
             }
         });
@@ -194,8 +216,6 @@ public class Store {
 
         g.drawImage(storeBox, 150, 52, null);
         g.drawImage(titleBox, 294, 27, null);
-        g.drawImage(categoryBox, 188, 92, null);
-        g.drawImage(categoryBox, 407, 92, null);
         g.drawImage(catalogueBox, 187, 136, null);
         g.drawImage(simNameBox, 261, 509, null);
         g.drawImage(simMoneyBox, 447, 509, null);
@@ -205,30 +225,73 @@ public class Store {
         g.setColor(Color.BLACK);
         UserInterface.drawCenteredText(g, storeBox, 150, 555, "press esc to return", font);
         
-        if (isChoosing) {
-            UserInterface.drawCenteredText(g, storeBox, 150, 453, "choose item to buy", font);
-        }
-        if (isSelecting) {
-            g.drawImage(decreaseButton, 331, 441, null);
-            g.drawImage(increaseButton, 445, 441, null);
-            g.drawImage(counterBox, 369, 442, null);
-
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_MINUS)) {
-                g.drawImage(decreaseHighlight, 326, 440, null);
-            }
-            if (KeyHandler.isKeyDown(KeyHandler.KEY_EQUALS)) {
-                g.drawImage(increaseHighlight, 440, 440, null);
-            }
-        }
         if (!isBuySuccess) {
+            font = new Font("Inter", Font.PLAIN, 10);
+            g.setFont(font);
+            g.setColor(Color.BLACK);
+
             UserInterface.drawCenteredText(g, storeBox, 150, 453, "you don't have enough money", font);
         }
+        else {
+            if (isChoosing) {
+                font = new Font("Inter", Font.BOLD, 14);
+                g.setColor(Color.WHITE);
+                g.setFont(font);
+    
+                Item selectedItem = listOfItem.get(slotSelected);
+                UserInterface.drawCenteredText(g, storeBox, 150, 443, selectedItem.getName(), font);
+                UserInterface.drawCenteredText(g, storeBox, 150, 463, "$ " + selectedItem.getPrice(), font);
+            }
+            if (isSelecting) {
+                font = new Font("Inter", Font.BOLD, 14);
+                g.setColor(Color.WHITE);
+                g.setFont(font);
+    
+                Item selectedItem = listOfItem.get(slotSelected);
+                UserInterface.drawCenteredText(g, storeBox, 143, 435, "$ " + selectedItem.getPrice(), font);
+    
+                g.drawImage(decreaseButton, 331, 441, null);
+                g.drawImage(increaseButton, 445, 441, null);
+                g.drawImage(counterBox, 369, 442, null);
+    
+                if (KeyHandler.isKeyDown(KeyHandler.KEY_MINUS)) {
+                    g.drawImage(decreaseHighlight, 326, 440, null);
+                }
+                if (KeyHandler.isKeyDown(KeyHandler.KEY_EQUALS)) {
+                    g.drawImage(increaseHighlight, 440, 440, null);
+                }
+            }
+        }
 
-        font = new Font("Inter", Font.BOLD, 14);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
-        UserInterface.drawCenteredText(g, categoryBox, 188, 114, "Objects", font);
-        UserInterface.drawCenteredText(g, categoryBox, 407, 114, "Foods", font);
+        int categoryHighlightedWidth = categoryBox.getWidth() + 4;
+        int categoryHighlightedHeight = categoryBox.getHeight() + 3;
+        if (isObject) {
+            g.drawImage(categoryBox, 188, 90, categoryHighlightedWidth, categoryHighlightedHeight, null);
+            g.drawImage(categoryBox, 407, 92, null);
+            
+            g.setColor(Color.WHITE);
+            
+            font = new Font("Inter", Font.BOLD, 16);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 188, 114, "Interactables", font);
+
+            font = new Font("Inter", Font.BOLD, 14);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 407, 114, "Foods", font);
+        }
+        else {
+            g.drawImage(categoryBox, 188, 92, null);
+            g.drawImage(categoryBox, 403, 90, categoryHighlightedWidth, categoryHighlightedHeight, null);
+            
+            g.setColor(Color.WHITE);
+            font = new Font("Inter", Font.BOLD, 14);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 188, 114, "Interactables", font);
+            
+            font = new Font("Inter", Font.BOLD, 17);
+            g.setFont(font);
+            UserInterface.drawCenteredText(g, categoryBox, 407, 114, "Foods", font);
+        }
 
         font = new Font("Inter", Font.BOLD, 20);
         g.setFont(font);
@@ -282,9 +345,7 @@ public class Store {
     }
 
     private static void drawCursor(Graphics2D g) {
-        if (isChoosing) {
-            g.drawImage(selector, 203 + (slotSize * slotCol) + (18 * slotCol), 153 + (slotSize * slotRow) + (24 * slotRow), 72, 72, null);
-        }
+        g.drawImage(selector, 203 + (slotSize * slotCol) + (18 * slotCol), 153 + (slotSize * slotRow) + (24 * slotRow), 72, 72, null);
     }
 
     private static ArrayList<Item> init() {
