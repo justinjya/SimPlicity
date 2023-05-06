@@ -37,11 +37,9 @@ public class MainMenuPanel extends JPanel {
                         PanelHandler.switchPanel(MainMenuPanel.getInstance(), CreateSimPanel.getInstance());
                     }
                     if (selectedBox == 1) {
-                        GamePanel.gameState = "Playing";
 
-                        // LOAD GAME HERE
+                        // NOTHING SINCE LOAD HASN'T BEEN IMPLEMENTED
                         
-                        PanelHandler.switchPanel(MainMenuPanel.getInstance(), GamePanel.getInstance());
                     }
                     if (selectedBox == 2) {
                         GamePanel.gameState = "Main menu: About";
