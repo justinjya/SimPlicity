@@ -143,6 +143,7 @@ public class UserInterface {
     public static void tab() {
         if (pause) return;
         if (upgradingHouse) return;
+        if (viewingTime) return;
 
         tabbed = !tabbed;
         if (currentSim.isStatusCurrently("Idle")) {
