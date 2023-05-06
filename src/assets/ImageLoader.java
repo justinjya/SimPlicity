@@ -68,7 +68,7 @@ public class ImageLoader {
         images[4] = readImage("panels/main_menu_panel", "about_button", 1, 1, false);
         images[5] = readImage("panels/main_menu_panel", "exit_button", 1, 1, false);
         images[6] = readImage("panels/main_menu_panel", "start_highlight", 1, 1, false);
-        images[7] = readImage("panels/main_menu_panel", "load_highlight", 1, 1, false);
+        images[7] = readImage("panels/main_menu_panel", "load_highlight_red", 1, 1, false);
         images[8] = readImage("panels/main_menu_panel", "about_highlight", 1, 1, false);
         images[9] = readImage("panels/main_menu_panel", "exit_highlight", 1, 1, false);
     

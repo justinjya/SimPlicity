@@ -65,7 +65,7 @@ public class CreateSimPanel extends JPanel {
                     if (GamePanel.isCurrentState("Creating a new sim")) {
                         GamePanel.gameState = "Playing";
                         PanelHandler.switchPanel(CreateSimPanel.getInstance(), GamePanel.getInstance());
-                    } 
+                    }
                 }
 
                 if (keyCode == KeyEvent.VK_SLASH) {
