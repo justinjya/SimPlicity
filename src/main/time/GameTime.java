@@ -22,7 +22,10 @@ public class GameTime implements Runnable {
     public static void init(int day, int timeRemaining) {
         GameTime.day = day;
         GameTime.timeRemaining = timeRemaining;
-        gtThread.start();
+        
+        if (!gtThread.isAlive()) {
+            gtThread.start();
+        }
     }
 
     // GETTERS
