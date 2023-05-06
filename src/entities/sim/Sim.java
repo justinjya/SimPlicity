@@ -58,13 +58,13 @@ public class Sim extends Entity{
         this.health = 80;
         this.hunger = 80;
         this.mood = 80;
-        this.money = 10;
+        this.money = 100;
         this.status = "Idle";
         this.profession = new Profession(); 
         this.inventory = new Inventory();
         this.isBusy = false;
         this.hasAte = false;
-        this.durationWorked = 830;
+        this.durationWorked = 0;
         this.timeNotSlept = 0;
         this.timeNotTakenLeak = 0;
 
