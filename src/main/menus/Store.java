@@ -163,7 +163,7 @@ public class Store {
                 itemQuantity = 1;
                 int timeUpperBound = 150;
                 int timeLowerBound = 30;
-                int deliveryTime = (int) Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound;
+                int deliveryTime = (int) (Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound);
                 
                 UserInterface.getCurrentSim().setMoney(UserInterface.getCurrentSim().getMoney() - listOfItem.get(slotSelected).getPrice());
                 Thread t = GameTime.startDecrementTimeRemaining(deliveryTime);
