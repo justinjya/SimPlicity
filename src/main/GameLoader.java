@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import src.assets.ImageLoader;
 import src.main.time.GameTime;
+import src.main.menus.ListOfSimsMenu;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
 import src.entities.sim.Sim;
@@ -26,6 +27,8 @@ public class GameLoader {
         
         // Actually start the game by changing the state into adding a house
         UserInterface.init(world);
+        ListOfSimsMenu.world = world;
+        ListOfSimsMenu.listOfSims = world.getListOfSim();
     }
 
     public static void addSim() {

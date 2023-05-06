@@ -27,6 +27,7 @@ public class CreateSimPanel extends JPanel {
     public static int selectedColor = 2;
     private static int selectedField = 0; // 0 to 3
     private static boolean help = false;
+    private static boolean nameTaken = false;
 
     public static Sim currentSim;
 
@@ -54,7 +55,6 @@ public class CreateSimPanel extends JPanel {
                     }
                     if (GamePanel.isCurrentState("Creating a new sim")) {
                         World world = UserInterface.getWorld();
-                        boolean nameTaken = false;
                         ArrayList<Sim> listOfSim = world.getListOfSim();
                         
                         for (Sim sim : listOfSim) {
@@ -108,6 +108,7 @@ public class CreateSimPanel extends JPanel {
                     if (selectedField > 3) {
                         selectedField = 0;
                     }
+                    nameTaken = false;
                 }
                 repaint();
             }
@@ -174,7 +175,7 @@ public class CreateSimPanel extends JPanel {
         if (selectedField == 1) g.drawImage(images[7], 267, 328, null); // room name
         if (selectedField == 2) g.drawImage(images[8], 315, 388, null); // color selector
         if (selectedField == 3) {
-            if (textFields[0].equals("") || textFields[1].equals("")) {
+            if (textFields[0].equals("") || textFields[1].equals("") || nameTaken) {
                 g.drawImage(images[10], 337, 435, null); // done button
             }
             else {
