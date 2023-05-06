@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import javax.swing.JPanel;
 
@@ -14,6 +15,8 @@ import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.GameLoader;
 import src.main.KeyHandler;
+import src.main.UserInterface;
+import src.world.World;
 
 public class CreateSimPanel extends JPanel {
     public static CreateSimPanel csp = new CreateSimPanel();
@@ -24,6 +27,7 @@ public class CreateSimPanel extends JPanel {
     public static int selectedColor = 2;
     private static int selectedField = 0; // 0 to 3
     private static boolean help = false;
+    private static boolean nameTaken = false;
 
     public static Sim currentSim;
 
@@ -50,6 +54,17 @@ public class CreateSimPanel extends JPanel {
                         GameLoader.startNewGame();
                     }
                     if (GamePanel.isCurrentState("Creating a new sim")) {
+                        World world = UserInterface.getWorld();
+                        ArrayList<Sim> listOfSim = world.getListOfSim();
+
+                        for (Sim sim : listOfSim) {
+                            if (textFields[0].equals(sim.getName())) {
+                                nameTaken = true;
+                            }
+                        }
+
+                        if (nameTaken) return;
+
                         GamePanel.gameState = "Placing a new house";
                         GameLoader.addSim();
                     }
@@ -93,6 +108,7 @@ public class CreateSimPanel extends JPanel {
                     if (selectedField > 3) {
                         selectedField = 0;
                     }
+                    nameTaken = false;
                 }
                 repaint();
             }
@@ -159,7 +175,7 @@ public class CreateSimPanel extends JPanel {
         if (selectedField == 1) g.drawImage(images[7], 267, 328, null); // room name
         if (selectedField == 2) g.drawImage(images[8], 315, 388, null); // color selector
         if (selectedField == 3) {
-            if (textFields[0].equals("") || textFields[1].equals("")) {
+            if (textFields[0].equals("") || textFields[1].equals("") || nameTaken) {
                 g.drawImage(images[10], 337, 435, null); // done button
             }
             else {

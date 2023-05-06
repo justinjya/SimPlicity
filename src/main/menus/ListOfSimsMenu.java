@@ -31,9 +31,9 @@ public class ListOfSimsMenu {
     private static BufferedImage moodIcon = images[9];
     private static BufferedImage help = images[10];
 
-    private static World world = UserInterface.getWorld();
-    private static ArrayList<Sim> listOfSims = world.getListOfSim();
-    private static ArrayList<Sim> listOfSelectableSims = getListOfSelectableSims();
+    public static World world = UserInterface.getWorld();
+    public static ArrayList<Sim> listOfSims = world.getListOfSim();
+    public static ArrayList<Sim> listOfSelectableSims = getListOfSelectableSims();
     private static int slotSelected = 0;
     private static boolean createSimSlot = false;
 

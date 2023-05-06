@@ -3,11 +3,12 @@ package src.main;
 import java.awt.Color;
 
 import src.assets.ImageLoader;
+import src.main.menus.ListOfSimsMenu;
 import src.entities.interactables.Door;
-import src.entities.sim.Sim;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
 import src.main.time.GameTime;
+import src.entities.sim.Sim;
 import src.world.House;
 import src.world.Room;
 import src.world.World;
@@ -53,6 +54,8 @@ public class GameLoader {
 
         // Actually start the game by changing the state into adding a house
         UserInterface.initDebug(world);
+        ListOfSimsMenu.world = world;
+        ListOfSimsMenu.listOfSims = world.getListOfSim();
     }
 
     public static void startNewGame() {
