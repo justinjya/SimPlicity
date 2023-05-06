@@ -15,4 +15,4 @@ K3 | Kelompok 1
   3. Ganti _directory_ ke _directory_ tempat dimana Anda meng-_clone repository_ ini 
   5. Jalani _command_ ini: javac -d bin ./src/main/*.java
   6. Ketika kompilasi berhasil, jalani _command_ ini: java -cp bin src.main.Main
-  7. Anda masuk ke dalam Game!
+  7. Silahkan bermain!
