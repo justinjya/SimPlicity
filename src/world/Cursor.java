@@ -2,10 +2,9 @@ package src.world;
 
 import java.awt.event.KeyEvent;
 
-import src.entities.sim.Sim;
 import src.main.Consts;
-import src.main.GameLoader;
 import src.main.KeyHandler;
+import src.entities.sim.Sim;
 import src.main.UserInterface;
 import src.main.panels.CreateSimPanel;
 import src.main.panels.GamePanel;
@@ -40,6 +39,14 @@ public class Cursor {
 
     public int getGridY() {
         return y / Consts.TILE_SIZE;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     // Others

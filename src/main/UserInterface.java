@@ -189,6 +189,8 @@ public class UserInterface {
 
     public static void viewWorld() {
         viewingWorld = !viewingWorld;
+
+        world.reset();
     }
 
     public static void viewTime() {

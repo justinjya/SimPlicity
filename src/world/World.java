@@ -31,7 +31,7 @@ public class World {
     private Cursor cursor;
     
     // Viewable world inside of the window (32 x 32 grid)
-    private int viewableGrid = Consts.TILE_SIZE * 32;
+    private int viewableGrid = (Consts.TILE_SIZE * 32) - 1;
     private int topLeftX = 26;
     private int topLeftY = 26;
 
@@ -88,6 +88,7 @@ public class World {
     public boolean isAdding() {
         return isAdding;
     }
+
     public Cursor getCursor() {
         return cursor;
     }
@@ -118,6 +119,11 @@ public class World {
 
     public void changeIsAddingState() {
         this.isAdding = !this.isAdding;
+    }
+
+    public void reset() {
+        cursor.setX(Consts.TILE_SIZE * 16);
+        cursor.setY(Consts.TILE_SIZE * 16);
     }
 
     // Others
@@ -175,7 +181,7 @@ public class World {
             return 1;
         }
         if ((cursor.getX() >= middleCoords && cursor.getX() < upperCoords) &&
-            (cursor.getY() >= 0 * lowerCoords && cursor.getY() < middleCoords)) {
+            (cursor.getY() >= lowerCoords && cursor.getY() < middleCoords)) {
             return 2;
         }
         if ((cursor.getX() >= middleCoords && cursor.getX() < upperCoords) &&
@@ -193,18 +199,22 @@ public class World {
         if (getCursorInQuarter() == 1) {
             lowerBoundsX = 0; upperBoundsX = 32;
             lowerBoundsY = 0; upperBoundsY = 32;
+            topLeftX = 26; topLeftY = 26;
         }
         else if (getCursorInQuarter() == 2) {
             lowerBoundsX = 32; upperBoundsX = 64;
             lowerBoundsY = 0; upperBoundsY = 32;
+            topLeftX = 25; topLeftY = 26;
         }
         else if (getCursorInQuarter() == 3) {
             lowerBoundsX = 32; upperBoundsX = 64;
             lowerBoundsY = 32; upperBoundsY = 64;
+            topLeftX = 25; topLeftY = 25;
         }
         else if (getCursorInQuarter() == 4) {
-            lowerBoundsX = 32; upperBoundsX = 64;
-            lowerBoundsY = 0; upperBoundsY = 32;
+            lowerBoundsX = 0; upperBoundsX = 32;
+            lowerBoundsY = 32; upperBoundsY = 64;
+            topLeftX = 26; topLeftY = 25;
         }
     }
 
@@ -292,13 +302,13 @@ public class World {
             return;
         }
 
-        int tileX = topLeftX + (cursor.getX() % viewableGrid);
-        int tileY = topLeftY + (cursor.getY() % viewableGrid);
+        int tileX = topLeftX + (cursor.getX() % (viewableGrid));
+        int tileY = topLeftY + (cursor.getY() % (viewableGrid));
 
-        if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
-            tileX = topLeftX + (cursor.getX() % (viewableGrid - 14));
-            tileY = topLeftY + (cursor.getY() % (viewableGrid - 14));
-        }
+        // if (getCursorInQuarter() == 1 || getCursorInQuarter() == 3) {
+        //     tileX = topLeftX + (cursor.getX() % (viewableGrid - 14));
+        //     tileY = topLeftY + (cursor.getY() % (viewableGrid - 14));
+        // }
 
         if (isAdding) {
             g.drawImage(images[3], tileX, tileY, null);
