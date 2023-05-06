@@ -21,6 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static GameTime time;
 
     public static World world;
+    Sound sound = new Sound();
 
     private GamePanel() {
         setPreferredSize(new Dimension(Consts.WIDTH, Consts.HEIGHT));
@@ -49,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFocusTraversalKeysEnabled(false);
 
         new Thread(this).start();
+        playMusic(0);
     }
 
     @Override
@@ -151,5 +153,18 @@ public class GamePanel extends JPanel implements Runnable {
     private static void drawPlayAreaBorder(Graphics2D g) {
         g.setColor(new Color(61, 30, 45));
         g.fillRect(203, 47, 394, 394);
+    }
+
+
+    // sound
+
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic(int i){
+        sound.stop();
     }
 }
