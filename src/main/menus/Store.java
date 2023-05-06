@@ -248,7 +248,7 @@ public class Store {
                 g.setFont(font);
     
                 Item selectedItem = listOfItem.get(slotSelected);
-                UserInterface.drawCenteredText(g, storeBox, 143, 435, "$ " + selectedItem.getPrice(), font);
+                UserInterface.drawCenteredText(g, storeBox, 143, 435, "$ " + selectedItem.getPrice() * itemQuantity, font);
     
                 g.drawImage(decreaseButton, 331, 441, null);
                 g.drawImage(increaseButton, 445, 441, null);
@@ -287,7 +287,7 @@ public class Store {
             font = new Font("Inter", Font.BOLD, 14);
             g.setFont(font);
             UserInterface.drawCenteredText(g, categoryBox, 188, 114, "Interactables", font);
-            
+
             font = new Font("Inter", Font.BOLD, 17);
             g.setFont(font);
             UserInterface.drawCenteredText(g, categoryBox, 407, 114, "Foods", font);
