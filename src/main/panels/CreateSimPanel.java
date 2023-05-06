@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import javax.swing.JPanel;
 
@@ -14,6 +15,8 @@ import src.assets.ImageLoader;
 import src.entities.sim.Sim;
 import src.main.GameLoader;
 import src.main.KeyHandler;
+import src.main.UserInterface;
+import src.world.World;
 
 public class CreateSimPanel extends JPanel {
     public static CreateSimPanel csp = new CreateSimPanel();
@@ -44,12 +47,24 @@ public class CreateSimPanel extends JPanel {
                 // Check if the Enter key was pressed on the done button
                 if (keyCode == KeyEvent.VK_ENTER && selectedField == 3) {
                     if (textFields[0].equals("")|| textFields[1].equals("")) return;
-                    
+
                     if (GamePanel.isCurrentState("Starting a new game: Creating a new sim")) {
                         GamePanel.gameState = "Starting a new game: Placing a new house";
                         GameLoader.startNewGame();
                     }
                     if (GamePanel.isCurrentState("Creating a new sim")) {
+                        World world = UserInterface.getWorld();
+                        boolean nameTaken = false;
+                        ArrayList<Sim> listOfSim = world.getListOfSim();
+                        
+                        for (Sim sim : listOfSim) {
+                            if (textFields[0].equals(sim.getName())) {
+                                nameTaken = true;
+                                break;
+                            }
+                        }
+                        if (nameTaken) return;
+
                         GamePanel.gameState = "Placing a new house";
                         GameLoader.addSim();
                     }

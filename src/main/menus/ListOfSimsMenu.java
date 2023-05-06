@@ -138,6 +138,7 @@ public class ListOfSimsMenu {
             int currentDay = GameTime.day;
 
             if (dayLastAddedSim == currentDay) {
+                System.out.println(dayLastAddedSim + ", " + currentDay + ", " + (dayLastAddedSim == currentDay));
                 g.drawImage(createNewSimHighlightRed, 106, 408, null);
             }
             else {
