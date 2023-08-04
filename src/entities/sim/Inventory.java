@@ -113,7 +113,7 @@ public class Inventory {
             }
             mapOfItems.put(item, 1);
         }
-        catch (ConcurrentModificationException cme) {}
+        catch (ConcurrentModificationException cme) {addItem(item);}
     }
 
     public void removeItem(Item item)
@@ -133,7 +133,7 @@ public class Inventory {
                 }
             }
         }
-        catch (ConcurrentModificationException cme) {}
+        catch (ConcurrentModificationException cme) {removeItem(item);}
     }
 
     public void interact() {

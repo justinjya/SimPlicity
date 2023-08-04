@@ -95,6 +95,9 @@ public class GameTime implements Runnable {
     }
 
     public static boolean isAlive(Sim sim, String activity) {
+        if (listOfActiveActivities.isEmpty()) return false;
+        
+        boolean isAlive = false;
         try {
             for (ActivityTimer activityTimer : listOfActiveActivities) {
                 Sim activeSim = activityTimer.getSim();
@@ -103,14 +106,14 @@ public class GameTime implements Runnable {
                 boolean activityIsActive = activity.equals(activityTimer.getActivity());
     
                 if (simIsActive && activityIsActive) {
-                    return true;
+                    isAlive = true;
                 }
-                continue;
             }
         }
         catch (ConcurrentModificationException cme) {}
+        catch (NullPointerException npe) {}
         
-        return false;
+        return isAlive;
     }
 
     // SETTERS

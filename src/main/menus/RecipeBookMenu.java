@@ -47,41 +47,38 @@ public class RecipeBookMenu {
         return ableToCook;
     }
 
-    public static boolean isAllIngredientAvailable() {
+    public static boolean isAllIngredientAvailable(BakedFood bakedFood) {
         Sim currentSim = UserInterface.getCurrentSim();
         Inventory currentSimInventory = currentSim.getInventory();
         
         // check available ingredients first
-        boolean isAllIngredientAvailable = true;
-        for (BakedFood bakedFood : RecipeBookMenu.listOfBakedFoods) {
-            boolean isIngredientAvailable = false;
+        String[] ingredients = bakedFood.getIngredients();
+        boolean isAllIngredientAvailable = false;
 
-            for (String ingredient : bakedFood.getIngredients()) { 
-                for (Item rawFood : currentSimInventory.getMapOfItems().keySet()) {
-                    if (!(rawFood instanceof RawFood)) continue;
+        int length = ingredients.length;
+        int availableIngredients = 0;
 
-                    if (ingredient.equals(rawFood.getName())) {
-                        isIngredientAvailable = true;
-                        break;
-                    }
+        for (int i = 0; i < length; i++) { 
+            for (Item rawFood : currentSimInventory.getMapOfItems().keySet()) {
+
+                if (!(rawFood instanceof RawFood)) continue;
+
+                if (ingredients[i].equals(rawFood.getName())) {
+                    availableIngredients++;
                 }
             }
+        }
 
-            if (!isIngredientAvailable) {
-                isAllIngredientAvailable = false;
-                break;
-            }
+        if (availableIngredients >= length) {
+            isAllIngredientAvailable = true;
         }
 
         return isAllIngredientAvailable;
     }
 
     public static void update() {
-        if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-            if (!ableToCook) ableToCook();
-            else UserInterface.viewRecipes();
-        }
-
+        if (!isAbleToCook()) return;
+        
         int newSlotSelected = slotSelected;
         int newSlotCol = slotCol;
         int newSlotRow = slotRow;

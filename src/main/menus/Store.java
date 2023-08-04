@@ -173,12 +173,13 @@ public class Store {
                 isBuySuccess = true;
                 isObject = true;
                 
+                int selectedItemQuantity = itemQuantity;
                 int timeUpperBound = 150;
                 int timeLowerBound = 30;
                 int deliveryTime = (int) (Math.random()*(timeUpperBound-timeLowerBound) + timeLowerBound);
                 
                 Sim currentSim = UserInterface.getCurrentSim();
-                Item selectedItem = listOfItem.get(slotSelected);
+                Item selectedItem = itemsToShow.get(slotSelected);
                 
                 if (currentSim.getMoney() < selectedItem.getPrice() * itemQuantity) isBuySuccess = false;
                 if (!isBuySuccess) return;
@@ -187,13 +188,14 @@ public class Store {
                 
                 UserInterface.viewStore();
 
-                Sim sim = UserInterface.getCurrentSim();
-                GameTime.addActivityTimer(sim, "Delivering Item(s)", deliveryTime, deliveryTime);
+                String activityStatus = selectedItem.getName() + "(s) Pack";
 
-                while (GameTime.isAlive(sim, "Delivering Item(s)")) continue;
+                GameTime.addActivityTimer(currentSim, activityStatus, deliveryTime, deliveryTime);
 
-                for (int i = 0; i < itemQuantity; i++) {
-                    currentSim.getInventory().addItem(listOfItem.get(slotSelected));
+                while (GameTime.isAlive(currentSim, activityStatus)) continue;
+
+                for (int i = 0; i < selectedItemQuantity; i++) {
+                    currentSim.getInventory().addItem(selectedItem);
                 }
                 slotSelected = 0;
             }
@@ -238,7 +240,7 @@ public class Store {
                 g.setColor(Color.WHITE);
                 g.setFont(font);
     
-                Item selectedItem = listOfItem.get(slotSelected);
+                Item selectedItem = itemsToShow.get(slotSelected);
                 UserInterface.drawCenteredText(g, storeBox, 150, 443, selectedItem.getName(), font);
                 UserInterface.drawCenteredText(g, storeBox, 150, 463, "$ " + selectedItem.getPrice(), font);
             }
@@ -247,7 +249,7 @@ public class Store {
                 g.setColor(Color.WHITE);
                 g.setFont(font);
     
-                Item selectedItem = listOfItem.get(slotSelected);
+                Item selectedItem = itemsToShow.get(slotSelected);
                 UserInterface.drawCenteredText(g, storeBox, 143, 435, "$ " + selectedItem.getPrice() * itemQuantity, font);
     
                 g.drawImage(decreaseButton, 331, 441, null);
@@ -386,7 +388,7 @@ public class Store {
                     }
                 }
                 else {
-                    if ((item instanceof Food)) {
+                    if (item instanceof Food) {
                         itemsToShow.add(item);
                     }
                 }

@@ -38,9 +38,6 @@ public class RawFood extends Food implements Item{
         3
     };
 
-    // Attributes
-    private int price;
-
     // Images of the raw foods
     private BufferedImage[] icons = new BufferedImage[8];
 
@@ -55,11 +52,6 @@ public class RawFood extends Food implements Item{
         
         // load the icons
         this.icons = ImageLoader.loadRawFood();
-    }
-
-    // Getters
-    public int getPrice() {
-        return price;
     }
 
     // Implementation of abstract methods

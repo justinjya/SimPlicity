@@ -117,26 +117,31 @@ public class Stove extends Interactables{
                 UserInterface.viewRecipes();
                 foodToCook = null;
 
-                while (true) {
-                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER)) {
-                        if (!RecipeBookMenu.isAllIngredientAvailable()) {
+                while (foodToCook == null) {
+                    if (KeyHandler.isKeyPressed(KeyHandler.KEY_ENTER) && RecipeBookMenu.isAbleToCook()) {
+                        BakedFood selectedBakedFood = RecipeBookMenu.listOfBakedFoods.get(RecipeBookMenu.slotSelected);
+
+                        if (!RecipeBookMenu.isAllIngredientAvailable(selectedBakedFood)) {
                             RecipeBookMenu.ableToCook();
-                            return;
                         }
+                        else {
+                            Sim currentSim = UserInterface.getCurrentSim();
+                            InteractionHandler currentSimInteract = currentSim.getInteractionHandler();
 
-                        Sim currentSim = UserInterface.getCurrentSim();
-                        InteractionHandler currentSimInteract = currentSim.getInteractionHandler();
-
-                        Stove stove = (Stove) currentSimInteract.getInteractableObject();
-                        BakedFood foodToCook = RecipeBookMenu.listOfBakedFoods.get(RecipeBookMenu.slotSelected);
-        
-                        stove.setFoodToCook(foodToCook);
-                        UserInterface.viewRecipes();
-                        break;
+                            Stove stove = (Stove) currentSimInteract.getInteractableObject();
+            
+                            stove.setFoodToCook(selectedBakedFood);
+                            UserInterface.viewRecipes();
+                        }
                     }
                     if (KeyHandler.isKeyPressed(KeyHandler.KEY_ESCAPE)) {
-                        UserInterface.viewRecipes();
-                        break;
+                        if (RecipeBookMenu.isAbleToCook()) {
+                            UserInterface.viewRecipes();
+                            break;
+                        }
+                        else {
+                            RecipeBookMenu.ableToCook();
+                        }
                     }
                 }
 
@@ -158,10 +163,13 @@ public class Stove extends Interactables{
                 Inventory simInventory = sim.getInventory();
 
                 try {
+                    String[] ingredients = foodToCook.getIngredients();
+                    int length = ingredients.length;
+
                     simInventory.addItem(foodToCook);
-                    for (String ingredient : foodToCook.getIngredients()) {
+                    for (int i = 0; i < length; i++) {
                         for (Item rawFood : simInventory.getMapOfItems().keySet()) {
-                            if (!ingredient.equals(rawFood.getName())) continue;
+                            if (!ingredients[i].equals(rawFood.getName())) continue;
 
                             simInventory.removeItem(rawFood);
                         }
